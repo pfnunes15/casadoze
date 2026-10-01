@@ -25,18 +25,29 @@ Duas coisas se vendem aqui, e são de naturezas diferentes:
 ## Onde o CMS vive
 
 O pacote é consumido por um repositório `path` do Composer apontado a `../cms`,
-com symlink:
+com symlink. Este projecto fica **ao lado dos outros sites e do CMS**, que é o
+que faz esse `../cms` apontar para o sítio certo sem mais nada:
 
 ```
-orca/
-  casadoze/        este projecto
-  cms -> /Users/pedronunes/Documents/dev/cms
+Documents/dev/
+  asjp/
+  barbeito/
+  blandywinelodge/
+  casadoze/            este projecto
+  cms/                 o pacote admedia/cms
+  madeiratraveltaxi/
+  quintadamoscadinha/
+  travellider/
 ```
 
-`orca/cms` é um symlink para a cópia de trabalho em `Documents/dev/cms`, que é a
-mesma que os outros sites usam. Editar o CMS a partir daqui é editar esse
-repositório — é o mesmo ficheiro —, e commita-se lá. Não há segunda cópia a
-divergir.
+O `vendor/admedia/cms` fica um symlink relativo — `../../../cms/`, o mesmo que o
+Barbeito tem — para a cópia de trabalho em `Documents/dev/cms`, que é a mesma que
+todos os outros usam. **Editar o CMS a partir daqui é editar esse repositório** —
+é o mesmo ficheiro —, e commita-se lá. Não há segunda cópia a divergir.
+
+Daí que o sítio no disco não seja indiferente: um projecto noutra pasta tem de
+inventar um symlink só para o `../cms` resolver, e um symlink inventado é uma
+coisa que não está no repositório e que a máquina seguinte não tem.
 
 Depois de cada `composer install` ou `composer update`, publicar os assets do
 backoffice:
