@@ -1,0 +1,50 @@
+# Local configuration — contains database credentials, app key and the
+# migration token. Copy config/config.example.php to config/config.php.
+/config/config.php
+# E qualquer config solto na raiz. Um destes entrou por arrasto num `git add -A`
+# — a regra acima só apanhava o que está em config/ — e levou consigo a
+# palavra-passe da base de dados, a app_key e o migration_token.
+/config.php
+/config.*.php
+
+# Runtime state: sessions, logs, private uploads. Never versioned.
+/storage/
+
+# Composer is optional here (the app ships a hand-rolled PSR-4 autoloader),
+# but if it is used locally the vendor tree stays out of the repo.
+/vendor/
+/node_modules/
+
+# Editor-uploaded media. Lives on the server, not in git — but the directory
+# and its execution guard must ship, or uploads land somewhere PHP will run.
+/public/assets/uploads/*
+!/public/assets/uploads/.gitkeep
+!/public/assets/uploads/.htaccess
+
+# Machine-local Claude Code settings
+/.claude/
+
+# macOS
+.DS_Store
+
+# Credenciais do alojamento anotadas à mão. Mesma razão do config.php acima:
+# o que abre a base de dados nunca entra no repositório.
+/.access
+
+# Pacotes montados para enviar por FTP. São cópias do próprio projecto.
+/Arquivo.zip
+/*.zip
+
+# O vídeo completo do módulo dos vinhos. 7,8 MB, e o site não o usa — a faixa
+# corre o excerto de 22 segundos, que esse vai versionado. Fica aqui em local
+# como material de origem, e fora do repositório porque um ficheiro grande que
+# ninguém serve é peso que não sai mais de um histórico de git. Recompõe-se do
+# original com o comando que está na migração 0032.
+/public/assets/video/vinhos.webm
+
+# O bundle da maquete: 2,6 MB de base64 com os assets todos lá dentro, e o site
+# já não o usa — o que dele interessa está em docs/maquete.html (o markup) e em
+# public/assets/ (as letras e as imagens, desempacotadas). Fica em local como
+# material de origem, e fora do repositório porque um ficheiro grande que ninguém
+# serve é peso que não sai mais de um histórico de git.
+/docs/maquete-bundle.html

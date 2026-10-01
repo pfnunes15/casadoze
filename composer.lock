@@ -1,0 +1,57 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "79534b94bf8e37aa7b568db5704dcc2d",
+    "packages": [
+        {
+            "name": "admedia/cms",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../cms",
+                "reference": "04c961ad782bdd2ecdb9637c06c71c187739df39"
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-pdo": "*",
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Admedia\\Core\\": "src/Core/",
+                    "Admedia\\Cms\\": "src/Cms/",
+                    "Admedia\\Shop\\": "src/Shop/"
+                },
+                "files": [
+                    "src/Core/helpers.php"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "The CMS shared between Admedia's sites: a small framework, an optional content layer of pages and blocks, and an optional shop.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "admedia/cms": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=8.1"
+    },
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}

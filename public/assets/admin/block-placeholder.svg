@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Stand-in photograph for the block previews in the backoffice.
+
+  Part of the CMS, not of any site's design: the previews render each block with
+  this in place of real pictures, so a project that ships its own theme gets
+  usable previews without anyone producing artwork for them.
+
+  Deliberately plain — it has to sit under a headline, behind an overlay, and
+  inside a small card without competing with any of them.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Imagem de exemplo">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9fb4c2"/>
+      <stop offset="100%" stop-color="#cdd8de"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6c8494"/>
+      <stop offset="100%" stop-color="#54697a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <circle cx="930" cy="200" r="74" fill="#f2ead0" opacity=".85"/>
+  <path d="M0 620 L300 380 L520 620 Z" fill="url(#hill)" opacity=".75"/>
+  <path d="M330 640 L640 330 L980 640 Z" fill="url(#hill)"/>
+  <path d="M760 650 L1010 450 L1200 650 Z" fill="url(#hill)" opacity=".85"/>
+  <rect y="620" width="1200" height="180" fill="#46596a"/>
+</svg>

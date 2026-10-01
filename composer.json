@@ -1,0 +1,27 @@
+{
+    "name": "admedia/casadoze",
+    "description": "Casa de Zé — o site, a loja e as consultas, sobre o CMS partilhado.",
+    "type": "project",
+    "license": "proprietary",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../cms",
+            "options": { "symlink": true }
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "admedia/cms": "@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {}
+    }
+}

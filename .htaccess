@@ -1,0 +1,27 @@
+# Serve the site from public/ when the document root points at the project root
+# instead. Where the document root can be set to public/ — which is better,
+# because then nothing else is reachable over the web at all — this file is
+# never consulted.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Nothing outside public/ is the web's business. Denied before the rewrite
+    # below, because once a request has been rewritten these paths look like
+    # ordinary files under public/ and the deny would never be reached.
+    RewriteRule ^(config|src|views|database|storage|bin)(/|$) - [F,L]
+
+    # Into public/, once.
+    #
+    # The condition is what stops it: mod_rewrite feeds a rewritten path back
+    # through the same rules, so without it "/" becomes "public/", then
+    # "public/public/", and so on until the server gives up — which it reports
+    # as a 403 or a 500, with nothing in the logs to say why.
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Deny direct access to files in the project root
+<Files ~ "^.*\.(env|json|md|sql|yml|yaml|lock|log)$">
+    Require all denied
+</Files>

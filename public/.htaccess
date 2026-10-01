@@ -1,0 +1,74 @@
+# Send every non-file request to the front controller.
+# Requires Apache 2.4+ with mod_rewrite enabled.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS.
+    #
+    # Both conditions are required. Shared hosting usually terminates TLS at a
+    # proxy, so %{HTTPS} reads "off" on a request that reached the user over
+    # HTTPS; redirecting on that alone is an infinite loop. X-Forwarded-Proto is
+    # what the proxy sets, and it is only trusted to say "already secure" —
+    # never to downgrade.
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Serve real files directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Everything else goes to index.php
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# No directory listings
+Options -Indexes
+
+# What each file IS.
+#
+# Sem isto, este alojamento serve o .webm da faixa dos vinhos como `text/plain`
+# — e o browser recusa-o sem sequer o pedir: `readyState` a zero, `networkState`
+# em IDLE, nenhum erro, nenhuma pista. Um <source type="video/webm"> que recebe
+# `text/plain` é uma promessa por cumprir, e o elemento desiste em silêncio.
+#
+# Declarados aqui e não deixados ao servidor porque a lista de tipos que cada
+# alojamento conhece é dele e muda sem aviso. Os três, e não só o webm, para o
+# dia em que alguém puser um mp4 no campo — que o bloco aceita.
+<IfModule mod_mime.c>
+    AddType video/webm .webm
+    AddType video/mp4  .mp4 .m4v
+    AddType video/ogg  .ogv
+</IfModule>
+
+# Compression
+#
+# Só o que comprime. Um vídeo, um JPEG ou um PNG já vêm comprimidos: passá-los
+# por aqui outra vez gasta processador para não poupar byte nenhum, e uma
+# resposta comprimida não se serve por intervalos — que é como um browser pede
+# um vídeo.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# Asset caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType video/webm "access plus 1 year"
+    ExpiresByType video/mp4 "access plus 1 year"
+</IfModule>
+
+# Block access to sensitive files
+<FilesMatch "^\.(htaccess|env|gitignore)|composer\.(json|lock)$">
+    Require all denied
+</FilesMatch>
