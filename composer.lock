@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35633cde5c5e51285348f9902d42febb",
+    "content-hash": "22c75dc6d62a61d07a64fe9816fffb87",
     "packages": [
         {
             "name": "admedia/cms",
-            "version": "v2.6.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfnunes15/admedia-cms-core.git",
-                "reference": "af4f7913f4870f509b7219e7d82f49b638aa5bf3"
+                "reference": "c38a9a0fd7f9d49e3f30203cbc857257e330831a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/af4f7913f4870f509b7219e7d82f49b638aa5bf3",
-                "reference": "af4f7913f4870f509b7219e7d82f49b638aa5bf3",
+                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/c38a9a0fd7f9d49e3f30203cbc857257e330831a",
+                "reference": "c38a9a0fd7f9d49e3f30203cbc857257e330831a",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                 "proprietary"
             ],
             "description": "The CMS shared between Admedia's sites: a small framework, an optional content layer of pages and blocks, and an optional shop.",
-            "time": "2026-10-02T15:21:28+00:00"
+            "time": "2026-10-02T15:54:44+00:00"
         }
     ],
     "packages-dev": [],
