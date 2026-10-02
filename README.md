@@ -1,5 +1,30 @@
 # Casa de Zé
 
+> **Aviso: este repositório já não é o que está escrito a seguir.**
+>
+> O site foi **reduzido à porta de entrada**. Saíram a loja pública, o cesto, o
+> checkout, as páginas de produto, as marcações, a entrada e o backoffice
+> inteiro. Ficou uma página — a `home` — construída contra a maquete aprovada em
+> `docs/maquete.html`, e os dados que ela lê.
+>
+> A tabela de rotas tem **um** endereço: `GET /`. Quem procurar aqui o que o
+> texto abaixo descreve não o encontra.
+>
+> **O que saiu está no histórico**, no commit anterior a esta redução, e
+> recupera-se de lá. O resto do texto deste ficheiro fica como estava porque
+> continua a descrever o projecto que era — e porque é a ele que se volta se
+> alguém quiser o site inteiro de novo.
+>
+> Consequências que valem a aviso:
+>
+> - **A Casa já não tem como editar nada.** Sem backoffice, os textos mudam-se
+>   por SQL ou por migração.
+> - **As existências em armazém estão a 12 e são inventadas** — ver
+>   `database/migrations/0006_a_montra_da_maquete.sql`. Têm de ser corrigidas
+>   antes de abrir.
+> - O boletim do rodapé **não envia nada**, e o botão «+ Adicionar» conta no
+>   cesto do cabeçalho sem ir ao servidor: não há cesto para onde ir.
+
 O site, a loja e as consultas. O núcleo do CMS é o mesmo que corre a Quinta da
 Moscadinha, o Barbeito e o Blandy's — vem do pacote `admedia/cms`, não está
 copiado aqui. Deste projecto é o que o distingue: o catálogo de blocos

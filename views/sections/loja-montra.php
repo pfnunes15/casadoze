@@ -1,16 +1,26 @@
 <?php
 /**
- * A montra da loja, numa página de conteúdo.
+ * A montra da loja, na porta de entrada.
  *
- * **Mostra produtos; não os guarda.** Os produtos estão no catálogo, em Loja, com
- * o preço, o stock e a fotografia, e é de lá que esta lista vem. Na maquete
- * estavam escritos à mão dentro da página, e isso queria dizer que mudar um preço
- * era mexer em todas as páginas onde ele aparecia — e que o stock da montra não
- * tinha nada a ver com o stock que a loja contava.
+ * **Mostra produtos; não os guarda.** Os produtos estão no catálogo, com o
+ * preço, o stock e as características, e é de lá que esta lista vem. Escritos à
+ * mão dentro da página, mudar um preço era mexer em todas as páginas onde ele
+ * aparecia — e o stock da montra não tinha nada a ver com o stock que a loja
+ * conta.
  *
- * O botão «Adicionar» é um formulário e não uma ligação, porque adicionar ao
- * cesto muda coisas: um GET que muda estado é um GET que o browser repete ao
- * recarregar, e dois produtos entravam no cesto por quem carregou em F5.
+ * **Os produtos não têm fotografia: têm desenho.** Cada um diz, numa
+ * característica chamada «Desenho», qual das oito ilustrações leva — a vela, o
+ * frasco, o cacho de ametista. Quem as pinta é js/arte-produtos.js, num canvas
+ * de 600 por 800, e a semente é o `id` do produto para o desenho sair sempre
+ * igual. Um produto sem essa característica fica com a moldura vazia em vez de
+ * rebentar, que é o que deve acontecer a uma falta de dados.
+ *
+ * **A fase da lua é um selo e não parte da frase.** Vem da característica «Lua».
+ *
+ * Os filtros por categoria filtram do lado do browser e não recarregam a página:
+ * são oito cartões já desenhados, e ir buscar os mesmos oito ao servidor para
+ * esconder quatro era uma viagem para nada. Sem JavaScript não aparecem — ver
+ * js/site.js —, e o que fica é a montra inteira, que é a resposta certa.
  *
  * @var array  $section
  * @var string $headingTag
@@ -19,115 +29,154 @@
  * @var \Admedia\Core\App $app
  */
 
+use Admedia\Shop\Models\Attribute;
+use Admedia\Shop\Models\Category;
+use Admedia\Shop\Models\Product;
+use Admedia\Shop\Shop;
+
 /* Sem loja não há montra. Um site do mesmo CMS sem `config/shop.php` não tem as
-   classes da loja para chamar, e chamá-las rebentava a página toda — não só este
-   bloco. Ver App::hasShop. */
+   classes da loja para chamar, e chamá-las rebentava a página toda. */
 if (!$app->hasShop()) {
     return;
 }
 
-$opções   = \Admedia\Cms\Models\PageSection::options($section);
-$quantos  = max(2, min(24, (int)($opções['limit'] ?? 8)));
+$opções    = \Admedia\Cms\Models\PageSection::options($section);
+$quantos   = max(2, min(24, (int)($opções['limit'] ?? 8)));
 $categoria = trim((string)($opções['category'] ?? ''));
 
-/* De uma categoria ou de todas. `withDescendants` e não só a categoria em si:
-   quem escolhe «Velas & Óleos» quer o que está lá dentro, e uma subcategoria que
-   aparecesse vazia era um buraco que ninguém explicava. */
 if ($categoria !== '') {
-    $cat = \Admedia\Shop\Models\Category::findBySlug($categoria);
-    $produtos = $cat === null
-        ? []
-        : \Admedia\Shop\Models\Product::inCategories(
-            \Admedia\Shop\Models\Category::withDescendants((int)$cat['id'])
-          );
+    $cat = Category::findBySlug($categoria);
+    $produtos = $cat === null ? [] : Product::inCategories(Category::withDescendants((int)$cat['id']));
 } else {
-    $produtos = \Admedia\Shop\Models\Product::published();
+    $produtos = Product::published();
 }
 
 $produtos = array_slice($produtos, 0, $quantos);
 
-// O botão para a loja inteira. Vazio usa o endereço da loja deste site, que está
-// em config/shop.php — escrevê-lo à mão aqui era tê-lo em dois sítios.
+/* As categorias de cada produto, para os filtros saberem o que esconder. Uma
+   pergunta por produto — oito para oito cartões —, e fica em memória: a fila dos
+   filtros precisa da mesma resposta logo a seguir. */
+$categorias = Category::tree(true);
+
+$deCada = [];
+$caraterísticas = [];
+foreach ($produtos as $produto) {
+    $id = (int)$produto['id'];
+
+    $deCada[$id] = array_map(
+        static fn(array $c): string => (string)$c['slug'],
+        Category::forProduct($id)
+    );
+
+    $caraterísticas[$id] = [];
+    foreach (Attribute::forProduct($id) as $c) {
+        $caraterísticas[$id][mb_strtolower((string)$c['name'])] = (string)$c['value'];
+    }
+}
+
 $botãoTexto = trim((string)($section['cta_label'] ?? ''));
-$botãoUrl   = trim((string)($section['cta_url'] ?? '')) ?: \Admedia\Shop\Shop::to('index');
+$botãoUrl   = trim((string)($section['cta_url'] ?? '')) ?: Shop::to('index');
 ?>
-<section class="secção"<?= $section['anchor'] !== '' ? ' id="' . e($section['anchor']) . '"' : '' ?>>
+<section class="secção secção--loja"<?= $section['anchor'] !== '' ? ' id="' . e($section['anchor']) . '"' : '' ?>>
   <div class="miolo">
 
-    <?php if (trim((string)($section['eyebrow'] ?? '')) !== ''): ?>
-      <p class="sobrescrita"><?= e((string)$section['eyebrow']) ?></p>
-    <?php endif; ?>
+    <div class="montra__topo">
+      <div class="montra__dizer">
+        <?php if (trim((string)($section['eyebrow'] ?? '')) !== ''): ?>
+          <p class="sobrescrita sobrescrita--larga" data-entra="sobe"><?= e((string)$section['eyebrow']) ?></p>
+        <?php endif; ?>
 
-    <?php if (trim((string)$section['heading']) !== ''): ?>
-      <<?= $headingTag ?> style="margin-block: 18px 16px"><?= heading_html($section['heading']) ?></<?= $headingTag ?>>
-    <?php endif; ?>
+        <?php if (trim((string)$section['heading']) !== ''): ?>
+          <<?= $headingTag ?> data-entra="sobe" data-atraso="80"><?= heading_html($section['heading']) ?></<?= $headingTag ?>>
+        <?php endif; ?>
 
-    <?php if (trim((string)($section['body'] ?? '')) !== ''): ?>
-      <p style="max-width: 640px; color: var(--letra-fraca)"><?= nl2br(e((string)$section['body'])) ?></p>
-    <?php endif; ?>
+        <?php if (trim((string)($section['body'] ?? '')) !== ''): ?>
+          <p class="montra__entrada" data-entra="sobe" data-atraso="160"><?= nl2br(e((string)$section['body'])) ?></p>
+        <?php endif; ?>
+      </div>
 
-    <?php if ($produtos === []): ?>
-      <?php /* A montra vazia diz-se. Um bloco que desaparecesse deixava o editor
-               a pensar que o tinha configurado mal, e um visitante a não ver
-               nada entre dois títulos. */ ?>
-      <p class="agenda__vazia" style="margin-top: 28px"><?= e(__('shop.empty')) ?></p>
-    <?php else: ?>
+      <?php if ($categorias !== []): ?>
+        <?php /* Escondida até o JavaScript a ligar: uma fila de filtros que não
+                 filtram é pior do que fila nenhuma. */ ?>
+        <div class="montra__filtros" role="group" aria-label="<?= e(__('shop.categories')) ?>"
+             data-filtros data-entra="sobe" data-atraso="200" hidden>
+          <button type="button" class="pastilha pastilha--activa" data-filtro="">
+            <?= e(__('shop.all')) ?>
+          </button>
+          <?php foreach ($categorias as $c): ?>
+            <button type="button" class="pastilha" data-filtro="<?= e((string)$c['slug']) ?>">
+              <?= e((string)$c['name']) ?>
+            </button>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    </div>
 
-    <div class="grelha" style="margin-top: 32px">
-      <?php foreach ($produtos as $produto): ?>
+    <div class="montra" data-montra>
+      <?php foreach ($produtos as $índice => $produto): ?>
         <?php
-        $disponível = \Admedia\Shop\Models\Product::isAvailable($produto);
-        $ficha      = \Admedia\Shop\Shop::to('product', ['slug' => $produto['slug']]);
+        $id      = (int)$produto['id'];
+        $desenho = $caraterísticas[$id]['desenho'] ?? '';
+        $lua     = $caraterísticas[$id]['lua'] ?? '';
+        $esgotado = (int)$produto['stock'] < 1;
         ?>
-        <article class="cartão">
-          <?php if (trim((string)$produto['image']) !== ''): ?>
-            <a href="<?= e($ficha) ?>" tabindex="-1" aria-hidden="true">
-              <?php /* `loading` e `fetchpriority` conforme o bloco: as imagens do
-                       primeiro bloco são o que quem chega está à espera; as de
-                       baixo não devem competir com elas. */ ?>
-              <img src="<?= e(media_url($produto['image'])) ?>" alt=""
-                   loading="<?= $eager ? 'eager' : 'lazy' ?>"
-                   <?= $eager ? '' : 'decoding="async"' ?>
-                   style="aspect-ratio: 4/5; object-fit: cover; width: 100%">
-            </a>
-          <?php endif; ?>
+        <article class="produto" data-entra="sobe" data-atraso="<?= ((int)$índice % 4) * 90 ?>"
+                 data-categorias="<?= e(implode(' ', $deCada[$id] ?? [])) ?>">
 
-          <<?= $itemTag ?> class="cartão__nome">
-            <a href="<?= e($ficha) ?>" style="color: inherit"><?= e((string)$produto['name']) ?></a>
-          </<?= $itemTag ?>>
+          <div class="produto__moldura" data-inclina>
+            <?php if ($desenho !== ''): ?>
+              <?php /* O canvas é desenhado pelo browser e não traz nada escrito:
+                       o que descreve o produto é o nome por baixo, que está em
+                       texto. Daí o `aria-hidden`. */ ?>
+              <canvas class="produto__desenho" width="600" height="800"
+                      data-desenho="<?= e($desenho) ?>" data-semente="<?= $id ?>"
+                      aria-hidden="true"></canvas>
+            <?php endif; ?>
 
-          <?php if (trim((string)($produto['summary'] ?? '')) !== ''): ?>
-            <p class="cartão__dito"><?= e((string)$produto['summary']) ?></p>
-          <?php endif; ?>
+            <span class="produto__luz" aria-hidden="true"></span>
 
-          <div class="cartão__pé">
-            <span class="cartão__linha"><?= e(money((int)$produto['price_cents'])) ?></span>
-
-            <?php if ($disponível): ?>
-              <?php /* O formulário leva para onde voltar: sem isto, adicionar da
-                       montra deixava a pessoa na página do cesto, longe do sítio
-                       onde estava a escolher. */ ?>
-              <form method="post" action="<?= e(\Admedia\Shop\Shop::to('cart_add')) ?>" style="margin-left: auto">
-                <?= csrf_field() ?>
-                <input type="hidden" name="product_id" value="<?= (int)$produto['id'] ?>">
-                <input type="hidden" name="quantity" value="1">
-                <input type="hidden" name="back" value="<?= e(\Admedia\Core\Locales::path()) ?>">
-                <button type="submit" class="botão"><?= e(__('shop.product.add')) ?></button>
-              </form>
-            <?php else: ?>
-              <span class="cartão__ordinal" style="margin-left: auto"><?= e(__('shop.sold_out')) ?></span>
+            <?php if ($lua !== ''): ?>
+              <span class="produto__lua"><?= e($lua) ?></span>
             <?php endif; ?>
           </div>
+
+          <div class="produto__linha">
+            <div class="produto__nomes">
+              <<?= $itemTag ?> class="produto__nome"><?= e((string)$produto['name']) ?></<?= $itemTag ?>>
+              <?php if (trim((string)($produto['summary'] ?? '')) !== ''): ?>
+                <span class="produto__dito"><?= e((string)$produto['summary']) ?></span>
+              <?php endif; ?>
+            </div>
+            <span class="produto__preço"><?= e(money((int)$produto['price_cents'])) ?></span>
+          </div>
+
+          <?php if ($esgotado): ?>
+            <span class="produto__esgotado"><?= e(__('shop.product.sold_out')) ?></span>
+          <?php else: ?>
+            <?php /* Conta no cesto do cabeçalho e não vai ao servidor, porque
+                     neste site não há cesto para onde ir: a loja, o checkout e
+                     as páginas de produto foram retiradas, e ficou a porta de
+                     entrada. É também o que a maquete faz — lá o botão soma um
+                     ao contador e anuncia-o, e mais nada.
+
+                     `type="button"` de propósito: dentro de um formulário, um
+                     botão sem tipo submete-o. */ ?>
+            <button type="button" class="produto__botão"
+                    data-no-cesto="<?= e((string)$produto['name']) ?>">
+              + <?= e(__('shop.product.add')) ?>
+            </button>
+          <?php endif; ?>
         </article>
       <?php endforeach; ?>
     </div>
 
     <?php if ($botãoTexto !== ''): ?>
-      <p style="margin-top: 32px">
-        <a class="botão" href="<?= e($botãoUrl) ?>"><?= e($botãoTexto) ?></a>
-      </p>
-    <?php endif; ?>
-
+      <div class="montra__pé" data-entra="sobe">
+        <a class="botão botão--ouro" href="<?= e($botãoUrl) ?>">
+          <span><?= e($botãoTexto) ?></span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
     <?php endif; ?>
   </div>
 </section>

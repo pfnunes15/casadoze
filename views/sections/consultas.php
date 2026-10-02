@@ -1,256 +1,127 @@
 <?php
 /**
- * As consultas da Casa, com a agenda em cada cartão.
+ * As consultas da Casa: a lista numerada, ao lado da mesa de tarot.
  *
- * **Mostra consultas; não as guarda.** Estão em Consultas, com a duração, o preço
- * e o horário, e é de lá que esta lista vem — ver App\Models\Consultation e a nota
- * no topo de config/blocks.php.
+ * **Mostra consultas; não as guarda.** Estão em `consultations`, com a duração, o
+ * preço e o modo, e é de lá que esta lista vem — ver App\Models\Consultation.
  *
- * Três coisas que este parcial decide, e porquê:
+ * A composição é a da maquete: duas colunas que se partem em duas linhas quando
+ * a largura acaba. À esquerda a mesa de tarot — ver views/partials/tarot.php —, à
+ * direita a sobrescrita, o título, a frase de entrada e as consultas numeradas em
+ * romanos, separadas por riscos e não por caixas: uma lista e não uma grelha de
+ * cartões.
  *
- * **As horas não são escritas no HTML — vêm por JSON.** A página pode estar numa
- * cache, e as horas mudam a cada marcação: uma página guardada que mostrasse horas
- * já tomadas punha as pessoas a carregar em botões que recusam. O `js/site.js` vai
- * buscá-las a /consultas/vagas quando a secção entra no ecrã.
+ * **Não há agenda aqui.** A maquete não a tem: cada consulta leva um botão, e
+ * marcar é uma conversa que começa noutro lado. A versão anterior desenhava um
+ * selector de dia e hora dentro de cada cartão, que é desenho que a maquete
+ * nunca pediu.
  *
- * **Sem JavaScript continua a dar para marcar.** O `<noscript>` desenha a mesma
- * agenda como um `<select>` com as horas todas, feito com os dados que o servidor
- * já tem à mão. É mais feio e não é mais lento; o que não se pode é não existir.
- *
- * **Uma consulta sem agenda mostra um botão em vez de horas.** São os trabalhos
- * espirituais: preparam-se depois de uma conversa, e não há horas para escolher.
- * Ver a coluna `is_bookable`.
+ * **Sem preço diz «Sob consulta»**, que é o que a maquete escreve nos trabalhos
+ * espirituais — e é a frase certa para o que ainda não tem número. Quem o
+ * escrever em Consultas vê-o aparecer aqui.
  *
  * @var array  $section
  * @var string $headingTag
  * @var string $itemTag
  */
-$opções = \Admedia\Cms\Models\PageSection::options($section);
-$comAgenda = ($opções['agenda'] ?? 'inline') !== 'linked';
 
-$consultas = \App\Models\Consultation::published();
+use App\Models\Consultation;
 
-/* De onde se voltou, para um erro de preenchimento aparecer ao pé do formulário
-   que o causou e não no topo de uma página qualquer. */
-$voltarPara = \Admedia\Core\Locales::path();
+$consultas = Consultation::published();
 
-// As mensagens desta secção. Não são mensagens de página — pertencem ao
-// formulário, e no topo do ecrã ficariam longe do campo que falhou.
-$bem = $flashes['marcacao.ok'][0] ?? null;
-$mal = $flashes['marcacao.bad'][0] ?? null;
+/* Os romanos. Escritos e não calculados: são quatro, a maquete mostra quatro, e
+   um conversor de numeração romana para uma lista que nunca passa de uma dúzia é
+   código a mais. Acima do que a tabela tem, a lista continua com o número
+   árabe — é feio, e é melhor do que uma linha sem ordinal nenhum. */
+$romanos = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 6 => 'VI',
+            7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X', 11 => 'XI', 12 => 'XII'];
 
-// Onde levar o «Falar com o Zé», das consultas que não têm agenda.
-$urlDaConversa = trim(setting('readings.talk_url'));
+// Onde levar quem carrega no botão. Vazio não desenha botão nenhum: um botão
+// sem destino é um botão que não faz nada.
+$urlDaConversa = trim((string)setting('readings.talk_url'));
 ?>
-<section class="secção"<?= $section['anchor'] !== '' ? ' id="' . e($section['anchor']) . '"' : '' ?>>
+<section class="secção secção--consultas"<?= $section['anchor'] !== '' ? ' id="' . e($section['anchor']) . '"' : '' ?>>
   <div class="miolo">
+    <div class="consultas__par">
 
-    <?php if (trim((string)($section['eyebrow'] ?? '')) !== ''): ?>
-      <p class="sobrescrita"><?= e((string)$section['eyebrow']) ?></p>
-    <?php endif; ?>
+      <?php /* A mesa, à esquerda. É o que faz esta secção ser uma mesa e não uma
+               lista de preços: quem chega tira três cartas antes de decidir se
+               marca. Ver views/partials/tarot.php. */ ?>
+      <div class="consultas__mesa" data-entra="sobe">
+        <?php partial('partials/tarot'); ?>
+      </div>
 
-    <?php if (trim((string)$section['heading']) !== ''): ?>
-      <<?= $headingTag ?> style="margin-block: 18px 20px"><?= heading_html($section['heading']) ?></<?= $headingTag ?>>
-    <?php endif; ?>
+      <div class="consultas__dizer">
+        <?php if (trim((string)($section['eyebrow'] ?? '')) !== ''): ?>
+          <p class="sobrescrita" data-entra="sobe"><?= e((string)$section['eyebrow']) ?></p>
+        <?php endif; ?>
 
-    <?php if (trim((string)($section['body'] ?? '')) !== ''): ?>
-      <div style="max-width: 680px; color: var(--letra-fraca)"><?= (string)$section['body'] ?></div>
-    <?php endif; ?>
+        <?php if (trim((string)$section['heading']) !== ''): ?>
+          <<?= $headingTag ?> class="consultas__título" data-entra="sobe" data-atraso="80"><?= heading_html($section['heading']) ?></<?= $headingTag ?>>
+        <?php endif; ?>
 
-    <?php if ($bem !== null): ?><p class="aviso aviso--bom" style="margin-top: 24px"><?= e($bem) ?></p><?php endif; ?>
-    <?php if ($mal !== null): ?><p class="aviso aviso--mau" style="margin-top: 24px"><?= e($mal) ?></p><?php endif; ?>
+        <?php if (trim((string)($section['body'] ?? '')) !== ''): ?>
+          <div class="consultas__entrada" data-entra="sobe" data-atraso="160"><?= (string)$section['body'] ?></div>
+        <?php endif; ?>
 
-    <?php if ($consultas === []): ?>
-      <p class="agenda__vazia" style="margin-top: 28px"><?= e(__('consultas.none')) ?></p>
-    <?php else: ?>
+        <?php if ($consultas !== []): ?>
+        <div class="consultas__lista">
+          <?php foreach ($consultas as $i => $consulta): ?>
+            <?php
+            $modo     = (string)($consulta['mode'] ?? 'ambos');
+            $duração  = (int)($consulta['duration_min'] ?? 0);
+            $preço    = $consulta['price_cents'] ?? null;
+            $marcável = (int)($consulta['is_bookable'] ?? 0) === 1;
+            ?>
+            <?php /* A luz que segue o rato vem do js/site.js, que escreve `--rato-x`
+                     e `--rato-y`. Sem JavaScript fica no sítio de origem, fora da
+                     linha, e não se vê — que é o que deve acontecer a uma luz. */ ?>
+            <article class="consulta" data-entra="sobe" data-atraso="<?= (int)$i * 120 ?>">
+              <span class="consulta__ordinal" aria-hidden="true"><?= e($romanos[$i + 1] ?? (string)($i + 1)) ?></span>
 
-    <div class="grelha grelha--larga grelha--solta" style="margin-top: 36px">
-      <?php foreach ($consultas as $n => $consulta): ?>
-        <?php
-        $marcável = !empty($consulta['is_bookable']);
-        $modos    = \App\Models\Consultation::modos($consulta);
-        /* As horas livres, para o `<noscript>` e para saber se há alguma.
+              <div class="consulta__corpo">
+                <p class="consulta__meta">
+                  <?php /* A duração só aparece quando há duração: os trabalhos
+                           espirituais não duram meia hora, duram o que durarem. */ ?>
+                  <?php if ($duração > 0): ?>
+                    <span><?= e(duration_text($duração)) ?></span>
+                    <span aria-hidden="true">&middot;</span>
+                  <?php endif; ?>
+                  <span><?= e(__('consultas.mode.' . $modo)) ?></span>
+                </p>
 
-           A mesma janela que o JSON usa — ver BookingController::DIAS_NA_PAGINA —
-           e não o horizonte todo: as duas listas têm de dizer o mesmo, ou quem
-           tem JavaScript vê quatro semanas e quem não tem vê três meses. */
-        $vagas = $marcável
-            ? \App\Models\ConsultationSlot::bookable(
-                  (int)$consulta['id'],
-                  \App\Controllers\BookingController::DIAS_NA_PAGINA
-              )
-            : [];
-        ?>
-        <article class="cartão">
-          <span class="cartão__ordinal"><?= e(['I', 'II', 'III', 'IV', 'V', 'VI'][$n] ?? (string)($n + 1)) ?></span>
+                <<?= $itemTag ?> class="consulta__nome"><?= e((string)$consulta['name']) ?></<?= $itemTag ?>>
 
-          <<?= $itemTag ?> class="cartão__nome"><?= e((string)$consulta['name']) ?></<?= $itemTag ?>>
-
-          <?php if (trim((string)($consulta['summary'] ?? '')) !== ''): ?>
-            <p class="cartão__dito"><?= e((string)$consulta['summary']) ?></p>
-          <?php endif; ?>
-
-          <p class="cartão__linha">
-            <?= e(\App\Models\Consultation::linha($consulta)) ?>
-            &middot; <?= e(__('consultas.mode.' . (string)$consulta['mode'])) ?>
-          </p>
-
-          <?php if (!$marcável): ?>
-            <?php /* Sem agenda: um botão para a conversa. Sem endereço escrito nas
-                     Definições não se desenha botão nenhum — um botão que não leva
-                     a sítio nenhum é pior do que a sua falta. */ ?>
-            <?php if ($urlDaConversa !== ''): ?>
-              <div class="cartão__pé">
-                <a class="botão botão--cheio" href="<?= e($urlDaConversa) ?>"><?= e(__('consultas.talk')) ?></a>
-              </div>
-            <?php endif; ?>
-
-          <?php elseif (!$comAgenda): ?>
-            <div class="cartão__pé">
-              <a class="botão botão--cheio" href="#marcar-<?= (int)$consulta['id'] ?>"><?= e(__('consultas.book')) ?></a>
-            </div>
-
-          <?php elseif ($vagas === []): ?>
-            <p class="agenda__vazia"><?= e(__('consultas.none')) ?></p>
-
-          <?php else: ?>
-            <form method="post" action="<?= e(locale_url('/marcar')) ?>" id="marcar-<?= (int)$consulta['id'] ?>">
-              <?= csrf_field() ?>
-              <input type="hidden" name="source" value="<?= e($voltarPara) ?>">
-
-              <?php /* O alçapão: um campo que uma pessoa nunca vê e que um robô
-                       preenche por o encontrar no documento. Fora do ecrã e não
-                       `display:none`, que há robôs que sabem saltar. */ ?>
-              <div class="alçapão" aria-hidden="true">
-                <label for="website-<?= (int)$consulta['id'] ?>">Website</label>
-                <input type="text" id="website-<?= (int)$consulta['id'] ?>" name="website" tabindex="-1" autocomplete="off">
-              </div>
-
-              <?php /* A agenda, montada pelo JavaScript. Fica `hidden` até as horas
-                       chegarem: uma caixa vazia com dois títulos dentro, à espera,
-                       parece uma coisa partida. */ ?>
-              <div class="agenda" data-agenda data-consulta="<?= (int)$consulta['id'] ?>"
-                   data-fonte="<?= e(locale_url('/consultas/vagas')) ?>" hidden>
-                <div class="agenda__passo">
-                  <span class="agenda__rótulo"><?= e(__('consultas.pick_day')) ?></span>
-                  <div class="agenda__fila" data-dias></div>
-                </div>
-                <div class="agenda__passo">
-                  <span class="agenda__rótulo"><?= e(__('consultas.pick_time')) ?></span>
-                  <div class="agenda__fila" data-horas></div>
-                </div>
-                <input type="hidden" name="slot_id" data-vaga value="">
-              </div>
-
-              <p class="agenda__vazia" data-vazia hidden><?= e(__('consultas.none')) ?></p>
-
-              <?php /* A mesma escolha sem JavaScript. Um `<select>` com as horas
-                       das próximas quatro semanas: uma lista comprida não é
-                       desenho, mas é uma marcação que se faz. O `name` é o mesmo,
-                       por isso o controlador não sabe nem precisa de saber por
-                       qual das duas vias é que a vaga chegou. */ ?>
-              <noscript>
-                <div class="campo">
-                  <label for="vaga-<?= (int)$consulta['id'] ?>"><?= e(__('consultas.pick_time')) ?></label>
-                  <select id="vaga-<?= (int)$consulta['id'] ?>" name="slot_id" required>
-                    <?php foreach ($vagas as $vaga): ?>
-                      <option value="<?= (int)$vaga['id'] ?>">
-                        <?= e(format_date((string)$vaga['starts_at'], 'l, j \d\e F')) ?>
-                        &middot; <?= e(date('H:i', strtotime((string)$vaga['starts_at']))) ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </noscript>
-
-              <div style="margin-top: 22px">
-                <div class="campo <?= errors('name') ? 'campo--dito' : '' ?>">
-                  <label for="nome-<?= (int)$consulta['id'] ?>"><?= e(__('marcacao.name')) ?></label>
-                  <input type="text" id="nome-<?= (int)$consulta['id'] ?>" name="name"
-                         value="<?= e((string)old('name')) ?>" autocomplete="name" required>
-                  <?php foreach (errors('name') as $dito): ?><span class="dito"><?= e($dito) ?></span><?php endforeach; ?>
-                </div>
-
-                <div class="campo <?= errors('email') ? 'campo--dito' : '' ?>">
-                  <label for="email-<?= (int)$consulta['id'] ?>"><?= e(__('marcacao.email')) ?></label>
-                  <input type="email" id="email-<?= (int)$consulta['id'] ?>" name="email"
-                         value="<?= e((string)old('email')) ?>" autocomplete="email" required>
-                  <?php foreach (errors('email') as $dito): ?><span class="dito"><?= e($dito) ?></span><?php endforeach; ?>
-                </div>
-
-                <div class="campo <?= errors('phone') ? 'campo--dito' : '' ?>">
-                  <label for="tel-<?= (int)$consulta['id'] ?>">
-                    <?= e(__('marcacao.phone')) ?>
-                    <span class="opcional">(<?= e(__('marcacao.phone_optional')) ?>)</span>
-                  </label>
-                  <input type="tel" id="tel-<?= (int)$consulta['id'] ?>" name="phone"
-                         value="<?= e((string)old('phone')) ?>" autocomplete="tel">
-                  <?php foreach (errors('phone') as $dito): ?><span class="dito"><?= e($dito) ?></span><?php endforeach; ?>
-                </div>
-
-                <?php /* O «onde» só se pergunta às consultas que são as duas
-                         coisas. Num selector de uma opção só, a escolha já está
-                         feita — e perguntá-la era pedir uma decisão que não
-                         existe. O controlador usa a mesma regra. */ ?>
-                <?php if (count($modos) > 1): ?>
-                <div class="campo <?= errors('mode') ? 'campo--dito' : '' ?>">
-                  <label for="modo-<?= (int)$consulta['id'] ?>"><?= e(__('marcacao.mode')) ?></label>
-                  <select id="modo-<?= (int)$consulta['id'] ?>" name="mode" required>
-                    <?php foreach ($modos as $modo): ?>
-                      <option value="<?= e($modo) ?>"<?= old('mode') === $modo ? ' selected' : '' ?>>
-                        <?= e(__('consultas.mode.' . $modo)) ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                  <?php foreach (errors('mode') as $dito): ?><span class="dito"><?= e($dito) ?></span><?php endforeach; ?>
-                </div>
-                <?php else: ?>
-                  <input type="hidden" name="mode" value="<?= e($modos[0]) ?>">
+                <?php if (trim((string)($consulta['summary'] ?? '')) !== ''): ?>
+                  <p class="consulta__dito"><?= e((string)$consulta['summary']) ?></p>
                 <?php endif; ?>
-
-                <?php /* Quantas pessoas, só onde cabe mais do que uma. Numa leitura
-                         de uma pessoa, um campo com um «1» que não se pode mudar é
-                         um campo a ocupar espaço. */ ?>
-                <?php if ((int)$consulta['max_party'] > 1): ?>
-                <div class="campo <?= errors('people') ? 'campo--dito' : '' ?>">
-                  <label for="quantas-<?= (int)$consulta['id'] ?>"><?= e(__('marcacao.people')) ?></label>
-                  <input type="number" id="quantas-<?= (int)$consulta['id'] ?>" name="people"
-                         min="1" max="<?= (int)$consulta['max_party'] ?>"
-                         value="<?= e((string)(old('people') ?: 1)) ?>" required>
-                  <?php foreach (errors('people') as $dito): ?><span class="dito"><?= e($dito) ?></span><?php endforeach; ?>
-                </div>
-                <?php else: ?>
-                  <input type="hidden" name="people" value="1">
-                <?php endif; ?>
-
-                <div class="campo">
-                  <label for="nota-<?= (int)$consulta['id'] ?>"><?= e(__('marcacao.note')) ?></label>
-                  <textarea id="nota-<?= (int)$consulta['id'] ?>" name="note" rows="3"><?= e((string)old('note')) ?></textarea>
-                  <span class="ajuda"><?= e(__('marcacao.note_help')) ?></span>
-                </div>
-
-                <div class="campo campo--caixa <?= errors('consent') ? 'campo--dito' : '' ?>">
-                  <input type="checkbox" id="ok-<?= (int)$consulta['id'] ?>" name="consent" value="1" required>
-                  <label for="ok-<?= (int)$consulta['id'] ?>"><?= e(__('marcacao.consent')) ?></label>
-                </div>
-                <?php foreach (errors('consent') as $dito): ?><span class="dito"><?= e($dito) ?></span><?php endforeach; ?>
-
-                <button type="submit" class="botão botão--cheio botão--largo">
-                  <?= e(__('marcacao.submit')) ?>
-                </button>
               </div>
-            </form>
+
+              <div class="consulta__fim">
+                <span class="consulta__preço">
+                  <?= $preço !== null ? e(money((int)$preço)) : e(__('consultas.on_request')) ?>
+                </span>
+                <?php if ($urlDaConversa !== ''): ?>
+                  <a class="consulta__botão" href="<?= e($urlDaConversa) ?>">
+                    <?= e(__($marcável ? 'consultas.book' : 'consultas.talk')) ?>
+                  </a>
+                <?php endif; ?>
+              </div>
+            </article>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
+        <div class="consultas__pé" data-entra="sobe">
+          <p class="consultas__nota"><?= e(__('consultas.disclaimer')) ?></p>
+          <?php if ($urlDaConversa !== ''): ?>
+            <a class="consultas__agenda" href="<?= e($urlDaConversa) ?>">
+              <?= e(__('consultas.agenda')) ?> <span aria-hidden="true">&rarr;</span>
+            </a>
           <?php endif; ?>
-        </article>
-      <?php endforeach; ?>
+        </div>
+      </div>
+
     </div>
-
-    <?php /* A ressalva, debaixo de onde se marca — e não só no rodapé. É no
-             momento de marcar que importa lê-la, e é uma exigência de quem vende
-             serviços desta natureza. Vem do catálogo e não deste ficheiro, para
-             existir nas cinco línguas. */ ?>
-    <p class="ressalva" style="margin-top: 32px"><?= e(__('consultas.disclaimer')) ?></p>
-
-    <?php endif; ?>
   </div>
 </section>

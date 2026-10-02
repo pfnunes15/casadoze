@@ -80,11 +80,18 @@ INSERT INTO pages (id, locale, slug, menu, title, content, meta_description, is_
 -- ---------------------------------------------------------------------------
 INSERT INTO page_sections (id, page_id, locale, type, anchor, eyebrow, heading, heading_level, body, image, image_alt, cta_label, cta_url, options, sort_order, is_published) VALUES
 
+    -- A abertura não leva texto por cima: o nome da Casa está desenhado dentro da
+    -- fotografia. O título fica escrito à mesma — é o `h1` da página, lido por
+    -- quem a ouve —, mas fora do ecrã. A frase que aqui estava é a mesma que a
+    -- página já tem em `meta_description`, e dizê-la duas vezes era repeti-la.
+    --
+    -- O primeiro botão é o cheio, e é o da loja: quem chega sem ler nada e
+    -- carrega num botão quer ver o que a Casa vende.
     (1, 1, 'pt', 'abertura', '', '', 'Casa de Zé', 1,
-        'Velas, óleos, cristais e ervas preparados à mão no Covil, no tempo certo da lua.',
+        '',
         '/assets/img/abertura.jpg', 'A mesa da Casa de Zé, com velas acesas',
-        'Marcar consulta', '#consultas',
-        '{"cta2_label":"Entrar na loja","cta2_url":"#loja","embers":70}',
+        'Entrar na loja', '#loja',
+        '{"cta2_label":"Marcar consulta","cta2_url":"#consultas","embers":70}',
         1, 1),
 
     (2, 1, 'pt', 'loja-montra', 'loja', 'Loja', 'Preparado à mão, no tempo da lua', 2,

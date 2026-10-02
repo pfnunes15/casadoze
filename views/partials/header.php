@@ -82,6 +82,7 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
         <button type="button" class="pílula" data-abrir-idiomas
                 aria-expanded="false" aria-label="<?= e(__('site.lang')) ?>">
           <?= e(\Admedia\Core\Locales::get(\Admedia\Core\Locales::current())['short'] ?? '') ?>
+          <span class="pílula__seta" aria-hidden="true">&#9660;</span>
         </button>
         <?php /* Escondido com o atributo `hidden` e não com uma classe: assim um
                  leitor de ecrã também não o encontra enquanto está fechado, e
@@ -101,7 +102,10 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
       <?php if ($app->hasShop()): ?>
       <a class="pílula" href="<?= e(\Admedia\Shop\Shop::to('cart')) ?>">
         <?= e(__('site.cart')) ?>
-        <?php if ($cesto > 0): ?><span class="pílula__conta"><?= (int)$cesto ?></span><?php endif; ?>
+        <?php /* Sempre escrito, mesmo a zero: um contador que só aparece quando
+                 há alguma coisa faz a barra mudar de largura no instante em que
+                 se põe a primeira peça no cesto. */ ?>
+        <span class="pílula__conta"><?= (int)$cesto ?></span>
       </a>
       <?php endif; ?>
     </div>

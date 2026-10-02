@@ -32,6 +32,100 @@ return [
     'footer.complaints' => 'Livre de réclamations électronique',
     'footer.rights'     => 'Tous droits réservés',
 
+    // ---------------------------------------------------------------------
+    // La lettre de la lune, dans le pied de page.
+    // ---------------------------------------------------------------------
+    'footer.nl_title' => 'La lune du mois dans ta boîte',
+    'footer.nl_text'  => 'Au début de chaque mois nous envoyons le calendrier lunaire, les '
+                       . 'rituels suggérés et les nouveautés de la boutique.',
+    'footer.nl_place' => 'Ton email',
+    'footer.nl_send'  => 'S\'abonner',
+    'footer.nl_ok'    => 'Merci. À la prochaine lune.',
+    'footer.nl_gift'  => 'En t\'abonnant, tu reçois le Guide du rituel de pleine lune en PDF.',
+    'footer.house'    => 'La Maison',
+    'footer.help'     => 'Aide',
+
+    // ---------------------------------------------------------------------
+    // Maintenant à la Maison : le prochain sabbat et le calendrier lunaire.
+    // ---------------------------------------------------------------------
+    'agora.next'   => 'Prochain sabbat',
+    'agora.left'   => 'dans :n jours',
+    'agora.left_1' => 'dans 1 jour',
+    'agora.today'  => 'C\'est aujourd\'hui',
+    'agora.kit'    => 'Coffret :sabbat',
+    'agora.lunar'  => 'Calendrier lunaire',
+    'agora.now'    => 'Aujourd\'hui',
+
+    // Le pont entre la boutique et les consultations.
+    'ponte.left'  => 'Boutique · objets expédiés',
+    'ponte.right' => 'Consultations · sur rendez-vous',
+
+    // Le Grimoire : les séances gratuites.
+    'grimorio.related' => 'Utilisé dans cette séance',
+    'grimorio.thumb'   => '[Vignette de la vidéo]',
+
+    // ---------------------------------------------------------------------
+    // A mesa de tarot.
+    //
+    // Os vinte e dois Arcanos Maiores, e o que cada um diz ao direito e ao
+    // contrário. Numa linha só por campo, separados por barra: são três
+    // frases a traduzir em vez de sessenta e seis.
+    // ---------------------------------------------------------------------
+    'tarot.title'   => 'Tirage de 3 cartes',
+    'tarot.start'   => 'Mélanger et tirer',
+    'tarot.skip'    => 'Passer l’animation',
+    'tarot.focus'   => 'Concentre-toi sur ta question…',
+    'tarot.cut'     => 'Coupe du jeu…',
+    'tarot.pick'    => 'Choisis 3 cartes',
+    'tarot.reveal'  => 'Touche les cartes pour les révéler',
+    'tarot.again'   => 'Nouveau tirage',
+    'tarot.full'    => 'Réserver une lecture complète',
+    'tarot.inv'     => 'Inversée',
+    'tarot.note'    => 'Tirage symbolique et gratuit avec les 22 Arcanes majeurs.',
+    'tarot.pos'     => 'Passé|Présent|Futur',
+    'tarot.names'   => 'Le Mat|Le Bateleur|La Papesse|L’Impératrice|L’Empereur|Le Pape|L’Amoureux|Le Chariot|La Force|L’Ermite|La Roue de Fortune|La Justice|Le Pendu|L’Arcane sans nom|La Tempérance|Le Diable|La Maison Dieu|L’Étoile|La Lune|Le Soleil|Le Jugement|Le Monde',
+    'tarot.up'      => 'Nouveaux départs, spontanéité|Volonté, initiative|Intuition, mystère|Abondance, créativité|Structure, stabilité|Tradition, enseignement|Union, choix du cœur|Détermination, avancée|Courage, compassion|Introspection, quête intérieure|Changement, cycles|Équilibre, vérité|Pause, nouveau regard|Transformation, fin de cycle|Harmonie, patience|Désir, attachements|Rupture, révélation soudaine|Espoir, renouveau|Illusion, intuition profonde|Joie, réussite|Éveil, appel|Accomplissement, achèvement',
+    'tarot.rev'     => 'Imprudence, hésitation|Manipulation, énergie dispersée|Secrets, intuition bloquée|Blocage créatif, dépendance|Rigidité, contrôle excessif|Rébellion, remise en question|Déséquilibre, indécision|Manque de direction|Insécurité, impatience|Isolement, solitude|Résistance au changement, retards|Injustice, fuite des responsabilités|Stagnation, sacrifice inutile|Peur du changement, attachement|Excès, déséquilibre|Libération, briser les chaînes|Éviter le changement, crise différée|Découragement, manque de foi|Clarté naissante, peurs apaisées|Enthousiasme freiné, retards|Doute, autocritique|Cycle inachevé',
+
+    // ---------------------------------------------------------------------
+    // A previsão dos signos.
+    // ---------------------------------------------------------------------
+    'signos.eyebrow'   => 'Prévision des signes',
+    'signos.title'     => 'Ta semaine dans les astres',
+    'signos.note'      => 'Mise à jour chaque semaine.',
+    'signos.from'      => 'Du',
+    'signos.to'        => 'au',
+    'signos.element'   => 'Élément',
+    'signos.ruler'     => 'Maître',
+    'signos.share'     => 'Partager mon signe',
+    'signos.names'     => 'Bélier|Taureau|Gémeaux|Cancer|Lion|Vierge|Balance|Scorpion|Sagittaire|Capricorne|Verseau|Poissons',
+    'signos.planets'   => 'Mars|Vénus|Mercure|Lune|Soleil|Mercure|Vénus|Pluton|Jupiter|Saturne|Uranus|Neptune',
+    'signos.elements'  => 'Feu|Terre|Air|Eau',
+    'signos.colors'    => 'Doré|Vert mousse|Lilas|Bleu profond',
+    'signos.meters'    => 'Amour|Travail|Énergie',
+    'signos.lucky'     => 'Chiffre|Jour fort|Couleur',
+    'lua.0' => 'Nouvelle lune',
+    'lua.1' => 'Premier croissant',
+    'lua.2' => 'Premier quartier',
+    'lua.3' => 'Gibbeuse croissante',
+    'lua.4' => 'Pleine lune',
+    'lua.5' => 'Gibbeuse décroissante',
+    'lua.6' => 'Dernier quartier',
+    'lua.7' => 'Dernier croissant',
+
+
+    // ---------------------------------------------------------------------
+    // Acheter par intention.
+    // ---------------------------------------------------------------------
+    'intencao.piece'  => ':n pièce',
+    'intencao.pieces' => ':n pièces',
+    'intencao.title'  => 'Pour :intencao',
+
+    // A loja: duas frases do pacote que a Casa diz mais curtas.
+    // O botão da montra é «+ Adicionar» e não «Adicionar ao carrinho» —
+    // ao lado do sinal de mais, o resto da frase é ruído.
+    'shop.product.add'      => 'Ajouter',
+    'shop.product.sold_out' => 'Épuisé',
     'about.does'   => 'Ce que je fais',
     'about.doesnt' => 'Ce que je ne fais pas',
 

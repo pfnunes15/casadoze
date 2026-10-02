@@ -63,37 +63,30 @@ return [
     // -----------------------------------------------------------------------
     'abertura' => [
         'label'   => 'Abertura',
-        'summary' => 'A fotografia de ecrã inteiro com que a Casa se apresenta, com uma '
-                   . 'frase e dois botões por baixo — um para a loja, outro para as consultas.',
+        'summary' => 'A fotografia de ecrã inteiro com que a Casa se apresenta, com dois '
+                   . 'botões encostados à margem — um para a loja, outro para as consultas.',
         'under_header'  => true,
         'heading_level' => 1,
         'sample' => [
             'heading'   => 'Casa de Zé',
-            'body'      => 'Velas, óleos, cristais e ervas preparados à mão no Covil, '
-                         . 'no tempo certo da lua.',
-            'cta_label' => 'Marcar consulta',
+            'cta_label' => 'Entrar na loja',
         ],
         'fields' => [
             'image' => [
                 'type'  => 'image',
                 'label' => 'Fotografia',
-                'help'  => 'Ocupa o ecrã inteiro e é esbatida nas bordas, em redondo. O assunto '
-                         . 'deve estar ao centro — ao contrário das aberturas com texto por '
-                         . 'cima, aqui é o meio que fica à vista.',
+                'help'  => 'Ocupa o ecrã inteiro e é esbatida nas bordas, em redondo. Não leva '
+                         . 'texto por cima, e por isso é ela que diz o nome da Casa: o assunto '
+                         . 'e o nome devem estar ao centro, que é o que fica à vista.',
             ],
             'heading' => [
                 'type'  => 'heading',
                 'level' => 1,
                 'label' => 'Título',
-                'help'  => 'O nome da Casa, ou o que a página é. É o título da página para um '
-                         . 'motor de busca, e por isso há um só por página.',
-            ],
-            'body' => [
-                'type'  => 'textarea',
-                'rows'  => 3,
-                'label' => 'Frase',
-                'help'  => 'Uma ou duas linhas a dizer o que a Casa faz. Quem chega lê isto antes '
-                         . 'de decidir se desce.',
+                'help'  => 'O nome da Casa, ou o que a página é. Não aparece no ecrã — o nome '
+                         . 'está desenhado dentro da fotografia —, mas é lido por quem ouve a '
+                         . 'página e por um motor de busca, e por isso há um só por página e '
+                         . 'não se deixa vazio.',
             ],
             'cta_label' => [
                 'type'  => 'text',
@@ -121,12 +114,70 @@ return [
                 'min'      => 0,
                 'max'      => 200,
                 'label'    => 'Quantas brasas',
-                'help'     => 'Os pontos de luz a subir por cima da fotografia. Zero desliga-as. '
+                'help'     => 'Os pontos de luz a subir por todo o ecrã. Zero desliga-as. '
                             . 'Acima de 120 nota-se num telefone antigo. A quem pediu menos '
                             . 'movimento no sistema não aparecem, seja o número que for.',
                 'advanced' => true,
             ],
             'anchor' => ['type' => 'anchor', 'advanced' => true],
+        ],
+    ],
+
+    // -----------------------------------------------------------------------
+    // Comprar por intenção.
+    //
+    // A loja arruma-se por categorias — velas, cristais, ervas —, que é como se
+    // arruma um armazém. Quem chega não procura uma vela: procura dormir melhor.
+    // Esta é a outra entrada para o mesmo catálogo, pela razão e não pela
+    // prateleira, e cada cartão abre a lista dos produtos com aquela etiqueta.
+    // -----------------------------------------------------------------------
+    'intencoes' => [
+        'label'   => 'Comprar por intenção',
+        'summary' => 'A fila de cartões com que se entra na loja pela razão — proteção, amor, '
+                   . 'sono — em vez de pela prateleira.',
+        'sample' => [
+            'eyebrow' => 'Comprar por intenção',
+            'heading' => 'O que procuras?',
+            'items'   => [
+                ['title' => 'Proteção', 'subtitle' => 'protecao'],
+            ],
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading' => ['type' => 'heading', 'label' => 'Título'],
+            'anchor'  => ['type' => 'anchor', 'advanced' => true],
+        ],
+        'items' => [
+            'label'    => 'Intenções',
+            'singular' => 'intenção',
+            'fields'   => [
+                'title' => [
+                    'type'  => 'text',
+                    'label' => 'Intenção',
+                    'help'  => 'Uma ou duas palavras. É o que o cartão diz em grande.',
+                ],
+                'subtitle' => [
+                    'type'  => 'text',
+                    'label' => 'Etiqueta',
+                    'help'  => 'A etiqueta da loja que este cartão abre — o endereço dela, em '
+                             . 'minúsculas e sem acentos, como aparece em Loja > Etiquetas. É '
+                             . 'ela que decide que produtos aparecem e quantos o cartão conta. '
+                             . 'Uma etiqueta que não exista desenha o cartão sem contagem.',
+                ],
+                'caption' => [
+                    'type'    => 'select',
+                    'label'   => 'Símbolo',
+                    'choices' => [
+                        'olho' => 'Olho — proteção',
+                        'laco' => 'Dois laços — amor',
+                        'sol'  => 'Sol — prosperidade',
+                        'fumo' => 'Fumo — limpeza',
+                        'lua'  => 'Lua — sono e sonhos',
+                    ],
+                    'help'    => 'O desenho a traço no cimo do cartão. Sem símbolo escolhido o '
+                               . 'cartão desenha-se à mesma, sem ele.',
+                ],
+            ],
         ],
     ],
 
@@ -178,6 +229,71 @@ return [
                 'help'  => 'A loja inteira. Vazio usa o endereço da loja deste site.',
             ],
             'anchor' => ['type' => 'anchor', 'advanced' => true],
+        ],
+    ],
+
+    // -----------------------------------------------------------------------
+    // Agora na Casa.
+    //
+    // O próximo sabbat e o mês da lua. As duas coisas calculam-se — ver
+    // App\Services\Lua —, e por isso este bloco quase não tem campos: o que se
+    // escreve é o kit, e o nome dele é o do sabbat.
+    // -----------------------------------------------------------------------
+    'agora' => [
+        'label'   => 'Agora na Casa',
+        'summary' => 'O próximo sabbat com a contagem dos dias, o kit da data, e a fita com '
+                   . 'as fases da lua do mês. As datas e as luas são calculadas; não se escrevem.',
+        'sample' => [
+            'eyebrow'   => 'Agora na Casa',
+            'body'      => 'Velas, ervas e o ritual escrito à mão para celebrar a data.',
+            'cta_label' => 'Ver o kit',
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'body' => [
+                'type'  => 'textarea',
+                'rows'  => 3,
+                'label' => 'O que é o kit',
+                'help'  => 'Duas linhas a dizer o que vai dentro. O nome não se escreve: é o do '
+                         . 'sabbat que vier a seguir, e muda sozinho.',
+            ],
+            'price' => [
+                'type'  => 'text',
+                'store' => 'options',
+                'label' => 'Preço do kit',
+                'help'  => 'Escrito como aparece — «38,00 €». Vazio não mostra preço nenhum, '
+                         . 'que é o que deve acontecer enquanto não houver um.',
+            ],
+            'cta_label' => ['type' => 'text', 'label' => 'Texto do botão'],
+            'cta_url'   => ['type' => 'url',  'label' => 'Endereço do botão'],
+            'anchor'    => ['type' => 'anchor', 'advanced' => true],
+        ],
+    ],
+
+    // -----------------------------------------------------------------------
+    // A ponte.
+    //
+    // Separa o que se leva para casa do que se vive à mesa. Por trás passam duas
+    // filas de letras ocas — «Loja» e «Consultas» —, que são textura e não
+    // texto, e por isso não se escrevem aqui.
+    // -----------------------------------------------------------------------
+    'ponte' => [
+        'label'   => 'Ponte entre a loja e as consultas',
+        'summary' => 'A faixa que separa os produtos dos serviços, com as duas palavras em '
+                   . 'letras ocas a passar por trás.',
+        'sample' => [
+            'eyebrow' => 'Da loja à mesa',
+            'heading' => 'Os objetos levam-se para casa. As consultas vivem-se à mesa.',
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading' => ['type' => 'heading', 'label' => 'Título'],
+            'body'    => ['type' => 'textarea', 'rows' => 3, 'label' => 'Frase'],
+            'cta_label' => ['type' => 'text', 'label' => 'O que fica acima', 'help' => 'Vazio diz «Loja · produtos com envio».'],
+            'cta_url'   => ['type' => 'url',  'label' => 'Para onde leva', 'help' => 'Vazio leva à loja desta página.'],
+            'cta2_label' => ['type' => 'text', 'store' => 'options', 'label' => 'O que fica abaixo'],
+            'cta2_url'   => ['type' => 'url',  'store' => 'options', 'label' => 'Para onde leva'],
+            'anchor'     => ['type' => 'anchor', 'advanced' => true],
         ],
     ],
 
@@ -302,6 +418,78 @@ return [
                 ],
                 'subtitle' => ['type' => 'text', 'label' => 'O que marcou', 'help' => 'Por exemplo «Leitura completa, Março».'],
             ],
+        ],
+    ],
+
+    // -----------------------------------------------------------------------
+    // O Grimório: as sessões gratuitas.
+    //
+    // Liga o que se vê de graça ao que se vende: quem assiste a um ritual com
+    // sálvia encontra o molho de sálvia a um clique. O endereço do canal vem das
+    // Definições e não se escreve aqui.
+    // -----------------------------------------------------------------------
+    'grimorio' => [
+        'label'   => 'Grimório',
+        'summary' => 'As sessões gratuitas do canal, em três cartões, cada um a dizer que '
+                   . 'produto foi usado.',
+        'sample' => [
+            'eyebrow' => 'Grimório',
+            'heading' => 'Sessões gratuitas no YouTube',
+            'items'   => [
+                ['title' => '[Título da sessão]', 'caption' => '[mm:ss]'],
+            ],
+        ],
+        'fields' => [
+            'eyebrow'   => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading'   => ['type' => 'heading', 'label' => 'Título'],
+            'body'      => ['type' => 'textarea', 'rows' => 3, 'label' => 'Frase'],
+            'cta_label' => [
+                'type'  => 'text',
+                'label' => 'Texto do botão do canal',
+                'help'  => 'O endereço não se escreve aqui: vem de Definições > Redes > '
+                         . 'YouTube, que é o mesmo que o rodapé usa. Sem ele o botão não '
+                         . 'aparece.',
+            ],
+            'anchor'    => ['type' => 'anchor', 'advanced' => true],
+        ],
+        'items' => [
+            'label'    => 'Sessões',
+            'singular' => 'sessão',
+            'fields'   => [
+                'title'    => ['type' => 'text', 'label' => 'Título da sessão'],
+                'url'      => [
+                    'type'  => 'url',
+                    'label' => 'Endereço do vídeo',
+                    'help'  => 'Vazio desenha a moldura à espera, como na maquete — diz que '
+                             . 'ali vai estar um vídeo sem fingir que já está.',
+                ],
+                'caption'  => ['type' => 'text', 'label' => 'Duração', 'help' => 'Escrita como se lê: «12:40».'],
+                'image'    => ['type' => 'image', 'label' => 'Miniatura'],
+                'subtitle' => ['type' => 'text', 'label' => 'Produto usado'],
+                'link_label' => ['type' => 'url', 'label' => 'Onde está esse produto', 'help' => 'Vazio leva à loja desta página.'],
+            ],
+        ],
+    ],
+
+    // -----------------------------------------------------------------------
+    // A previsão dos signos.
+    //
+    // Quase não tem campos: os doze signos, as constelações, os períodos e a
+    // semana são calculados — ver App\Services\Signos —, e as frases estão no
+    // catálogo de línguas. O que o editor escreve é a sobrescrita e o título.
+    // -----------------------------------------------------------------------
+    'signos' => [
+        'label'   => 'Previsão dos signos',
+        'summary' => 'A roda dos doze signos com a constelação ao centro, e a carta da semana '
+                   . 'do signo escolhido. Abre no signo em que o sol anda hoje.',
+        'sample' => [
+            'eyebrow' => 'Previsão dos signos',
+            'heading' => 'A tua semana nos astros',
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading' => ['type' => 'heading', 'label' => 'Título'],
+            'anchor'  => ['type' => 'anchor', 'advanced' => true],
         ],
     ],
 

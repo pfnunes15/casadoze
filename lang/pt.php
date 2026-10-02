@@ -47,6 +47,123 @@ return [
     'footer.rights'    => 'Todos os direitos reservados',
 
     // ---------------------------------------------------------------------
+    // O boletim da lua, no rodapé.
+    // ---------------------------------------------------------------------
+    'footer.nl_title' => 'A lua do mês no teu email',
+    'footer.nl_text'  => 'No início de cada mês enviamos o calendário lunar, os rituais '
+                       . 'sugeridos e as novidades da loja.',
+    'footer.nl_place' => 'O teu email',
+    'footer.nl_send'  => 'Subscrever',
+    'footer.nl_ok'    => 'Obrigado. Até à próxima lua.',
+    'footer.nl_gift'  => 'Ao subscrever, recebes o Guia do ritual de lua cheia em PDF.',
+    'footer.house'    => 'A Casa',
+    'footer.help'     => 'Ajuda',
+
+    // ---------------------------------------------------------------------
+    // Agora na Casa: o próximo sabbat e o calendário lunar.
+    //
+    // As oito fases pela ordem do ciclo, da lua nova à minguante. A ordem conta:
+    // é por ela que App\Services\Lua escolhe o nome, pelo número da fatia.
+    // ---------------------------------------------------------------------
+    'agora.next'   => 'Próximo sabbat',
+    'agora.left'   => 'faltam :n dias',
+    'agora.left_1' => 'falta 1 dia',
+    'agora.today'  => 'É hoje',
+    'agora.kit'    => 'Kit de :sabbat',
+    'agora.lunar'  => 'Calendário lunar',
+    'agora.now'    => 'Hoje',
+
+    // A ponte entre a loja e as consultas.
+    'ponte.left'  => 'Loja · produtos com envio',
+    'ponte.right' => 'Consultas · serviços com marcação',
+
+    // O Grimório: as sessões gratuitas.
+    'grimorio.related' => 'Usado nesta sessão',
+    'grimorio.thumb'   => '[Miniatura do vídeo]',
+
+    // ---------------------------------------------------------------------
+    // A mesa de tarot.
+    //
+    // Os vinte e dois Arcanos Maiores, e o que cada um diz ao direito e ao
+    // contrário. Numa linha só por campo, separados por barra: são três
+    // frases a traduzir em vez de sessenta e seis.
+    // ---------------------------------------------------------------------
+    'tarot.title'   => 'Tiragem de 3 cartas',
+    'tarot.start'   => 'Baralhar e tirar as cartas',
+    'tarot.skip'    => 'Saltar animação',
+    'tarot.focus'   => 'Concentra-te na tua pergunta…',
+    'tarot.cut'     => 'A cortar o baralho…',
+    'tarot.pick'    => 'Escolhe 3 cartas',
+    'tarot.reveal'  => 'Toca nas cartas para as revelar',
+    'tarot.again'   => 'Nova tiragem',
+    'tarot.full'    => 'Marcar leitura completa',
+    'tarot.inv'     => 'Invertida',
+    'tarot.note'    => 'Tiragem simbólica e gratuita com os 22 Arcanos Maiores.',
+    'tarot.pos'     => 'Passado|Presente|Futuro',
+    'tarot.names'   => 'O Louco|O Mago|A Sacerdotisa|A Imperatriz|O Imperador|O Hierofante|Os Enamorados|O Carro|A Força|O Eremita|A Roda da Fortuna|A Justiça|O Enforcado|A Morte|A Temperança|O Diabo|A Torre|A Estrela|A Lua|O Sol|O Julgamento|O Mundo',
+    'tarot.up'      => 'Novos começos, espontaneidade|Vontade, iniciativa|Intuição, mistério|Abundância, criatividade|Estrutura, estabilidade|Tradição, ensinamento|União, escolhas do coração|Determinação, avanço|Coragem, compaixão|Introspeção, procura interior|Mudança, ciclos|Equilíbrio, verdade|Pausa, nova perspetiva|Transformação, fim de ciclo|Harmonia, paciência|Desejo, apegos|Rutura, revelação súbita|Esperança, renovação|Ilusão, intuição profunda|Alegria, sucesso|Despertar, chamado|Realização, conclusão',
+    'tarot.rev'     => 'Imprudência, hesitação|Manipulação, energia dispersa|Segredos, intuição bloqueada|Bloqueio criativo, dependência|Rigidez, controlo excessivo|Rebeldia, questionar regras|Desequilíbrio, indecisão|Falta de rumo, dispersão|Insegurança, impaciência|Isolamento, solidão|Resistência à mudança, atrasos|Injustiça, fugir à responsabilidade|Estagnação, sacrifício inútil|Medo da mudança, apego|Excesso, desequilíbrio|Libertação, quebrar correntes|Evitar a mudança, crise adiada|Desânimo, falta de fé|Clareza a surgir, medos a dissipar|Entusiasmo contido, atrasos|Dúvida, autocrítica|Ciclo por fechar',
+
+    // ---------------------------------------------------------------------
+    // A previsão dos signos.
+    // ---------------------------------------------------------------------
+    'signos.eyebrow'   => 'Previsão dos signos',
+    'signos.title'     => 'A tua semana nos astros',
+    'signos.note'      => 'Atualizada todas as semanas.',
+    'signos.from'      => 'De',
+    'signos.to'        => 'a',
+    'signos.element'   => 'Elemento',
+    'signos.ruler'     => 'Regente',
+    'signos.share'     => 'Partilhar o meu signo',
+    'signos.names'     => 'Áries|Touro|Gémeos|Caranguejo|Leão|Virgem|Balança|Escorpião|Sagitário|Capricórnio|Aquário|Peixes',
+    'signos.planets'   => 'Marte|Vénus|Mercúrio|Lua|Sol|Mercúrio|Vénus|Plutão|Júpiter|Saturno|Urano|Neptuno',
+    'signos.elements'  => 'Fogo|Terra|Ar|Água',
+    'signos.colors'    => 'Dourado|Verde musgo|Lilás|Azul profundo',
+    'signos.meters'    => 'Amor|Trabalho|Energia',
+    'signos.lucky'     => 'Número|Dia forte|Cor',
+
+    /* A previsão de cada signo. Uma por signo e igual todas as semanas — o
+       que muda com a semana são os medidores e os números, e esses são
+       calculados. Está escrita só em português, como na maquete: as outras
+       línguas caem para aqui até alguém as traduzir. */
+    'signos.text.0' => 'Semana de decisões rápidas e mudanças inesperadas. Evite agir no impulso e tenha atenção às palavras.',
+    'signos.text.1' => 'A energia favorece estabilidade, dinheiro e crescimento pessoal. Bom momento para reorganizar prioridades.',
+    'signos.text.2' => 'Conversas importantes poderão trazer respostas e mudanças positivas. A comunicação será a sua força.',
+    'signos.text.3' => 'Semana sensível emocionalmente. Afaste-se de ambientes negativos e cuide mais da sua paz interior.',
+    'signos.text.4' => 'O brilho pessoal estará muito forte. Aproveite para mostrar o seu valor e abrir novos caminhos.',
+    'signos.text.5' => 'A semana pede menos controlo e mais descanso mental. Nem tudo precisa de solução imediata.',
+    'signos.text.6' => 'Energia favorável para amor, reconciliações e equilíbrio emocional. Escute mais o coração.',
+    'signos.text.7' => 'Transformações profundas aproximam-se. O que já não pertence ao seu destino começará a afastar-se.',
+    'signos.text.8' => 'Semana positiva para trabalho, novos contactos e oportunidades inesperadas.',
+    'signos.text.9' => 'Disciplina e foco serão recompensados. O esforço começa finalmente a trazer resultados.',
+    'signos.text.10' => 'A mente estará acelerada. Procure momentos de silêncio e proteção espiritual.',
+    'signos.text.11' => 'A espiritualidade estará muito ativa. Sonhos, sinais e intuições terão mensagens importantes.',
+    'lua.0' => 'Lua nova',
+    'lua.1' => 'Crescente',
+    'lua.2' => 'Quarto crescente',
+    'lua.3' => 'Crescente gibosa',
+    'lua.4' => 'Lua cheia',
+    'lua.5' => 'Minguante gibosa',
+    'lua.6' => 'Quarto minguante',
+    'lua.7' => 'Minguante',
+
+
+    // ---------------------------------------------------------------------
+    // Comprar por intenção.
+    //
+    // Duas linhas para uma coisa só porque em português uma peça não são duas
+    // peças, e «1 peças» num cartão é o género de erro que se vê de longe.
+    // ---------------------------------------------------------------------
+    'intencao.piece'  => ':n peça',
+    'intencao.pieces' => ':n peças',
+    'intencao.title'  => 'Para :intencao',
+
+    // A loja: duas frases do pacote que a Casa diz mais curtas.
+    // O botão da montra é «+ Adicionar» e não «Adicionar ao carrinho» —
+    // ao lado do sinal de mais, o resto da frase é ruído.
+    'shop.product.add'      => 'Adicionar',
+    'shop.product.sold_out' => 'Esgotado',
+    // ---------------------------------------------------------------------
     // Quem está por trás.
     // ---------------------------------------------------------------------
     'about.does'   => 'O que faço',

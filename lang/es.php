@@ -32,6 +32,100 @@ return [
     'footer.complaints' => 'Libro de Reclamaciones Electrónico',
     'footer.rights'     => 'Todos los derechos reservados',
 
+    // ---------------------------------------------------------------------
+    // El boletín de la luna, en el pie.
+    // ---------------------------------------------------------------------
+    'footer.nl_title' => 'La luna del mes en tu correo',
+    'footer.nl_text'  => 'Al principio de cada mes enviamos el calendario lunar, los '
+                       . 'rituales sugeridos y las novedades de la tienda.',
+    'footer.nl_place' => 'Tu correo',
+    'footer.nl_send'  => 'Suscribirse',
+    'footer.nl_ok'    => 'Gracias. Hasta la próxima luna.',
+    'footer.nl_gift'  => 'Al suscribirte recibes la Guía del ritual de luna llena en PDF.',
+    'footer.house'    => 'La Casa',
+    'footer.help'     => 'Ayuda',
+
+    // ---------------------------------------------------------------------
+    // Ahora en la Casa: el próximo sabbat y el calendario lunar.
+    // ---------------------------------------------------------------------
+    'agora.next'   => 'Próximo sabbat',
+    'agora.left'   => 'faltan :n días',
+    'agora.left_1' => 'falta 1 día',
+    'agora.today'  => 'Es hoy',
+    'agora.kit'    => 'Kit de :sabbat',
+    'agora.lunar'  => 'Calendario lunar',
+    'agora.now'    => 'Hoy',
+
+    // El puente entre la tienda y las consultas.
+    'ponte.left'  => 'Tienda · productos con envío',
+    'ponte.right' => 'Consultas · servicios con cita',
+
+    // El Grimorio: las sesiones gratuitas.
+    'grimorio.related' => 'Usado en esta sesión',
+    'grimorio.thumb'   => '[Miniatura del vídeo]',
+
+    // ---------------------------------------------------------------------
+    // A mesa de tarot.
+    //
+    // Os vinte e dois Arcanos Maiores, e o que cada um diz ao direito e ao
+    // contrário. Numa linha só por campo, separados por barra: são três
+    // frases a traduzir em vez de sessenta e seis.
+    // ---------------------------------------------------------------------
+    'tarot.title'   => 'Tirada de 3 cartas',
+    'tarot.start'   => 'Barajar y sacar',
+    'tarot.skip'    => 'Saltar animación',
+    'tarot.focus'   => 'Concéntrate en tu pregunta…',
+    'tarot.cut'     => 'Cortando la baraja…',
+    'tarot.pick'    => 'Elige 3 cartas',
+    'tarot.reveal'  => 'Toca las cartas para revelarlas',
+    'tarot.again'   => 'Nueva tirada',
+    'tarot.full'    => 'Reservar lectura completa',
+    'tarot.inv'     => 'Invertida',
+    'tarot.note'    => 'Tirada simbólica y gratuita con los 22 Arcanos Mayores.',
+    'tarot.pos'     => 'Pasado|Presente|Futuro',
+    'tarot.names'   => 'El Loco|El Mago|La Sacerdotisa|La Emperatriz|El Emperador|El Hierofante|Los Enamorados|El Carro|La Fuerza|El Ermitaño|La Rueda de la Fortuna|La Justicia|El Colgado|La Muerte|La Templanza|El Diablo|La Torre|La Estrella|La Luna|El Sol|El Juicio|El Mundo',
+    'tarot.up'      => 'Nuevos comienzos, espontaneidad|Voluntad, iniciativa|Intuición, misterio|Abundancia, creatividad|Estructura, estabilidad|Tradición, enseñanza|Unión, elecciones del corazón|Determinación, avance|Valor, compasión|Introspección, búsqueda interior|Cambio, ciclos|Equilibrio, verdad|Pausa, nueva perspectiva|Transformación, fin de ciclo|Armonía, paciencia|Deseo, ataduras|Ruptura, revelación súbita|Esperanza, renovación|Ilusión, intuición profunda|Alegría, éxito|Despertar, llamada|Realización, culminación',
+    'tarot.rev'     => 'Imprudencia, duda|Manipulación, energía dispersa|Secretos, intuición bloqueada|Bloqueo creativo, dependencia|Rigidez, control excesivo|Rebeldía, cuestionar normas|Desequilibrio, indecisión|Falta de rumbo|Inseguridad, impaciencia|Aislamiento, soledad|Resistencia al cambio, retrasos|Injusticia, eludir responsabilidades|Estancamiento, sacrificio inútil|Miedo al cambio, apego|Exceso, desequilibrio|Liberación, romper cadenas|Evitar el cambio, crisis aplazada|Desánimo, falta de fe|Claridad que llega, miedos que se disipan|Entusiasmo contenido, retrasos|Duda, autocrítica|Ciclo sin cerrar',
+
+    // ---------------------------------------------------------------------
+    // A previsão dos signos.
+    // ---------------------------------------------------------------------
+    'signos.eyebrow'   => 'Previsión de los signos',
+    'signos.title'     => 'Tu semana en los astros',
+    'signos.note'      => 'Actualizada cada semana.',
+    'signos.from'      => 'Del',
+    'signos.to'        => 'al',
+    'signos.element'   => 'Elemento',
+    'signos.ruler'     => 'Regente',
+    'signos.share'     => 'Compartir mi signo',
+    'signos.names'     => 'Aries|Tauro|Géminis|Cáncer|Leo|Virgo|Libra|Escorpio|Sagitario|Capricornio|Acuario|Piscis',
+    'signos.planets'   => 'Marte|Venus|Mercurio|Luna|Sol|Mercurio|Venus|Plutón|Júpiter|Saturno|Urano|Neptuno',
+    'signos.elements'  => 'Fuego|Tierra|Aire|Agua',
+    'signos.colors'    => 'Dorado|Verde musgo|Lila|Azul profundo',
+    'signos.meters'    => 'Amor|Trabajo|Energía',
+    'signos.lucky'     => 'Número|Día fuerte|Color',
+    'lua.0' => 'Luna nueva',
+    'lua.1' => 'Creciente',
+    'lua.2' => 'Cuarto creciente',
+    'lua.3' => 'Creciente gibosa',
+    'lua.4' => 'Luna llena',
+    'lua.5' => 'Menguante gibosa',
+    'lua.6' => 'Cuarto menguante',
+    'lua.7' => 'Menguante',
+
+
+    // ---------------------------------------------------------------------
+    // Comprar por intención.
+    // ---------------------------------------------------------------------
+    'intencao.piece'  => ':n pieza',
+    'intencao.pieces' => ':n piezas',
+    'intencao.title'  => 'Para :intencao',
+
+    // A loja: duas frases do pacote que a Casa diz mais curtas.
+    // O botão da montra é «+ Adicionar» e não «Adicionar ao carrinho» —
+    // ao lado do sinal de mais, o resto da frase é ruído.
+    'shop.product.add'      => 'Añadir',
+    'shop.product.sold_out' => 'Agotado',
     'about.does'   => 'Lo que hago',
     'about.doesnt' => 'Lo que no hago',
 

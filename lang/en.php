@@ -33,6 +33,100 @@ return [
     'footer.complaints' => 'Electronic Complaints Book',
     'footer.rights'     => 'All rights reserved',
 
+    // ---------------------------------------------------------------------
+    // The moon letter, in the footer.
+    // ---------------------------------------------------------------------
+    'footer.nl_title' => 'This month\'s moon in your inbox',
+    'footer.nl_text'  => 'At the start of each month we send the lunar calendar, the '
+                       . 'suggested rituals and what is new in the shop.',
+    'footer.nl_place' => 'Your email',
+    'footer.nl_send'  => 'Subscribe',
+    'footer.nl_ok'    => 'Thank you. Until the next moon.',
+    'footer.nl_gift'  => 'Subscribe and get the Full Moon Ritual Guide as a PDF.',
+    'footer.house'    => 'The House',
+    'footer.help'     => 'Help',
+
+    // ---------------------------------------------------------------------
+    // Now at the House: the next sabbat and the lunar calendar.
+    // ---------------------------------------------------------------------
+    'agora.next'   => 'Next sabbat',
+    'agora.left'   => ':n days to go',
+    'agora.left_1' => '1 day to go',
+    'agora.today'  => 'It is today',
+    'agora.kit'    => ':sabbat kit',
+    'agora.lunar'  => 'Lunar calendar',
+    'agora.now'    => 'Today',
+
+    // The bridge between the shop and the readings.
+    'ponte.left'  => 'Shop · things that ship',
+    'ponte.right' => 'Readings · booked in advance',
+
+    // The Grimoire: the free sessions.
+    'grimorio.related' => 'Used in this session',
+    'grimorio.thumb'   => '[Video thumbnail]',
+
+    // ---------------------------------------------------------------------
+    // A mesa de tarot.
+    //
+    // Os vinte e dois Arcanos Maiores, e o que cada um diz ao direito e ao
+    // contrário. Numa linha só por campo, separados por barra: são três
+    // frases a traduzir em vez de sessenta e seis.
+    // ---------------------------------------------------------------------
+    'tarot.title'   => 'Three-card spread',
+    'tarot.start'   => 'Shuffle and draw',
+    'tarot.skip'    => 'Skip animation',
+    'tarot.focus'   => 'Focus on your question…',
+    'tarot.cut'     => 'Cutting the deck…',
+    'tarot.pick'    => 'Choose 3 cards',
+    'tarot.reveal'  => 'Tap the cards to reveal them',
+    'tarot.again'   => 'New spread',
+    'tarot.full'    => 'Book a full reading',
+    'tarot.inv'     => 'Reversed',
+    'tarot.note'    => 'A free, symbolic spread with the 22 Major Arcana.',
+    'tarot.pos'     => 'Past|Present|Future',
+    'tarot.names'   => 'The Fool|The Magician|The High Priestess|The Empress|The Emperor|The Hierophant|The Lovers|The Chariot|Strength|The Hermit|Wheel of Fortune|Justice|The Hanged Man|Death|Temperance|The Devil|The Tower|The Star|The Moon|The Sun|Judgement|The World',
+    'tarot.up'      => 'New beginnings, spontaneity|Willpower, initiative|Intuition, mystery|Abundance, creativity|Structure, stability|Tradition, teaching|Union, choices of the heart|Determination, progress|Courage, compassion|Introspection, inner search|Change, cycles|Balance, truth|Pause, new perspective|Transformation, end of a cycle|Harmony, patience|Desire, attachments|Upheaval, sudden revelation|Hope, renewal|Illusion, deep intuition|Joy, success|Awakening, calling|Fulfilment, completion',
+    'tarot.rev'     => 'Recklessness, hesitation|Manipulation, scattered energy|Secrets, blocked intuition|Creative block, dependence|Rigidity, excessive control|Rebellion, questioning rules|Imbalance, indecision|Lack of direction|Insecurity, impatience|Isolation, loneliness|Resisting change, delays|Unfairness, avoiding responsibility|Stagnation, needless sacrifice|Fear of change, attachment|Excess, imbalance|Release, breaking chains|Avoiding change, delayed crisis|Discouragement, lack of faith|Clarity emerging, fears fading|Muted enthusiasm, delays|Doubt, self-judgement|Unfinished cycle',
+
+    // ---------------------------------------------------------------------
+    // A previsão dos signos.
+    // ---------------------------------------------------------------------
+    'signos.eyebrow'   => 'Star forecast',
+    'signos.title'     => 'Your week in the stars',
+    'signos.note'      => 'Updated every week.',
+    'signos.from'      => 'From',
+    'signos.to'        => 'to',
+    'signos.element'   => 'Element',
+    'signos.ruler'     => 'Ruler',
+    'signos.share'     => 'Share my sign',
+    'signos.names'     => 'Aries|Taurus|Gemini|Cancer|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces',
+    'signos.planets'   => 'Mars|Venus|Mercury|Moon|Sun|Mercury|Venus|Pluto|Jupiter|Saturn|Uranus|Neptune',
+    'signos.elements'  => 'Fire|Earth|Air|Water',
+    'signos.colors'    => 'Gold|Moss green|Lilac|Deep blue',
+    'signos.meters'    => 'Love|Work|Energy',
+    'signos.lucky'     => 'Number|Best day|Colour',
+    'lua.0' => 'New moon',
+    'lua.1' => 'Waxing crescent',
+    'lua.2' => 'First quarter',
+    'lua.3' => 'Waxing gibbous',
+    'lua.4' => 'Full moon',
+    'lua.5' => 'Waning gibbous',
+    'lua.6' => 'Last quarter',
+    'lua.7' => 'Waning crescent',
+
+
+    // ---------------------------------------------------------------------
+    // Shopping by intention.
+    // ---------------------------------------------------------------------
+    'intencao.piece'  => ':n piece',
+    'intencao.pieces' => ':n pieces',
+    'intencao.title'  => 'For :intencao',
+
+    // A loja: duas frases do pacote que a Casa diz mais curtas.
+    // O botão da montra é «+ Adicionar» e não «Adicionar ao carrinho» —
+    // ao lado do sinal de mais, o resto da frase é ruído.
+    'shop.product.add'      => 'Add',
+    'shop.product.sold_out' => 'Sold out',
     'about.does'   => 'What I do',
     'about.doesnt' => 'What I do not do',
 

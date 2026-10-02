@@ -99,6 +99,12 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
 
 <?php require __DIR__ . '/../partials/footer.php'; ?>
 
+<?php /* A biblioteca que desenha os produtos. Separada do js/site.js porque é
+         grande, não é dela a lógica da página, e veio inteira da maquete — ver o
+         cabeçalho dela. Carregada em todas as páginas e não só onde há montra
+         porque este site é uma página só; o dia em que forem duas, isto passa a
+         ser pedido pelo bloco. */ ?>
+<script src="<?= asset('js/arte-produtos.js') ?>" defer></script>
 <script src="<?= asset('js/site.js') ?>" defer></script>
 <?php clear_old(); ?>
 </body>

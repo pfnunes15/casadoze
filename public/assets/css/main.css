@@ -148,7 +148,7 @@
      telefone 20px é o que sobra, num ecrã largo 72px é o que a página precisa
      para não colar o texto ao vidro. */
   --miolo:   1280px;
-  --goteira: clamp(20px, 5vw, 72px);
+  --goteira: clamp(24px, 5vw, 72px);
 }
 
 /* ---------------------------------------------------------------------------
@@ -156,15 +156,37 @@
    --------------------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+
+  /* O menu do topo é todo de âncoras — a loja, as consultas, a casa, os
+     contactos — e sem isto cada uma delas corta a página de um sítio para o
+     outro. Quem pediu menos movimento recebe o salto de volta, na regra lá em
+     cima. */
+  scroll-behavior: smooth;
+}
+
+/* Onde uma âncora pára.
+   -------------------------------------------------------------------------
+   O cabeçalho é fixo e tapa os primeiros setenta pixéis da página. Sem esta
+   margem, carregar em «Consultas» deixava o título da secção escondido por
+   baixo da barra — a página ia ao sítio certo e parecia ter ido ao sítio
+   errado. Vale para tudo o que tem `id` e por isso pode ser destino. */
+[id] { scroll-margin-top: 70px; }
 
 body {
   margin: 0;
   background: var(--fundo);
   color: var(--letra);
   font-family: var(--prosa);
-  font-size: 19px;
-  line-height: 1.65;
+
+  /* Dezasseis e entrelinha normal, que é o que a maquete tem no `body`. Não é
+     o tamanho a que se lê nenhum parágrafo: é o ponto de partida de que cada
+     peça parte, e quase todas dizem o seu tamanho. Herdar 19px com entrelinha
+     1,65 empurrava para baixo tudo o que não o dissesse — e era essa a razão de
+     as linhas pequenas da página ficarem mais altas do que na maquete. */
+  font-size: 16px;
+  line-height: normal;
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
@@ -213,9 +235,18 @@ h1, h2, h3, h4 {
   font-weight: 400;
   color: var(--letra-forte);
   letter-spacing: .02em;
-  line-height: 1.08;
   text-wrap: balance;
 }
+
+/* A entrelinha apertada é só dos títulos grandes.
+   -------------------------------------------------------------------------
+   Num título de 58px, 1,05 junta as duas linhas e faz o bloco ler-se como uma
+   coisa só. Num nome de produto de 22px faz o contrário: aperta uma linha que
+   não tem par e corta-lhe cinco pixéis de altura — foi o que pôs os cartões da
+   montra a 514 em vez dos 519 da maquete. Os pequenos ficam em `normal`, que é
+   onde a maquete os deixa. */
+h1, h2 { line-height: 1.05; }
+h3, h4 { line-height: normal; }
 
 h1 { font-size: clamp(38px, 7vw, 68px); }
 h2 { font-size: clamp(32px, 4.4vw, 58px); }
@@ -231,6 +262,11 @@ p:last-child { margin-bottom: 0; }
   display: flex;
   align-items: center;
   gap: 14px;
+
+  /* Sem margem. Na maquete a sobrescrita é um `div` e não tem nenhuma; aqui é um
+     `p`, e a margem de um parágrafo somava-se à folga da coluna — o título
+     descia onze pixéis a mais do que devia, em todas as secções. */
+  margin: 0;
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: .22em;
@@ -256,21 +292,1261 @@ p:last-child { margin-bottom: 0; }
 /* ---------------------------------------------------------------------------
    A armação: o miolo e as secções.
    --------------------------------------------------------------------------- */
+/* O miolo tem a largura e mais nada.
+   -------------------------------------------------------------------------
+   A margem lateral é da secção e não daqui. Posta no miolo, comia-lhe a
+   largura: o conteúdo ficava com 1136 em vez de 1280 e começava 72px mais à
+   direita do que devia — em todas as secções da página, que era a diferença
+   que mais se via contra a maquete. */
 .miolo {
   width: 100%;
   max-width: var(--miolo);
   margin: 0 auto;
-  padding-inline: var(--goteira);
 }
 
+/* A secção põe a margem lateral e o ar em cima e em baixo.
+   -------------------------------------------------------------------------
+   **O ar vertical é de cada secção e não um valor só.** A maquete dá a cada uma
+   o seu — 110 em cima nas intenções, 150 nas consultas, 40 nos testemunhos —, e
+   um `clamp` igual para todas achatava umas e esticava outras. Cada bloco diz o
+   seu mais abaixo; este é o que sobra para quem não disser nada. */
 .secção {
   position: relative;
-  padding-block: clamp(64px, 11vw, 130px);
+  padding-block: 120px 40px;
+  padding-inline: 40px;
 }
-/* Duas secções seguidas do mesmo tom não precisam do dobro do ar ao meio. */
-.secção + .secção { padding-top: 0; }
 
 .secção--caixa { background: var(--fundo-caixa); }
+
+/* O ar de cada secção, medido na maquete. Não há regra por trás destes números:
+   são a composição, secção a secção, e é por isso que estão escritos e não
+   calculados. */
+.secção--intenções   { padding-block: 110px 40px; }
+
+/* As intenções empilham-se com 22px entre as peças — sobrescrita, título, e
+   depois a fila de cartões, que acrescenta os seus 26 por cima desses 22. Posto
+   aqui e não em margens soltas nos modelos: uma folga que se lê num sítio é uma
+   folga que se corrige num sítio. */
+.secção--intenções .miolo {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.secção--loja        { padding-block: 120px 40px; }
+.secção--agora       { padding-block: 70px 60px; }
+
+/* ---------------------------------------------------------------------------
+   A ponte entre a loja e as consultas.
+
+   Duas filas de letras ocas a atravessar o fundo, e no meio a frase que diz o
+   que muda daqui para baixo. O fundo clareia para roxo a meio e volta ao preto
+   nas pontas, para a faixa se destacar sem ter uma borda.
+   --------------------------------------------------------------------------- */
+.secção--ponte {
+  position: relative;
+  overflow: hidden;
+  padding: 170px 40px;
+  background: linear-gradient(to bottom, var(--fundo), var(--fundo-ponte) 30%, var(--fundo-ponte) 70%, var(--fundo));
+}
+
+.ponte__fila {
+  position: absolute;
+  left: 0;
+  display: flex;
+  gap: .5em;
+  white-space: nowrap;
+  font-family: var(--titulo);
+  font-size: clamp(90px, 13vw, 200px);
+  line-height: 1;
+  pointer-events: none;
+  will-change: transform;
+
+  /* Letras ocas: sem preenchimento e com o contorno a ouro muito apagado. É
+     textura e não texto — daí o `aria-hidden` no HTML. */
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(217, 179, 108, .22);
+}
+.ponte__fila--cima  { top: 6%; }
+.ponte__fila--baixo { bottom: 6%; transform: translate3d(-90%, 0, 0); opacity: .2; }
+.ponte__ponto { -webkit-text-stroke: 1px rgba(167, 123, 224, .3); }
+
+.ponte__dizer {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+}
+
+/* Centrada, leva traço dos dois lados: um traço só de um lado puxava-a. */
+.sobrescrita--ambos { gap: 16px; }
+.sobrescrita--ambos::before,
+.sobrescrita--ambos::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: currentColor;
+  flex: none;
+}
+
+.ponte__título {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.08;
+}
+.ponte__texto {
+  margin: 0;
+  font-size: clamp(19px, 1.7vw, 22px);
+  line-height: 1.5;
+  color: #cfc6b5;
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+
+/* As duas setas, com o losango ao meio. Três colunas e não um `flex` com folga:
+   assim o losango fica no centro da linha, e não no centro do que sobra depois
+   de as duas frases ocuparem o que querem. */
+.ponte__setas {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  margin-top: 30px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.ponte__seta { display: flex; align-items: center; gap: 14px; transition: color .3s; }
+.ponte__seta--esq { justify-self: end; color: var(--letra-tenue); }
+.ponte__seta--esq:hover { color: var(--ouro); }
+.ponte__seta--dir { justify-self: start; color: var(--ouro-claro); }
+.ponte__seta--dir:hover { color: #fff; }
+
+.ponte__risco { width: clamp(20px, 6vw, 90px); height: 1px; flex: none; }
+.ponte__risco--esq { background: linear-gradient(270deg, rgba(217, 179, 108, .5), transparent); }
+.ponte__risco--dir { background: linear-gradient(90deg, rgba(217, 179, 108, .5), transparent); }
+
+.ponte__losango {
+  width: 9px;
+  height: 9px;
+  transform: rotate(45deg);
+  border: 1px solid var(--ouro);
+}
+
+/* O separador com o sigilo da Casa, a fechar a ponte. */
+.separador {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: var(--miolo);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.separador__fio { flex: 1; height: 1px; }
+.separador__fio--esq { background: linear-gradient(90deg, transparent, rgba(217, 179, 108, .5)); }
+.separador__fio--dir { background: linear-gradient(270deg, transparent, rgba(217, 179, 108, .5)); }
+.separador__sigilo {
+  width: 92px;
+  height: auto;
+  flex: none;
+  animation: sigilo-respirar 3.2s ease-in-out infinite alternate;
+}
+@keyframes sigilo-respirar {
+  from { filter: drop-shadow(0 0 0 rgba(217, 179, 108, 0)); transform: translateY(0); }
+  to   { filter: drop-shadow(0 0 18px rgba(217, 179, 108, .55)); transform: translateY(-4px); }
+}
+
+/* ---------------------------------------------------------------------------
+   Agora na Casa.
+   --------------------------------------------------------------------------- */
+.secção--agora {
+  background: radial-gradient(ellipse 50% 60% at 20% 30%, rgba(224, 134, 60, .10), transparent 70%);
+}
+
+.agora__par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 64px;
+  align-items: center;
+  margin-bottom: 90px;
+}
+.agora__dizer { display: flex; flex-direction: column; gap: 20px; }
+.agora__rótulo {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--letra-tenue);
+}
+/* O nome do sabbat é o maior tipo da página — maior do que o da abertura. É a
+   coisa que a secção existe para dizer. */
+.agora__sabbat {
+  margin: 0;
+  font-size: clamp(72px, 10vw, 140px);
+  line-height: .9;
+  color: var(--ouro-claro);
+}
+.agora__quando {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 18px;
+}
+.agora__data { font-size: 26px; font-style: italic; color: #ece3d0; }
+.agora__contagem {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--brasa);
+  padding: 6px 10px;
+  border: 1px solid rgba(224, 134, 60, .5);
+}
+
+.agora__kit {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 22px;
+  border: 1px solid rgba(217, 179, 108, .22);
+  background: rgba(9, 8, 10, .5);
+}
+.agora__desenho {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--traco);
+}
+.agora__kitDizer { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.agora__kitNome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 30px;
+  color: var(--letra-forte);
+}
+.agora__kitTexto { margin: 0; font-size: 19px; line-height: 1.45; color: #bdb4c4; }
+.agora__preço { font-family: var(--mono); font-size: 13px; color: var(--ouro-claro); }
+.agora__botão {
+  align-self: flex-start;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  padding: 13px 18px;
+  background: var(--ouro);
+  color: var(--fundo);
+  transition: background .3s;
+}
+.agora__botão:hover { background: var(--ouro-claro); }
+
+/* ---------------------------------------------------------------------------
+   A fita das luas.
+
+   Sai da margem da secção para os lados — é uma faixa de ponta a ponta, não uma
+   coisa dentro da coluna de texto. Daí a margem negativa igual ao enchimento
+   lateral da secção.
+
+   As luas são uma grelha de tantas colunas quantos os dias do mês, e não uma
+   fila que dá a volta: um mês partido a meio não é um mês.
+   --------------------------------------------------------------------------- */
+.luas {
+  position: relative;
+  padding: 8px 0 40px;
+  margin-inline: -40px;
+  background: var(--fundo);
+}
+.luas__dentro {
+  padding-inline: clamp(16px, 2vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.luas__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.luas__nome { display: flex; gap: 14px; align-items: baseline; }
+.luas__etiqueta { color: var(--roxo-claro); }
+.luas__mês {
+  font-family: var(--titulo);
+  font-size: 20px;
+  letter-spacing: .08em;
+  text-transform: none;
+  color: var(--ouro-claro);
+}
+.luas__hoje { font-weight: 500; color: var(--letra); }
+
+.luas__fila {
+  display: grid;
+  grid-template-columns: repeat(var(--quantos, 31), minmax(0, 1fr));
+  gap: 4px;
+  align-items: start;
+  padding-top: 10px;
+}
+.lua {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.lua svg {
+  width: min(48px, 100%);
+  height: auto;
+  overflow: visible;
+  /* Crescem e inclinam-se a partir do pé, não do meio: é o que as faz parecer
+     presas à linha dos dias em vez de a flutuar por cima dela. */
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+/* A fita responde ao toque e ao clique — ver js/site.js. */
+.luas__fila { cursor: pointer; }
+.lua__aro  { stroke: transparent; }
+.lua__halo { stroke: transparent; }
+/* Os quatro dias em que o ciclo vira levam aro a ouro; o dia de hoje leva halo. */
+.lua--marco .lua__aro { stroke: var(--ouro); }
+.lua--hoje  .lua__halo { stroke: rgba(217, 179, 108, .7); }
+
+.lua__dia {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #6f6875;
+}
+.lua--marco .lua__dia { color: var(--ouro); font-weight: 500; }
+.lua--hoje  .lua__dia { color: var(--letra); font-weight: 500; }
+
+/* ---------------------------------------------------------------------------
+   A montra.
+
+   O topo é duas coisas numa linha que se parte: o dizer à esquerda, com 640 de
+   largura máxima, e a fila dos filtros à direita, alinhada pela base do texto —
+   `align-items: flex-end` — para a última linha da frase e as pastilhas ficarem
+   assentes no mesmo chão.
+
+   A grelha é `auto-fill` e não `auto-fit`: com `auto-fit`, quatro produtos numa
+   largura para seis esticavam-se até a ocupar, e um cartão de 400px ao lado de
+   um de 250 lê-se como dois desenhos diferentes. Com `auto-fill` a coluna vazia
+   fica vazia e o cartão mantém o tamanho.
+   --------------------------------------------------------------------------- */
+.montra__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  margin-bottom: 56px;
+}
+.montra__dizer {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 640px;
+}
+.montra__dizer > :where(h1, h2, h3) { margin: 0; }
+.montra__entrada {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.5;
+  color: #cfc6b5;
+  text-wrap: pretty;
+}
+
+/* A sobrescrita da loja é mais aberta do que as outras: .26em e não .22em. */
+.sobrescrita--larga { letter-spacing: .26em; }
+
+.montra__filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.pastilha {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  white-space: nowrap;
+  border: 1px solid var(--traco);
+  background: none;
+  color: var(--letra-fraca);
+  cursor: pointer;
+  transition: color .3s, background .3s, border-color .3s;
+}
+.pastilha:hover { border-color: rgba(217, 179, 108, .6); color: var(--letra-forte); }
+.pastilha--activa {
+  border-color: var(--roxo);
+  background: var(--roxo);
+  color: var(--letra-forte);
+}
+
+.montra {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 44px 28px;
+}
+
+.produto { display: flex; flex-direction: column; gap: 16px; }
+
+/* A moldura do desenho. Inclina-se para o lado do rato — quem a inclina é o
+   js/site.js, que escreve o `transform`; aqui está a transição que o suaviza. */
+.produto__moldura {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid var(--traco);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .9);
+  transition: transform .6s cubic-bezier(.2, .7, .1, 1), box-shadow .6s, border-color .6s;
+  cursor: pointer;
+}
+.produto__moldura:hover {
+  border-color: rgba(217, 179, 108, .5);
+  box-shadow: 0 40px 70px -24px rgba(123, 79, 184, .45);
+}
+
+.produto__desenho { display: block; width: 100%; height: 100%; }
+
+.produto__luz {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(260px circle at var(--rato-x, 50%) var(--rato-y, -200px),
+              rgba(255, 220, 160, .14), transparent 70%);
+}
+
+/* O selo da fase da lua, por cima do desenho. */
+.produto__lua {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--letra);
+  padding: 5px 8px;
+  background: rgba(9, 8, 10, .6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(228, 220, 203, .16);
+}
+
+.produto__linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.produto__nomes { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.produto__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: .03em;
+  color: var(--letra-forte);
+}
+.produto__dito { font-size: 17px; font-style: italic; color: #a9a0b2; }
+.produto__preço {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ouro-claro);
+  white-space: nowrap;
+  padding-top: 4px;
+}
+
+.produto__botão {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: 1px solid rgba(228, 220, 203, .22);
+  background: none;
+  color: var(--letra);
+  cursor: pointer;
+  transition: background .3s, color .3s, border-color .3s;
+}
+.produto__botão:hover { background: var(--letra); color: var(--fundo); border-color: var(--letra); }
+
+.produto__esgotado {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+  padding: 10px 0;
+}
+
+/* O botão para a loja inteira: centrado. O desenho dele está com os outros
+   botões, mais abaixo — escrito aqui, ficava antes de `.botão:hover` e perdia
+   para ele, que é o que punha a letra a dourado-claro sobre dourado. */
+.montra__pé { display: flex; justify-content: center; margin-top: 72px; }
+.secção--ze          { padding-block: 140px; }
+
+/* ---------------------------------------------------------------------------
+   Quem está por trás.
+
+   Duas colunas com 72px de folga — a grelha comum tem 18, e era isso que
+   engordava a coluna do retrato em 27px e a secção em 34.
+   --------------------------------------------------------------------------- */
+.ze__par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 72px;
+  align-items: center;
+}
+
+.ze__retrato { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+/* Mais alta do que a moldura, para ter folga quando se mexer com o desenrolar. */
+.ze__foto {
+  position: absolute;
+  inset: -5% 0;
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+/* A sombra que fecha as bordas por dentro, para o retrato não ter limite recto. */
+.ze__sombra {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px 30px rgba(9, 8, 10, .85);
+  pointer-events: none;
+}
+.ze__fio {
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(217, 179, 108, .28);
+  pointer-events: none;
+}
+
+.ze__dizer { display: flex; flex-direction: column; gap: 24px; }
+.ze__título { margin: 0; font-size: clamp(40px, 4.4vw, 58px); }
+.ze__prosa { font-size: 21px; line-height: 1.55; color: #cfc6b5; max-width: 46ch; }
+.ze__prosa p { margin: 0 0 .6em; }
+.ze__prosa p:last-child { margin-bottom: 0; }
+
+.ze__listas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+  margin-top: 10px;
+  padding-top: 26px;
+  border-top: 1px solid var(--traco);
+}
+.ze__lista { display: flex; flex-direction: column; gap: 12px; }
+.ze__rótulo {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+}
+/* Verde para o que a Casa faz, cor de brasa para o que não faz. Não é um
+   semáforo: a segunda lista não é um aviso, é uma promessa ao contrário. */
+.ze__rótulo--sim { color: #8e9c78; }
+.ze__rótulo--nao { color: var(--brasa); }
+.ze__linhas { font-size: 18px; line-height: 1.5; color: #bdb4c4; }
+
+.ze__ligação {
+  align-self: flex-start;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--ouro);
+  border-bottom: 1px solid rgba(217, 179, 108, .5);
+  padding-bottom: 4px;
+}
+.secção--testemunhos { padding-block: 40px 140px; }
+
+/* ---------------------------------------------------------------------------
+   Os testemunhos.
+
+   As aspas são do desenho e não do texto, e são grandes: 54px com entrelinha
+   .6, que é o que as encosta ao que vêm citar em vez de abrir uma linha só para
+   elas.
+
+   Cada cartão empurra o nome para o fundo — `justify-content: space-between` —
+   para os três ficarem com a atribuição à mesma altura, por mais desiguais que
+   sejam os textos.
+   --------------------------------------------------------------------------- */
+.testemunhos__miolo { display: flex; flex-direction: column; gap: 22px; }
+.testemunhos__título { margin: 0; font-size: clamp(40px, 4.4vw, 58px); }
+
+.testemunhos__fila {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.testemunho {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 30px 28px;
+  border: 1px solid var(--traco);
+  background: rgba(123, 79, 184, .05);
+}
+.testemunho__dito { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.testemunho__aspas {
+  font-family: var(--titulo);
+  font-size: 54px;
+  line-height: .6;
+  color: var(--ouro);
+}
+.testemunho__texto {
+  font-size: 21px;
+  line-height: 1.45;
+  font-style: italic;
+  color: #d6cebd;
+}
+.testemunho__quem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.testemunho__nome { color: var(--letra); }
+.testemunho__oque { color: var(--roxo-claro); }
+.secção--signos      { padding-block: 120px 130px; }
+.secção--grimorio    { padding-block: 130px 140px; }
+
+/* ---------------------------------------------------------------------------
+   O Grimório: as sessões gratuitas.
+   --------------------------------------------------------------------------- */
+.secção--grimorio {
+  background: linear-gradient(to bottom, var(--fundo), var(--fundo-caixa) 40%, var(--fundo));
+}
+.grimorio__miolo { display: flex; flex-direction: column; gap: 22px; }
+
+.grimorio__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+}
+.grimorio__dizer { display: flex; flex-direction: column; gap: 22px; max-width: 680px; }
+.grimorio__título { margin: 0; font-size: clamp(40px, 4.4vw, 58px); }
+.grimorio__texto { margin: 0; font-size: 21px; line-height: 1.5; color: #cfc6b5; }
+
+.grimorio__canal {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 16px 22px;
+  border: 1px solid rgba(217, 179, 108, .5);
+  color: var(--ouro);
+  white-space: nowrap;
+  transition: background .3s, color .3s;
+}
+.grimorio__canal:hover { background: var(--ouro); color: var(--fundo); }
+
+.grimorio__vídeos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 24px;
+  margin-top: 34px;
+}
+.vídeo { display: flex; flex-direction: column; gap: 14px; }
+
+/* A moldura: tracejada enquanto não houver vídeo, inteira quando houver. O
+   tracejado é o que diz «ali vai estar uma coisa» sem fingir que já está. */
+.vídeo__moldura {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  border: 1px dashed rgba(217, 179, 108, .3);
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(123, 79, 184, .2), transparent 70%),
+    #0e0b12;
+  overflow: hidden;
+  transition: border-color .4s;
+}
+.vídeo__moldura:hover { border-color: rgba(217, 179, 108, .7); }
+/* Com vídeo a sério o tracejado dá lugar a um fio inteiro. */
+a.vídeo__moldura { border-style: solid; }
+
+.vídeo__capa { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.vídeo__aviso {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 9.5px;
+  color: var(--letra-tenue);
+}
+
+.vídeo__ver {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 179, 108, .7);
+  display: grid;
+  place-items: center;
+  color: var(--ouro);
+  font-size: 20px;
+  padding-left: 4px;
+  box-sizing: border-box;
+  background: rgba(9, 8, 10, .5);
+  transition: background .3s, color .3s;
+}
+.vídeo__moldura:hover .vídeo__ver { background: var(--ouro); color: var(--fundo); }
+
+.vídeo__tempo {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--letra);
+  background: rgba(9, 8, 10, .7);
+  padding: 3px 7px;
+}
+
+.vídeo__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 23px;
+  color: var(--letra-forte);
+}
+.vídeo__usado {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--letra-tenue);
+}
+.vídeo__usado a { color: var(--ouro); }
+
+/* ---------------------------------------------------------------------------
+   A previsão dos signos.
+
+   A roda à esquerda, a carta à direita. Os doze botões são postos por
+   `transform` a partir do centro: rodar até ao lugar, afastar, e rodar ao
+   contrário — é a última volta que deixa o símbolo direito em vez de deitado.
+   --------------------------------------------------------------------------- */
+.secção--signos {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 70% at 28% 50%, rgba(123, 79, 184, .14), transparent 70%),
+    radial-gradient(ellipse 40% 50% at 85% 30%, rgba(123, 79, 184, .12), transparent 70%),
+    var(--fundo);
+}
+.signos__céu {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: .9;
+}
+.signos__miolo { position: relative; display: flex; flex-direction: column; gap: 56px; }
+
+.signos__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+}
+.signos__dizer { display: flex; flex-direction: column; gap: 20px; }
+.signos__título { margin: 0; font-size: clamp(44px, 5vw, 72px); line-height: 1; }
+.signos__semana {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--ouro-claro);
+  padding: 10px 14px;
+  border: 1px solid rgba(217, 179, 108, .4);
+}
+
+.signos__par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+  gap: clamp(40px, 6vw, 90px);
+  align-items: center;
+}
+
+.roda {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+}
+.roda__aros { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.roda__pontilhado { stroke: var(--viva, #d9b36c); transition: stroke 1s; }
+.roda__divisórias {
+  transform-origin: 200px 200px;
+  transition: transform 1.1s cubic-bezier(.6, 0, .2, 1);
+  transform: rotate(var(--roda-volta, 0deg));
+}
+
+.roda__signo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 15%;
+  aspect-ratio: 1 / 1;
+  margin: -7.5% 0 0 -7.5%;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 1.1s cubic-bezier(.6, 0, .2, 1), background .4s;
+  transform:
+    rotate(calc(var(--volta) + var(--roda-volta, 0deg)))
+    translateY(-285%)
+    rotate(calc(-1 * (var(--volta) + var(--roda-volta, 0deg))));
+}
+.roda__signo:hover { background: rgba(217, 179, 108, .12); }
+.roda__signo[aria-pressed="true"] {
+  background: var(--esbatida, rgba(217, 179, 108, .22));
+  transform:
+    rotate(calc(var(--volta) + var(--roda-volta, 0deg)))
+    translateY(-285%)
+    rotate(calc(-1 * (var(--volta) + var(--roda-volta, 0deg))))
+    scale(1.25);
+}
+
+.roda__símbolo {
+  font-family: 'Segoe UI Symbol', 'Noto Sans Symbols', 'DejaVu Sans', serif;
+  font-size: clamp(20px, 2.6vw, 32px);
+  line-height: 1;
+  color: #b9a57c;
+  transition: color .4s, text-shadow .4s;
+}
+.roda__signo[aria-pressed="true"] .roda__símbolo {
+  color: #fff6dc;
+  text-shadow: 0 0 18px var(--viva, #d9b36c);
+}
+
+.roda__centro { position: absolute; inset: 27%; display: grid; place-items: center; }
+.constelação { grid-area: 1 / 1; width: 100%; height: 100%; overflow: visible; }
+
+/* A carta do signo. */
+.signos__cartas { position: relative; }
+.carta {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: clamp(28px, 4vw, 48px);
+  border: 1px solid var(--esbatida);
+  background: linear-gradient(160deg, var(--esbatida), rgba(12, 10, 16, .92) 55%);
+  box-shadow: 0 40px 80px -40px var(--esbatida);
+}
+.carta__topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+.carta__nomes { display: flex; flex-direction: column; gap: 10px; }
+.carta__periodo {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  color: var(--viva);
+}
+.carta__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: .95;
+  color: #f3ead6;
+}
+.carta__símbolo {
+  font-family: 'Segoe UI Symbol', 'Noto Sans Symbols', 'DejaVu Sans', serif;
+  font-size: clamp(56px, 6vw, 84px);
+  line-height: 1;
+  color: var(--viva);
+  text-shadow: 0 0 40px var(--viva);
+}
+
+.carta__etiquetas { display: flex; flex-wrap: wrap; gap: 8px; }
+.carta__etiquetas span {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 7px 11px;
+  border: 1px solid rgba(228, 220, 203, .2);
+  color: var(--letra);
+}
+
+.carta__dito {
+  margin: 0;
+  font-size: clamp(21px, 1.9vw, 25px);
+  line-height: 1.45;
+  font-style: italic;
+  color: #ece3d0;
+  text-wrap: pretty;
+}
+
+.carta__medidores {
+  display: grid;
+  gap: 14px;
+  padding-top: 22px;
+  border-top: 1px solid var(--traco);
+}
+.medidor {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 14px;
+}
+.medidor__nome {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--letra-fraca);
+}
+.medidor__calha {
+  position: relative;
+  height: 4px;
+  background: rgba(228, 220, 203, .1);
+  overflow: hidden;
+}
+.medidor__calha i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, var(--viva), #f3d99c);
+  transition: width 1.2s cubic-bezier(.2, .7, .1, 1);
+}
+.medidor__valor {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ouro-claro);
+  text-align: right;
+}
+
+.carta__sorte { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sorte {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--traco);
+  background: rgba(9, 8, 10, .4);
+}
+.sorte__nome {
+  font-family: var(--mono);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 9px;
+  color: var(--letra-tenue);
+}
+.sorte__valor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--titulo);
+  font-size: 22px;
+  color: var(--letra-forte);
+}
+.sorte__ponto { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+
+.carta__partilhar {
+  align-self: flex-start;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  padding: 14px 20px;
+  border: 0;
+  background: var(--ouro);
+  color: var(--fundo);
+  cursor: pointer;
+  transition: background .3s;
+}
+.carta__partilhar:hover { background: var(--ouro-claro); }
+
+.signos__nota {
+  margin: 0;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--letra-tenue);
+  text-align: center;
+}
+.secção--garantias   { padding-block: 30px 110px; }
+
+/* ---------------------------------------------------------------------------
+   As garantias.
+
+   Uma fila de quatro, com um fio a ouro por cima e outro por baixo, e um fio
+   vertical entre cada duas. O primeiro não leva fio à esquerda — `:first-child`
+   — senão a fila ficava fechada de um lado e aberta do outro.
+
+   O número de colunas vem do HTML, em `--quantas`: com três garantias são três
+   colunas, e não quatro com um buraco. Abaixo de 900px passam a duas, e os fios
+   da esquerda da primeira de cada linha saem pelo mesmo motivo.
+   --------------------------------------------------------------------------- */
+.garantias {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgba(217, 179, 108, .18);
+  border-bottom: 1px solid rgba(217, 179, 108, .18);
+}
+
+.garantia {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 54px 24px 50px;
+  text-align: center;
+  border-left: 1px solid rgba(217, 179, 108, .18);
+  transition: background-color .5s;
+}
+.garantia:hover { background-color: rgba(123, 79, 184, .07); }
+/* Nas duas colunas, a primeira de cada linha não leva fio à esquerda. */
+.garantia:nth-child(2n + 1) { border-left: 0; }
+/* A segunda linha leva fio por cima, para as duas filas não ficarem coladas. */
+.garantia:nth-child(n + 3) { border-top: 1px solid rgba(217, 179, 108, .18); }
+
+.garantia__selo {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 179, 108, .4);
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(224, 134, 60, .12), transparent 70%);
+  color: var(--ouro-claro);
+  transition: box-shadow .5s, border-color .5s;
+}
+.garantia:hover .garantia__selo {
+  box-shadow: 0 0 36px -4px rgba(224, 134, 60, .6);
+  border-color: var(--ouro);
+}
+.garantia__selo svg { width: 34px; height: 34px; }
+
+.garantia__ordinal {
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--roxo-claro);
+}
+.garantia__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 1.1;
+  color: var(--letra-forte);
+}
+.garantia__dito {
+  font-size: 18px;
+  line-height: 1.45;
+  color: #a9a0b2;
+  max-width: 24ch;
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------------------
+   O rodapé.
+   --------------------------------------------------------------------------- */
+.rodapé {
+  position: relative;
+  border-top: 1px solid var(--traco);
+  background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(110, 60, 170, .22), transparent 70%), #070608;
+  overflow: hidden;
+}
+/* Como a barra do topo, o rodapé é mais largo do que o miolo das secções: 1360
+   de conteúdo mais 40 de margem de cada lado. Com os 1280 das secções, o
+   conteúdo ficava a 244 em vez dos 204 da maquete. */
+.rodapé__miolo {
+  max-width: 1360px;
+  padding: 110px 40px 0;
+  box-sizing: border-box;
+}
+
+/* O boletim. */
+.boletim {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 48px;
+  align-items: end;
+  padding-bottom: 90px;
+  border-bottom: 1px solid var(--traco);
+}
+.boletim__dizer { display: flex; flex-direction: column; gap: 18px; }
+.boletim__título {
+  margin: 0;
+  font-size: 46px;
+  line-height: 1.08;
+}
+.boletim__texto {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #bdb4c4;
+  max-width: 44ch;
+}
+.boletim__prenda {
+  align-self: flex-start;
+  font-family: var(--mono);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  color: var(--ouro-claro);
+  padding: 8px 12px;
+  border: 1px solid rgba(217, 179, 108, .4);
+}
+
+.boletim__forma { display: flex; flex-direction: column; gap: 12px; }
+.boletim__linha {
+  display: flex;
+  border-bottom: 1px solid rgba(228, 220, 203, .35);
+  padding-bottom: 6px;
+}
+.boletim__campo {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: var(--letra);
+  font-family: var(--prosa);
+  font-size: 24px;
+  padding: 10px 0;
+  outline: none;
+}
+.boletim__botão {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ouro);
+  background: none;
+  border: 0;
+  padding: 0 4px 0 18px;
+  cursor: pointer;
+  transition: color .3s;
+}
+.boletim__botão:hover { color: var(--ouro-claro); }
+/* O sítio da resposta ocupa a sua altura desde o início, para a linha de cima
+   não saltar no instante em que ela aparece. */
+.boletim__resposta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: #8e9c78;
+  min-height: 16px;
+}
+
+/* As colunas de ligações. */
+.rodapé__colunas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 40px;
+  padding: 72px 0;
+}
+.rodapé__colunas > div { display: flex; flex-direction: column; gap: 14px; }
+.rodapé__título {
+  margin: 0 0 6px;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 10.5px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.rodapé__colunas a { font-size: 19px; color: #d6cebd; transition: color .3s; }
+.rodapé__colunas a:hover { color: var(--ouro); }
+.rodapé__tenue { font-size: 19px; color: var(--letra-tenue); }
+.rodapé__redes { display: flex; gap: 8px; margin-top: 6px; }
+
+/* O letreiro da Casa, em grande, a fechar a página. */
+.rodapé__letreiro {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 0 40px 40px;
+}
+.rodapé__letreiro img {
+  width: min(680px, 100%);
+  height: auto;
+  /* A proporção do ficheiro, para o espaço estar guardado antes de a imagem
+     chegar. Sem isto, uma imagem adiada ocupa zero até carregar e o fundo da
+     página dá um salto de duzentos e tal pixéis debaixo dos olhos de quem lá
+     está a ler. */
+  aspect-ratio: 1080 / 370;
+}
+
+.rodapé__ressalva {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 40px 28px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--letra-tenue);
+  text-align: center;
+}
+
+/* A barra do fundo. */
+.rodapé__barra { border-top: 1px solid var(--traco); }
+.rodapé__fim {
+  max-width: 1360px;
+  padding: 24px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.rodapé__fim a { color: var(--letra-tenue); transition: color .3s; }
+.rodapé__fim a:hover { color: var(--ouro); }
+.rodapé__línguas { display: flex; flex-wrap: wrap; gap: 6px; }
+.rodapé__línguas a {
+  padding: 6px 9px;
+  border: 1px solid var(--traco);
+  transition: color .3s, border-color .3s;
+}
+.rodapé__línguas a[aria-current] { border-color: var(--ouro); color: var(--ouro); }
 
 /* A página que **não** abre com uma fotografia de ecrã inteiro.
    -------------------------------------------------------------------------
@@ -291,6 +1567,29 @@ p:last-child { margin-bottom: 0; }
   -webkit-backdrop-filter: blur(14px);
 }
 
+/* A luz que acompanha o rato.
+   -------------------------------------------------------------------------
+   Um disco com um halo cor de brasa e roxo, **somado** ao que está por baixo em
+   vez de pintado por cima — é o `screen` que faz isso, e é o que a deixa
+   acender a página sem a sujar.
+
+   Criada pelo js/site.js e não escrita no HTML: sem JavaScript não se move, e
+   uma luz parada a meio do ecrã é uma mancha. */
+.luz-do-rato {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 520px;
+  height: 520px;
+  margin: -260px 0 0 -260px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+              rgba(224, 134, 60, .10), rgba(123, 79, 184, .06) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 40;
+  mix-blend-mode: screen;
+}
+
 /* Saltar para o conteúdo. Fora do ecrã até ganhar o foco — é a primeira coisa
    que um leitor de ecrã encontra, e a única maneira de passar o menu à frente. */
 .saltar {
@@ -308,6 +1607,24 @@ p:last-child { margin-bottom: 0; }
 }
 .saltar:focus { left: 12px; top: 12px; }
 
+/* O que um leitor de ecrã lê e os olhos não vêem. A abertura usa-o no `h1`: o
+   nome da Casa está desenhado dentro da fotografia, mas uma página sem título
+   é uma página que ninguém consegue nomear numa lista de separadores.
+
+   `clip-path` e não `display: none` nem `visibility: hidden` — esses dois tiram
+   o elemento também a quem ouve, que é exactamente o contrário do que se quer. */
+.fora-do-ecrã {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------------------------------------------------------------------------
    Os botões.
 
@@ -315,12 +1632,17 @@ p:last-child { margin-bottom: 0; }
    carregar num, qual é o que quero?». O cheio é esse.
    --------------------------------------------------------------------------- */
 .botão {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
   min-height: 48px;          /* o que um dedo acerta sem pensar */
-  padding: 15px 24px;
+
+  /* Dezassete e não quinze: com a linha de 15px da letra e o fio de um pixel de
+     cada lado, dá os 51 de altura que a maquete tem. */
+  padding: 17px 24px;
   border: 1px solid var(--traco-forte);
   border-radius: 0;
   background: none;
@@ -341,7 +1663,51 @@ p:last-child { margin-bottom: 0; }
 }
 .botão--cheio:hover { background: var(--ouro-claro); border-color: var(--ouro-claro); color: #140f08; }
 
+/* O brilho que varre o botão cheio de tempos a tempos.
+
+   Num `::after` e não num elemento escrito no HTML: é decoração pura, e um
+   `<span>` vazio dentro de cada botão era uma coisa a mais no documento para
+   quem o lê com os ouvidos. Fora do fluxo — `position: absolute` — porque o
+   botão é um `flex`, e em fluxo o brilho passava a ser uma terceira coluna
+   entre o texto e a seta.
+
+   Varre em 1,4 s e espera 2,4 até voltar, com 2,6 de espera à entrada: são os
+   tempos da maquete, somados num ciclo de 3,8 em que o varrimento ocupa os
+   primeiros 36,8%. */
+.botão--cheio::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent);
+  transform: translateX(-150%);
+  pointer-events: none;
+  animation: botão-brilho 3.8s 2.6s infinite;
+}
+@keyframes botão-brilho {
+  0%     { transform: translateX(-150%); animation-timing-function: cubic-bezier(.6, 0, .3, 1); }
+  36.8%  { transform: translateX(300%); }
+  100%   { transform: translateX(300%); }
+}
+
 .botão--largo { width: 100%; }
+
+/* O botão a ouro: o contorno dourado da montra e do Grimório. Ao passar o rato
+   enche-se de ouro e a letra escurece — e **tem de vir depois de `.botão:hover`**,
+   senão é essa que ganha e deixa a letra quase da cor do fundo dela. */
+.botão--ouro {
+  padding: 17px 30px;
+  gap: 14px;
+  border-color: rgba(217, 179, 108, .5);
+  color: var(--ouro);
+}
+.botão--ouro:hover {
+  background: var(--ouro);
+  border-color: var(--ouro);
+  color: var(--fundo);
+}
 
 /* ---------------------------------------------------------------------------
    Os campos de formulário.
@@ -447,12 +1813,17 @@ p:last-child { margin-bottom: 0; }
   background: transparent;
   border-bottom: 1px solid transparent;
   transition: background .5s, border-color .5s;
+
+  /* O desfoque está sempre ligado, e não só a partir do momento em que a barra
+     ganha fundo. Ligado ao mesmo tempo que o fundo aparecia, acendia de uma vez
+     enquanto o fundo levava meio segundo a chegar — e via-se o estalo. Posto na
+     regra de base, o que muda ao descer é só a cor, que é o que transita. */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .cabeçalho[data-descido] {
   background: rgba(9, 8, 10, .9);
   border-bottom-color: var(--traco);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
 }
 
 .cabeçalho__linha {
@@ -461,12 +1832,18 @@ p:last-child { margin-bottom: 0; }
   justify-content: space-between;
   gap: 16px;
   padding-block: 12px;
+
+  /* A barra é mais larga do que o miolo das secções: 1360 de conteúdo e não
+     1280. É o que põe o menu a começar em 164 e não em 204 — a maquete deixa a
+     navegação avançar para fora da coluna do texto, de propósito. */
+  max-width: 1440px;
+  padding-inline: 40px;
 }
 
 .marca {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--ouro-claro);
 }
 .marca img { width: 44px; height: 32px; object-fit: contain; }
@@ -488,15 +1865,17 @@ p:last-child { margin-bottom: 0; }
 }
 .navegação a:hover, .navegação a[aria-current] { color: var(--ouro); }
 
-.cabeçalho__fim { display: flex; align-items: center; gap: 8px; }
+.cabeçalho__fim { display: flex; align-items: center; gap: 10px; }
 
 /* O botão redondo do cabeçalho: o idioma, o cesto, o menu. */
 .pílula {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 40px;
-  padding: 8px 14px;
+
+  /* Nove de cima e de baixo, sem altura mínima: com a linha de 15px da letra e
+     o fio de um pixel, dá os 35 de altura da maquete. */
+  padding: 9px 14px;
   border: 1px solid rgba(228, 220, 203, .18);
   border-radius: 999px;
   background: none;
@@ -509,15 +1888,19 @@ p:last-child { margin-bottom: 0; }
   transition: border-color .3s, color .3s;
 }
 .pílula:hover { border-color: var(--ouro); color: var(--ouro-claro); }
+/* A conta do cesto: um número a ouro ao lado da palavra, e não uma medalha
+   redonda. A maquete escreve-o assim, e escreve-o sempre — zero incluído. Um
+   contador que só aparece com alguma coisa dentro faz a barra mudar de largura
+   no instante em que se põe a primeira peça no cesto. */
 .pílula__conta {
-  min-width: 18px;
-  padding: 0 5px;
-  border-radius: 999px;
-  background: var(--ouro);
-  color: #140f08;
-  font-size: 10px;
-  line-height: 18px;
-  text-align: center;
+  font-weight: 500;
+  color: var(--ouro);
+}
+
+/* A seta do selector de idioma. */
+.pílula__seta {
+  font-size: 8px;
+  color: var(--letra-tenue);
 }
 
 /* O selector de idioma, aberto. */
@@ -578,37 +1961,59 @@ p:last-child { margin-bottom: 0; }
 
 /* ---------------------------------------------------------------------------
    A abertura.
+
+   O retrato ocupa o ecrã e não divide a largura com uma coluna de texto: o nome
+   da Casa está desenhado dentro da fotografia, e por isso não há nada escrito
+   por cima dela. Os botões ficam encostados à margem esquerda, a meia altura, em
+   coluna — num ecrã largo. Num estreito o retrato e os botões empilham-se, que é
+   a mesma página sem a margem onde a coluna cabia.
    --------------------------------------------------------------------------- */
 .abertura {
   position: relative;
   overflow: hidden;
   background: var(--fundo-fundo);
-  min-height: max(560px, 100svh);
+  min-height: max(680px, 100svh);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  padding: 100px var(--goteira) 60px;
+  gap: 36px;
+  padding: 84px var(--goteira) 72px;
+  box-sizing: border-box;
 }
 .abertura__retrato {
   position: relative;
-  width: min(80vh, 100%, 860px);
+  width: min(84vh, 100%, 880px);
   aspect-ratio: 1 / 1;
   flex: none;
+  will-change: transform;
 }
-.abertura__retrato::after {
+.abertura__foto {
   /* O retrato esbatido nas bordas, para não ter um limite recto a cortar o
      fundo. A máscara é radial e não um gradiente por cima: por cima, qualquer
-     coisa que passasse por trás do retrato aparecia através dela. */
-  content: '';
+     coisa que passasse por trás do retrato aparecia através dela.
+
+     O `background-image` vem do bloco, escrito no atributo `style`. */
   position: absolute;
   inset: 0;
-  background: url('../img/abertura.jpg') center / cover no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform-origin: 50% 35%;
   -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
   mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+  animation: abertura-respirar 22s ease-in-out infinite alternate;
 }
-.abertura__brasas { position: absolute; inset: 0; pointer-events: none; }
+/* A fotografia aproxima-se devagar e volta atrás. Vinte e dois segundos de ida
+   são lentos de mais para se ver a andar e bastam para a abertura não ficar
+   parada enquanto se lê. */
+@keyframes abertura-respirar {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07) translate(-1%, .5%); }
+}
+
+.abertura__brasas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
 .abertura__véu {
   position: absolute;
   inset: 0;
@@ -616,19 +2021,142 @@ p:last-child { margin-bottom: 0; }
   background: linear-gradient(to bottom,
               rgba(5, 4, 5, .6), transparent 16%, transparent 78%, var(--fundo) 100%);
 }
-.abertura__dizer {
+
+.abertura__botões {
   position: relative;
   z-index: 2;
-  max-width: 620px;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.abertura__botões .botão { min-width: 240px; }
+
+/* O sinal de que a página continua: a palavra e um risco com uma brasa a descer
+   dentro dele. Escondido num ecrã estreito — ver a regra dos 1100px. */
+.abertura__desce {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+.abertura__desce > span:first-child {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.abertura__risco {
+  position: relative;
+  width: 1px;
+  height: 44px;
+  background: var(--traco);
+  overflow: hidden;
+}
+.abertura__risco i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 18px;
+  background: var(--ouro);
+  animation: abertura-desce 1.8s cubic-bezier(.6, 0, .3, 1) infinite;
+}
+@keyframes abertura-desce {
+  from { transform: translateY(-24px); }
+  to   { transform: translateY(60px); }
+}
+
+/* ---------------------------------------------------------------------------
+   Comprar por intenção.
+
+   Cinco cartões altos numa fila que se parte quando a largura acaba. O símbolo
+   em cima, o nome em baixo, e o espaço entre eles a crescer com o cartão — é o
+   vazio ao meio que lhes dá o ar de carta e não de botão.
+   --------------------------------------------------------------------------- */
+.intenções {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.intenção {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  min-height: 240px;
+  padding: 26px 22px;
+  text-align: left;
+  color: var(--ouro);
+  border: 1px solid var(--traco);
+  background: linear-gradient(170deg, rgba(123, 79, 184, .12), rgba(9, 8, 10, 0) 70%);
+  transition: border-color .4s, background-color .4s;
 }
-.abertura__linha { font-size: clamp(18px, 2vw, 23px); color: var(--letra); }
-.abertura__botões { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-.abertura__botões .botão { min-width: 240px; }
+.intenção:hover,
+.intenção:focus-visible {
+  border-color: rgba(217, 179, 108, .6);
+  background-color: rgba(123, 79, 184, .12);
+}
+
+/* A luz que segue o rato. As duas medidas são escritas pelo js/site.js; sem
+   JavaScript ficam no sítio de origem — `-300px` acima do cartão —, que é fora
+   dele, e a luz não se vê. Um cartão que dependesse disto para se ler era um
+   cartão que não se lia sem JavaScript. */
+.intenção__luz {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(260px circle at var(--rato-x, 50%) var(--rato-y, -300px),
+              rgba(217, 179, 108, .18), transparent 70%);
+}
+
+.intenção__símbolo {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  overflow: visible;
+  transition: transform .7s cubic-bezier(.2, .7, .1, 1), filter .7s;
+}
+.intenção:hover .intenção__símbolo,
+.intenção:focus-visible .intenção__símbolo {
+  transform: scale(1.22) rotate(-6deg);
+  filter: drop-shadow(0 0 14px rgba(217, 179, 108, .8));
+}
+
+.intenção__dizer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform .5s cubic-bezier(.2, .7, .1, 1);
+}
+.intenção:hover .intenção__dizer,
+.intenção:focus-visible .intenção__dizer { transform: translateY(-6px); }
+
+.intenção__nome {
+  font-family: var(--titulo);
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--letra-forte);
+}
+.intenção__conta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
 
 /* ---------------------------------------------------------------------------
    As grelhas de cartões: os produtos, as consultas, os testemunhos.
@@ -683,47 +2211,388 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* ---------------------------------------------------------------------------
-   A agenda das consultas.
+   As consultas.
 
-   Dois passos, e nessa ordem: o dia, e depois a hora. Fazer as duas coisas numa
-   lista só dava noventa botões de uma vez.
+   Duas colunas que se partem em duas linhas quando a largura acaba — a mesa de
+   tarot de um lado, a lista do outro. O `minmax(min(100%, 440px), 1fr)` é o que
+   decide: cada coluna quer 440px, e num ecrã onde 440 é mais do que há, quer a
+   largura toda. Sem o `min()` por dentro, uma coluna de 440px num telefone de
+   400 transbordava.
+
+   A lista é riscos e não caixas. Quatro cartões emoldurados leem-se como quatro
+   produtos; quatro linhas separadas por um fio leem-se como uma carta de uma
+   casa — que é o que isto é.
    --------------------------------------------------------------------------- */
-.agenda { display: flex; flex-direction: column; gap: 22px; }
+.secção--consultas {
+  padding-block: 150px 140px;
+  background: radial-gradient(ellipse 60% 50% at 80% 30%, rgba(110, 60, 170, .16), transparent 70%);
+}
 
-.agenda__passo { display: flex; flex-direction: column; gap: 10px; }
-.agenda__rótulo {
+.consultas__par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+  gap: 80px;
+  align-items: start;
+}
+
+.consultas__mesa { align-self: stretch; display: flex; flex-direction: column; gap: 14px; }
+.consultas__dizer { display: flex; flex-direction: column; gap: 22px; }
+
+/* ---------------------------------------------------------------------------
+   A mesa de tarot.
+
+   Um pano escuro com as vinte e duas cartas empilhadas ao meio. Baralhar,
+   cortar e espalhar é mexer no `transform` de cada uma — o JavaScript escreve
+   `--x`, `--y`, `--volta` e `--z`, e a folha de estilo trata do resto. Assim a
+   conta do movimento fica num sítio e o desenho noutro.
+
+   O pano tem altura mínima e não altura fixa: as cartas são postas em
+   percentagem dele, e uma mesa que encolhesse abaixo do baralho punha as cartas
+   fora dela.
+   --------------------------------------------------------------------------- */
+.mesa {
+  position: relative;
+  flex: 1;
+  min-height: 560px;
+  border: 1px solid rgba(217, 179, 108, .22);
+  background: radial-gradient(ellipse 75% 55% at 50% 36%, #261a31, #120c17 68%, #0b080e);
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, .75);
+  overflow: hidden;
+  touch-action: manipulation;
+}
+/* O fio de dentro, a 12px da borda: é o que faz o pano parecer um tabuleiro. */
+.mesa::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(217, 179, 108, .1);
+  pointer-events: none;
+}
+
+.mesa__topo {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  z-index: 40;
+}
+.mesa__título {
   font-family: var(--mono);
-  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  color: var(--roxo-claro);
+}
+.mesa__saltar {
+  font-family: var(--mono);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--letra-tenue);
+  padding: 6px 10px;
+  border: 1px solid rgba(228, 220, 203, .16);
+  background: none;
+  cursor: pointer;
+  transition: color .3s, border-color .3s;
+}
+.mesa__saltar:hover { color: var(--ouro); border-color: rgba(217, 179, 108, .5); }
+
+.mesa__dito {
+  position: absolute;
+  top: 108px;
+  left: 24px;
+  right: 24px;
+  margin: 0;
+  text-align: center;
+  font-family: var(--titulo);
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.15;
+  color: #f3e2b5;
+  text-shadow: 0 0 28px rgba(224, 134, 60, .65), 0 0 2px rgba(0, 0, 0, .8);
+  z-index: 40;
+  pointer-events: none;
+  transition: opacity .5s;
+}
+
+/* Os três lugares onde as cartas pousam. */
+.mesa__lugares {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 60%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 clamp(14px, 3vw, 48px);
+  z-index: 1;
+}
+.lugar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  min-width: 0;
+  text-align: center;
+}
+.lugar__vazio {
+  flex: none;
+  width: var(--larg-carta, 84px);
+  height: var(--alt-carta, 140px);
+  border: 1px dashed rgba(217, 179, 108, .28);
+}
+.lugar__dizer { display: flex; flex-direction: column; gap: 12px; min-width: 0; max-width: 220px; }
+.lugar__nome {
+  font-family: var(--mono);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--roxo-claro);
+}
+.lugar__carta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .3s, transform .3s;
+}
+.lugar__carta[data-virada] { opacity: 1; transform: none; }
+.lugar__arcano {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--titulo);
+  font-size: 19px;
+  line-height: 1.15;
+  color: var(--letra-forte);
+}
+.lugar__sentido {
+  font-family: var(--mono);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  font-size: 9.5px;
+  color: var(--brasa);
+  min-height: 14px;
+}
+.lugar__significado {
+  font-family: var(--prosa);
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 15px;
+  line-height: 1.35;
+  font-style: italic;
+  color: #bdb4c4;
+}
+
+/* As cartas. Postas por `transform` a partir do canto superior esquerdo do
+   pano; a conta das posições está no js/site.js. */
+.baralho { position: absolute; inset: 0; }
+.carta-tarot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--larg-carta, 84px);
+  height: var(--alt-carta, 140px);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  z-index: var(--z, 10);
+  transform: translate3d(var(--x, -300px), var(--y, -300px), 0) rotate(var(--volta, 0deg));
+  transition: transform .6s cubic-bezier(.2, .7, .1, 1), opacity .4s;
+}
+.carta-tarot:hover { z-index: 30; }
+
+.carta-tarot__virar {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .6s ease-in-out;
+}
+.carta-tarot[data-virada] .carta-tarot__virar { transform: rotateY(180deg); }
+/* Levantada ao passar o rato, mas só enquanto houver escolha a fazer. */
+.mesa[data-fase="escolher"] .carta-tarot:hover .carta-tarot__virar { transform: translateY(-10px); }
+
+.carta-tarot__verso,
+.carta-tarot__frente {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 4px;
+  border: 1px solid rgba(217, 179, 108, .6);
+  box-shadow: 0 14px 26px -12px rgba(0, 0, 0, .9);
+}
+.carta-tarot__verso { background: linear-gradient(160deg, #22192c, #0e0a13); }
+.carta-tarot__verso svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.carta-tarot__frente {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #1b1522, #0c0910);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.carta-tarot__romano {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  color: var(--ouro);
+}
+.carta-tarot__nome {
+  font-family: var(--titulo);
+  font-size: 13px;
+  line-height: 1.1;
+  color: var(--letra-forte);
+}
+/* A carta invertida vira-se de pernas para o ar — e só a frente, para o verso
+   não aparecer ao contrário enquanto roda. */
+.carta-tarot[data-invertida] .carta-tarot__frente { transform: rotateY(180deg) rotate(180deg); }
+
+.mesa__fim {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 40;
+}
+
+/* Sem JavaScript não há tiragem: o botão de baralhar não aparece e fica a
+   frase a dizer o que isto é. É o `data-pronta` que o js/site.js escreve. */
+.mesa:not([data-pronta]) .mesa__fim { display: none; }
+.consultas__título { margin: 0; }
+.consultas__entrada {
+  font-size: 22px;
+  line-height: 1.5;
+  color: #cfc6b5;
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+.consultas__entrada p { margin: 0; }
+
+.consultas__lista {
+  display: flex;
+  flex-direction: column;
+  margin-top: 18px;
+  border-top: 1px solid var(--traco);
+}
+
+.consulta {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: start;
+  padding: 30px 22px 30px 8px;
+  border-bottom: 1px solid var(--traco);
+  background: radial-gradient(360px circle at var(--rato-x, -400px) var(--rato-y, 50%),
+              rgba(217, 179, 108, .09), transparent 70%);
+  transition: background-color .4s;
+}
+.consulta:hover { background-color: rgba(123, 79, 184, .06); }
+
+.consulta__ordinal {
+  font-family: var(--titulo);
+  font-size: 28px;
+  line-height: 1;
+  color: var(--ouro);
+}
+
+.consulta__corpo { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+.consulta__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--letra-fraca);
+  color: var(--letra-tenue);
 }
 
-/* Os dias e as horas: uma fila que dá a volta, com os botões todos do mesmo
-   tamanho. `flex-wrap` e não uma grelha porque o número deles muda com a semana,
-   e uma grelha deixava buracos na última linha. */
-.agenda__fila { display: flex; flex-wrap: wrap; gap: 8px; }
+.consulta__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: .03em;
+  color: var(--letra-forte);
+}
 
-.agenda__opção {
-  min-height: 44px;
-  padding: 11px 16px;
-  border: 1px solid var(--traco);
-  background: none;
-  color: var(--letra);
+.consulta__dito {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.5;
+  color: #bdb4c4;
+  max-width: 48ch;
+  text-wrap: pretty;
+}
+
+.consulta__fim {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+.consulta__preço {
   font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: .1em;
-  cursor: pointer;
-  transition: border-color .3s, background .3s, color .3s;
+  font-size: 13px;
+  color: var(--ouro-claro);
+  white-space: nowrap;
 }
-.agenda__opção:hover { border-color: var(--ouro); color: var(--ouro-claro); }
-.agenda__opção[aria-pressed="true"] {
-  border-color: var(--ouro);
-  background: var(--ouro);
-  color: #140f08;
+.consulta__botão {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: 1px solid rgba(217, 179, 108, .5);
+  color: var(--ouro);
+  white-space: nowrap;
+  transition: background .3s, color .3s;
 }
+.consulta__botão:hover { background: var(--ouro); color: var(--fundo); }
 
-.agenda__vazia { font-size: 17px; color: var(--letra-tenue); }
+.consultas__pé {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+}
+.consultas__nota {
+  margin: 0;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--letra-tenue);
+  max-width: 52ch;
+}
+.consultas__agenda {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ouro);
+  border-bottom: 1px solid rgba(217, 179, 108, .5);
+  padding-bottom: 4px;
+}
 
 /* A nota de que as leituras não substituem um médico. Dita onde se marca, e não
    só numa página de termos que ninguém abre. */
@@ -781,44 +2650,6 @@ p:last-child { margin-bottom: 0; }
 .cartão-só { width: 100%; max-width: 460px; }
 .cartão-só h1 { margin-bottom: 24px; }
 
-/* ---------------------------------------------------------------------------
-   O rodapé.
-   --------------------------------------------------------------------------- */
-.rodapé {
-  border-top: 1px solid var(--traco);
-  padding-block: clamp(48px, 7vw, 90px) 32px;
-  font-size: 17px;
-}
-.rodapé__colunas {
-  display: grid;
-  gap: 32px;
-  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
-  margin-bottom: 40px;
-}
-.rodapé h2 {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--letra-tenue);
-  margin-bottom: 14px;
-}
-.rodapé ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.rodapé a { color: var(--letra); }
-.rodapé a:hover { color: var(--ouro); }
-
-.rodapé__fim {
-  border-top: 1px solid var(--traco);
-  padding-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: .1em;
-  color: var(--letra-tenue);
-}
-
 /* ===========================================================================
    Os ecrãs largos.
    =========================================================================== */
@@ -841,15 +2672,30 @@ p:last-child { margin-bottom: 0; }
   .marca { justify-self: center; }
   .marca img { width: 54px; height: 40px; }
   .marca span { font-size: 15px; letter-spacing: .36em; }
-
-  /* A abertura passa a ter o retrato de um lado e o texto do outro. */
-  .abertura { flex-direction: row; gap: 48px; text-align: left; }
-  .abertura__dizer { text-align: left; align-items: flex-start; }
-  .abertura__botões { justify-content: flex-start; }
 }
 
 @media (min-width: 1100px) {
   body { font-size: 20px; }
   .cartão { padding: 26px; }
   .grelha { gap: 18px; }
+
+  /* As garantias passam de duas colunas a quantas forem — quatro, na maquete.
+     Com uma fila só, os fios de cima das segundas linhas deixam de fazer falta. */
+  .garantias { grid-template-columns: repeat(var(--quantas, 4), minmax(0, 1fr)); }
+  .garantia:nth-child(2n + 1) { border-left: 1px solid rgba(217, 179, 108, .18); }
+  .garantia:first-child { border-left: 0; }
+  .garantia:nth-child(n + 3) { border-top: 0; }
+
+  /* A abertura ganha a margem onde a coluna dos botões cabe. Tirados do fluxo,
+     deixam o retrato ficar do tamanho do ecrã — que é o ponto da composição. */
+  .abertura { flex-direction: row; gap: 36px; }
+  .abertura__botões {
+    position: absolute;
+    left: var(--goteira);
+    top: 0;
+    bottom: 0;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .abertura__desce { display: flex; }
 }
