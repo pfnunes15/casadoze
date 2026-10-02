@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79534b94bf8e37aa7b568db5704dcc2d",
+    "content-hash": "35633cde5c5e51285348f9902d42febb",
     "packages": [
         {
             "name": "admedia/cms",
-            "version": "dev-main",
+            "version": "v2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pfnunes15/admedia-cms-core.git",
+                "reference": "af4f7913f4870f509b7219e7d82f49b638aa5bf3"
+            },
             "dist": {
-                "type": "path",
-                "url": "../cms",
-                "reference": "04c961ad782bdd2ecdb9637c06c71c187739df39"
+                "type": "zip",
+                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/af4f7913f4870f509b7219e7d82f49b638aa5bf3",
+                "reference": "af4f7913f4870f509b7219e7d82f49b638aa5bf3",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -35,18 +41,13 @@
                 "proprietary"
             ],
             "description": "The CMS shared between Admedia's sites: a small framework, an optional content layer of pages and blocks, and an optional shop.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-10-02T15:21:28+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "admedia/cms": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

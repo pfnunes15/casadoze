@@ -5,14 +5,14 @@
     "license": "proprietary",
     "repositories": [
         {
-            "type": "path",
-            "url": "../cms",
-            "options": { "symlink": true }
+            "type": "vcs",
+            "url": "https://github.com/pfnunes15/admedia-cms-core.git",
+            "no-api": true
         }
     ],
     "require": {
         "php": ">=8.1",
-        "admedia/cms": "@dev"
+        "admedia/cms": "^2.6"
     },
     "autoload": {
         "psr-4": {
@@ -22,6 +22,8 @@
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true,
-        "allow-plugins": {}
+        "allow-plugins": {},
+        "use-github-api": false,
+        "preferred-install": { "admedia/cms": "source" }
     }
 }
