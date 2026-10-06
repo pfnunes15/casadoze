@@ -1292,7 +1292,7 @@
       if (!arranqueLuas) { arranqueLuas = agora; rodarFases(1800, 2, null); }
 
       var n = luas.length;
-      var largura = caixa.width / n;
+      var largura = fitaDasLuas.scrollWidth / n;
       var t = (agora - arranqueLuas) / 1000;
       var corcova = (t % 7) / 1.6 * n - 4;
 
@@ -1319,7 +1319,10 @@
         }
 
         if (ratoX !== null) {
-          var dx = ratoX - (caixa.left + (i + 0.5) * largura);
+          /* Menos o que a fita estiver rolada: num telefone ela rola na
+             horizontal, e sem isto a lua que cresce não era a que está debaixo
+             do dedo. */
+          var dx = ratoX - (caixa.left - fitaDasLuas.scrollLeft + (i + 0.5) * largura);
           var g = Math.exp(-dx * dx / (2 * 45 * 45));
           escala += g * 0.75;
           y -= g * 6;
@@ -1336,7 +1339,7 @@
 
     fitaDasLuas.addEventListener('click', function (ev) {
       var caixa = fitaDasLuas.getBoundingClientRect();
-      var onde = (ev.clientX - caixa.left) / caixa.width * luas.length;
+      var onde = (ev.clientX - caixa.left + fitaDasLuas.scrollLeft) / fitaDasLuas.scrollWidth * luas.length;
       ondas.push({ quando: performance.now(), onde: onde });
       rodarFases(900, 1, onde);
     });

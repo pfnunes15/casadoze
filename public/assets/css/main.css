@@ -149,6 +149,11 @@
      para não colar o texto ao vidro. */
   --miolo:   1280px;
   --goteira: clamp(24px, 5vw, 72px);
+
+  /* A margem lateral das secções. Vinte no telefone e quarenta a partir dos
+     900 — ver o fim da folha. Quarenta num ecrã de 390 são oitenta dos trezentos
+     e noventa, e era isso que empurrava o cabeçalho para fora da página. */
+  --goteira-secção: 20px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -313,7 +318,7 @@ p:last-child { margin-bottom: 0; }
 .secção {
   position: relative;
   padding-block: 120px 40px;
-  padding-inline: 40px;
+  padding-inline: var(--goteira-secção);
 }
 
 .secção--caixa { background: var(--fundo-caixa); }
@@ -345,7 +350,7 @@ p:last-child { margin-bottom: 0; }
 .secção--ponte {
   position: relative;
   overflow: hidden;
-  padding: 170px 40px;
+  padding: 170px var(--goteira-secção);
   background: linear-gradient(to bottom, var(--fundo), var(--fundo-ponte) 30%, var(--fundo-ponte) 70%, var(--fundo));
 }
 
@@ -445,7 +450,7 @@ p:last-child { margin-bottom: 0; }
   gap: 24px;
   max-width: var(--miolo);
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 var(--goteira-secção);
 }
 .separador__fio { flex: 1; height: 1px; }
 .separador__fio--esq { background: linear-gradient(90deg, transparent, rgba(217, 179, 108, .5)); }
@@ -510,7 +515,9 @@ p:last-child { margin-bottom: 0; }
 
 .agora__kit {
   display: grid;
-  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  /* Uma coluna no telefone: com duas, o texto do kit ficava com quarenta e três
+     pixéis ao lado de uma ilustração de duzentos e vinte. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 28px;
   align-items: center;
   padding: 22px;
@@ -559,7 +566,9 @@ p:last-child { margin-bottom: 0; }
 .luas {
   position: relative;
   padding: 8px 0 40px;
-  margin-inline: -40px;
+  /* Sai para fora da margem da secção, e tem de sair exactamente o que ela
+     mete — senão, no telefone, é a fita que passa a transbordar. */
+  margin-inline: calc(var(--goteira-secção) * -1);
   background: var(--fundo);
 }
 .luas__dentro {
@@ -593,10 +602,20 @@ p:last-child { margin-bottom: 0; }
 
 .luas__fila {
   display: grid;
-  grid-template-columns: repeat(var(--quantos, 31), minmax(0, 1fr));
+  /* Cada lua pede 26px. Num ecrã largo sobra e elas repartem o que há — `1fr`;
+     num telefone não cabem as trinta e uma, e a fita rola em vez de as espremer
+     a sete pixéis cada, que é o que acontecia. Um mês partido ao meio não é um
+     mês, e por isso a resposta é rolar e não quebrar. */
+  grid-template-columns: repeat(var(--quantos, 31), minmax(26px, 1fr));
   gap: 4px;
   align-items: start;
-  padding-top: 10px;
+
+  /* O ar em cima é para as luas poderem subir sem serem cortadas: a onda
+     levanta-as até 22px, e um contentor que rola corta o que sai dele. */
+  padding-top: 28px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
 }
 .lua {
   display: flex;
@@ -1222,9 +1241,9 @@ a.vídeo__moldura { border-style: solid; }
 }
 .medidor {
   display: grid;
-  grid-template-columns: 110px minmax(0, 1fr) 34px;
+  grid-template-columns: 84px minmax(0, 1fr) 34px;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 .medidor__nome {
   font-family: var(--mono);
@@ -1254,7 +1273,9 @@ a.vídeo__moldura { border-style: solid; }
   text-align: right;
 }
 
-.carta__sorte { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+/* Três caixas onde couberem; onde não couberem, as que couberem. «Segunda-feira»
+   não cabe em setenta pixéis. */
+.carta__sorte { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
 .sorte {
   display: flex;
   flex-direction: column;
@@ -1394,7 +1415,7 @@ a.vídeo__moldura { border-style: solid; }
    conteúdo ficava a 244 em vez dos 204 da maquete. */
 .rodapé__miolo {
   max-width: 1360px;
-  padding: 110px 40px 0;
+  padding: 110px var(--goteira-secção) 0;
   box-sizing: border-box;
 }
 
@@ -1498,7 +1519,7 @@ a.vídeo__moldura { border-style: solid; }
   position: relative;
   display: flex;
   justify-content: center;
-  padding: 0 40px 40px;
+  padding: 0 var(--goteira-secção) 40px;
 }
 .rodapé__letreiro img {
   width: min(680px, 100%);
@@ -1513,7 +1534,7 @@ a.vídeo__moldura { border-style: solid; }
 .rodapé__ressalva {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 0 40px 28px;
+  padding: 0 var(--goteira-secção) 28px;
   box-sizing: border-box;
   font-size: 16px;
   font-style: italic;
@@ -1525,7 +1546,7 @@ a.vídeo__moldura { border-style: solid; }
 .rodapé__barra { border-top: 1px solid var(--traco); }
 .rodapé__fim {
   max-width: 1360px;
-  padding: 24px 40px;
+  padding: 24px var(--goteira-secção);
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -1837,7 +1858,7 @@ a.vídeo__moldura { border-style: solid; }
      1280. É o que põe o menu a começar em 164 e não em 204 — a maquete deixa a
      navegação avançar para fora da coluna do texto, de propósito. */
   max-width: 1440px;
-  padding-inline: 40px;
+  padding-inline: var(--goteira-secção);
 }
 
 .marca {
@@ -1846,11 +1867,20 @@ a.vídeo__moldura { border-style: solid; }
   gap: 12px;
   color: var(--ouro-claro);
 }
-.marca img { width: 44px; height: 32px; object-fit: contain; }
+.marca img { width: 36px; height: 26px; object-fit: contain; }
+
+/* **No telefone fica só o sigilo.** Num ecrã de 386, depois do botão do menu e
+   das duas pastilhas, sobram setenta e cinco pixéis para a marca — e «CASA DE
+   ZÉ» não cabe em setenta e cinco. Escrito à mesma e escondido com `clip-path`:
+   o nome continua a ser lido por quem ouve a página, e o `aria-label` da
+   ligação continua lá. A partir dos 900 volta a ver-se. */
 .marca span {
-  font-family: var(--titulo);
-  font-size: 13px;
-  letter-spacing: .3em;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
@@ -2253,7 +2283,11 @@ a.vídeo__moldura { border-style: solid; }
 .mesa {
   position: relative;
   flex: 1;
-  min-height: 560px;
+  /* Mais alta no telefone. Tudo o que está na mesa é posicionado em absoluto —
+     a frase, os lugares, os botões — e com 560 a frase passava a três linhas e
+     atravessava o baralho, e o botão tapava as etiquetas dos lugares. A partir
+     dos 900 volta aos 560 da maquete. */
+  min-height: 700px;
   border: 1px solid rgba(217, 179, 108, .22);
   background: radial-gradient(ellipse 75% 55% at 50% 36%, #261a31, #120c17 68%, #0b080e);
   box-shadow: inset 0 0 140px rgba(0, 0, 0, .75);
@@ -2303,13 +2337,13 @@ a.vídeo__moldura { border-style: solid; }
 
 .mesa__dito {
   position: absolute;
-  top: 108px;
-  left: 24px;
-  right: 24px;
+  top: 86px;
+  left: 20px;
+  right: 20px;
   margin: 0;
   text-align: center;
   font-family: var(--titulo);
-  font-size: clamp(26px, 2.6vw, 36px);
+  font-size: 21px;
   line-height: 1.15;
   color: #f3e2b5;
   text-shadow: 0 0 28px rgba(224, 134, 60, .65), 0 0 2px rgba(0, 0, 0, .8);
@@ -2323,7 +2357,7 @@ a.vídeo__moldura { border-style: solid; }
   position: absolute;
   left: 0;
   right: 0;
-  top: 60%;
+  top: 52%;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
@@ -2334,7 +2368,7 @@ a.vídeo__moldura { border-style: solid; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  gap: 14px;
   min-width: 0;
   text-align: center;
 }
@@ -2463,14 +2497,17 @@ a.vídeo__moldura { border-style: solid; }
 
 .mesa__fim {
   position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 26px;
+  left: 16px;
+  right: 16px;
+  bottom: 20px;
   display: flex;
   justify-content: center;
   gap: 12px;
   z-index: 40;
 }
+
+/* Apertados, para caberem numa linha num ecrã estreito. */
+.mesa__fim .botão { min-width: 0; padding: 14px 16px; letter-spacing: .14em; gap: 10px; }
 
 /* Sem JavaScript não há tiragem: o botão de baralhar não aparece e fica a
    frase a dizer o que isto é. É o `data-pronta` que o js/site.js escreve. */
@@ -2495,8 +2532,11 @@ a.vídeo__moldura { border-style: solid; }
 .consulta {
   position: relative;
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto;
-  gap: 24px;
+  /* Duas colunas no telefone — o romano e o texto —, com o preço e o botão a
+     passarem para a linha de baixo. Com as três, o texto ficava com sessenta e
+     três pixéis. */
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 16px 18px;
   align-items: start;
   padding: 30px 22px 30px 8px;
   border-bottom: 1px solid var(--traco);
@@ -2546,9 +2586,12 @@ a.vídeo__moldura { border-style: solid; }
 }
 
 .consulta__fim {
+  /* Debaixo do texto e alinhado com ele, no telefone. */
+  grid-column: 2;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 14px;
 }
 .consulta__preço {
@@ -2671,7 +2714,54 @@ a.vídeo__moldura { border-style: solid; }
   .cabeçalho__fim { justify-self: end; }
   .marca { justify-self: center; }
   .marca img { width: 54px; height: 40px; }
-  .marca span { font-size: 15px; letter-spacing: .36em; }
+  .marca span {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    font-family: var(--titulo);
+    font-size: 15px;
+    letter-spacing: .36em;
+  }
+
+  /* A margem das secções abre para os quarenta da maquete. */
+  :root { --goteira-secção: 40px; }
+
+  /* E as composições de duas e três colunas, que num telefone não cabem. */
+  .agora__kit { grid-template-columns: minmax(0, 220px) minmax(0, 1fr); }
+
+  .consulta {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 24px;
+  }
+  .consulta__fim {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .medidor { grid-template-columns: 110px minmax(0, 1fr) 34px; gap: 14px; }
+
+  /* Três e não as que couberem: num ecrã largo, `auto-fit` dava quatro colunas
+     e encolhia a carta do signo em vinte e oito pixéis. */
+  .carta__sorte { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  /* A mesa de tarot volta aos valores da maquete. */
+  .mesa { min-height: 560px; }
+  .mesa__dito { top: 108px; left: 24px; right: 24px; font-size: clamp(26px, 2.6vw, 36px); }
+  .mesa__lugares { top: 60%; }
+  .lugar { gap: 26px; }
+  .mesa__fim { left: 24px; right: 24px; bottom: 26px; }
+  .mesa__fim .botão { min-width: 240px; padding: 17px 24px; letter-spacing: .22em; gap: 18px; }
+
+  /* A fita da lua deixa de rolar: as trinta e uma cabem. */
+  .luas__fila {
+    grid-template-columns: repeat(var(--quantos, 31), minmax(0, 1fr));
+    padding-top: 10px;
+    overflow-x: visible;
+  }
 }
 
 @media (min-width: 1100px) {
