@@ -1,27 +1,47 @@
-# Serve the site from public/ when the document root points at the project root
-# instead. Where the document root can be set to public/ — which is better,
-# because then nothing else is reachable over the web at all — this file is
-# never consulted.
+# Serve the site when the document root is the project root and cannot be
+# pointed at public/ — a shared host with a fixed public_html, typically.
+#
+# Where the document root CAN be public/, that is better and none of this is
+# read: nothing outside public/ is then under the web at all.
+#
+# The defence is not a list of folders to deny. It is the other way round: the
+# only things served are real files inside public/, and every other address
+# goes to the front controller, which answers 404. A folder added to this
+# project tomorrow is closed without anybody remembering to close it — which a
+# deny list is always one forgotten line away from getting wrong.
+
+DirectoryIndex public/index.php
+Options -Indexes
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Nothing outside public/ is the web's business. Denied before the rewrite
-    # below, because once a request has been rewritten these paths look like
-    # ordinary files under public/ and the deny would never be reached.
-    RewriteRule ^(config|src|views|database|storage|bin)(/|$) - [F,L]
+    # Already inside public/: leave it, or the rules below feed it back in.
+    RewriteRule ^public/ - [L]
 
-    # Into public/, once.
-    #
-    # The condition is what stops it: mod_rewrite feeds a rewritten path back
-    # through the same rules, so without it "/" becomes "public/", then
-    # "public/public/", and so on until the server gives up — which it reports
-    # as a 403 or a 500, with nothing in the logs to say why.
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Certificate renewal writes into the document root, which here is the
+    # project root. It has to stay reachable or the certificate stops renewing.
+    RewriteRule ^\.well-known/ - [L]
+
+    # A real file inside public/ — a stylesheet, an image, an upload — served
+    # from there under its own clean address, with no /public/ in it.
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
+    RewriteRule ^(.+)$ public/$1 [L]
+
+    # Everything else, unconditionally. This is the line that makes the project
+    # root unreachable rather than merely discouraged: it does not ask whether
+    # the file exists, so config/, src/, vendor/ and whatever comes next are
+    # answered by the front controller and not by Apache.
+    RewriteRule ^ public/index.php [L]
 </IfModule>
 
-# Deny direct access to files in the project root
-<Files ~ "^.*\.(env|json|md|sql|yml|yaml|lock|log)$">
+# Without mod_rewrite none of the above happens and the whole project root is
+# served. These hold regardless, and are the only reason to name anything.
+<IfModule mod_alias.c>
+    RedirectMatch 404 ^/(config|src|views|database|storage|bin|vendor|design)(/|$)
+    RedirectMatch 404 ^/\.(?!well-known/)
+</IfModule>
+
+<FilesMatch "(^\.|\.(env|json|lock|md|sql|ya?ml|log|zip|tar|gz)$)">
     Require all denied
-</Files>
+</FilesMatch>
