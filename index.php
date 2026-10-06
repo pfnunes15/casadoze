@@ -1,6 +1,21 @@
 <?php
-// Router para o servidor embutido do PHP (php -S localhost:8000 router.php)
-// Serve ficheiros estáticos directamente; encaminha o resto para public/index.php
+/**
+ * O encaminhador do servidor embutido do PHP.
+ *
+ *     php -S 127.0.0.1:8000 index.php
+ *
+ * Serve os ficheiros estáticos de `public/` directamente e encaminha tudo o
+ * resto para o front controller, que é o `public/index.php`.
+ *
+ * **Isto é código de desenvolvimento.** Em produção o docroot é `public/` e quem
+ * serve os estáticos é o Apache ou o nginx; este ficheiro nunca é alcançado.
+ *
+ * Chama-se `index.php` por convenção entre os projectos e não porque o servidor
+ * o exija — o nome é o que vai escrito na linha de comandos. Como está na raiz,
+ * um docroot mal apontado para a raiz em vez de `public/` passa a encontrar aqui
+ * um ponto de entrada que funciona, em vez de falhar à vista. É a troco disso
+ * que se ganha o nome igual em todo o lado.
+ */
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $publicDir = __DIR__ . '/public';

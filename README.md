@@ -109,7 +109,7 @@ mysql -e "CREATE DATABASE casadoze CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode
 php bin/migrate.php
 ADMIN_EMAIL=voce@exemplo.pt ADMIN_NAME="O Seu Nome" php bin/seed-admin.php
 php bin/gerar-vagas.php
-php -S 127.0.0.1:8000 router.php
+php -S 127.0.0.1:8000 index.php
 ```
 
 As migrações semeiam o site com o conteúdo da maquete aprovada: a porta de
