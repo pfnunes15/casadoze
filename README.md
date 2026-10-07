@@ -462,18 +462,25 @@ que é o que a grelha sabe fazer.
 Não há SSH no alojamento, por isso publicar é copiar ficheiros:
 
 1. Enviar tudo excepto `config/config.php`, `storage/` e `docs/`.
+
+   **Os ficheiros começados por ponto contam.** O `.htaccess` da raiz e o de
+   `public/` são o que faz o site responder; muitos descompactadores e clientes
+   de FTP saltam-nos sem avisar, e o que se vê a seguir é um 403 na raiz e um
+   404 em tudo o resto. Confirmar que lá estão antes de procurar o erro noutro
+   sítio.
+
 2. Criar `config/config.php` a partir do `.example`, com `app.env` em
    `production` e `app.debug` em `false`.
 3. Apontar o docroot a `public/`. Onde não for possível, o `.htaccess` da raiz
    encaminha para lá — mas apontar o docroot é melhor, porque então nada mais é
    alcançável pela web.
 4. Correr as migrações pelo `/_migrate?token=…`, e limpar o token a seguir.
-5. `php bin/cms-publish.php` não corre sem shell: copiar à mão o que ele copiaria,
-   de `vendor/admedia/cms/public/` para `public/assets/`.
-6. Confirmar que `storage/sessions/` existe e é escrevível, e que não é alcançável
-   pela web.
-7. Pôr o cron do `bin/gerar-vagas.php`. Sem ele o site desenrasca-se, mas é quem
-   abre o backoffice a pagar a geração.
+5. Criar `storage/sessions/` e `storage/logs/` se não vierem, e confirmar que
+   são escrevíveis e que não são alcançáveis pela web.
+
+Os passos do `bin/cms-publish.php` e do cron do `bin/gerar-vagas.php` saíram
+daqui com o backoffice e o motor de marcações — ver o aviso no topo deste
+ficheiro. Os guiões já não existem.
 
 ## Antes de lançar: correr os sites todos
 
