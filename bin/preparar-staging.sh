@@ -240,7 +240,19 @@ if [ -n "$DESDE" ]; then
   echo "→ Assets do backoffice: ficam de fora (saem do CMS, que não mudou)"
 else
   echo "→ Assets do backoffice…"
-  ( cd "$DEST" && php bin/cms-publish.php | sed 's/^/   /' )
+  # O do projecto quando existe, o do pacote quando não. Nem todos os sites
+  # guardam uma cópia deste guião no seu próprio bin/ — o casadoze não guarda —
+  # e o que conta é o que vem com o CMS que o zip leva dentro.
+  if [ -f "$DEST/bin/cms-publish.php" ]; then
+    PUBLICA="bin/cms-publish.php"
+  elif [ -f "$DEST/vendor/admedia/cms/bin/cms-publish.php" ]; then
+    PUBLICA="vendor/admedia/cms/bin/cms-publish.php"
+  else
+    echo "   Não encontrei o cms-publish.php, nem no projecto nem no vendor." >&2
+    echo "   O pacote sairia sem a folha de estilo do backoffice." >&2
+    exit 1
+  fi
+  ( cd "$DEST" && php "$PUBLICA" | sed 's/^/   /' )
 fi
 
 # ---------------------------------------------------------------------------
