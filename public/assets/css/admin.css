@@ -467,6 +467,26 @@ a { color: inherit; text-decoration: none; }
 .admin-chips a.is-on { background: var(--primary); border-color: var(--primary); color: #fff; }
 .admin-chips a span { font-weight: 600; opacity: .75; }
 
+/* The second row: which part of the site, rather than which state. It is set
+   apart with a rule above it and a word in front of it, because two rows of
+   identical chips read as one list of alternatives where picking one unpicks
+   another — and these two narrow by different things and combine. */
+.admin-chips--second {
+  align-items: center;
+  width: 100%;
+  margin-top: .6rem; padding-top: .6rem;
+  border-top: 1px dashed var(--border);
+}
+.admin-chips__label {
+  margin-right: .25rem;
+  color: var(--faint); font-size: .72rem; font-weight: 600;
+  letter-spacing: .4px; text-transform: uppercase;
+}
+.admin-chips__aside {
+  margin-left: .25rem;
+  color: var(--faint); font-size: .78rem;
+}
+
 /* ---------------- Users ---------------- */
 
 /* One row per person. A table of identical rows is readable with six and
