@@ -6,19 +6,38 @@
    gets a backoffice that matches without anyone touching this file. The names
    below say what a thing is for, not what colour it happens to be.
 
-   The second value in each color-mix is the one that survives on a browser too
-   old to understand it — the plain declaration above each mix. */
+   The plain declaration above each color-mix is what survives on a browser too
+   old to understand the mix.
+
+   **Every var() inside a color-mix carries its own fallback, and must.** A
+   custom property holding an unresolvable var() is not invalid when it is
+   declared — it is a valid token sequence, so it overrides the plain value
+   above it — it is invalid at the moment something *uses* it, and the using
+   property is then dropped altogether. `--white` was never defined by
+   anything, so these three resolved to nothing and `border: 1px solid
+   var(--border)` became no border at all. The backoffice lost every row
+   separator, every card outline, the background of the table headers and of
+   every <code>, and the colour of all its faint text — silently, with no
+   error anywhere, because that is exactly how this failure presents. */
+/* `hidden` has to actually hide.
+   The attribute's `display: none` comes from the browser's own stylesheet,
+   which any author rule beats — so a `.card { display: flex }` somewhere
+   further down silently makes `el.hidden = true` do nothing at all. Every
+   script here hides things that way, and one of them (the block picker's
+   search) was filtering correctly and showing every card regardless. */
+[hidden] { display: none !important; }
+
 :root {
   --bg:          var(--admin-canvas, #f4f1ea);
   --surface:     var(--white, #ffffff);
   --surface-2:   #f7f5ef;
-  --surface-2:   color-mix(in srgb, var(--admin-canvas) 55%, var(--white));
+  --surface-2:   color-mix(in srgb, var(--admin-canvas, #f4f1ea) 55%, var(--white, #ffffff));
   --border:      #e3e0d8;
-  --border:      color-mix(in srgb, var(--admin-ink) 12%, var(--white));
+  --border:      color-mix(in srgb, var(--admin-ink, #1b2426) 12%, var(--white, #ffffff));
   --text:        var(--admin-ink, #1b2426);
   --muted:       var(--admin-muted, #6b7a7c);
   --faint:       #9aa5a6;
-  --faint:       color-mix(in srgb, var(--admin-muted) 62%, var(--white));
+  --faint:       color-mix(in srgb, var(--admin-muted, #6b7a7c) 62%, var(--white, #ffffff));
 
   /* Solid buttons and the sidebar: the brand's own chrome. */
   --primary:     var(--admin-chrome, #4a4a49);
@@ -188,6 +207,17 @@ a { color: inherit; text-decoration: none; }
 .admin-nav-adv[open] > summary::after { transform: rotate(45deg); }
 .admin-nav-adv__items { margin-top: 2px; }
 
+/* The way out of the backoffice, in the foot rather than in the list.
+   Quieter than a nav item, because leaving is not one of the things the
+   sidebar is for — but it sits above the signed-in name, because people look
+   for it in the corner. */
+.admin-sidebar__site {
+  display: block; padding: .55rem .9rem; margin: 0 .7rem .35rem;
+  font-size: .82rem; color: rgba(255,255,255,.55); text-decoration: none;
+  border-radius: var(--radius-sm); transition: all var(--transition);
+}
+.admin-sidebar__site:hover { background: rgba(255,255,255,.06); color: #fff; }
+
 .admin-sidebar__user {
   padding: 0.9rem 1.1rem;
   border-top: 1px solid rgba(255,255,255,0.07);
@@ -231,12 +261,20 @@ a { color: inherit; text-decoration: none; }
   box-shadow: var(--shadow);
 }
 /* Cards with a wide table scroll horizontally (instead of cutting the page off) */
-.admin-card:has(> .admin-table) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+/* `clip` and not `hidden`, and not `auto`.
+   Both of those make the card a scroll container, and a scroll container is
+   what a sticky header sticks to — so the header would have pinned itself to
+   a box that never scrolls vertically, which looks exactly like sticky being
+   broken. `clip` still clips the table's square corners to the card's round
+   ones, and creates no scrollport, so the header pins to the window instead.
+   Narrow screens get the horizontal scroll back below, where the header has
+   nowhere useful to pin anyway. */
+.admin-card:has(> .admin-table) { overflow: clip; }
 .admin-card h2 {
   margin: 0 0 1.1rem; font-size: 1.05rem; font-weight: 600;
   display: flex; align-items: center; gap: 0.5rem;
 }
-.admin-card--flush { padding: 0; overflow: hidden; }
+.admin-card--flush { padding: 0; overflow: clip; }
 .admin-card--flush h2 { padding: 1.2rem 1.5rem 0; }
 
 /* ---------------- Stat tiles ---------------- */
@@ -276,14 +314,46 @@ a { color: inherit; text-decoration: none; }
 .stat-tile__value { font-size: 1.7rem; font-weight: 700; margin: 0; line-height: 1; }
 
 /* ---------------- Table ---------------- */
-.admin-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+/* `separate` and not `collapse`: a collapsed table draws its borders on the
+   cells, and a sticky header carries no cell borders with it — the line under
+   the header disappears the moment it unsticks from the table and pins to the
+   window. With separate borders the line is a box-shadow on the header, which
+   travels with it. */
+.admin-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  font-size: 0.875rem;
+}
 .admin-table th, .admin-table td {
-  padding: 0.85rem 1.1rem; text-align: left;
+  padding: 0.8rem 1.1rem; text-align: left;
   border-bottom: 1px solid var(--border); vertical-align: middle;
 }
+
+/* The header follows the reader down a long list. Eighty wines is four
+   screens of scrolling, and by the second one a column of dates and a column
+   of addresses are indistinguishable without their names. */
 .admin-table thead th {
+  position: sticky; top: 0; z-index: 2;
   font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;
-  color: var(--muted); font-weight: 600; background: var(--surface-2);
+  color: var(--muted); font-weight: 600;
+  /* Opaque, or the rows read through it as it passes over them. */
+  background: var(--surface-2);
+  border-bottom: 0;
+  box-shadow: inset 0 -1px 0 var(--border);
+}
+
+/* Dates, counts and prices line up digit over digit — the comparison a column
+   of numbers exists to make. */
+.admin-table td.num, .admin-table th.num { font-variant-numeric: tabular-nums; }
+
+/* A column that must not wrap: a date broken over two lines makes every row
+   in the table a different height, and a list of uneven rows is harder to
+   read down than a list of long ones. */
+.admin-table .nowrap { white-space: nowrap; }
+
+/* An address can be any length and is not what anybody reads the row for.
+   One line, cut with an ellipsis; the full value stays in the title. */
+.admin-table .truncate {
+  max-width: 22rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 /* Sortable headers (clickable) */
 .admin-table thead th.th-sortable {
@@ -299,6 +369,9 @@ a { color: inherit; text-decoration: none; }
 .admin-table tbody tr { transition: background var(--transition); }
 .admin-table tbody tr:hover { background: var(--surface-2); }
 .admin-table tbody tr:last-child td { border-bottom: none; }
+/* The row is reachable, so it should look it — the title carries the link and
+   lights up with the row rather than only under the pointer. */
+.admin-table tbody tr:hover a strong { text-decoration: underline; }
 .admin-table td.actions { text-align: right; white-space: nowrap; }
 .admin-table code { background: var(--surface-2); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.8rem; color: var(--muted); }
 
@@ -589,8 +662,15 @@ a { color: inherit; text-decoration: none; }
   .admin-sidebar__nav a { margin: 0; }
   .admin-sidebar__nav a.sub { padding-left: 0.85rem; }
   .admin-main { padding: 1.25rem; }
-  /* keeps the columns readable; the card (above) handles the horizontal scroll */
+  /* Below this width the columns stop fitting, so the card scrolls sideways
+     after all. The header stops being sticky with it: it would pin to the
+     card, which does not scroll down, and a header that stays put while
+     nothing moves under it is worse than no header at all. */
+  .admin-card:has(> .admin-table),
+  .admin-card--flush { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .admin-table { min-width: 640px; }
+  .admin-table thead th { position: static; }
+  .admin-table .truncate { max-width: 14rem; }
 }
 .badge--blocked   { background: var(--danger-bg); color: var(--danger); }
 
@@ -817,50 +897,169 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
 }
 
 /* ---------------- The block list ---------------- */
-.composer { list-style: none; margin: 0 0 1rem; padding: 0; }
-.composer__block {
-  display: flex; align-items: center; gap: .85rem;
-  padding: .85rem 1rem; margin-bottom: .5rem;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  transition: border-color var(--transition), box-shadow var(--transition);
+/* ---------------- The page editor ----------------
+   The page down the middle, the blocks to build it from on the right. Two
+   columns because the two are used together: the palette under the page meant
+   scrolling past everything already built to reach the thing that adds to it,
+   and then scrolling back to see what happened. */
+.editor {
+  display: grid; grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: 1.5rem; align-items: start;
 }
-.composer__block:hover { border-color: #cbd2dd; box-shadow: var(--shadow); }
-.composer__block.is-dragging { opacity: .45; }
-/* A hidden block is dimmed rather than removed: it is still part of the page's
-   makeup, just not part of what a visitor sees. */
-.composer__block.is-hidden { background: var(--surface-2); }
-.composer__block.is-hidden .composer__body { opacity: .6; }
+.editor__canvas { min-width: 0; }
 
-.composer__handle {
-  flex: 0 0 auto; cursor: grab; background: none; border: 0;
-  color: var(--faint); font-size: 1.1rem; line-height: 1; padding: .3rem;
+/* Sticky, which is the whole reason it moved: it has to still be there after
+   scrolling the page. Its own scrollbar, because thirty-four blocks are
+   taller than any window. */
+.editor__palette {
+  position: sticky; top: 1.5rem;
+  max-height: calc(100vh - 3rem); overflow-y: auto;
+  padding: 1rem 1.1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
 }
-.composer__handle:active { cursor: grabbing; }
+/* In one column the palette's own grid is two cards wide; in this column it
+   is one, and the pictures are the point. */
+.editor__palette .block-picker { margin-top: 0; padding-top: 0; border-top: 0; }
+.editor__palette .block-picker__grid { grid-template-columns: 1fr; gap: .9rem; }
+.editor__palette .block-picker__head { display: block; }
+.editor__palette .block-picker__search { margin-top: .6rem; }
+.editor__palette .block-picker__search input { width: 100%; }
 
-.composer__body { flex: 1 1 auto; min-width: 0; display: block; }
-.composer__type {
-  display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .8px;
-  color: var(--muted); font-weight: 600;
+/* The page that is not there yet. */
+.editor__blank {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; min-height: 16rem;
+  border-style: dashed; background: var(--surface-2);
 }
-.composer__line {
-  display: block; font-weight: 600; font-size: .95rem; margin-top: .1rem;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.editor__blank-title { font-weight: 600; margin: 0 0 .3rem; }
+.editor__blank .field-help { max-width: 28rem; }
+
+@media (max-width: 1100px) {
+  /* Below this the two columns are both too narrow to be the thing they are
+     for. Back to one, palette last. */
+  .editor { grid-template-columns: 1fr; }
+  .editor__palette { position: static; max-height: none; }
+  .editor__palette .block-picker__grid {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  }
 }
-.composer__line em { color: var(--faint); font-weight: 400; }
-.composer__meta { display: block; font-size: .78rem; color: var(--muted); margin-top: .1rem; }
 
-.composer__state { flex: 0 0 auto; font-size: .78rem; color: var(--muted); }
-.composer__actions { flex: 0 0 auto; display: flex; gap: .35rem; align-items: center; }
+/* ---------------- The canvas ----------------
+   The page as a page: one sheet, the blocks butted against each other, drawn
+   at the width the site is written for and scaled to this column. No cards
+   and no gaps between them — a gap is what turns a page back into a list. */
+.canvas-wrap { margin-bottom: 1.25rem; }
+.canvas {
+  background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  overflow: clip;
+}
+.canvas--new, .canvas:has(> [data-canvas-empty]) { border-style: dashed; background: var(--surface-2); }
 
-.composer__save {
+.canvas__empty {
+  margin: 0; padding: 5rem 1.5rem; text-align: center;
+  color: var(--muted); font-size: .92rem; line-height: 1.7;
+}
+
+/* Each block. `relative` so the bar can sit on top of it, and no margin: the
+   blocks touch, the way they do on the site. */
+.canvas__block { position: relative; display: block; }
+.canvas__block + .canvas__block { border-top: 0; }
+.canvas__block.is-dragging { opacity: .4; }
+
+/* The outline appears with the pointer, so the sheet reads as the site until
+   somebody reaches for it. Inset, so it does not shift anything. */
+.canvas__block::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 0 2px transparent; transition: box-shadow var(--transition);
+}
+.canvas__block:hover::after,
+.canvas__block:focus-within::after { box-shadow: inset 0 0 0 2px var(--primary); }
+
+/* A hidden block is dimmed rather than dropped: it is still part of the
+   page's makeup, just not part of what a visitor sees. */
+.canvas__block.is-hidden .canvas__shot { opacity: .42; filter: grayscale(.4); }
+
+.canvas__shot { position: relative; overflow: hidden; }
+.canvas__shot iframe {
+  display: block; width: 1280px; border: 0;
+  transform-origin: 0 0; pointer-events: none;
+}
+/* Where a block gets cut off. Kept in step with TALL in admin.js, which is
+   where the reasoning for the number is. */
+.canvas__shot--tall { max-height: 520px; }
+.canvas__shot--tall::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 64px;
+  background: linear-gradient(to bottom, transparent, var(--surface));
+  pointer-events: none;
+}
+
+/* The controls, over the block and only while it is under the pointer. */
+.canvas__bar {
+  position: absolute; top: .5rem; right: .5rem; z-index: 2;
+  display: flex; align-items: center; gap: .5rem;
+  padding: .3rem .4rem .3rem .7rem; border-radius: var(--radius-sm);
+  background: rgba(27, 36, 38, .92); color: #fff;
+  opacity: 0; transform: translateY(-.25rem);
+  transition: opacity var(--transition), transform var(--transition);
+  /* Out of the way until it is visible, or an invisible bar would sit between
+     the pointer and the corner of the block it is meant to be helping with. */
+  pointer-events: none;
+}
+.canvas__block:hover .canvas__bar,
+.canvas__block:focus-within .canvas__bar {
+  opacity: 1; transform: none; pointer-events: auto;
+}
+
+.canvas__name {
+  font-size: .72rem; font-weight: 600; letter-spacing: .3px;
+  text-transform: uppercase; white-space: nowrap;
+}
+.canvas__state {
+  margin-left: .4rem; padding: .05rem .35rem; border-radius: 3px;
+  background: rgba(255,255,255,.18); font-weight: 500; letter-spacing: .4px;
+}
+.canvas__tools { display: flex; align-items: center; gap: .15rem; }
+.canvas__tools .inline-form { display: inline-flex; }
+
+.canvas__tool {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 1.7rem; height: 1.7rem; padding: 0 .4rem;
+  background: none; border: 0; border-radius: 4px;
+  color: rgba(255,255,255,.85); font: inherit; font-size: .78rem; line-height: 1;
+  text-decoration: none; cursor: pointer;
+}
+.canvas__tool:hover:not(:disabled) { background: rgba(255,255,255,.16); color: #fff; }
+.canvas__tool:disabled { opacity: .3; cursor: default; }
+.canvas__tool--text { font-size: .74rem; }
+.canvas__tool--danger:hover { background: var(--danger, #c0392b); color: #fff; }
+
+/* Where a block out of the palette is going to land. A real gap opening in the
+   page, not a line drawn over it: the page moves aside for the thing being
+   added, which is the answer to "where does this go" before the drop. */
+.canvas__gap {
+  height: 4.5rem; border: 2px dashed var(--primary); border-radius: var(--radius-sm);
+  margin: .25rem; background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+.canvas.is-receiving { box-shadow: inset 0 0 0 2px var(--primary); }
+
+/* A palette card on its way to the page. */
+.block-picker__card.is-dragging { opacity: .45; }
+.block-picker__card { cursor: grab; }
+.block-picker__card:active { cursor: grabbing; }
+
+/* Sticky, because the block that was just dragged can be a long way from the
+   bottom of the page and this is the one thing that has to be clicked after
+   moving it. It only exists once something has moved — see admin.js. */
+.canvas__save {
+  position: sticky; bottom: 1rem; z-index: 3;
   display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
-  padding: .8rem 1rem; border-radius: var(--radius-sm);
+  margin-top: .75rem; padding: .8rem 1rem; border-radius: var(--radius-sm);
   background: #fdf1dd; color: #9a6b10; font-size: .88rem; font-weight: 500;
+  box-shadow: var(--shadow-md);
 }
-/* An author `display` beats the `hidden` attribute, which would otherwise leave
-   this permanently on screen telling the editor to save an order nobody moved. */
-.composer__save[hidden] { display: none; }
-.composer__empty, .item-list__empty, .outline__empty {
+.item-list__empty, .outline__empty {
   color: var(--muted); background: var(--surface-2);
   padding: 1.1rem 1.25rem; border-radius: var(--radius-sm); margin: 0 0 1rem;
 }
@@ -868,6 +1067,39 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
 /* ---------------- Choosing a block ---------------- */
 .block-picker { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
 .block-picker h3 { margin: 0 0 .9rem; font-size: .95rem; font-weight: 600; }
+/* The head of the picker: the question on the left, the way to skip reading
+   it on the right. */
+.block-picker__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.block-picker__head h3 { margin: 0; }
+.block-picker__search input {
+  width: 15rem; max-width: 100%;
+  padding: .5rem .8rem; font-size: .85rem; font-family: inherit;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.block-picker__search input:focus-visible { outline: 2px solid var(--primary); outline-offset: -1px; }
+
+/* A heading over each group. Quiet: it is a shelf label, not a title — what
+   the eye is looking for is the pictures below it. */
+.block-picker__group {
+  margin: 1.6rem 0 .7rem; font-size: .7rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .8px; color: var(--muted);
+}
+.block-picker__group:first-of-type { margin-top: .4rem; }
+
+.block-picker__none { color: var(--muted); font-size: .9rem; padding: 1.2rem 0; }
+
+/* A button that is a sentence, not a control. Used where the only honest
+   wording is a verb inside a line of prose. */
+.link-button {
+  background: none; border: 0; padding: 0; font: inherit; color: var(--primary);
+  text-decoration: underline; cursor: pointer;
+}
+.link-button:hover { color: var(--primary-d); }
+
 .block-picker__grid {
   display: grid; gap: .75rem;
   grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));

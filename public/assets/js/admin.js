@@ -478,22 +478,36 @@
   sync();
 })();
 
-// Reordering the blocks of a page.
+// Building the page by dragging.
 //
-// The list is not a form — each block carries its own show/hide and delete —
-// so the new order is written into one hidden field and submitted separately.
-// The save strip stays hidden until something actually moves: a permanent
-// "save the order" button next to a list nobody touched is noise, and noise is
-// what people learn to click past.
+// Two drags land in the same place. One takes a block that is already on the
+// page and moves it; the other takes one out of the palette and puts it on the
+// page for the first time. Both show where the block is going to land while the
+// pointer is still down, so what happens on release is the thing that was
+// already on screen.
+//
+// A move is not saved as it happens. The strip appears and waits, because a
+// page that wrote itself to the database on every dragover would have no way
+// back from a drag nobody meant. A new block is the other way round — it has to
+// exist before it can be written, so dropping one from the palette submits.
+//
+// The arrows do the same job for anyone not dragging: a trackpad, a touch
+// screen and a keyboard all reach them, and drag-and-drop reaches none of them
+// reliably.
 (function () {
   'use strict';
 
   var list = document.querySelector('[data-block-list]');
-  var save = document.querySelector('[data-block-save]');
-  if (!list || !save) return;
+  if (!list) return;
 
-  var field = save.querySelector('[data-block-order]');
-  var original = ids().join(',');
+  var save  = document.querySelector('[data-block-save]');
+  var field = save ? save.querySelector('[data-block-order]') : null;
+
+  // Marks a drag that came out of the palette. The payload cannot be read
+  // during dragover — the browser hides it until the drop — but the type is
+  // visible the whole way, and the type is all this needs to tell a new block
+  // from one being moved.
+  var PALETTE = 'application/x-admedia-block';
 
   function blocks() {
     return Array.prototype.slice.call(list.querySelectorAll('[data-block]'));
@@ -503,10 +517,14 @@
     return blocks().map(function (block) { return block.dataset.id; });
   }
 
+  var original = ids().join(',');
+
   function sync() {
-    var now = ids();
-    field.value = now.join(',');
-    save.hidden = now.join(',') === original;
+    if (field && save) {
+      var now = ids().join(',');
+      field.value = now;
+      save.hidden = now === original;
+    }
 
     // The arrows disable at the ends, and the ends have just moved.
     blocks().forEach(function (block, i, all) {
@@ -533,23 +551,15 @@
     sync();
   });
 
+  /* ------------------------------------------------------------------ */
+  /* Moving a block that is already on the page.                        */
+  /*                                                                    */
+  /* The block itself is the handle. There is no row to grip by here —   */
+  /* the page is a page — and reaching for the thing you want to move is */
+  /* what anybody does with a page they can rearrange. The bar on top is */
+  /* draggable="false" so a press on one of its buttons stays a press.   */
+
   var dragging = null;
-
-  list.addEventListener('pointerdown', function (event) {
-    var handle = event.target.closest('[data-block-handle]');
-    if (handle) handle.closest('[data-block]').setAttribute('draggable', 'true');
-  });
-
-  // See the note on the item list: a press that never became a drag has to
-  // give the attribute back.
-  ['pointerup', 'pointercancel'].forEach(function (type) {
-    list.addEventListener(type, function () {
-      if (dragging) return;
-      list.querySelectorAll('[data-block][draggable]').forEach(function (block) {
-        block.removeAttribute('draggable');
-      });
-    });
-  });
 
   list.addEventListener('dragstart', function (event) {
     var block = event.target.closest('[data-block]');
@@ -560,23 +570,118 @@
     event.dataTransfer.setData('text/plain', block.dataset.id);
   });
 
-  list.addEventListener('dragover', function (event) {
-    if (!dragging) return;
-    event.preventDefault();
-    var over = event.target.closest('[data-block]');
-    if (!over || over === dragging) return;
-    var box = over.getBoundingClientRect();
-    list.insertBefore(dragging, event.clientY > box.top + box.height / 2 ? over.nextSibling : over);
-  });
-
-  list.addEventListener('drop', function (event) { event.preventDefault(); });
-
   list.addEventListener('dragend', function () {
     if (!dragging) return;
     dragging.classList.remove('is-dragging');
-    dragging.removeAttribute('draggable');
     dragging = null;
     sync();
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* Dragging a new block out of the palette.                          */
+  /*                                                                    */
+  /* The cards are made draggable here and not in the markup: a card    */
+  /* that can be picked up but has nowhere to go is a promise the page  */
+  /* cannot keep, and without this script there is nowhere to go. The   */
+  /* click still works and still adds the block at the end.             */
+
+  var card = null;   // the palette card being dragged
+
+  var gap = document.createElement('div');
+  gap.className = 'canvas__gap';
+  gap.setAttribute('aria-hidden', 'true');
+
+  document.querySelectorAll('[data-picker-card]').forEach(function (el) {
+    el.setAttribute('draggable', 'true');
+    el.addEventListener('dragstart', function (event) {
+      card = el;
+      el.classList.add('is-dragging');
+      event.dataTransfer.effectAllowed = 'copy';
+      event.dataTransfer.setData(PALETTE, el.value);
+      event.dataTransfer.setData('text/plain', el.value);
+    });
+    el.addEventListener('dragend', function () {
+      el.classList.remove('is-dragging');
+      card = null;
+      gap.remove();
+      list.classList.remove('is-receiving');
+    });
+  });
+
+  /** Is this drag carrying a block out of the palette? */
+  function fromPalette(event) {
+    var types = event.dataTransfer && event.dataTransfer.types;
+    return !!types && Array.prototype.indexOf.call(types, PALETTE) !== -1;
+  }
+
+  /** Put `node` where the pointer is, among the blocks already on the page. */
+  function placeAt(node, event) {
+    var over = event.target.closest('[data-block]');
+    if (!over) {
+      // Over the sheet but not over a block: the empty page, or the margin
+      // below the last one.
+      if (!node.parentNode) list.appendChild(node);
+      return;
+    }
+    if (over === node) return;
+    var box = over.getBoundingClientRect();
+    list.insertBefore(node, event.clientY > box.top + box.height / 2 ? over.nextSibling : over);
+  }
+
+  list.addEventListener('dragover', function (event) {
+    if (dragging) {
+      event.preventDefault();
+      placeAt(dragging, event);
+      return;
+    }
+    if (!fromPalette(event)) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+    list.classList.add('is-receiving');
+    placeAt(gap, event);
+  });
+
+  list.addEventListener('dragleave', function (event) {
+    // Only when the pointer has actually left the sheet: dragleave also fires
+    // crossing from one block to the next, and removing the gap there would
+    // make it flicker the whole way down the page.
+    if (event.relatedTarget && list.contains(event.relatedTarget)) return;
+    gap.remove();
+    list.classList.remove('is-receiving');
+  });
+
+  list.addEventListener('drop', function (event) {
+    event.preventDefault();
+    if (dragging || !card) return;
+
+    // Where it landed, counted in blocks. The gap is in the list, so this is
+    // simply how many blocks are above it.
+    var before = 0;
+    var node = gap.previousElementSibling;
+    while (node) {
+      if (node.hasAttribute('data-block')) before++;
+      node = node.previousElementSibling;
+    }
+
+    var form = card.form;
+    gap.remove();
+    list.classList.remove('is-receiving');
+    if (!form) return;
+
+    // Only on a page that exists. On the creation screen there is nothing to
+    // count from and nothing to position against: the drop makes the page and
+    // its first block, which is the only place it could go.
+    if (list.hasAttribute('data-page')) {
+      var at = form.querySelector('input[name="position"]') || document.createElement('input');
+      at.type = 'hidden';
+      at.name = 'position';
+      at.value = String(before);
+      form.appendChild(at);
+    }
+
+    // Through the card, so the request is the one the click would have sent —
+    // same form, same submitter, same `type`.
+    card.click();
   });
 
   sync();
@@ -685,6 +790,147 @@
       thisRun.oncancel = tidyUp;
     });
   });
+
+  /* ------------------------------------------------------------------ */
+  /* The page canvas: fitting a 1280px page into this column.             */
+  /*                                                                      */
+  /* Each frame renders at the width the site is written for and is       */
+  /* scaled to whatever width the editor column happens to be. The height */
+  /* cannot be guessed — a block is as tall as its content, and a table   */
+  /* of heights per block type goes stale the first time a partial        */
+  /* changes — so it is read off the frame.                               */
+  /*                                                                      */
+  /* Read and not posted. The preview is served by this same application, */
+  /* so the frame is same-origin and its document is simply there; a      */
+  /* postMessage handshake would be two moving parts where none is        */
+  /* needed, and the first version of this shipped with the message       */
+  /* never arriving and every block cropped to a strip.                   */
+  /*                                                                      */
+  /* Re-read whenever the frame's content changes size — a block with a   */
+  /* photograph is short until the photograph arrives — and re-scaled on  */
+  /* resize, because the sidebar collapses at 900px and the column        */
+  /* doubles in width when it does.                                       */
+  (function () {
+    var PAGE_WIDTH = 1280;
+    /* Past this a block is cut off and faded out. It is a compromise: the
+       editor is meant to show the page, and cutting a block is not showing it
+       — but a hero is 1500px tall and a wine list 6700, and three of those in
+       a row is a page nobody can scan to find the part they came to change.
+       Kept generous enough that what is on screen is still recognisably the
+       block, and matched by .canvas__shot--tall in admin.css. */
+    var TALL = 520;
+    var shots = Array.prototype.slice.call(document.querySelectorAll('[data-shot]'));
+    if (!shots.length) return;
+
+    function fit(shot) {
+      var frame = shot.querySelector('[data-shot-frame]');
+      if (!frame) return;
+
+      var scale = shot.clientWidth / PAGE_WIDTH;
+      frame.style.transform = 'scale(' + scale + ')';
+
+      var doc;
+      try { doc = frame.contentDocument; } catch (e) { return; }
+      if (!doc || !doc.documentElement) return;
+
+      var height = doc.documentElement.scrollHeight;
+      if (!(height > 0)) return;
+
+      frame.style.height = height + 'px';
+      shot.style.height = Math.round(height * scale) + 'px';
+      shot.classList.toggle('canvas__shot--tall', Math.round(height * scale) > TALL);
+    }
+
+    shots.forEach(function (shot) {
+      var frame = shot.querySelector('[data-shot-frame]');
+      if (!frame) return;
+
+      var watch = function () {
+        fit(shot);
+        var doc;
+        try { doc = frame.contentDocument; } catch (e) { return; }
+        if (doc && doc.body && window.ResizeObserver) {
+          new ResizeObserver(function () { fit(shot); }).observe(doc.body);
+        }
+      };
+
+      frame.addEventListener('load', watch);
+      /* Already there when this runs — a cached frame fires no load event. */
+      if (frame.contentDocument && frame.contentDocument.readyState === 'complete') watch();
+    });
+
+    var pending;
+    window.addEventListener('resize', function () {
+      clearTimeout(pending);
+      pending = setTimeout(function () { shots.forEach(fit); }, 120);
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* The block picker: finding one of thirty-four.                        */
+  /*                                                                      */
+  /* The box is created here and not in the markup, so a page without     */
+  /* this script never shows a search field that cannot search. Matching  */
+  /* is on the name, the description and the type, all lowercased into    */
+  /* data-search when the card was drawn — no work per keystroke beyond   */
+  /* indexOf.                                                             */
+  /*                                                                      */
+  /* A heading disappears when nothing under it matches. Leaving it would */
+  /* say the group is empty, which is a different thing from the group    */
+  /* having nothing that matches what was typed.                          */
+  (function () {
+    document.querySelectorAll('[data-picker]').forEach(function (picker) {
+      var box   = picker.querySelector('[data-picker-search]');
+      var input = picker.querySelector('[data-picker-input]');
+      var none  = picker.querySelector('[data-picker-none]');
+      var clear = picker.querySelector('[data-picker-clear]');
+      var cards = Array.from(picker.querySelectorAll('[data-picker-card]'));
+      if (!box || !input || cards.length < 8) return;
+
+      box.hidden = false;
+
+      var apply = function () {
+        var q = input.value.trim().toLowerCase();
+        var shown = 0;
+
+        cards.forEach(function (card) {
+          var hit = q === '' || card.getAttribute('data-search').indexOf(q) !== -1;
+          card.hidden = !hit;
+          if (hit) shown++;
+        });
+
+        /* A heading is drawn before its grid, so the grid is what follows it
+           until the next heading. Hide the pair together. */
+        picker.querySelectorAll('[data-picker-group]').forEach(function (heading) {
+          var grid = heading.nextElementSibling;
+          var any  = grid && Array.from(grid.querySelectorAll('[data-picker-card]'))
+                                  .some(function (c) { return !c.hidden; });
+          heading.hidden = !any;
+          if (grid) grid.hidden = !any;
+        });
+
+        if (none) none.hidden = shown > 0;
+      };
+
+      input.addEventListener('input', apply);
+      input.addEventListener('keydown', function (e) {
+        /* Escape empties the box rather than leaving the page, which is what
+           a search field in a form otherwise does on some browsers. */
+        if (e.key === 'Escape' && input.value !== '') {
+          e.preventDefault();
+          input.value = '';
+          apply();
+        }
+      });
+      if (clear) {
+        clear.addEventListener('click', function () {
+          input.value = '';
+          apply();
+          input.focus();
+        });
+      }
+    });
+  })();
 
   /* ------------------------------------------------------------------ */
   /* Settings: one group at a time.                                      */
