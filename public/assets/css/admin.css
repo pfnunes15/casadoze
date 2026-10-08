@@ -984,11 +984,31 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
 .canvas__shot { position: relative; overflow: hidden; }
 .canvas__shot iframe {
   display: block; width: 1280px; border: 0;
-  transform-origin: 0 0; pointer-events: none;
+  transform-origin: 0 0;
+  /* The frame takes the pointer: there is a document in there with a cursor
+     in it. The picker's thumbnails are the ones that stay pictures. */
 }
 /* Where a block gets cut off. Kept in step with TALL in admin.js, which is
-   where the reasoning for the number is. */
+   where the reasoning for the number is. A block being written in, or one
+   somebody unfolded, is shown whole: the cursor can be below the cut, and a
+   cursor you cannot see is worse than a long page. */
 .canvas__shot--tall { max-height: 520px; }
+.canvas__block.is-open .canvas__shot--tall,
+.canvas__block.is-writing .canvas__shot--tall { max-height: none; }
+.canvas__block.is-open .canvas__shot--tall::after,
+.canvas__block.is-writing .canvas__shot--tall::after { display: none; }
+
+/* Sits on the fade, centred, and only on a block that was actually folded —
+   admin.js unhides it after measuring. */
+.canvas__more {
+  position: absolute; left: 50%; bottom: .6rem; transform: translateX(-50%); z-index: 2;
+  padding: .3rem .8rem; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); color: var(--muted);
+  font: inherit; font-size: .74rem; font-weight: 500; cursor: pointer;
+  box-shadow: var(--shadow);
+}
+.canvas__more:hover { color: var(--ink, inherit); border-color: var(--primary); }
+.canvas__block.is-open .canvas__more { position: static; display: block; margin: .4rem auto .8rem; transform: none; }
 .canvas__shot--tall::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 64px;
   background: linear-gradient(to bottom, transparent, var(--surface));
@@ -1008,14 +1028,42 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
   pointer-events: none;
 }
 .canvas__block:hover .canvas__bar,
-.canvas__block:focus-within .canvas__bar {
+.canvas__block:focus-within .canvas__bar,
+.canvas__block.is-writing .canvas__bar {
   opacity: 1; transform: none; pointer-events: auto;
 }
+/* `focus-within` does not cross into a frame, so a cursor inside the block
+   would otherwise take the bar away the moment somebody started typing —
+   along with the only thing telling them it is being saved. The frame says
+   so instead: see window.canvasLive in admin.js. */
+
+/* The grip. Wide enough to press without aiming, and the only thing on the
+   block that starts a drag — see admin.js. */
+.canvas__grip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.1rem; height: 1.6rem; margin-right: .1rem;
+  background: none; border: 0; padding: 0;
+  color: rgba(255,255,255,.55); font-size: .7rem; line-height: 1;
+  letter-spacing: -2px; cursor: grab; touch-action: none;
+}
+.canvas__grip:hover { color: #fff; }
+.canvas__grip:active { cursor: grabbing; }
 
 .canvas__name {
   font-size: .72rem; font-weight: 600; letter-spacing: .3px;
   text-transform: uppercase; white-space: nowrap;
 }
+
+/* What the frame reported. Empty almost always, so it takes no room until
+   there is something to say. */
+.canvas__said:empty { display: none; }
+.canvas__said {
+  padding: .05rem .4rem; border-radius: 3px;
+  background: rgba(255,255,255,.14);
+  font-size: .68rem; font-weight: 500; letter-spacing: .3px; white-space: nowrap;
+}
+.canvas__said.is-good { background: rgba(47, 133, 90, .85); }
+.canvas__said.is-bad  { background: var(--danger, #c0392b); }
 .canvas__state {
   margin-left: .4rem; padding: .05rem .35rem; border-radius: 3px;
   background: rgba(255,255,255,.18); font-weight: 500; letter-spacing: .4px;

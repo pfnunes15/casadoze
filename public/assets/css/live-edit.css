@@ -1,0 +1,61 @@
+/* ---------------------------------------------------------------------------
+   The bits of a block that can be typed into.
+
+   Loaded inside the preview frame, on top of the site's own stylesheet, and
+   written to disturb it as little as possible. A field marked here has to
+   still look like the site: the moment the editor's furniture changes the
+   spacing or the weight of a heading, the sheet stops being a preview and
+   the whole point of typing on it goes with it.
+
+   So: no borders, no boxes, no background until the pointer is on one. The
+   outline appears on hover to say "this one is yours", and firms up when the
+   cursor is actually in it.
+   --------------------------------------------------------------------------- */
+
+.live-field {
+  /* `inherit` everywhere, because this span was inserted in the middle of
+     the site's markup and must not introduce a font, a size or a line. */
+  font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit;
+  outline: 2px solid transparent; outline-offset: 3px;
+  border-radius: 2px;
+  transition: outline-color .12s ease, background-color .12s ease;
+  cursor: text;
+}
+
+/* Rich text is the one that comes out as a block, because it holds
+   paragraphs. Its margins have to come from the site's own stylesheet, so it
+   collapses out of the way entirely. */
+.live-field--html { display: block; }
+.live-field--html > :first-child { margin-top: 0; }
+.live-field--html > :last-child  { margin-bottom: 0; }
+
+.live-field:hover { outline-color: rgba(43, 108, 176, .35); }
+
+.live-field:focus,
+.live-field.is-editing {
+  outline-color: #2b6cb0;
+  background: rgba(43, 108, 176, .06);
+}
+
+/* The one that was just written. A tick would need a box and a position; a
+   colour that fades is the same message and costs the layout nothing. */
+.live-field.is-saving  { outline-color: #b7791f; }
+.live-field.is-saved   { outline-color: rgba(47, 133, 90, .9); }
+.live-field.is-unsaved {
+  outline-color: #c0392b;
+  background: rgba(192, 57, 43, .08);
+}
+
+/* A block being edited has nothing to click through to: every link and button
+   in it is neutralised by the script. Saying so with the cursor stops anybody
+   waiting for a page that is never going to load. */
+.block-preview--live a,
+.block-preview--live button { cursor: default; }
+.block-preview--live a:not(:has(.live-field)):hover { text-decoration: none; }
+
+/* Motion in a page being written in is motion in the way. The sheet already
+   kills the reveal animation; these are the ones that run on their own. */
+.block-preview--live * {
+  animation-play-state: paused !important;
+  scroll-behavior: auto !important;
+}

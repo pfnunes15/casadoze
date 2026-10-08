@@ -554,12 +554,30 @@
   /* ------------------------------------------------------------------ */
   /* Moving a block that is already on the page.                        */
   /*                                                                    */
-  /* The block itself is the handle. There is no row to grip by here —   */
-  /* the page is a page — and reaching for the thing you want to move is */
-  /* what anybody does with a page they can rearrange. The bar on top is */
-  /* draggable="false" so a press on one of its buttons stays a press.   */
+  /* By the grip in its bar, and only by the grip. The block used to be  */
+  /* its own handle, which read well until the text inside it became     */
+  /* something you could put a cursor in: on a sheet you can write on, a */
+  /* press on a paragraph means "write here" and nothing else. So        */
+  /* `draggable` is armed on pressing the grip and given back when the   */
+  /* drag ends — a block that is permanently draggable swallows the      */
+  /* selection of its own text.                                          */
 
   var dragging = null;
+
+  list.addEventListener('pointerdown', function (event) {
+    var handle = event.target.closest('[data-block-handle]');
+    if (handle) handle.closest('[data-block]').setAttribute('draggable', 'true');
+  });
+
+  // A press that never became a drag has to give the attribute back.
+  ['pointerup', 'pointercancel'].forEach(function (type) {
+    list.addEventListener(type, function () {
+      if (dragging) return;
+      list.querySelectorAll('[data-block][draggable]').forEach(function (block) {
+        block.removeAttribute('draggable');
+      });
+    });
+  });
 
   list.addEventListener('dragstart', function (event) {
     var block = event.target.closest('[data-block]');
@@ -573,8 +591,24 @@
   list.addEventListener('dragend', function () {
     if (!dragging) return;
     dragging.classList.remove('is-dragging');
+    dragging.removeAttribute('draggable');
     dragging = null;
     sync();
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* Unfolding a block that the sheet cut off.                          */
+  /*                                                                    */
+  /* A block taller than the cut is faded out at the bottom, which is    */
+  /* fine for reading the page and useless for writing in the part that  */
+  /* was cut. The button appears only on the ones that were.             */
+
+  list.addEventListener('click', function (event) {
+    var button = event.target.closest('[data-block-expand]');
+    if (!button) return;
+    var block = button.closest('[data-block]');
+    var open  = block.classList.toggle('is-open');
+    button.textContent = open ? 'Encolher' : 'Ver o bloco todo';
   });
 
   /* ------------------------------------------------------------------ */
@@ -838,7 +872,63 @@
 
       frame.style.height = height + 'px';
       shot.style.height = Math.round(height * scale) + 'px';
-      shot.classList.toggle('canvas__shot--tall', Math.round(height * scale) > TALL);
+
+      var tall = Math.round(height * scale) > TALL;
+      shot.classList.toggle('canvas__shot--tall', tall);
+
+      // The button that unfolds it only makes sense on a block that was
+      // folded. See the click handler on the block list.
+      var block  = shot.closest('[data-block]');
+      var expand = block && block.querySelector('[data-block-expand]');
+      if (expand) expand.hidden = !tall;
+    }
+
+    /* The frames save what is typed in them on their own, and then tell this
+       window. Same origin, so there is nothing to arrange: they reach for
+       `window.canvasLive` on their parent and call it. See live-edit.js.
+
+       Everything it does is cosmetic — the saving already happened — so each
+       entry is written to do nothing at all if the block it names has gone. */
+    window.canvasLive = {
+      focused: function (id) {
+        // Unfold a block the moment somebody writes in it: the cursor can
+        // easily be in the part the sheet cut off.
+        var block = blockFor(id);
+        if (block) block.classList.add('is-writing');
+      },
+      left: function (id) {
+        var block = blockFor(id);
+        if (block) block.classList.remove('is-writing');
+      },
+      resized: function (id) {
+        var shot = shotFor(id);
+        if (shot) fit(shot);
+      },
+      saving: function (id) { say(id, 'a guardar…', ''); },
+      saved:  function (id) {
+        say(id, 'guardado', 'is-good');
+        var block = blockFor(id);
+        if (block) block.classList.remove('is-writing');
+        setTimeout(function () { say(id, '', ''); }, 2000);
+      },
+      failed: function (id, message) { say(id, message || 'não guardou', 'is-bad'); }
+    };
+
+    function blockFor(id) {
+      return id ? document.querySelector('[data-block][data-id="' + id + '"]') : null;
+    }
+
+    function shotFor(id) {
+      var block = blockFor(id);
+      return block ? block.querySelector('[data-shot]') : null;
+    }
+
+    function say(id, text, state) {
+      var block = blockFor(id);
+      var slot  = block && block.querySelector('[data-block-said]');
+      if (!slot) return;
+      slot.textContent = text;
+      slot.className = 'canvas__said' + (state ? ' ' + state : '');
     }
 
     shots.forEach(function (shot) {
