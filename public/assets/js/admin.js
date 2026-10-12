@@ -801,6 +801,24 @@
       }
     });
 
+    /* Which tab is open, said out loud on the root element.
+
+       A panel is always one element, and sometimes a screen has something
+       that belongs to several tabs at once but not to all of them — the save
+       button of a form whose three sections are three tabs, next to a fourth
+       tab that is not part of that form and has its own saving. There is no
+       honest way to put that button in a panel. With the open tab written
+       here a stylesheet can answer it in one line, and the tab machinery
+       stays "one panel, one tab". One bar to a screen, so there is only ever
+       one answer.
+
+       `data-tab-open` and not `data-tab`: the picks in the bar already carry
+       `data-tab`, and putting the same attribute on the root makes <html>
+       itself answer `querySelectorAll('[data-tab]')`. Nothing here was
+       fooled by that — the picks are looked up inside the bar — but the next
+       thing to go looking for tabs would have been. */
+    document.documentElement.setAttribute('data-tab-open', key);
+
     if (remember) {
       if (window.history && window.history.replaceState) {
         window.history.replaceState(null, '', '#' + key);
@@ -832,14 +850,17 @@
 
   /* A required field left empty on a hidden panel stops the submit with
      nothing on screen to explain it. Open the tab it is on, then let the
-     browser point at it. */
-  var form = bar.closest('form') || document.querySelector('form');
-  if (form) {
-    form.addEventListener('invalid', function (event) {
-      var panel = event.target.closest('[data-tab-panel]');
-      if (panel && panel.hidden) show(panel.getAttribute('data-tab-panel'), false);
-    }, true);
-  }
+     browser point at it.
+
+     On the document and not on one form: a screen can have the bar outside
+     the form it governs — the visits editor does — and more than one form
+     under it. Picking "the first form on the page" was right until it was
+     not, and when it is wrong the symptom is a save button that does
+     nothing without a word. */
+  document.addEventListener('invalid', function (event) {
+    var panel = event.target.closest && event.target.closest('[data-tab-panel]');
+    if (panel && panel.hidden) show(panel.getAttribute('data-tab-panel'), false);
+  }, true);
 
   /* Says the switching is live, which is what lets the stylesheet drop the
      per-section headings: with tabs on, the tab says the same thing and a
