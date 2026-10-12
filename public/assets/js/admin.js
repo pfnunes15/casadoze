@@ -722,6 +722,137 @@
 })();
 
 /* ---------------------------------------------------------------------------
+   Tabs.
+
+   One screen, in sections you switch between — see
+   views/admin/partials/tabs.php for why the long forms are shaped this way.
+
+   What this file is responsible for, and the order matters:
+
+     Nothing is hidden until this runs. The panels are plain sections of the
+     page in the markup, so a screen with no JavaScript is the long form it
+     used to be rather than one section with the rest unreachable. The hiding
+     is the enhancement, not the default.
+
+     A field that cannot be seen still gets its error. A browser refusing to
+     submit because something required is empty, on a panel that is hidden,
+     is a save button that does nothing and says nothing — so an invalid
+     field pulls its own tab open.
+
+     The chosen tab lives in the address. A link to a screen can then be a
+     link to the part of it that matters, and a reload comes back where you
+     were. Written with replaceState and not a jump, or choosing a tab would
+     scroll the page to the panel.
+
+     And it is remembered per screen. Saving reloads the page, and the
+     redirect after a save carries no fragment — so without this, changing
+     the phone number in Definições and saving put you back on the first
+     group, hunting for where you just were. The address still wins when it
+     names a tab, because a link somebody followed is a thing they asked for
+     and the memory is only a guess about what they wanted.
+   --------------------------------------------------------------------------- */
+(function () {
+  'use strict';
+
+  var bar = document.querySelector('[data-tabs]');
+  if (!bar) return;
+
+  var picks  = Array.prototype.slice.call(bar.querySelectorAll('[data-tab]'));
+  var panels = {};
+  var order  = [];
+
+  picks.forEach(function (pick) {
+    var key   = pick.getAttribute('data-tab');
+    var panel = document.querySelector('[data-tab-panel="' + key + '"]');
+    // A tab naming a panel that is not there would be a control that empties
+    // the screen. Drop it rather than draw it.
+    if (!panel) { pick.remove(); return; }
+    panel.id = 'tab-' + key;
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', 'tab-pick-' + key);
+    pick.id = 'tab-pick-' + key;
+    panels[key] = panel;
+    order.push(key);
+  });
+
+  if (order.length < 2) return;
+
+  // Per screen, so two screens with a tab called the same thing do not
+  // inherit each other's.
+  var MEMORY = 'admin.tabs:' + window.location.pathname;
+
+  function remembered() {
+    try { return sessionStorage.getItem(MEMORY) || ''; } catch (e) { return ''; }
+  }
+
+  function show(key, remember) {
+    if (!panels[key]) return;
+
+    order.forEach(function (other) {
+      var on = other === key;
+      panels[other].hidden = !on;
+      var pick = bar.querySelector('[data-tab="' + other + '"]');
+      if (pick) {
+        pick.classList.toggle('is-on', on);
+        pick.setAttribute('aria-selected', on ? 'true' : 'false');
+        // Only the chosen tab is in the tab order; the arrow keys move
+        // between them, which is what a row of tabs is supposed to do.
+        pick.tabIndex = on ? 0 : -1;
+      }
+    });
+
+    if (remember) {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '#' + key);
+      }
+      try { sessionStorage.setItem(MEMORY, key); } catch (e) { /* private window */ }
+    }
+  }
+
+  bar.addEventListener('click', function (event) {
+    var pick = event.target.closest('[data-tab]');
+    if (pick) show(pick.getAttribute('data-tab'), true);
+  });
+
+  bar.addEventListener('keydown', function (event) {
+    var at = order.indexOf(document.activeElement.getAttribute('data-tab'));
+    if (at < 0) return;
+
+    var to = at;
+    if (event.key === 'ArrowRight') to = (at + 1) % order.length;
+    else if (event.key === 'ArrowLeft') to = (at - 1 + order.length) % order.length;
+    else if (event.key === 'Home') to = 0;
+    else if (event.key === 'End') to = order.length - 1;
+    else return;
+
+    event.preventDefault();
+    show(order[to], true);
+    bar.querySelector('[data-tab="' + order[to] + '"]').focus();
+  });
+
+  /* A required field left empty on a hidden panel stops the submit with
+     nothing on screen to explain it. Open the tab it is on, then let the
+     browser point at it. */
+  var form = bar.closest('form') || document.querySelector('form');
+  if (form) {
+    form.addEventListener('invalid', function (event) {
+      var panel = event.target.closest('[data-tab-panel]');
+      if (panel && panel.hidden) show(panel.getAttribute('data-tab-panel'), false);
+    }, true);
+  }
+
+  /* Says the switching is live, which is what lets the stylesheet drop the
+     per-section headings: with tabs on, the tab says the same thing and a
+     second copy of it is noise. Set here and not in the markup, so a browser
+     that never ran this keeps them. */
+  document.documentElement.classList.add('has-tabs');
+
+  var asked = (window.location.hash || '').replace('#', '');
+  var back  = remembered();
+  show(panels[asked] ? asked : (panels[back] ? back : order[0]), false);
+})();
+
+/* ---------------------------------------------------------------------------
    The "Definições avançadas" drawers open and close with motion.
 
    A <details> opens all at once: the content appears in one go and the page
@@ -1022,56 +1153,5 @@
     });
   })();
 
-  /* ------------------------------------------------------------------ */
-  /* Settings: one group at a time.                                      */
-  /*                                                                     */
-  /* Twenty-three fields in a single column, and changing the phone       */
-  /* number meant scrolling past the logo and the languages. It is still  */
-  /* one single form — what gets saved is the whole set — and what        */
-  /* changes is what is in sight.                                         */
-  /*                                                                     */
-  /* Without this every panel stays open and the left-hand column is a    */
-  /* list of jump links: the page works just the same, only longer.       */
-  (function () {
-    const formEl = document.querySelector('[data-settings]');
-    if (!formEl) return;
-
-    const tabs    = Array.from(formEl.querySelectorAll('[data-settings-tab]'));
-    const panels = Array.from(formEl.querySelectorAll('.settings__panel'));
-    if (tabs.length < 2) return;
-
-    const show = (id, remember) => {
-      const target = panels.some((p) => p.id === id) ? id : panels[0].id;
-      panels.forEach((p) => { p.hidden = p.id !== target; });
-      tabs.forEach((a) => a.classList.toggle('is-on', a.dataset.settingsTab === target));
-      /* Remembered between saves: saving reloads the page, and always coming
-         back to the first group meant finding again the one you were in. */
-      if (remember) { try { sessionStorage.setItem('admin.settings.group', target); } catch (e) {} }
-    };
-
-    formEl.classList.add('is-live');
-
-    tabs.forEach((a) => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        show(a.dataset.settingsTab, true);
-      });
-    });
-
-    /* The address's fragment wins, so a link from outside can open a group.
-       After that, the last group seen. */
-    let initial = (location.hash || '').replace('#', '');
-    if (!initial) {
-      try { initial = sessionStorage.getItem('admin.settings.group') || ''; } catch (e) {}
-    }
-    show(initial, false);
-
-    /* An invalid field inside a hidden panel cannot be seen, and the browser
-       refuses to save without saying why. Its panel is opened. */
-    formEl.addEventListener('invalid', (e) => {
-      const panel = e.target.closest('.settings__panel');
-      if (panel && panel.hidden) show(panel.id, true);
-    }, true);
-  })();
 
 })();

@@ -519,42 +519,17 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------------- Settings ---------------- */
 
-/* One group at a time, with the groups in a column on the left. Twenty-three
-   fields in a single column read like a wall, and changing the phone number
-   meant scrolling past the logo and the languages.
+/* The groups are the shared tabs now — see the Tabs section above and
+   views/admin/partials/tabs.php. This screen had the first tabs in the
+   backoffice and an implementation of its own: its own markup, its own
+   script, forty lines of its own CSS, and a left-hand column where every
+   other screen has a row along the top. Two screens that behave almost alike
+   are the worst of both, so it moved to the shared one and all of that went.
 
-   Without JavaScript (`is-live` never arrives) every panel stays open and the
-   column becomes a list of jump links: longer, but whole. */
-.settings { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-
-.settings__nav { display: grid; gap: .15rem; position: sticky; top: 1.5rem; }
-.settings__nav a {
-  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
-  padding: .55rem .75rem; border-radius: var(--radius-sm);
-  color: var(--muted); text-decoration: none; font-weight: 500; font-size: .9rem;
-}
-.settings__nav a:hover { background: var(--surface-2); color: var(--text); }
-.settings__nav a span {
-  min-width: 1.4rem; padding: .05rem .35rem; border-radius: 999px;
-  background: var(--surface-2); color: var(--faint);
-  font-size: .7rem; font-weight: 600; text-align: center;
-}
-/* It only marks the open group when there are open and closed groups — without
-   JavaScript they are all open, and highlighting one of them would be a lie. */
-.settings.is-live .settings__nav a.is-on { background: var(--primary); color: #fff; }
-.settings.is-live .settings__nav a.is-on span { background: rgba(255,255,255,.25); color: #fff; }
-
-.settings__panels { display: grid; gap: 1.25rem; min-width: 0; }
-
-@media (max-width: 60em) {
-  .settings { grid-template-columns: 1fr; }
-  .settings__nav {
-    position: static;
-    grid-auto-flow: column; grid-auto-columns: max-content;
-    overflow-x: auto; padding-bottom: .25rem;
-    border-bottom: 1px solid var(--border);
-  }
-}
+   What is left is the one thing that is really about this screen: the panels
+   stack with a gap when the script never ran and they are all on the page at
+   once. */
+.settings .admin-tab + .admin-tab { margin-top: 1.25rem; }
 
 /* ---------------- Menus ---------------- */
 
@@ -873,6 +848,84 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
 }
 .image-field__controls { flex: 1 1 280px; min-width: 0; }
 .image-field__controls .field-check { margin-bottom: 0; }
+
+/* A document — a menu in PDF, a price list. An upload button, always: a box
+   to write a path into asks an editor to know where files live on the server
+   and to spell it exactly, which is two ways to end up with a link to
+   nothing. See views/admin/fields/file.php. */
+.file-field { max-width: 36rem; }
+.file-field__now {
+  display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap;
+  margin: 0 0 .5rem; padding: .5rem .7rem;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+}
+.file-field__now a { font-weight: 600; }
+.file-field__now span { color: var(--muted); font-size: .78rem; }
+.file-field .field-check { margin-bottom: 0; }
+
+/* The two native pickers. Sized to their content rather than stretched across
+   the form: a date is ten characters wide however wide the screen is, and a
+   full-width box for it reads as somewhere to write a sentence. */
+.field--date input,
+.field--time input,
+.field--datetime input { width: auto; min-width: 9rem; }
+.field--datetime input { min-width: 14rem; }
+
+/* Chrome hides the calendar and clock buttons until the field is hovered,
+   which leaves an input that looks like a box to type in — the exact thing
+   these fields exist not to be. */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  opacity: .55; cursor: pointer;
+}
+input[type="date"]:hover::-webkit-calendar-picker-indicator,
+input[type="time"]:hover::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity: 1; }
+
+/* ---------------- Tabs ----------------
+   One screen in sections you switch between. The same row of tabs on every
+   long form in the backoffice, because two screens that behave alike are one
+   thing to learn instead of two. See views/admin/partials/tabs.php. */
+.admin-tabs {
+  display: flex; flex-wrap: wrap; gap: .15rem;
+  margin: 0 0 1.25rem; border-bottom: 1px solid var(--border);
+}
+.admin-tab__pick {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .55rem 1rem .6rem; margin-bottom: -1px;
+  background: none;
+  border: 1px solid transparent; border-bottom-color: var(--border);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  color: var(--muted); font: inherit; font-size: .9rem; font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+}
+.admin-tab__pick:hover { color: var(--text); background: var(--surface-2); }
+.admin-tab__pick.is-on {
+  background: var(--surface); color: var(--text);
+  border-color: var(--border); border-bottom-color: var(--surface);
+}
+.admin-tab__count {
+  padding: .05rem .4rem; border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font-size: .7rem; font-weight: 600;
+}
+.admin-tab__pick.is-on .admin-tab__count { background: var(--accent-bg); color: var(--accent); }
+
+/* Without the script the panels are plain sections of the page, one after the
+   other, each behind its own heading — the long form this replaced, which is
+   no worse than it was. The heading is for exactly that case.
+
+   `has-tabs` is put on the root by admin.js once the switching actually
+   works. Keyed on that and not on the markup, because the row of tabs is
+   rendered by the server either way: hiding the headings whenever it is
+   present would hide them on the one page where they are the only thing
+   naming each section. */
+.admin-tab > h2:first-child { margin-top: 0; }
+.has-tabs .admin-tab > h2:first-child { display: none; }
+.has-tabs .admin-tabs + .admin-tab { margin-top: 0; }
 
 /* ---------------- Cards, advanced, save bar ---------------- */
 .admin-card--advanced { padding: 0; }
