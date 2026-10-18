@@ -938,6 +938,64 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .has-tabs .admin-tab > h2:first-child { display: none; }
 .has-tabs .admin-tabs + .admin-tab { margin-top: 0; }
 
+/* ---------------- Features ----------------
+   O que o site tem ligado, e o que pode ligar. O estado vive na aresta
+   esquerda e no selo, nunca na cor do cartão inteiro: um cartão verde ao lado
+   de um cinzento lê-se como bom ao lado de mau, e «ainda não liguei a loja»
+   não é mau. */
+.features { margin-bottom: 2rem; }
+.features__title {
+  margin: 0 0 .75rem; font-size: .76rem; font-weight: 600;
+  letter-spacing: .6px; text-transform: uppercase; color: var(--faint);
+}
+.features__title span {
+  margin-left: .3rem; padding: .05rem .4rem; border-radius: 999px;
+  background: var(--surface-2); color: var(--muted); font-size: .72rem;
+}
+
+.feature {
+  padding: 1rem 1.15rem; margin-bottom: .6rem;
+  background: var(--surface);
+  border: 1px solid var(--border); border-left: 3px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.feature.is-on  { border-left-color: var(--accent); }
+.feature.is-off { border-left-color: var(--faint); }
+
+.feature__head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.feature__head h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+.feature__selo {
+  padding: .1rem .45rem; border-radius: 999px;
+  background: var(--surface-2); color: var(--muted);
+  font-size: .68rem; font-weight: 600; letter-spacing: .3px; text-transform: uppercase;
+}
+.feature__selo--on { background: var(--accent-bg); color: var(--accent); }
+
+.feature__sumario { margin: .35rem 0 .6rem; color: var(--muted); font-size: .9rem; max-width: 60ch; }
+
+/* O que aparece na barra lateral depois. É isto que responde a «o que é que
+   eu ganho», melhor do que qualquer frase. */
+.feature__junta { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; margin: 0 0 .6rem; }
+.feature__junta > span:first-child {
+  margin-right: .15rem;
+  font-size: .7rem; font-weight: 600; letter-spacing: .4px;
+  text-transform: uppercase; color: var(--faint);
+}
+.feature__entrada {
+  padding: .12rem .5rem; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-2); color: var(--text); font-size: .76rem;
+}
+
+.feature__depois { margin: 0 0 .7rem; color: var(--faint); font-size: .82rem; }
+
+.feature__accoes { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.feature__nota { color: var(--muted); font-size: .8rem; }
+.feature__nota.is-bad { color: var(--danger); font-weight: 600; }
+.feature__travada {
+  margin: 0; padding: .45rem .7rem; border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--muted); font-size: .84rem;
+}
+
 /* ---------------- Cards, advanced, save bar ---------------- */
 .admin-card--advanced { padding: 0; }
 .admin-card--advanced > summary {
