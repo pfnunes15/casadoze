@@ -14,16 +14,21 @@ declare(strict_types=1);
  * layout são de lá, e este ficheiro só diz em que endereços vivem. É isso que
  * devolve à Casa a possibilidade de editar o que está no ar.
  *
- * **O backoffice das consultas não está.** Marcações, vagas, horários e
- * encerramentos eram deste projecto e foram apagados com o motor que os servia.
- * Para os ter de volta é preciso repor src/Models e src/Services do histórico —
- * é outro trabalho, e maior.
+ * **O backoffice das consultas também está**, e esse é desta casa e não do
+ * pacote: marcações, vagas, horários e encerramentos. Um CMS partilhado não tem
+ * consultas de tarot.
+ *
+ * O que continua fora é a marcação do lado de fora — o `/marcar`, as vagas em
+ * JSON e a página de uma marcação. A porta de entrada não tem agenda: a maquete
+ * não a tem, e a secção das consultas leva botões, não um selector de dia e
+ * hora. O que o backoffice serve é marcar por telefone e ver quem vem.
  *
  * O apanha-tudo `/{slug}` continua fora. Com uma página pública só não há
  * segundo `slug` para apanhar, e deixá-lo de pé era servir a mesma página em
  * qualquer endereço escrito à sorte.
  */
 
+use Admedia\Cms\Controllers\Admin\FeatureController;
 use Admedia\Cms\Controllers\Admin\BlockPreviewController;
 use Admedia\Cms\Controllers\Admin\DashboardController;
 use Admedia\Cms\Controllers\Admin\EditorController;
@@ -41,6 +46,9 @@ use Admedia\Core\Middleware\AuthMiddleware;
 use Admedia\Core\Middleware\CsrfMiddleware;
 use Admedia\Core\Middleware\EditorOrAbove;
 use Admedia\Shop\Shop;
+use App\Controllers\Admin\BookingAdminController;
+use App\Controllers\Admin\ConsultationAdminController;
+use App\Controllers\Admin\SlotAdminController;
 
 $r = \Admedia\Core\App::instance()->router();
 
@@ -132,6 +140,54 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
            preços, as fotografias e as existências. */
         Shop::adminRoutes($r);
 
+        // ---------- As consultas ----------
+        /* Três ecrãs, e não quatro. Vive aqui e não no pacote porque é desta
+           casa: um CMS partilhado não tem consultas de tarot.
+
+             Marcações     o calendário (onde marcar) e a lista (quem vem)
+             Consultas     o que é, quanto dura, quanto custa, e quando é
+             Encerramentos os dias em que o Zé não atende
+
+           O ecrã de uma vaga não é um quarto ecrã: é o detalhe de um dia do
+           calendário, e abre-se de lá.
+
+           **Só o backoffice.** A marcação do lado de fora — o /marcar, o
+           /consultas/vagas e o /marcacao/{token} — continua fora, porque a
+           porta de entrada não tem agenda: a maquete não a tem, e a secção das
+           consultas leva botões e não um selector de dia e hora. */
+
+        $r->get ('/marcacoes',               [BookingAdminController::class, 'index']);
+        // Marcar por telefone. O formulário vive no ecrã da vaga, que é onde se
+        // está a olhar quando o telefone toca.
+        $r->post('/marcacoes',               [BookingAdminController::class, 'store']);
+        $r->get ('/marcacoes/{id}',          [BookingAdminController::class, 'show']);
+        $r->post('/marcacoes/{id}/cancelar', [BookingAdminController::class, 'cancel']);
+
+        $r->get   ('/consultas',               [ConsultationAdminController::class, 'index']);
+        $r->get   ('/consultas/nova',          [ConsultationAdminController::class, 'create']);
+        $r->post  ('/consultas',               [ConsultationAdminController::class, 'store']);
+        $r->get   ('/consultas/{id}/edit',     [ConsultationAdminController::class, 'edit']);
+        $r->post  ('/consultas/{id}',          [ConsultationAdminController::class, 'update']);
+        $r->post  ('/consultas/{id}/publicar', [ConsultationAdminController::class, 'togglePublish']);
+        $r->delete('/consultas/{id}',          [ConsultationAdminController::class, 'destroy']);
+        $r->post  ('/consultas/{id}/horario',  [ConsultationAdminController::class, 'storeSchedule']);
+        $r->post  ('/horario/{scheduleId}',    [ConsultationAdminController::class, 'updateSchedule']);
+        $r->delete('/horario/{scheduleId}',    [ConsultationAdminController::class, 'destroySchedule']);
+
+        $r->get   ('/encerramentos',             [ConsultationAdminController::class, 'closures']);
+        $r->post  ('/encerramentos',             [ConsultationAdminController::class, 'storeClosure']);
+        $r->delete('/encerramentos/{closureId}', [ConsultationAdminController::class, 'destroyClosure']);
+
+        // Uma vaga. `/vagas` sem id fica de pé só para reencaminhar: há-de
+        // acabar em marcadores, e um endereço que deixa de existir é um erro que
+        // ninguém percebe.
+        $r->get   ('/vagas',            [SlotAdminController::class, 'index']);
+        $r->post  ('/vagas',            [SlotAdminController::class, 'store']);
+        $r->get   ('/vagas/{id}',       [SlotAdminController::class, 'show']);
+        $r->post  ('/vagas/{id}',       [SlotAdminController::class, 'update']);
+        $r->post  ('/vagas/{id}/abrir', [SlotAdminController::class, 'toggle']);
+        $r->delete('/vagas/{id}',       [SlotAdminController::class, 'destroy']);
+
         // Pedidos. Ler e apagar, e mais nada — um registo que se pode editar não
         // é um registo.
         $r->get   ('/enquiries',      [EnquiryAdminController::class, 'index']);
@@ -150,6 +206,14 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->group(['middleware' => [AdminOnly::class]], function ($r) {
             $r->get ('/settings', [SettingsController::class, 'edit']);
             $r->post('/settings', [SettingsController::class, 'update']);
+
+            /* O que o site tem ligado, e o que pode ligar. Instalar escreve
+               na pasta config/ e mexe no esquema — por isso o controlador
+               exige administrador, e não se fia só em a barra lateral o
+               esconder. Ver Admedia\Cms\Features. */
+            $r->get ('/features',                [FeatureController::class, 'index']);
+            $r->post('/features/{key}/install',  [FeatureController::class, 'install']);
+            $r->post('/features/{key}/disable',  [FeatureController::class, 'disable']);
 
             $r->get   ('/users',               [UserAdminController::class, 'index']);
             $r->get   ('/users/new',           [UserAdminController::class, 'create']);
