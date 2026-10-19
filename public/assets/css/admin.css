@@ -996,6 +996,42 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   background: var(--surface-2); color: var(--muted); font-size: .84rem;
 }
 
+/* ---------------- Promoções ----------------
+   Se uma regra está a descontar *agora* é diferente de estar ligada: uma
+   campanha de Dezembro está ligada em Outubro e não desconta nada. A lista
+   diz as duas coisas, senão manda-se alguém procurar o erro no sítio
+   errado. */
+.rule-state {
+  display: inline-block; padding: .1rem .5rem; border-radius: 999px;
+  font-size: .72rem; font-weight: 600; letter-spacing: .2px; white-space: nowrap;
+}
+.rule-state--on   { background: var(--accent-bg); color: var(--accent); }
+.rule-state--soon { background: #fdf1dd; color: #9a6b10; }
+.rule-state--done,
+.rule-state--off  { background: var(--surface-2); color: var(--muted); }
+
+.admin-table tr.is-dim td { opacity: .62; }
+.is-muted { color: var(--faint); }
+
+/* O que a regra faz a produtos verdadeiros. É isto que apanha uma promoção
+   apontada à categoria errada, antes de ela ir para a montra. */
+.rule-preview {
+  margin-top: 1.25rem; padding: .9rem 1.1rem;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.rule-preview h3 {
+  margin: 0 0 .5rem; font-size: .72rem; font-weight: 600;
+  letter-spacing: .5px; text-transform: uppercase; color: var(--faint);
+}
+.rule-preview p {
+  display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+  margin: 0 0 .3rem; font-size: .9rem;
+}
+.rule-preview__name { flex: 1 1 12rem; }
+.rule-preview s { color: var(--faint); }
+.rule-preview strong { color: var(--accent); font-size: 1rem; }
+
 /* ---------------- Cards, advanced, save bar ---------------- */
 .admin-card--advanced { padding: 0; }
 .admin-card--advanced > summary {
