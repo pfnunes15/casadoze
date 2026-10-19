@@ -1032,6 +1032,15 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .rule-preview s { color: var(--faint); }
 .rule-preview strong { color: var(--accent); font-size: 1rem; }
 
+/* As variantes, numa tabela de campos. Estreita de propósito: um nome, uma
+   referência, um preço e um número cabem numa linha, e um formulário por
+   variante seria cinco ecrãs para escrever cinco tamanhos. */
+.variant-table input[type="text"],
+.variant-table input[type="number"] { width: 100%; min-width: 4rem; padding: .35rem .5rem; }
+.variant-table td { vertical-align: middle; }
+.variant-table .field-check { margin: 0; }
+.variant-table__drop { font-size: .78rem; color: var(--danger); white-space: nowrap; }
+
 /* Um código de cupão lê-se letra a letra, muitas vezes ao telefone. */
 .coupon-code {
   padding: .1rem .4rem; border-radius: 4px;

@@ -200,6 +200,27 @@ return [
                           . 'antes de pagar.',
                 'placeholder' => 'whsec_...',
             ],
+            'shop.country' => [
+                'type'   => 'text',
+                'global' => true,
+                'label'  => 'País da loja',
+                'help'   => 'Duas letras: PT. Serve para saber o que é uma venda para fora — '
+                          . 'uma empresa portuguesa a vender a outra portuguesa cobra IVA.',
+                'placeholder' => 'PT',
+            ],
+            
+            'shop.reverse_charge' => [
+                'type'   => 'select',
+                'global' => true,
+                'label'  => 'Autoliquidação do IVA (UE)',
+                'help'   => 'Uma empresa de outro país da UE com número de IVA liquida o imposto '
+                          . 'do lado dela, e esta loja não o cobra. Ligue só se vende a empresas: '
+                          . 'numa loja ao público isto é deixar de cobrar imposto que continua a '
+                          . 'dever. O número fica guardado na encomenda e NÃO é verificado no '
+                          . 'VIES — confirmá-lo é de quem vende, como a lei pede.',
+                'choices' => ['' => 'Não — cobrar sempre IVA', '1' => 'Sim — aceitar número de IVA da UE'],
+            ],
+
             'shop.prices_show' => [
                 'type'   => 'select',
                 'global' => true,
