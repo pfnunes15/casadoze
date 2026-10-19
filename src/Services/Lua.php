@@ -85,6 +85,62 @@ final class Lua
     }
 
     /**
+     * A fase de um nome escrito à mão, ou null se não se reconhecer.
+     *
+     * **O caminho ao contrário do nomeDaFase(), e existe por causa do
+     * catálogo.** Cada produto declara numa característica a lua em que deve
+     * ser usado — «Lua cheia», «Lua minguante» —, escrita por quem o criou no
+     * backoffice e não escolhida de uma lista. Para a desenhar ao lado do nome
+     * é preciso voltar do nome ao número.
+     *
+     * Compara contra as oito traduções da língua que se está a ler, e contra as
+     * quatro formas largas que uma pessoa escreve sem pensar: «lua crescente»
+     * não é nenhum dos oito nomes — os oito dizem «Crescente» — e é o que está
+     * escrito em metade do catálogo.
+     *
+     * Devolve a fase do meio da fatia, que é a que o desenho quer: pedir o
+     * desenho do princípio da fatia da lua cheia dava uma lua quase cheia.
+     */
+    public static function faseDoNome(string $nome): ?float
+    {
+        $limpo = self::semEnfeites($nome);
+        if ($limpo === '') {
+            return null;
+        }
+
+        for ($i = 0; $i < 8; $i++) {
+            if (self::semEnfeites(__('lua.' . $i)) === $limpo) {
+                return $i / 8;
+            }
+        }
+
+        /* As formas largas. Escritas com o nome da fase à frente de «lua»,
+           que é como se diz e não como os oito nomes estão. */
+        $largas = [
+            'luanova'       => 0,
+            'luacrescente'  => 1,
+            'luacheia'      => 4,
+            'luaminguante'  => 7,
+        ];
+
+        return isset($largas[$limpo]) ? $largas[$limpo] / 8 : null;
+    }
+
+    /** Sem acentos, sem espaços e em minúsculas, para comparar nomes. */
+    private static function semEnfeites(string $texto): string
+    {
+        $t = mb_strtolower(trim($texto));
+        $t = strtr($t, [
+            'á' => 'a', 'à' => 'a', 'â' => 'a', 'ã' => 'a',
+            'é' => 'e', 'ê' => 'e', 'í' => 'i',
+            'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+            'ú' => 'u', 'ç' => 'c',
+        ]);
+
+        return (string)preg_replace('/[^a-z0-9]/', '', $t);
+    }
+
+    /**
      * O desenho da lua, para um `path` de SVG numa grelha de 40 por 40.
      *
      * Dois arcos: a borda do disco, sempre igual, e o limite da sombra, que é

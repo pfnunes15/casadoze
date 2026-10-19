@@ -48,6 +48,7 @@ use Admedia\Core\Middleware\CsrfMiddleware;
 use Admedia\Core\Middleware\EditorOrAbove;
 use Admedia\Shop\Shop;
 use App\Controllers\IntentController;
+use App\Controllers\KitController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
 use App\Controllers\Admin\SlotAdminController;
@@ -102,6 +103,11 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        para cá antes de este endereço existir, e dava 404 a quem lhe
        carregasse. Ver App\Controllers\IntentController. */
     $r->get('/intencao/{slug}', [IntentController::class, 'show']);
+
+    /* Juntar ao cesto, de uma vez, o que a Casa usa com uma peça. O do pacote
+       leva uma peça de cada vez, e está certo — isto é outra coisa, e chama o
+       mesmo Cart::add() por dentro. Ver App\Controllers\KitController. */
+    $r->post('/carrinho/kit', [KitController::class, 'add']);
 
     // ---------- Entrar ----------
     $r->get ('/login',           [AuthController::class, 'showLogin']);

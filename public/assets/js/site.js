@@ -799,6 +799,102 @@
   }
 
   /* ---------------------------------------------------------------------
+     A ficha: a quantidade e o conjunto.
+     --------------------------------------------------------------------- */
+
+  /* Os dois botões da quantidade.
+     ---------------------------------------------------------------------
+     **Postos aqui e não no HTML**, porque sem JavaScript não fazem nada: o
+     campo é um `<input type="number">` a sério, que o browser já sabe subir e
+     descer com as setas do teclado e com os seus próprios esporões. O desenho
+     pede dois botões grandes, e um botão grande que não responde é pior do que
+     um campo simples. */
+  var quantias = document.querySelectorAll('[data-quantia]');
+
+  for (var q = 0; q < quantias.length; q++) {
+    (function (caixa) {
+      var campo = caixa.querySelector('.quantia__campo');
+      if (!campo) { return; }
+
+      function botão(texto, quanto, rótulo) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'quantia__botão';
+        b.textContent = texto;
+        b.setAttribute('aria-label', rótulo);
+        b.addEventListener('click', function () {
+          var mínimo = parseInt(campo.min, 10) || 1;
+          var máximo = parseInt(campo.max, 10) || Infinity;
+          var agora = parseInt(campo.value, 10) || mínimo;
+          campo.value = String(Math.max(mínimo, Math.min(máximo, agora + quanto)));
+          campo.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+        return b;
+      }
+
+      /* Os nomes dos dois botões vêm do HTML, para ficarem na língua da
+         página: são lidos por quem ouve o site e nunca aparecem escritos. */
+      caixa.insertBefore(botão('\u2212', -1, caixa.getAttribute('data-menos') || '-'), campo);
+      caixa.appendChild(botão('+', 1, caixa.getAttribute('data-mais') || '+'));
+    }(quantias[q]));
+  }
+
+  /* O conjunto: a conta e o total acompanham as caixas escolhidas.
+     ---------------------------------------------------------------------
+     O molde das duas frases vem do HTML — `data-um` e `data-muitos` —, para a
+     contagem ficar na língua da página sem a repetir aqui. O total é somado dos
+     `data-preco` de cada caixa, em cêntimos, e só se divide por cem no fim:
+     somar euros com vírgula dá os erros que se sabe. */
+  var kit = document.querySelector('[data-kit]');
+
+  if (kit) {
+    var conta = kit.querySelector('[data-kit-conta]');
+    var total = kit.querySelector('[data-kit-total]');
+    var botãoDoKit = kit.querySelector('.kit__botão');
+
+    function somarOKit() {
+      var caixas = kit.querySelectorAll('input[type="checkbox"]');
+      var quantas = 0;
+      var cêntimos = 0;
+
+      for (var c = 0; c < caixas.length; c++) {
+        if (caixas[c].checked) {
+          quantas++;
+          cêntimos += parseInt(caixas[c].getAttribute('data-preco'), 10) || 0;
+        }
+      }
+
+      if (conta) {
+        var molde = quantas === 1
+          ? (conta.getAttribute('data-um') || '{n}')
+          : (conta.getAttribute('data-muitos') || '{n}');
+        conta.textContent = molde.replace('{n}', String(quantas));
+      }
+
+      /* O dinheiro escrito pelo browser, na língua da página: o `Intl` sabe
+         que em português são «14,00 €» e em alemão «14,00 €» com outro espaço,
+         e escrevê-lo à mão com uma vírgula era acertar numa língua e falhar as
+         outras quatro. */
+      if (total) {
+        try {
+          total.textContent = new Intl.NumberFormat(
+            document.documentElement.lang || 'pt-PT',
+            { style: 'currency', currency: 'EUR' }
+          ).format(cêntimos / 100);
+        } catch (e) {
+          total.textContent = (cêntimos / 100).toFixed(2) + ' €';
+        }
+      }
+
+      /* Nenhuma escolhida é um botão que não tem o que juntar. */
+      if (botãoDoKit) { botãoDoKit.disabled = quantas === 0; }
+    }
+
+    kit.addEventListener('change', somarOKit);
+    somarOKit();
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um

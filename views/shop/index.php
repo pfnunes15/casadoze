@@ -40,6 +40,12 @@ use Admedia\Shop\Models\Tag;
 use Admedia\Shop\Shop;
 use App\Services\Sigilos;
 
+/* O cabeçalho é fixo e transparente, e isso só funciona por cima de uma abertura
+   de ecrã inteiro. Esta página não tem nenhuma, por isso leva o espaço em cima e
+   o cabeçalho deixa de ser transparente — ver `.com-cabeçalho` na folha de
+   estilo, e views/pages/composed.php, que faz o mesmo às páginas de blocos. */
+$bodyClass = 'com-cabeçalho';
+
 $etiqueta = $tag ?? null;
 
 $pageTitle = $category
