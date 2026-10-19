@@ -49,6 +49,7 @@ use Admedia\Core\Middleware\EditorOrAbove;
 use Admedia\Shop\Shop;
 use App\Controllers\IntentController;
 use App\Controllers\KitController;
+use App\Controllers\CheckoutPageController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
 use App\Controllers\Admin\SlotAdminController;
@@ -108,6 +109,14 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        leva uma peça de cada vez, e está certo — isto é outra coisa, e chama o
        mesmo Cart::add() por dentro. Ver App\Controllers\KitController. */
     $r->post('/carrinho/kit', [KitController::class, 'add']);
+
+    /* A página do checkout. O pacote só tem o `POST /checkout` — no desenho
+       dele o cesto já pede o e-mail e a zona, e o botão manda tudo de uma vez.
+       O desenho desta casa parte isso em dois, e esta é a metade que faltava.
+       **Mostra; não cobra**: o formulário submete para o mesmo POST de sempre.
+       Tem de ficar antes do `Shop::routes`? Não — são métodos diferentes no
+       mesmo endereço, e o router distingue-os. */
+    $r->get('/checkout', [CheckoutPageController::class, 'show']);
 
     // ---------- Entrar ----------
     $r->get ('/login',           [AuthController::class, 'showLogin']);

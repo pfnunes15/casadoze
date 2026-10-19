@@ -3609,6 +3609,372 @@ a.vídeo__moldura { border-style: solid; }
 .resumo__promessas li { font-size: 16px; color: #a9a0b2; display: flex; gap: 8px; }
 .resumo__promessas li::before { content: '\2726'; color: var(--ouro); }
 
+/* ---------------------------------------------------------------------------
+   Finalizar a compra: os três passos e o resumo.
+
+   Reaproveita o `.resumo` do cesto — é a mesma caixa, com as linhas da
+   encomenda a mais.
+   --------------------------------------------------------------------------- */
+.caixa {
+  width: 100%;
+  max-width: var(--miolo);
+  margin: 0 auto;
+  padding: 48px var(--goteira-secção) 120px;
+}
+.caixa__par {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: flex-start;
+  margin-top: 32px;
+}
+.caixa__passos { flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 56px; }
+
+.passo { display: flex; flex-direction: column; gap: 18px; }
+.passo__título {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 34px;
+  color: var(--letra-forte);
+}
+.passo__número { font-family: var(--mono); font-size: 12px; color: var(--roxo-claro); }
+.passo__nota { font-size: 17px; font-style: italic; color: #a9a0b2; }
+.passo__falta {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(224, 134, 60, .45);
+  background: rgba(224, 134, 60, .06);
+  font-size: 17px;
+  color: #cfc6b5;
+}
+.passo__caixa { display: flex; align-items: center; gap: 10px; font-size: 17px; font-style: italic; color: #a9a0b2; }
+.passo__caixa svg { width: 22px; height: 22px; flex: none; color: var(--ouro); }
+.passo--fim { padding-top: 30px; border-top: 1px solid var(--traco); gap: 16px; }
+
+/* Os campos. Um só desenho para os três passos. */
+.campo {
+  background: transparent;
+  border: 1px solid rgba(228, 220, 203, .22);
+  padding: 0 16px;
+  height: 56px;
+  font-family: var(--prosa);
+  font-size: 19px;
+  color: var(--letra);
+  width: 100%;
+}
+.campo:focus { border-color: var(--ouro); outline: none; }
+.campo--prosa { height: auto; padding: 14px 16px; line-height: 1.5; resize: vertical; }
+.campo__rótulo {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+
+/* As zonas de envio. */
+.zonas { display: flex; flex-direction: column; gap: 10px; border: 0; margin: 0; padding: 0; }
+.zona {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px solid rgba(228, 220, 203, .22);
+  cursor: pointer;
+  transition: border-color .3s, background .3s;
+}
+.zona:hover { border-color: rgba(217, 179, 108, .5); }
+.zona input { position: absolute; opacity: 0; width: 0; height: 0; }
+.zona__ponto {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(228, 220, 203, .35);
+  display: grid;
+  place-items: center;
+}
+.zona__ponto::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: transparent; }
+.zona:has(input:checked) { border-color: rgba(217, 179, 108, .7); background: rgba(217, 179, 108, .07); }
+.zona:has(input:checked) .zona__ponto { border-color: var(--ouro); }
+.zona:has(input:checked) .zona__ponto::after { background: var(--ouro); }
+.zona:has(input:focus-visible) { outline: 1px solid var(--ouro); outline-offset: 3px; }
+.zona__dizer { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.zona__nome { font-size: 20px; color: var(--letra-forte); }
+.zona__nota { font-size: 16px; font-style: italic; color: #a9a0b2; }
+.zona__preço { font-family: var(--mono); font-size: 12.5px; color: var(--ouro-claro); }
+
+/* Quem cobra. */
+.pagamentos { list-style: none; margin: 0; padding: 0; border: 1px solid rgba(228, 220, 203, .22); }
+.pagamento {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--traco);
+}
+.pagamento:last-child { border-bottom: 0; }
+.pagamento__nome { font-size: 20px; color: var(--letra-forte); }
+.pagamento__nota {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.pagamentos__seguro {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8e9c78;
+}
+.pagamentos__seguro svg { width: 18px; height: 18px; flex: none; }
+
+/* A caixa de aceitar. */
+.aceito { display: flex; align-items: center; gap: 12px; font-size: 18px; color: #cfc6b5; cursor: pointer; }
+.aceito input { position: absolute; opacity: 0; width: 0; height: 0; }
+.aceito__marca {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(228, 220, 203, .35);
+  display: grid;
+  place-items: center;
+  transition: background .3s, border-color .3s;
+}
+.aceito:has(input:checked) .aceito__marca { background: var(--ouro); border-color: var(--ouro); }
+.aceito:has(input:checked) .aceito__marca::after { content: '\2713'; color: var(--fundo); font-size: 12px; line-height: 1; }
+.aceito:has(input:focus-visible) .aceito__marca { outline: 1px solid var(--ouro); outline-offset: 3px; }
+
+.caixa__botão {
+  height: 64px;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  background: var(--ouro);
+  color: var(--fundo);
+  border: 0;
+  cursor: pointer;
+  transition: background .3s;
+}
+.caixa__botão:hover { background: var(--ouro-claro); }
+.caixa__ral { font-size: 15px; font-style: italic; color: var(--letra-tenue); text-align: center; }
+
+/* As linhas dentro do resumo. */
+.resumo__topo { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.resumo__mudar {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #a9a0b2;
+}
+.resumo__mudar:hover { color: var(--ouro); }
+.resumo__linhas { display: flex; flex-direction: column; gap: 14px; }
+.resumo__linha { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.resumo__moldura {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--traco);
+  overflow: hidden;
+}
+.resumo__moldura canvas { display: block; width: 100%; height: 100%; }
+.resumo__quantos {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--ouro);
+  color: var(--fundo);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 0 5px;
+}
+.resumo__nome { font-size: 18px; color: var(--letra); display: flex; flex-direction: column; gap: 2px; }
+.resumo__variante { font-size: 15px; font-style: italic; color: #a9a0b2; }
+.resumo__valor { font-family: var(--mono); font-size: 12.5px; color: var(--ouro-claro); white-space: nowrap; }
+
+/* ---------------------------------------------------------------------------
+   A confirmação.
+
+   A lua e não um visto verde: uma encomenda que ainda não está paga com um
+   visto por cima é uma mentira desenhada.
+   --------------------------------------------------------------------------- */
+.feito {
+  width: 100%;
+  max-width: var(--miolo);
+  margin: 0 auto;
+  padding: 64px var(--goteira-secção) 120px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 72px);
+}
+.feito__cabeça {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+}
+.feito__lua { width: 84px; height: 84px; overflow: visible; }
+.feito__sobrescrita {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--roxo-claro);
+}
+.feito__título {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(40px, 5.4vw, 68px);
+  line-height: 1.02;
+  color: var(--letra-forte);
+  text-wrap: balance;
+  max-width: 20ch;
+}
+.feito__dito { margin: 0; font-size: 21px; line-height: 1.5; color: #cfc6b5; max-width: 50ch; }
+.feito__aviso {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(224, 134, 60, .45);
+  background: rgba(224, 134, 60, .06);
+  font-size: 17px;
+  color: #cfc6b5;
+}
+
+.feito__par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: clamp(20px, 2.6vw, 32px);
+  align-items: start;
+}
+.feito__encomenda,
+.feito__caminho {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(22px, 3vw, 32px);
+  border: 1px solid rgba(217, 179, 108, .3);
+  background: #0d0a11;
+  min-width: 0;
+}
+
+.feito__linhas { display: flex; flex-direction: column; gap: 12px; }
+.feito__linha { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: baseline; }
+.feito__quantos { font-family: var(--mono); font-size: 12px; color: var(--ouro); }
+.feito__nome { font-size: 19px; color: var(--letra); display: flex; flex-direction: column; gap: 2px; }
+.feito__variante { font-size: 15px; font-style: italic; color: #a9a0b2; }
+.feito__valor { font-family: var(--mono); font-size: 12.5px; color: var(--ouro-claro); white-space: nowrap; }
+
+.feito__contas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--traco);
+  font-size: 18px;
+}
+.feito__contas > div { display: flex; justify-content: space-between; gap: 10px; }
+.feito__contas dt { color: #cfc6b5; }
+.feito__contas dd { margin: 0; font-family: var(--mono); font-size: 12.5px; }
+.feito__desconto { color: #8e9c78; }
+.feito__desconto dt { color: inherit; }
+.feito__iva dt, .feito__iva dd { color: var(--letra-tenue); font-size: 15px; }
+
+.feito__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--traco);
+}
+.feito__totalNome { font-family: var(--titulo); font-size: 24px; color: var(--letra-forte); }
+.feito__totalValor { font-family: var(--mono); font-size: 22px; color: var(--ouro-claro); }
+
+.feito__caminhoTítulo {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--letra-forte);
+}
+
+/* Os quatro passos. A linha que os liga é um `::before` do item e não um
+   elemento à parte: o último não a leva, e é isso que lhe dá fim. */
+.caminho { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.caminho__passo {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 16px;
+  padding: 0 0 22px;
+}
+.caminho__passo:last-child { padding-bottom: 0; }
+.caminho__passo::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 16px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(228, 220, 203, .16);
+}
+.caminho__passo:last-child::before { display: none; }
+.caminho__ponto {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(228, 220, 203, .3);
+  margin-top: 3px;
+}
+.caminho__passo--feito .caminho__ponto {
+  background: var(--ouro);
+  border-color: var(--ouro);
+  box-shadow: 0 0 12px rgba(217, 179, 108, .55);
+}
+.caminho__dizer { display: flex; flex-direction: column; gap: 3px; }
+.caminho__nome { font-size: 20px; color: var(--letra-tenue); }
+.caminho__passo--feito .caminho__nome { color: var(--letra-forte); }
+.caminho__dito { font-size: 16px; line-height: 1.4; color: #a9a0b2; }
+
+.feito__morada {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--traco);
+}
+.feito__moradaRótulo {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.feito__morada address { font-style: normal; font-size: 18px; line-height: 1.45; color: var(--letra); }
+.feito__moradaNota { font-size: 16px; font-style: italic; color: #a9a0b2; }
+
 @media (min-width: 900px) {
   .navegação {
     display: flex;
