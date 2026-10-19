@@ -3975,6 +3975,147 @@ a.vídeo__moldura { border-style: solid; }
 .feito__morada address { font-style: normal; font-size: 18px; line-height: 1.45; color: var(--letra); }
 .feito__moradaNota { font-size: 16px; font-style: italic; color: #a9a0b2; }
 
+/* ---------------------------------------------------------------------------
+   A gaveta do cesto.
+
+   Entra pela direita quando se junta uma peça, e o resto da página fica atrás
+   de um véu. O conteúdo é desenhado pelo servidor — ver views/shop/gaveta.php —
+   e metido aqui pelo js/site.js; sem JavaScript isto nunca abre e o formulário
+   leva a pessoa ao cesto a sério.
+   --------------------------------------------------------------------------- */
+.véu {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  background: rgba(5, 4, 6, .62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .45s;
+}
+.véu--posto { opacity: 1; }
+
+.gaveta {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 181;
+  width: min(460px, 100vw);
+  background: #0d0a11;
+  border-left: 1px solid rgba(217, 179, 108, .25);
+  box-shadow: -40px 0 80px -30px rgba(0, 0, 0, .9);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(105%);
+  transition: transform .45s cubic-bezier(.2, .7, .1, 1);
+}
+.gaveta--aberta { transform: translateX(0); }
+
+.gaveta__topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 26px;
+  border-bottom: 1px solid rgba(228, 220, 203, .10);
+  flex: none;
+}
+.gaveta__título { font-family: var(--titulo); font-size: 26px; color: var(--letra-forte); }
+.gaveta__conta { font-family: var(--mono); font-size: 12px; color: var(--ouro); }
+.gaveta__fechar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(228, 220, 203, .2);
+  background: none;
+  color: var(--letra);
+  cursor: pointer;
+  transition: border-color .3s;
+}
+.gaveta__fechar:hover { border-color: var(--ouro); }
+
+.gaveta__vazio {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 30px;
+  text-align: center;
+}
+.gaveta__vazio svg { width: 56px; height: 56px; color: var(--ouro); }
+.gaveta__vazioTítulo { font-family: var(--titulo); font-size: 28px; color: var(--letra-forte); }
+
+.gaveta__corpo {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 179, 108, .4) transparent;
+}
+.portes--gaveta { border: 0; border-bottom: 1px solid rgba(228, 220, 203, .10); margin: 0; padding: 18px 26px; }
+
+.gaveta__linha {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 18px 26px;
+  border-bottom: 1px solid rgba(228, 220, 203, .08);
+  align-items: start;
+}
+.gaveta__moldura {
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid var(--traco);
+}
+.gaveta__moldura canvas,
+.gaveta__moldura img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gaveta__dizer { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.gaveta__nome { font-family: var(--titulo); font-size: 19px; line-height: 1.15; color: var(--letra-forte); }
+.gaveta__nome:hover { color: var(--ouro); }
+.gaveta__variante { font-size: 15px; font-style: italic; color: #a9a0b2; }
+.gaveta__quantos { font-family: var(--mono); font-size: 11px; color: var(--letra-tenue); }
+.gaveta__valor { font-family: var(--mono); font-size: 12.5px; color: var(--ouro-claro); white-space: nowrap; }
+
+.gaveta__pé {
+  flex: none;
+  padding: 18px 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--traco);
+  background: #0d0a11;
+}
+.gaveta__soma { display: flex; justify-content: space-between; align-items: baseline; font-size: 20px; color: #cfc6b5; }
+.gaveta__subtotal { font-family: var(--mono); font-size: 18px; color: var(--ouro-claro); }
+.gaveta__nota { font-size: 15px; font-style: italic; color: var(--letra-tenue); }
+.gaveta__botão {
+  display: grid;
+  place-items: center;
+  height: 52px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  background: var(--ouro);
+  color: var(--fundo);
+  transition: background .3s;
+}
+.gaveta__botão:hover { background: var(--ouro-claro); color: var(--fundo); }
+.gaveta__botão--vazio {
+  height: 46px;
+  letter-spacing: .2em;
+  font-size: 10.5px;
+  background: none;
+  color: var(--letra);
+  border: 1px solid rgba(228, 220, 203, .25);
+}
+.gaveta__botão--vazio:hover { background: none; border-color: var(--ouro); color: var(--ouro); }
+
 @media (min-width: 900px) {
   .navegação {
     display: flex;

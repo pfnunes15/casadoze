@@ -923,6 +923,132 @@
   }
 
   /* ---------------------------------------------------------------------
+     A gaveta do cesto.
+
+     Juntar uma peça sem sair de onde se está. O formulário é um formulário a
+     sério e submete-se sozinho sem JavaScript — leva a pessoa ao cesto, que é
+     a resposta certa. Aqui é interceptado: a peça é juntada pelo mesmo
+     endereço, e o que volta é o cesto desenhado pelo servidor, que entra na
+     gaveta.
+
+     **O HTML da gaveta vem do servidor e não é montado aqui.** Quem desenha o
+     cesto é a vista em PHP que desenha tudo o resto; montá-lo em JavaScript
+     era escrevê-lo uma segunda vez, com os preços formatados outra vez e a
+     divergir da primeira no dia em que um deles mudasse.
+     --------------------------------------------------------------------- */
+  var gaveta = document.querySelector('[data-gaveta]');
+  var véu = document.querySelector('[data-véu-gaveta]');
+
+  if (gaveta && véu && window.fetch) {
+
+    function abrirGaveta() {
+      gaveta.hidden = false;
+      véu.hidden = false;
+      /* Dois quadros depois, para a transição ter de onde partir: posta no
+         mesmo instante em que o elemento deixa de estar `hidden`, o browser
+         não a corre. */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          gaveta.classList.add('gaveta--aberta');
+          véu.classList.add('véu--posto');
+        });
+      });
+      document.documentElement.style.overflow = 'hidden';
+
+      var fechar = gaveta.querySelector('[data-fechar-gaveta]');
+      if (fechar) { fechar.focus(); }
+    }
+
+    function fecharGaveta() {
+      gaveta.classList.remove('gaveta--aberta');
+      véu.classList.remove('véu--posto');
+      document.documentElement.style.overflow = '';
+
+      /* Esconder só no fim da transição: a gaveta tem de ter para onde
+         escorregar, e `hidden` tira-a do ecrã no instante. */
+      setTimeout(function () {
+        if (!gaveta.classList.contains('gaveta--aberta')) {
+          gaveta.hidden = true;
+          véu.hidden = true;
+        }
+      }, queto ? 0 : 420);
+    }
+
+    function encherGaveta() {
+      /* O endereço vem do HTML e não é montado aqui: o site tem cinco
+         línguas e `/fr/carrinho/gaveta` não se adivinha de JavaScript. */
+      return fetch(gaveta.getAttribute('data-gaveta'), { headers: { 'X-Requested-With': 'fetch' } })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (html) {
+          if (html === null) { return false; }
+          gaveta.innerHTML = html;
+          /* Os desenhos das peças são pintados num canvas, e os que acabaram de
+             entrar no documento ainda não o foram. */
+          var novas = gaveta.querySelectorAll('[data-desenho]');
+          for (var n = 0; n < novas.length; n++) { pintar(novas[n]); }
+          return true;
+        });
+    }
+
+    /* Juntar. O `fetch` manda o mesmo formulário para o mesmo endereço, com o
+       mesmo símbolo de CSRF: o que muda é quem recebe a resposta. */
+    document.addEventListener('submit', function (ev) {
+      var form = ev.target.closest ? ev.target.closest('[data-juntar]') : null;
+      if (!form) { return; }
+
+      ev.preventDefault();
+
+      var botão = form.querySelector('button');
+      if (botão) { botão.disabled = true; }
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'X-Requested-With': 'fetch' },
+        credentials: 'same-origin'
+      })
+        .then(function () { return encherGaveta(); })
+        .then(function (deu) {
+          if (deu) {
+            abrirGaveta();
+            actualizarConta();
+          } else {
+            /* O servidor não respondeu como devia: em vez de ficar calado,
+               segue-se o formulário como se não houvesse JavaScript. */
+            form.submit();
+          }
+        })
+        .catch(function () { form.submit(); })
+        .then(function () { if (botão) { botão.disabled = false; } });
+    });
+
+    /* O contador do cabeçalho, lido do que o servidor acabou de desenhar. */
+    function actualizarConta() {
+      var naGaveta = gaveta.querySelector('.gaveta__conta');
+      var naBarra = document.querySelector('.pílula__conta');
+      if (!naGaveta || !naBarra) { return; }
+
+      naBarra.textContent = naGaveta.textContent.trim();
+
+      if (!queto && naBarra.animate) {
+        naBarra.animate(
+          [{ transform: 'scale(1)' }, { transform: 'scale(1.8)' }, { transform: 'scale(1)' }],
+          { duration: 500, easing: 'cubic-bezier(.2, .7, .1, 1)' }
+        );
+      }
+    }
+
+    /* Fechar: o botão, o véu, e a tecla de escape. */
+    document.addEventListener('click', function (ev) {
+      if (ev.target.closest && ev.target.closest('[data-fechar-gaveta]')) { fecharGaveta(); }
+    });
+    véu.addEventListener('click', fecharGaveta);
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && !gaveta.hidden) { fecharGaveta(); }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um

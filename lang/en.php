@@ -274,6 +274,8 @@ return [
     'loja.done.step4.body'   => 'In discreet packaging.',
     'loja.done.delivery'     => 'Delivery',
     'loja.done.back'         => 'Back to the shop',
+    'loja.drawer.next'       => 'Delivery and discount codes at the next step.',
+    'loja.drawer.see'        => 'View the basket',
     'loja.kit.eyebrow'     => 'Complete the ritual',
     'loja.kit.title'       => 'What the House uses with this',
     'loja.kit.add'         => 'Add the set',

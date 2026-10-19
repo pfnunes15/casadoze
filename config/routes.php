@@ -50,6 +50,7 @@ use Admedia\Shop\Shop;
 use App\Controllers\IntentController;
 use App\Controllers\KitController;
 use App\Controllers\CheckoutPageController;
+use App\Controllers\GavetaController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
 use App\Controllers\Admin\SlotAdminController;
@@ -118,6 +119,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        mesmo endereço, e o router distingue-os. */
     $r->get('/checkout', [CheckoutPageController::class, 'show']);
 
+    /* O que está no cesto, como pedaço de página, para a gaveta lateral que a
+       maquete abre sem tirar ninguém de onde está. Devolve HTML e não JSON:
+       quem desenha o cesto é a vista em PHP, e um JSON obrigava a escrever a
+       gaveta uma segunda vez em JavaScript. Ver App\Controllers\GavetaController. */
+    $r->get('/carrinho/gaveta', [GavetaController::class, 'show']);
+
     // ---------- Entrar ----------
     $r->get ('/login',           [AuthController::class, 'showLogin']);
     $r->post('/login',           [AuthController::class, 'login']);
@@ -150,6 +157,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         // estilo do site, e por isso vai num iframe e não para dentro da página
         // do backoffice.
         $r->get('/blocks/{type}/preview', [BlockPreviewController::class, 'show']);
+        
+        /* Um bloco desta página, com o conteúdo dela, para a tela do editor
+           desenhar a página em vez de a descrever. Sem esta rota os quadros
+           da tela caem no apanha-tudo e cada bloco aparece como a página
+           inteira. Ver views/admin/partials/composer.php. */
+        $r->get('/sections/{id}/preview', [BlockPreviewController::class, 'section']);
 
         // Páginas. Uma página são os seus dados mais os blocos de que é feita, e
         // ambos se editam em /pages/{id}/edit.
@@ -171,6 +184,9 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->post  ('/sections/{id}',                 [SectionAdminController::class, 'update']);
         $r->post  ('/sections/{id}/move',            [SectionAdminController::class, 'move']);
         $r->post  ('/sections/{id}/publish',         [SectionAdminController::class, 'togglePublish']);
+        /* Um campo, escrito directamente na folha do editor em vez de num
+           formulário. Responde JSON — nada navega. Ver Admedia\Cms\LiveEdit. */
+        $r->post  ('/sections/{id}/field',           [SectionAdminController::class, 'field']);
         $r->delete('/sections/{id}',                 [SectionAdminController::class, 'destroy']);
 
         /* A loja no backoffice: produtos, encomendas, categorias, características

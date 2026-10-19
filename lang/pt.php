@@ -331,6 +331,8 @@ return [
     'loja.done.step4.body'   => 'Em embalagem discreta.',
     'loja.done.delivery'     => 'Entrega',
     'loja.done.back'         => 'Voltar à loja',
+    'loja.drawer.next'       => 'Envio e códigos de desconto no passo seguinte.',
+    'loja.drawer.see'        => 'Ver o cesto',
     'loja.kit.eyebrow'     => 'Completar o ritual',
     'loja.kit.title'       => 'O que a Casa usa com esta peça',
     'loja.kit.add'         => 'Juntar o conjunto',

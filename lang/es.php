@@ -273,6 +273,8 @@ return [
     'loja.done.step4.body'   => 'En embalaje discreto.',
     'loja.done.delivery'     => 'Entrega',
     'loja.done.back'         => 'Volver a la tienda',
+    'loja.drawer.next'       => 'Envío y códigos de descuento en el paso siguiente.',
+    'loja.drawer.see'        => 'Ver la cesta',
     'loja.kit.eyebrow'     => 'Completar el ritual',
     'loja.kit.title'       => 'Lo que la Casa usa con esta pieza',
     'loja.kit.add'         => 'Añadir el conjunto',

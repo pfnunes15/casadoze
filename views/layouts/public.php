@@ -99,6 +99,19 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
 
 <?php require __DIR__ . '/../partials/footer.php'; ?>
 
+<?php if ($app->hasShop()): ?>
+<?php /* A gaveta do cesto. Vazia no documento e enchida pelo js/site.js, que
+         vai buscar o seu conteúdo a `/carrinho/gaveta` depois de juntar uma
+         peça. Está aqui e não dentro de uma vista da loja porque se junta de
+         qualquer página — da montra da porta de entrada, da ficha, da loja.
+
+         Sem JavaScript fica fechada para sempre e ninguém dá por ela: o
+         formulário de juntar leva a pessoa ao cesto a sério. */ ?>
+<div class="véu" data-véu-gaveta hidden></div>
+<aside class="gaveta" data-gaveta="<?= e(locale_url('/carrinho/gaveta')) ?>"
+       aria-label="<?= e(__('site.cart')) ?>" hidden></aside>
+<?php endif; ?>
+
 <?php /* A biblioteca que desenha os produtos. Separada do js/site.js porque é
          grande, não é dela a lógica da página, e veio inteira da maquete — ver o
          cabeçalho dela. Carregada em todas as páginas e não só onde há montra

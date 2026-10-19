@@ -277,6 +277,8 @@ return [
     'loja.done.step4.body'   => 'In diskreter Verpackung.',
     'loja.done.delivery'     => 'Lieferung',
     'loja.done.back'         => 'Zurück zum Laden',
+    'loja.drawer.next'       => 'Versand und Rabattcodes im nächsten Schritt.',
+    'loja.drawer.see'        => 'Korb ansehen',
     'loja.kit.eyebrow'     => 'Das Ritual vervollständigen',
     'loja.kit.title'       => 'Was das Haus dazu verwendet',
     'loja.kit.add'         => 'Set hinzufügen',

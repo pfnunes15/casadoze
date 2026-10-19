@@ -123,7 +123,13 @@ $botãoUrl   = trim((string)($section['cta_url'] ?? '')) ?: Shop::to('index');
         <article class="produto" data-entra="sobe" data-atraso="<?= ((int)$índice % 4) * 90 ?>"
                  data-categorias="<?= e(implode(' ', $deCada[$id] ?? [])) ?>">
 
-          <div class="produto__moldura" data-inclina>
+          <?php /* A moldura inteira é uma ligação para a ficha, e o nome por
+                   baixo é outra. Dois `<a>` para o mesmo sítio e não um a
+                   embrulhar tudo: o botão de juntar está dentro do cartão, e um
+                   botão dentro de uma ligação é marcação inválida — e no
+                   teclado é um alvo que engole o outro. */ ?>
+          <a class="produto__moldura" href="<?= e(Shop::to('product', ['slug' => (string)$produto['slug']])) ?>"
+             data-inclina tabindex="-1" aria-hidden="true">
             <?php if ($desenho !== ''): ?>
               <?php /* O canvas é desenhado pelo browser e não traz nada escrito:
                        o que descreve o produto é o nome por baixo, que está em
@@ -138,11 +144,11 @@ $botãoUrl   = trim((string)($section['cta_url'] ?? '')) ?: Shop::to('index');
             <?php if ($lua !== ''): ?>
               <span class="produto__lua"><?= e($lua) ?></span>
             <?php endif; ?>
-          </div>
+          </a>
 
           <div class="produto__linha">
             <div class="produto__nomes">
-              <<?= $itemTag ?> class="produto__nome"><?= e((string)$produto['name']) ?></<?= $itemTag ?>>
+              <<?= $itemTag ?> class="produto__nome"><a href="<?= e(Shop::to('product', ['slug' => (string)$produto['slug']])) ?>"><?= e((string)$produto['name']) ?></a></<?= $itemTag ?>>
               <?php if (trim((string)($produto['summary'] ?? '')) !== ''): ?>
                 <span class="produto__dito"><?= e((string)$produto['summary']) ?></span>
               <?php endif; ?>
@@ -153,18 +159,22 @@ $botãoUrl   = trim((string)($section['cta_url'] ?? '')) ?: Shop::to('index');
           <?php if ($esgotado): ?>
             <span class="produto__esgotado"><?= e(__('shop.product.sold_out')) ?></span>
           <?php else: ?>
-            <?php /* Conta no cesto do cabeçalho e não vai ao servidor, porque
-                     neste site não há cesto para onde ir: a loja, o checkout e
-                     as páginas de produto foram retiradas, e ficou a porta de
-                     entrada. É também o que a maquete faz — lá o botão soma um
-                     ao contador e anuncia-o, e mais nada.
+            <?php /* **Junta a sério.** Até a loja voltar, este botão só somava
+                     um ao contador do cabeçalho — não havia cesto para onde ir.
+                     Agora há, e é o mesmo `POST` que a ficha usa.
 
-                     `type="button"` de propósito: dentro de um formulário, um
-                     botão sem tipo submete-o. */ ?>
-            <button type="button" class="produto__botão"
-                    data-no-cesto="<?= e((string)$produto['name']) ?>">
-              + <?= e(__('shop.product.add')) ?>
-            </button>
+                     Sem JavaScript o formulário leva a pessoa ao cesto, que é a
+                     resposta certa. Com JavaScript o js/site.js intercepta-o e
+                     abre a gaveta sem tirar ninguém da página, que é o que a
+                     maquete faz. */ ?>
+            <form class="produto__juntar" method="post" action="<?= e(Shop::to('cart_add')) ?>" data-juntar>
+              <?= csrf_field() ?>
+              <input type="hidden" name="product_id" value="<?= $id ?>">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="produto__botão">
+                + <?= e(__('shop.product.add')) ?>
+              </button>
+            </form>
           <?php endif; ?>
         </article>
       <?php endforeach; ?>
