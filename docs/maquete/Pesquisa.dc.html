@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#09080a}
+body{margin:0;background:#09080a;color:#e4dccb;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#e4dccb;text-decoration:none}a:hover{color:#d9b36c}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:1px solid #d9b36c;outline-offset:3px}
+input::placeholder{color:#7d7682}
+::selection{background:#7b4fb8;color:#fff}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #09080a; color: #e4dccb; overflow-x: clip">
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(9,8,10,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px">Menu</button></sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap"><a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Loja</a><a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Grimório</a><a href="Casa.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Contactos</a></nav></sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98"><img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain"><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if></a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center">
+<a href="Pesquisa.dc.html" aria-label="Pesquisar" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></a>
+<a href="Conta.dc.html" aria-label="Conta" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg></a>
+<a href="Loja.dc.html" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6); color: #e4dccb"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span>Carrinho</span></sc-if><b style="font-weight: 500; color: #d9b36c">{{ cartN }}</b></a>
+</div>
+</div>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px"><a href="Loja.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Loja</a><a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Grimório</a><a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Contactos</a></nav></sc-if>
+</header>
+<main data-screen-label="Pesquisa" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 56px clamp(20px, 3vw, 40px) 130px; box-sizing: border-box">
+<label style="position: relative; display: block; border-bottom: 1px solid rgba(228,220,203,.3)">
+<span style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex"><svg viewBox="0 0 20 20" style="width: 30px; height: 30px"><g fill="none" stroke="#d9b36c" stroke-width="1.1"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></span>
+<input type="search" value="{{ q }}" onChange="{{ onQ }}" autofocus="autofocus" placeholder="Procurar na Casa…" aria-label="Procurar" style="width: 100%; box-sizing: border-box; background: transparent; border: 0; outline: none; padding: 18px 60px 18px 50px; font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(36px, 5vw, 64px); color: #efe6d3">
+<sc-if value="{{ hasQ }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ clearQ }}" aria-label="Limpar" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(228,220,203,.2); color: #a9a0b2" style-hover="border-color: #d9b36c">✕</button></sc-if>
+</label>
+<sc-if value="{{ noQ }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 16px; margin-top: 40px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">Mais procurado</span><div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{ pop }}" as="p" hint-placeholder-count="6"><button type="button" onClick="{{ p.go }}" style="padding: 9px 17px; border-radius: 999px; border: 1px solid rgba(228,220,203,.2); font-size: 20px; color: #cfc6b5" style-hover="border-color: rgba(217,179,108,.6); color: #efe6d3">{{ p.label }}</button></sc-for></div></div>
+</sc-if>
+<sc-if value="{{ hasQ }}" hint-placeholder-val="{{ false }}">
+<div role="tablist" style="display: flex; gap: 26px; margin-top: 26px; border-bottom: 1px solid rgba(228,220,203,.12); overflow-x: auto; scrollbar-width: none">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5"><button type="button" role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.go }}" style="flex: none; display: flex; align-items: center; gap: 8px; padding: 14px 0; margin-bottom: -1px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: {{ t.fg }}; border-bottom: 1px solid {{ t.bd }}">{{ t.label }}<span style="color: #8c8591">{{ t.n }}</span></button></sc-for>
+</div>
+<sc-if value="{{ none }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 56px 0">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #efe6d3">Nada para “{{ qShown }}”</span>
+<span style="font-size: 20px; line-height: 1.5; color: #a9a0b2; max-width: 52ch">Experimenta uma palavra mais simples, uma intenção (proteção, amor, limpeza) ou fala connosco. A Casa pode preparar peças por encomenda.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{ pop }}" as="p" hint-placeholder-count="6"><button type="button" onClick="{{ p.go }}" style="padding: 8px 15px; border-radius: 999px; border: 1px solid rgba(228,220,203,.2); font-size: 18px; color: #cfc6b5" style-hover="border-color: rgba(217,179,108,.6)">{{ p.label }}</button></sc-for></div>
+<a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5); padding-bottom: 3px">Fala com a Casa →</a>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 56px; margin-top: 40px">
+<sc-if value="{{ showP }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">Na loja</span><a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #a9a0b2">Ver a loja →</a></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 32px clamp(14px, 2vw, 24px)">
+<sc-for list="{{ prods }}" as="p" hint-placeholder-count="4"><a href="Loja.dc.html" style="display: flex; flex-direction: column; gap: 12px; min-width: 0" style-hover="color: #e4dccb"><span style="display: block; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ p.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></span><span style="display: flex; justify-content: space-between; gap: 10px; align-items: flex-start"><span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 20px; line-height: 1.15; color: #efe6d3">{{ p.n }}</span><span style="font-size: 16px; font-style: italic; color: #a9a0b2">{{ p.sub }}</span></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #e8cf98; white-space: nowrap; padding-top: 4px">{{ p.price }}</span></span></a></sc-for>
+</div>
+</section>
+</sc-if>
+<sc-if value="{{ showS }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">Consultas</span>
+<div style="display: flex; flex-direction: column; border-top: 1px solid rgba(228,220,203,.12)"><sc-for list="{{ svcs }}" as="x" hint-placeholder-count="2"><a href="Consultas.dc.html" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgba(228,220,203,.12)" style-hover="color: #d9b36c"><span style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">{{ x.n }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #a9a0b2">{{ x.sub }}</span></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; padding: 11px 15px; background: #d9b36c; color: #09080a">Marcar</span></a></sc-for></div>
+</section>
+</sc-if>
+<sc-if value="{{ showV }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 20px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">No Grimório</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 32px clamp(14px, 2vw, 24px)">
+<sc-for list="{{ vids }}" as="v" hint-placeholder-count="3"><a href="Grimorio.dc.html" style="display: flex; flex-direction: column; gap: 12px" style-hover="color: #e4dccb"><span style="position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ v.cv }}" width="600" height="800" style="position: absolute; left: 0; top: 50%; width: 100%; height: 178%; transform: translateY(-50%)"></canvas><span style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,8,10,.8), transparent 60%)"></span><span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(232,207,152,.8); background: rgba(9,8,10,.45); display: grid; place-items: center; color: #e8cf98; padding-left: 3px; box-sizing: border-box">▶</span><span style="position: absolute; right: 10px; bottom: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #efe6d3; background: rgba(9,8,10,.75); padding: 3px 7px">{{ v.dur }}</span></span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px; line-height: 1.15; color: #efe6d3">{{ v.n }}</span></a></sc-for>
+</div>
+</section>
+</sc-if>
+<sc-if value="{{ showG }}" hint-placeholder-val="{{ false }}">
+<section style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">Ajuda e informação</span>
+<div style="display: flex; flex-direction: column; border-top: 1px solid rgba(228,220,203,.12)"><sc-for list="{{ pages }}" as="x" hint-placeholder-count="2"><a href="{{ x.href }}" style="display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(228,220,203,.12); font-size: 21px" style-hover="color: #d9b36c">{{ x.n }}<span style="color: #d9b36c">→</span></a></sc-for></div>
+</section>
+</sc-if>
+</div>
+</sc-if>
+</main>
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #e4dccb; color: #09080a; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;q&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Revisão&quot;}}">
+class Component extends DCLogic {
+  state = { narrow: false, hNarrow: false, menuOpen: false, cartN: 0, toast: '', q: '', tab: 0 };
+  P = [['Vela de Intenção', 14, 'candle', 'Prosperidade e caminhos abertos', 'vela verde rosa prosperidade amor'], ['Óleo Lua Negra', 18, 'oil', 'Proteção e corte de laços', 'oleo proteção'], ['Ametista Bruta', 26, 'crystal', 'Intuição e sono tranquilo', 'cristal pedra sono sonhos'], ['Amuleto Crescente', 32, 'amulet', 'Proteção em viagem', 'amuleto proteção viagem'], ['Kit Lua Cheia', 38, 'moon', 'Limpeza e gratidão', 'kit lua cheia ritual limpeza'], ['Molho de Sálvia', 9, 'sage', 'Limpeza de espaços', 'salvia ervas limpeza defumação casa'], ['Tarot da Casa', 42, 'tarot', 'Adivinhação e clareza', 'tarot cartas baralho'], ['Grimório em Branco', 48, 'grimoire', 'Registo de feitiços', 'caderno grimorio'], ['Óleo Rosa e Canela', 16, 'oil', 'Amor-próprio e atração', 'oleo amor'], ['Quartzo Rosa', 22, 'crystal', 'Amor e ternura', 'cristal amor pedra'], ['Vela Negra de Proteção', 12, 'candle', 'Proteção da casa', 'vela proteção casa'], ['Ervas de Abundância', 11, 'sage', 'Prosperidade e fartura', 'ervas prosperidade trabalho'], ['Kit Samhain', 44, 'moon', 'Honrar os antepassados', 'kit samhain sabbat outubro']];
+  S = [['Tarot · Três cartas', '30 min · 35,00 €', 'tarot cartas leitura pergunta'], ['Tarot · Leitura completa', '60 ou 90 min · desde 60,00 €', 'tarot cruz celta leitura amor trabalho'], ['Baralho Cigano', '45 min · 45,00 €', 'baralho cigano cartas leitura'], ['Trabalhos espirituais', 'Primeira conversa gratuita', 'trabalhos proteção amor caminhos limpeza']];
+  V = [['Ritual de lua cheia para gratidão', '18:42', 'moon', 'lua cheia ritual gratidão'], ['Como limpar a casa com sálvia', '12:05', 'sage', 'salvia limpeza casa defumação ervas'], ['Tiragem de Samhain ao vivo', '54:10', 'tarot', 'samhain tarot sabbat'], ['As 22 cartas dos Arcanos Maiores', '41:30', 'tarot', 'tarot cartas arcanos'], ['Vela de proteção para a casa nova', '15:20', 'candle', 'vela proteção casa'], ['Lua nova: escrever intenções', '10:48', 'grimoire', 'lua nova intenções'], ['Ametista: limpar e carregar cristais', '09:15', 'crystal', 'ametista cristais limpeza'], ['Amuletos para viagem', '13:02', 'amulet', 'amuleto proteção viagem'], ['Ervas de abundância para o trabalho', '11:37', 'sage', 'ervas prosperidade trabalho']];
+  G = [['Envios e prazos', 'Legal.dc.html#devolucoes', 'envio portes ctt prazo madeira açores entrega'], ['Trocas e devoluções', 'Legal.dc.html#devolucoes', 'devolução troca reembolso'], ['Perguntas frequentes', 'Legal.dc.html#faq', 'faq perguntas ajuda'], ['Contactos e horário', 'Contactos.dc.html', 'contacto morada horário whatsapp telefone'], ['A Casa e o Zé', 'Casa.dc.html', 'zé casa sobre quem']];
+  POP = ['Proteção', 'Lua cheia', 'Tarot', 'Sálvia', 'Amor', 'Vale de oferta'];
+  componentDidMount() {
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    try { const l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); this.setState({ cartN: l && l.cart ? l.cart.reduce((a, c) => a + c.qty, 0) : 0 }); } catch (e) {}
+    let q = ''; try { q = new URLSearchParams(location.search).get('q') || ''; } catch (e) {}
+    this.setState({ q: q || this.props.q || '' });
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); }
+  componentDidUpdate(pp) { if (pp.q !== this.props.q) this.setState({ q: this.props.q || '' }); }
+  _cv = {};
+  cv(slot, draw, seed) { const k = slot + '|' + draw + '|' + seed; return this._cv[k] || (this._cv[k] = (el) => { if (!el) return; const go = () => window.CovilArt.paint(el, draw, seed); window.CovilArt ? go() : window.addEventListener('covilart', go, { once: true }); }); }
+  norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  say(t) { clearTimeout(this._tt); this.setState({ toast: t }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+  renderVals() {
+    const s = this.state, q = this.norm(s.q.trim()), words = q.split(/\s+/).filter(Boolean);
+    const hit = (txt) => words.length > 0 && words.every(w => this.norm(txt).includes(w));
+    const prods = this.P.map((p, i) => ({ p, i })).filter(x => hit(x.p[0] + ' ' + x.p[3] + ' ' + x.p[4])).map(({ p, i }) => ({ n: p[0], sub: p[3], price: p[1].toFixed(2).replace('.', ',') + ' €', cv: this.cv('p', p[2], 100 + i) }));
+    const svcs = this.S.filter(x => hit(x[0] + ' ' + x[2])).map(x => ({ n: x[0], sub: x[1] }));
+    const vids = this.V.map((v, i) => ({ v, i })).filter(x => hit(x.v[0] + ' ' + x.v[3])).map(({ v, i }) => ({ n: v[0], dur: v[1], cv: this.cv('v', v[2], 301 + i) }));
+    const pages = this.G.filter(x => hit(x[0] + ' ' + x[2])).map(x => ({ n: x[0], href: x[1] }));
+    const total = prods.length + svcs.length + vids.length + pages.length, t = s.tab;
+    const tabs = [['Tudo', total], ['Loja', prods.length], ['Consultas', svcs.length], ['Grimório', vids.length], ['Ajuda', pages.length]].map(([label, n], k) => ({ label, n: String(n), go: () => this.setState({ tab: k }), fg: k === t ? '#efe6d3' : '#a9a0b2', bd: k === t ? '#d9b36c' : 'transparent', aria: k === t ? 'true' : 'false' }));
+    return {
+      narrow: s.narrow, wide: !s.narrow, hNarrow: s.hNarrow, hWide: !s.hNarrow, menuOpen: s.menuOpen && s.hNarrow, toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })), cartN: String(s.cartN),
+      q: s.q, onQ: (e) => { const v = e.target.value; this.setState({ q: v, tab: 0 }); try { history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); } catch (er) {} },
+      clearQ: () => this.setState({ q: '', tab: 0 }), hasQ: !!q, noQ: !q,
+      pop: this.POP.map(p => ({ label: p, go: () => this.setState({ q: p, tab: 0 }) })),
+      tabs, total: String(total), qShown: s.q.trim(), none: !!q && total === 0, some: total > 0,
+      showP: prods.length > 0 && (t === 0 || t === 1), showS: svcs.length > 0 && (t === 0 || t === 2), showV: vids.length > 0 && (t === 0 || t === 3), showG: pages.length > 0 && (t === 0 || t === 4),
+      prods, svcs, vids, pages,
+      toast: s.toast, toastOp: s.toast ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

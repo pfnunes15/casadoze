@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#09080a}
+body{margin:0;background:#09080a;color:#e4dccb;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#e4dccb;text-decoration:none}a:hover{color:#d9b36c}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:1px solid #d9b36c;outline-offset:3px}
+input::placeholder{color:#7d7682}
+::selection{background:#7b4fb8;color:#fff}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #09080a; color: #e4dccb; overflow-x: clip">
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(9,8,10,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px">Menu</button></sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap"><a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Loja</a><a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Grimório</a><a href="Casa.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid #d9b36c; padding-bottom: 3px" style-hover="color: #d9b36c">Contactos</a></nav></sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98"><img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain"><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if></a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center">
+<a href="Pesquisa.dc.html" aria-label="Pesquisar" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></a>
+<a href="Conta.dc.html" aria-label="Conta" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg></a>
+<a href="Loja.dc.html" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6); color: #e4dccb"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span>Carrinho</span></sc-if><b style="font-weight: 500; color: #d9b36c">{{ cartN }}</b></a>
+</div>
+</div>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px"><a href="Loja.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Loja</a><a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Grimório</a><a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #d9b36c">Contactos</a></nav></sc-if>
+</header>
+<main data-screen-label="Contactos" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 56px clamp(20px, 3vw, 40px) 130px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; gap: 20px; max-width: 720px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>Fala com a Casa</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(56px, 8vw, 104px); line-height: .92; letter-spacing: .02em; color: #efe6d3">Contactos</h1>
+<p style="margin: 0; font-size: 22px; line-height: 1.5; color: #cfc6b5">Respondemos em até um dia útil. Para o que é urgente no próprio dia, usa o WhatsApp.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px; margin-top: 44px">
+<a href="Conta.dc.html" style="display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 14px; align-items: center; padding: 18px 20px; border: 1px solid rgba(228,220,203,.14); font-size: 19px" style-hover="border-color: rgba(217,179,108,.55); color: #e4dccb"><svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex: none"><path d="M3 8l9-5 9 5v8l-9 5-9-5z M3 8l9 5 9-5 M12 13v8" fill="none" stroke="#d9b36c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Seguir uma encomenda<span style="color: #d9b36c">→</span></a>
+<a href="Conta.dc.html" style="display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 14px; align-items: center; padding: 18px 20px; border: 1px solid rgba(228,220,203,.14); font-size: 19px" style-hover="border-color: rgba(217,179,108,.55); color: #e4dccb"><svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex: none"><path d="M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4" fill="none" stroke="#d9b36c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Remarcar uma consulta<span style="color: #d9b36c">→</span></a>
+<a href="Legal.dc.html#devolucoes" style="display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 14px; align-items: center; padding: 18px 20px; border: 1px solid rgba(228,220,203,.14); font-size: 19px" style-hover="border-color: rgba(217,179,108,.55); color: #e4dccb"><svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex: none"><path d="M8 16a7 7 0 1 1 2 4 M8 9v7h7" fill="none" stroke="#d9b36c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Trocas e devoluções<span style="color: #d9b36c">→</span></a>
+<a href="Legal.dc.html#faq" style="display: grid; grid-template-columns: 22px minmax(0,1fr) auto; gap: 14px; align-items: center; padding: 18px 20px; border: 1px solid rgba(228,220,203,.14); font-size: 19px" style-hover="border-color: rgba(217,179,108,.55); color: #e4dccb"><svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex: none"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14 M12 17h.01" fill="none" stroke="#d9b36c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Perguntas frequentes<span style="color: #d9b36c">→</span></a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: clamp(32px, 5vw, 72px); align-items: start; margin-top: 64px">
+<div style="display: flex; flex-direction: column; gap: 22px; padding: clamp(22px, 3vw, 40px); border: 1px solid rgba(217,179,108,.25); background: #0d0a11">
+<sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 32px; color: #efe6d3">Escreve-nos</span>
+<div style="display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Sobre</span><div style="display: flex; flex-wrap: wrap; gap: 8px"><sc-for list="{{ topics }}" as="t" hint-placeholder-count="5"><button type="button" onClick="{{ t.go }}" aria-pressed="{{ t.aria }}" style="padding: 8px 15px; border-radius: 999px; font-size: 18px; border: 1px solid {{ t.bd }}; background: {{ t.bg }}; color: {{ t.fg }}" style-hover="border-color: rgba(217,179,108,.6)">{{ t.label }}</button></sc-for></div></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Nome</span><input type="text" autocomplete="name" style="width: 100%; box-sizing: border-box; min-width: 0; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 20px; color: #efe6d3" style-focus="border-color: #d9b36c; outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Email</span><input type="email" autocomplete="email" style="width: 100%; box-sizing: border-box; min-width: 0; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 20px; color: #efe6d3" style-focus="border-color: #d9b36c; outline: none"></label>
+</div>
+<sc-if value="{{ showOrder }}" hint-placeholder-val="{{ true }}"><label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Número da encomenda</span><input type="text" placeholder="CZ-00000" style="width: 100%; box-sizing: border-box; min-width: 0; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 20px; color: #efe6d3; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px; letter-spacing: .1em" style-focus="border-color: #d9b36c; outline: none"></label></sc-if>
+<sc-if value="{{ showCons }}" hint-placeholder-val="{{ false }}"><span style="font-size: 17px; font-style: italic; color: #a9a0b2">Para marcar, remarcar ou cancelar é mais rápido pela <a href="Consultas.dc.html" style="color: #d9b36c">página das consultas</a> ou pela tua conta.</span></sc-if>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Mensagem</span><textarea rows="6" placeholder="Conta-nos em que te podemos ajudar." style="width: 100%; box-sizing: border-box; min-width: 0; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 20px; color: #efe6d3; height: auto; padding: 14px 16px; resize: vertical; line-height: 1.45; font-family: inherit" style-focus="border-color: #d9b36c; outline: none"></textarea></label>
+<button type="button" role="checkbox" aria-checked="{{ ckAria }}" onClick="{{ toggleConsent }}" style="display: flex; align-items: flex-start; gap: 12px; text-align: left; font-size: 17px; line-height: 1.4; color: {{ ckFg }}"><span style="margin-top: 3px; flex: none; width: 18px; height: 18px; box-sizing: border-box; border: 1px solid {{ ckBd }}; background: {{ ckBg }}; display: grid; place-items: center; color: #09080a; font-size: 12px">{{ ck }}</span><span>Aceito que a Casa use estes dados para responder, como descrito na <a href="Legal.dc.html#privacidade" style="color: #d9b36c">política de privacidade</a>.</span></button>
+<button type="button" onClick="{{ send }}" style="height: 58px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Enviar mensagem</button>
+</sc-if>
+<sc-if value="{{ isSent }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding: 20px 0">
+<svg viewBox="0 0 80 80" style="width: 72px; height: 72px"><circle cx="40" cy="40" r="36" fill="none" stroke="rgba(217,179,108,.35)" stroke-width="1"></circle><path d="M52 12 A30 30 0 1 0 68 58 A24 24 0 1 1 52 12Z" fill="#e8cf98"></path></svg>
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; line-height: 1.1; color: #efe6d3">Mensagem recebida</span>
+<span style="font-size: 20px; line-height: 1.5; color: #cfc6b5">Obrigado por escreveres sobre {{ topicLabel }}. Enviámos uma cópia para o teu email e respondemos em até um dia útil.</span>
+<button type="button" onClick="{{ again }}" style="padding: 13px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb" style-hover="border-color: #d9b36c">Escrever outra mensagem</button>
+</div>
+</sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px">
+<button type="button" onClick="{{ wa }}" style="display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 20px 22px; text-align: left; border: 1px solid rgba(142,156,120,.45); background: rgba(142,156,120,.07)" style-hover="background: rgba(142,156,120,.14)">
+<span style="width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(169,184,146,.6)"><svg viewBox="0 0 24 24" style="width: 22px; height: 22px"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z M9 9.5c.3 2.3 2.2 4.2 4.5 4.5l1-1.2 2 1-.4 1.6c-3.6.2-7.1-3.3-6.9-6.9l1.6-.4 1 2z" fill="none" stroke="#a9b892" stroke-width="1.3" stroke-linejoin="round"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">WhatsApp</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: #a9b892">+351 [9xx xxx xxx]</span></span>
+<span style="color: #a9b892; font-size: 20px">→</span>
+</button>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: rgba(228,220,203,.12); border: 1px solid rgba(228,220,203,.12)">
+<div style="background: #09080a; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Email</span><a href="mailto:ola@casadeze.pt" style="font-size: 20px">ola@casadeze.pt</a></div>
+<div style="background: #09080a; padding: 20px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Telefone</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px">+351 [2xx xxx xxx]</span><span style="font-size: 14px; font-style: italic; color: #8c8591">Chamada para a rede fixa nacional</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 22px; border: 1px solid rgba(228,220,203,.14)">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 26px; color: #efe6d3">A Casa</span><span style="display: inline-flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: {{ openFg }}"><i style="width: 7px; height: 7px; border-radius: 50%; background: {{ openDot }}"></i>{{ openLabel }}</span></div>
+<span style="font-size: 20px; line-height: 1.45; color: #e4dccb">[Rua e número]<br>[Código postal] [Localidade]</span>
+<button type="button" onClick="{{ map }}" style="position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; border: 1px dashed rgba(217,179,108,.35); background: radial-gradient(ellipse at 50% 50%, rgba(123,79,184,.16), transparent 70%), #0e0b12" style-hover="border-color: rgba(217,179,108,.7)"><span style="display: flex; flex-direction: column; align-items: center; gap: 10px"><svg viewBox="0 0 24 24" style="width: 30px; height: 30px"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="#d9b36c" stroke-width="1.3"></path></svg><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">[Mapa] · Abrir no Google Maps</span></span></button>
+<div style="display: flex; flex-direction: column">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; padding-bottom: 8px">Horário da loja</span>
+<sc-for list="{{ hours }}" as="h" hint-placeholder-count="7"><div style="display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid rgba(228,220,203,.08); font-size: 18px"><span style="display: flex; align-items: center; gap: 10px; font-weight: {{ h.fw }}; color: {{ h.fg }}">{{ h.day }}<span style="display: {{ h.markOn }}; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: #d9b36c">{{ h.mark }}</span></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: {{ h.fg }}">{{ h.t }}</span></div></sc-for>
+<span style="padding-top: 12px; font-size: 15.5px; font-style: italic; color: #8c8591">As consultas presenciais são sempre com marcação.</span>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px"><a href="#" style="padding: 11px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb" style-hover="border-color: #d9b36c; color: #e4dccb">YouTube</a><a href="#" style="padding: 11px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb" style-hover="border-color: #d9b36c; color: #e4dccb">Instagram</a><a href="#" style="padding: 11px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb" style-hover="border-color: #d9b36c; color: #e4dccb">Facebook</a></div>
+</div>
+</div>
+</main>
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #e4dccb; color: #09080a; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;sent&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Revisão&quot;}}">
+class Component extends DCLogic {
+  state = { narrow: false, hNarrow: false, menuOpen: false, cartN: 0, toast: '', topic: 0, sent: false, consent: false, err: false };
+  TOPICS = ['Uma encomenda', 'Uma consulta', 'Trabalhos espirituais', 'Imprensa e parcerias', 'Outro assunto'];
+  componentDidMount() {
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    try { const l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); this.setState({ cartN: l && l.cart ? l.cart.reduce((a, c) => a + c.qty, 0) : 0 }); } catch (e) {}
+    if (this.props.sent) this.setState({ sent: true });
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); }
+  componentDidUpdate(pp) { if (pp.sent !== this.props.sent) this.setState({ sent: !!this.props.sent }); }
+  say(t) { clearTimeout(this._tt); this.setState({ toast: t }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+  renderVals() {
+    const s = this.state, d = new Date(), dow = (d.getDay() + 6) % 7, hr = d.getHours() + d.getMinutes() / 60;
+    const H = [['Segunda', '14:30 – 19:00', 14.5, 19], ['Terça', '10:00 – 19:00', 10, 19], ['Quarta', '10:00 – 19:00', 10, 19], ['Quinta', '10:00 – 19:00', 10, 19], ['Sexta', '10:00 – 19:00', 10, 19], ['Sábado', '10:00 – 14:00', 10, 14], ['Domingo', 'Fechado', 0, 0]];
+    const openNow = hr >= H[dow][2] && hr < H[dow][3];
+    return {
+      narrow: s.narrow, wide: !s.narrow, hNarrow: s.hNarrow, hWide: !s.hNarrow, menuOpen: s.menuOpen && s.hNarrow, toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })), cartN: String(s.cartN),
+      topics: this.TOPICS.map((t, k) => ({ label: t, go: () => this.setState({ topic: k }), bd: k === s.topic ? '#d9b36c' : 'rgba(228,220,203,.18)', bg: k === s.topic ? 'rgba(217,179,108,.12)' : 'transparent', fg: k === s.topic ? '#efe6d3' : '#cfc6b5', aria: k === s.topic ? 'true' : 'false' })),
+      showOrder: s.topic === 0, showCons: s.topic === 1,
+      ckBd: s.consent ? '#d9b36c' : s.err ? '#e0863c' : 'rgba(228,220,203,.35)', ckBg: s.consent ? '#d9b36c' : 'transparent', ck: s.consent ? '✓' : '', ckAria: s.consent ? 'true' : 'false', ckFg: !s.consent && s.err ? '#e8b48a' : '#cfc6b5',
+      toggleConsent: () => this.setState(x => ({ consent: !x.consent, err: false })),
+      send: () => { if (!s.consent) { this.setState({ err: true }); this.say('Falta aceitar a política de privacidade'); return; } this.setState({ sent: true }); window.scrollTo({ top: 0, behavior: 'smooth' }); },
+      notSent: !s.sent, isSent: s.sent, again: () => this.setState({ sent: false, consent: false }),
+      topicLabel: this.TOPICS[s.topic].toLowerCase(),
+      hours: H.map(([day, t], k) => ({ day, t, fw: k === dow ? '500' : '400', fg: k === dow ? '#efe6d3' : '#bdb4c4', mark: k === dow ? 'Hoje' : '', markOn: k === dow ? 'inline-block' : 'none' })),
+      openLabel: openNow ? 'Aberto agora' : 'Fechado agora', openFg: openNow ? '#a9b892' : '#e8b48a', openDot: openNow ? '#8e9c78' : '#e0863c',
+      wa: () => this.say('Abre o WhatsApp'), map: () => this.say('Abre o Google Maps'),
+      toast: s.toast, toastOp: s.toast ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

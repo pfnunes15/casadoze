@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#09080a}
+body{margin:0;background:#09080a;color:#e4dccb;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#e4dccb;text-decoration:none}a:hover{color:#d9b36c}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:1px solid #d9b36c;outline-offset:3px}
+input::placeholder{color:#7d7682}
+::selection{background:#7b4fb8;color:#fff}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #09080a; color: #e4dccb; overflow-x: clip">
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(9,8,10,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px">Menu</button></sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap"><a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Loja</a><a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid #d9b36c; padding-bottom: 3px" style-hover="color: #d9b36c">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Grimório</a><a href="Casa.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Contactos</a></nav></sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98"><img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain"><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if></a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center">
+<a href="Pesquisa.dc.html" aria-label="Pesquisar" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></a>
+<a href="Conta.dc.html" aria-label="Conta" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg></a>
+<a href="Loja.dc.html" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6); color: #e4dccb"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span>Carrinho</span></sc-if><b style="font-weight: 500; color: #d9b36c">{{ cartN }}</b></a>
+</div>
+</div>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px"><a href="Loja.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Loja</a><a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #d9b36c">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Grimório</a><a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Contactos</a></nav></sc-if>
+</header>
+<main data-screen-label="Sala" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 56px clamp(20px, 3vw, 40px) 130px; box-sizing: border-box">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: clamp(28px, 4vw, 64px); align-items: end">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>Quem lê as cartas na Casa</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(64px, 9vw, 124px); line-height: .9; letter-spacing: .02em; color: #efe6d3">A Sala</h1>
+</div>
+<p style="margin: 0; font-size: 22px; line-height: 1.5; color: #cfc6b5; max-width: 46ch">A equipa de tarólogas e cartomantes da Casa de Zé. Cada uma tem o seu baralho e a sua forma de ler. Escolhe com quem te queres sentar à mesa, ou deixa a Casa escolher por ti.</p>
+</div>
+
+<div style="position: sticky; top: 68px; z-index: 20; margin: 48px calc(-1 * clamp(20px, 3vw, 40px)) 0; padding: 16px clamp(20px, 3vw, 40px); background: rgba(9,8,10,.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(228,220,203,.10); border-bottom: 1px solid rgba(228,220,203,.10); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none"><span style="flex: none; width: 96px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #a77be0">Especialidade</span><sc-for list="{{ specChips }}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{ c.go }}" aria-pressed="{{ c.aria }}" style="flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid {{ c.bd }}; background: {{ c.bg }}; font-size: 18px; color: {{ c.fg }}; white-space: nowrap" style-hover="border-color: rgba(217,179,108,.6)">{{ c.label }}</button></sc-for></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px">
+<div style="display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; max-width: 100%"><span style="flex: none; width: 96px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #a77be0">Formato</span><sc-for list="{{ fmtChips }}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{ c.go }}" aria-pressed="{{ c.aria }}" style="flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid {{ c.bd }}; background: {{ c.bg }}; font-size: 18px; color: {{ c.fg }}; white-space: nowrap" style-hover="border-color: rgba(217,179,108,.6)">{{ c.label }}</button></sc-for></div>
+<div style="display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; max-width: 100%"><span style="flex: none; width: 96px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #a77be0">Língua</span><sc-for list="{{ langChips }}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{ c.go }}" aria-pressed="{{ c.aria }}" style="flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid {{ c.bd }}; background: {{ c.bg }}; font-size: 18px; color: {{ c.fg }}; white-space: nowrap" style-hover="border-color: rgba(217,179,108,.6)">{{ c.label }}</button></sc-for></div>
+<button type="button" onClick="{{ todayChip.go }}" aria-pressed="{{ todayChip.aria }}" style="flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid {{ todayChip.bd }}; background: {{ todayChip.bg }}; font-size: 18px; color: {{ todayChip.fg }}" style-hover="border-color: rgba(217,179,108,.6)">{{ todayChip.label }}</button>
+</div>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 30px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #a9a0b2">{{ count }}</span><a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5); padding-bottom: 3px">A Casa escolhe por mim →</a></div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: clamp(18px, 2.4vw, 30px); margin-top: 24px">
+<sc-for list="{{ cards }}" as="t" hint-placeholder-count="5">
+<article style="display: flex; flex-direction: column; border: 1px solid rgba(228,220,203,.14); background: #0d0a11; transition: border-color .4s, transform .5s cubic-bezier(.2,.7,.1,1)" style-hover="border-color: rgba(217,179,108,.5); transform: translateY(-4px)">
+<button type="button" onClick="{{ t.open }}" aria-label="Ver perfil de {{ t.n }}" style="position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; background: radial-gradient(ellipse at 50% 30%, rgba(123,79,184,.22), transparent 70%), #110d16">
+<sc-if value="{{ t.hasImg }}" hint-placeholder-val="{{ false }}"><span role="img" aria-label="{{ t.n }}" style="position: absolute; inset: 0; background-image: {{ t.bgImg }}; background-size: cover; background-position: 50% 18%"></span></sc-if>
+<sc-if value="{{ t.noImg }}" hint-placeholder-val="{{ true }}"><span style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; border: 1px dashed rgba(217,179,108,.25); margin: 14px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 96px; line-height: 1; color: transparent; -webkit-text-stroke: 1px {{ t.hue }}">{{ t.ini }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">[Retrato · 4:5]</span></span></sc-if>
+<span style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,10,17,.95), transparent 45%)"></span>
+<span style="position: absolute; left: 16px; top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(9,8,10,.7); backdrop-filter: blur(4px); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: {{ t.availFg }}"><i style="width: 6px; height: 6px; border-radius: 50%; background: {{ t.availDot }}"></i>{{ t.avail }}</span>
+<span style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px; text-align: left"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 32px; line-height: 1; color: #f3ead6">{{ t.n }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: {{ t.hue }}">{{ t.role }}</span></span>
+</button>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 18px; flex: 1">
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{ t.specs }}" as="sp" hint-placeholder-count="2"><span style="padding: 4px 10px; border: 1px solid rgba(228,220,203,.16); font-size: 15.5px; color: #cfc6b5">{{ sp.t }}</span></sc-for></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .1em; color: #a9a0b2"><span><b style="color: #e8cf98; font-weight: 500">★ {{ t.rating }}</b> · {{ t.revs }}</span><span>{{ t.yrs }}</span></div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .1em; color: #8c8591">{{ t.fmts }} · {{ t.langs }}</span>
+<div style="display: flex; gap: 8px; margin-top: auto; padding-top: 6px"><button type="button" onClick="{{ t.book }}" style="flex: 1; height: 46px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Marcar · {{ t.from }}</button><button type="button" onClick="{{ t.open }}" style="flex: none; height: 46px; padding: 0 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25)" style-hover="border-color: #d9b36c">Perfil</button></div>
+</div>
+</article>
+</sc-for>
+</div>
+<sc-if value="{{ none }}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 64px 20px; text-align: center; border: 1px dashed rgba(228,220,203,.18)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 30px; color: #efe6d3">Ninguém com esta combinação</span><button type="button" onClick="{{ clear }}" style="padding: 13px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; background: #d9b36c; color: #09080a">Ver toda a Sala</button></div></sc-if>
+
+<section style="margin-top: 110px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1px; background: rgba(228,220,203,.12); border: 1px solid rgba(228,220,203,.12)">
+<div style="background: #09080a; padding: 28px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #d9b36c">01</span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Escolhidas pelo Zé</span><span style="font-size: 18px; line-height: 1.5; color: #a9a0b2">Todas leram à mesa com o Zé antes de entrarem na Sala.</span></div>
+<div style="background: #09080a; padding: 28px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #d9b36c">02</span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">As mesmas regras</span><span style="font-size: 18px; line-height: 1.5; color: #a9a0b2">Preço fechado, sem promessas de resultado e remarcação livre até 24 h antes.</span></div>
+<div style="background: #09080a; padding: 28px; display: flex; flex-direction: column; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #d9b36c">03</span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Muda quando quiseres</span><span style="font-size: 18px; line-height: 1.5; color: #a9a0b2">Podes voltar à mesma pessoa ou experimentar outra leitura.</span></div>
+</section>
+</main>
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #e4dccb; color: #09080a; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+
+<div onClick="{{ close }}" style="position: fixed; inset: 0; z-index: 80; background: rgba(5,4,6,.62); backdrop-filter: blur(3px); transition: opacity .45s; opacity: {{ pOv }}; pointer-events: {{ pPe }}"></div>
+<aside aria-label="Perfil" style="position: fixed; top: 0; right: 0; bottom: 0; z-index: 81; width: min(560px, 100vw); box-sizing: border-box; background: #0d0a11; border-left: 1px solid rgba(217,179,108,.25); box-shadow: -40px 0 80px -30px rgba(0,0,0,.9); display: flex; flex-direction: column; transition: transform .55s cubic-bezier(.2,.7,.1,1); transform: {{ pTf }}">
+<div style="flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(217,179,108,.4) transparent">
+<div style="position: relative; aspect-ratio: 16 / 11; overflow: hidden; background: radial-gradient(ellipse at 50% 30%, rgba(123,79,184,.24), transparent 70%), #110d16">
+<sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><span role="img" aria-label="{{ p.n }}" style="position: absolute; inset: 0; background-image: {{ p.bgImg }}; background-size: cover; background-position: 50% 20%"></span></sc-if>
+<sc-if value="{{ p.noImg }}" hint-placeholder-val="{{ true }}"><span style="position: absolute; inset: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; border: 1px dashed rgba(217,179,108,.25)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 110px; line-height: 1; color: transparent; -webkit-text-stroke: 1px {{ p.hue }}">{{ p.ini }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">[Retrato]</span></span></sc-if>
+<span style="position: absolute; inset: 0; background: linear-gradient(to top, #0d0a11, transparent 55%)"></span>
+<button type="button" onClick="{{ close }}" aria-label="Fechar" style="position: absolute; top: 18px; right: 18px; width: 40px; height: 40px; border-radius: 50%; background: rgba(9,8,10,.6); backdrop-filter: blur(6px); border: 1px solid rgba(228,220,203,.25)" style-hover="border-color: #d9b36c">✕</button>
+<span style="position: absolute; left: 28px; right: 28px; bottom: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: {{ p.hue }}">{{ p.role }}</span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 48px; line-height: 1; color: #f3ead6">{{ p.n }}</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 26px; padding: 22px 28px 30px">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .1em; color: #a9a0b2"><span><b style="color: #e8cf98; font-weight: 500">★ {{ p.rating }}</b> · {{ p.revs }}</span><span>{{ p.yrs }}</span><span>{{ p.fmts }}</span><span>{{ p.langs }}</span></div>
+<p style="margin: 0; font-size: 23px; line-height: 1.45; font-style: italic; color: #ece3d0">“{{ p.quote }}”</p>
+<p style="margin: 0; font-size: 19px; line-height: 1.55; color: #bdb4c4">{{ p.bio }}</p>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: rgba(228,220,203,.12); border: 1px solid rgba(228,220,203,.12)">
+<div style="background: #0d0a11; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Baralho</span><span style="font-size: 18px; color: #efe6d3">{{ p.deck }}</span></div>
+<div style="background: #0d0a11; padding: 16px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Signo</span><span style="font-size: 18px; color: #efe6d3">{{ p.sign }}</span></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><sc-for list="{{ p.specs }}" as="sp" hint-placeholder-count="2"><span style="padding: 5px 11px; border: 1px solid rgba(228,220,203,.18); font-size: 16px; color: #cfc6b5">{{ sp.t }}</span></sc-for></div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">Próximas vagas</span>
+<sc-if value="{{ p.hasSlots }}" hint-placeholder-val="{{ true }}"><div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px"><sc-for list="{{ p.slots }}" as="x" hint-placeholder-count="4"><button type="button" onClick="{{ x.go }}" style="height: 48px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; border: 1px solid rgba(228,220,203,.22); color: #efe6d3" style-hover="border-color: #d9b36c; background: rgba(217,179,108,.08)">{{ x.label }}</button></sc-for></div></sc-if>
+<sc-if value="{{ p.noSlots }}" hint-placeholder-val="{{ false }}"><span style="font-size: 18px; font-style: italic; color: #a9a0b2">Agenda cheia esta semana. Vê as semanas seguintes ao marcar.</span></sc-if>
+</div>
+<div style="display: flex; flex-direction: column; border-top: 1px solid rgba(228,220,203,.12)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0; padding: 18px 0 6px">Leituras</span>
+<sc-for list="{{ p.services }}" as="v" hint-placeholder-count="2"><div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(228,220,203,.08)"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 20px; color: #efe6d3">{{ v.n }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; color: #8c8591">{{ v.d }}</span></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: #e8cf98">{{ v.pr }}</span></div></sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">Quem já se sentou com {{ p.n }}</span>
+<sc-for list="{{ p.reviews }}" as="r" hint-placeholder-count="2"><figure style="margin: 0; padding: 16px 18px; border: 1px solid rgba(228,220,203,.12); display: flex; flex-direction: column; gap: 8px"><span style="font-size: 18px; line-height: 1.45; font-style: italic; color: #d6cebd">“{{ r.t }}”</span><figcaption style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8c8591">{{ r.w }}</figcaption></figure></sc-for>
+</div>
+</div>
+</div>
+<div style="flex: none; padding: 16px 28px 20px; border-top: 1px solid rgba(228,220,203,.12); background: #0d0a11; display: flex; gap: 10px">
+<button type="button" onClick="{{ p.book }}" style="flex: 1; height: 54px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Marcar com {{ p.n }} · {{ p.from }}</button>
+</div>
+</aside>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;open&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Revisão&quot;}}">
+class Component extends DCLogic {
+  state = { narrow: false, hNarrow: false, menuOpen: false, cartN: 0, toast: '', sel: null, fSpec: -1, fFmt: -1, fLang: -1, today: false, now: Date.now() };
+  SPECS = ['Tarot', 'Baralho Cigano', 'Amor e relações', 'Trabalho e caminhos', 'Espiritualidade', 'Mediunidade'];
+  FMTS = ['Online', 'Presencial', 'Gravada'];
+  LANGS = ['Português', 'Español', 'Français', 'English'];
+  T = [
+    { id: 'ze', n: 'Zé', role: 'Fundador da Casa', img: 'assets/ze-retrato-2.png', yrs: 20, specs: [0, 1, 4], fmts: [0, 1, 2], langs: [0, 1], rating: 4.9, revs: 212, from: 35, sign: 'Escorpião', deck: 'Tarot da Casa e Baralho Cigano', quote: '[Frase do Zé sobre a forma como lê as cartas.]', bio: 'Abriu a Casa e é quem prepara os trabalhos espirituais. Lê com calma e diz o que vê, sem rodeios.', slots: [1, 3], hue: '#d9b36c' },
+    { id: 'helena', n: '[Helena]', role: 'Taróloga', yrs: 12, specs: [0, 2], fmts: [0, 2], langs: [0, 3], rating: 4.8, revs: 134, from: 35, sign: 'Peixes', deck: 'Rider-Waite-Smith', quote: '[Frase da taróloga.]', bio: '[Percurso: há quantos anos lê, como chegou ao tarot, o que mais gosta de trabalhar.]', slots: [0, 2], hue: '#a77be0' },
+    { id: 'marisa', n: '[Marisa]', role: 'Taróloga e médium', yrs: 15, specs: [0, 5, 4], fmts: [0, 1], langs: [0], rating: 4.9, revs: 98, from: 45, sign: 'Caranguejo', deck: 'Tarot de Marselha', quote: '[Frase da taróloga.]', bio: '[Percurso: formação, especialidade em mediunidade, como conduz a consulta.]', slots: [2], hue: '#5fb0c9' },
+    { id: 'ines', n: '[Inês]', role: 'Cartomante', yrs: 8, specs: [1, 3], fmts: [0, 2], langs: [0, 1, 2], rating: 4.7, revs: 76, from: 35, sign: 'Virgem', deck: 'Baralho Cigano', quote: '[Frase da cartomante.]', bio: '[Percurso: como aprendeu o Baralho Cigano, para quem são as suas leituras.]', slots: [0, 1, 4], hue: '#8fae74' },
+    { id: 'sofia', n: '[Sofia]', role: 'Taróloga', yrs: 6, specs: [0, 2, 3], fmts: [0], langs: [0, 3], rating: 4.8, revs: 51, from: 35, sign: 'Leão', deck: 'Thoth', quote: '[Frase da taróloga.]', bio: '[Percurso: formação, leituras online à noite, áreas preferidas.]', slots: [], hue: '#e0863c' }
+  ];
+  componentDidMount() {
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    try { const l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); this.setState({ cartN: l && l.cart ? l.cart.reduce((a, c) => a + c.qty, 0) : 0 }); } catch (e) {}
+    this._key = (e) => { if (e.key === 'Escape') this.setState({ sel: null }); }; addEventListener('keydown', this._key);
+    let p = null; try { p = new URLSearchParams(location.search).get('t'); } catch (e) {} if (p && this.T.some(t => t.id === p)) this.setState({ sel: p }); else if (this.props.open) this.setState({ sel: 'helena' });
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); removeEventListener('keydown', this._key); }
+  componentDidUpdate(pp) { if (pp.open !== this.props.open) this.setState({ sel: this.props.open ? 'helena' : null }); document.body.style.overflow = this.state.sel ? 'hidden' : ''; }
+  say(t) { clearTimeout(this._tt); this.setState({ toast: t }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+  nextSlots(t) { const base = new Date(this.state.now); const H = ['10:00', '11:30', '14:30', '16:00', '18:00', '21:00']; const out = []; for (let d = 0; d < 6 && out.length < 4; d++) { const day = new Date(base); day.setDate(base.getDate() + d); if (day.getDay() === 0) continue; H.forEach((h, i) => { if (out.length < 4 && ((t.id.length * 7 + d * 3 + i * 5) % 4 === 0) && !(d === 0 && +h.slice(0, 2) <= base.getHours() + 1)) out.push({ d, label: (d === 0 ? 'Hoje' : d === 1 ? 'Amanhã' : new Intl.DateTimeFormat('pt-PT', { weekday: 'short', day: 'numeric' }).format(day).replace('.', '')) + ' · ' + h }); }); } return out; }
+  card(t) {
+    const sl = this.nextSlots(t), todayOn = sl.some(x => x.d === 0);
+    return { id: t.id, n: t.n, role: t.role, hasImg: !!t.img, noImg: !t.img, img: t.img || '', bgImg: t.img ? 'url("' + t.img + '")' : 'none', hue: t.hue, ini: t.n.replace(/[\[\]]/g, '').slice(0, 1),
+      specs: t.specs.map(k => ({ t: this.SPECS[k] })), fmts: t.fmts.map(k => this.FMTS[k]).join(' · '), langs: t.langs.map(k => this.LANGS[k].slice(0, 2).toUpperCase()).join(' '),
+      rating: t.rating.toFixed(1).replace('.', ','), revs: t.revs + ' avaliações', yrs: t.yrs + ' anos a ler', from: 'desde ' + t.from + ' €',
+      avail: todayOn ? 'Disponível hoje' : sl.length ? 'Próxima vaga ' + sl[0].label.toLowerCase() : 'Agenda cheia esta semana', availFg: todayOn ? '#a9b892' : sl.length ? '#e8cf98' : '#a9a0b2', availDot: todayOn ? '#8e9c78' : sl.length ? '#d9b36c' : '#635d68',
+      open: () => this.setState({ sel: t.id }), book: () => { location.href = 'Consultas.dc.html?t=' + t.id; } };
+  }
+  renderVals() {
+    const s = this.state;
+    const list = this.T.filter(t => (s.fSpec < 0 || t.specs.includes(s.fSpec)) && (s.fFmt < 0 || t.fmts.includes(s.fFmt)) && (s.fLang < 0 || t.langs.includes(s.fLang)) && (!s.today || this.nextSlots(t).some(x => x.d === 0)));
+    const chip = (label, on, go) => ({ label, go, bd: on ? '#d9b36c' : 'rgba(228,220,203,.2)', bg: on ? 'rgba(217,179,108,.14)' : 'transparent', fg: on ? '#efe6d3' : '#cfc6b5', aria: on ? 'true' : 'false' });
+    const T = s.sel ? this.T.find(t => t.id === s.sel) : null, sl = T ? this.nextSlots(T) : [];
+    return {
+      narrow: s.narrow, wide: !s.narrow, hNarrow: s.hNarrow, hWide: !s.hNarrow, menuOpen: s.menuOpen && s.hNarrow, toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })), cartN: String(s.cartN),
+      specChips: [chip('Todas', s.fSpec < 0, () => this.setState({ fSpec: -1 })), ...this.SPECS.map((t, k) => chip(t, s.fSpec === k, () => this.setState({ fSpec: s.fSpec === k ? -1 : k })))],
+      fmtChips: this.FMTS.map((t, k) => chip(t, s.fFmt === k, () => this.setState({ fFmt: s.fFmt === k ? -1 : k }))),
+      langChips: this.LANGS.map((t, k) => chip(t, s.fLang === k, () => this.setState({ fLang: s.fLang === k ? -1 : k }))),
+      todayChip: chip('✦ Disponível hoje', s.today, () => this.setState({ today: !s.today })),
+      cards: list.map(t => this.card(t)), none: !list.length, count: list.length + (list.length === 1 ? ' pessoa à mesa' : ' pessoas à mesa'),
+      clear: () => this.setState({ fSpec: -1, fFmt: -1, fLang: -1, today: false }),
+      pOn: !!T, pOv: T ? '1' : '0', pPe: T ? 'auto' : 'none', pTf: T ? 'translateX(0)' : 'translateX(105%)', close: () => this.setState({ sel: null }),
+      p: T ? { ...this.card(T), quote: T.quote, bio: T.bio, sign: T.sign, deck: T.deck, slots: sl.map(x => ({ label: x.label, go: () => { location.href = 'Consultas.dc.html?t=' + T.id; } })), hasSlots: sl.length > 0, noSlots: !sl.length,
+        services: [['Tarot · Três cartas', '30 min', 35], ['Tarot · Leitura completa', '60 min', 60], ['Baralho Cigano', '45 min', 45]].filter((x, i) => T.specs.includes(i === 2 ? 1 : 0)).map(([n, d, pr]) => ({ n, d, pr: (pr + (T.from - 35)).toFixed(2).replace('.', ',') + ' €' })),
+        reviews: [['A leitura foi clara e sem rodeios. Saí com a cabeça arrumada.', 'C. M. · Tarot · Três cartas'], ['Senti-me ouvida desde o primeiro minuto.', 'A. L. · Leitura completa']].map(([t, w]) => ({ t, w })) } : { specs: [], slots: [], services: [], reviews: [] },
+      toast: s.toast, toastOp: s.toast ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

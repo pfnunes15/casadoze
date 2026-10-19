@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#09080a}
+body{margin:0;background:#09080a;color:#e4dccb;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#e4dccb;text-decoration:none}a:hover{color:#d9b36c}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:1px solid #d9b36c;outline-offset:3px}
+input::placeholder{color:#7d7682}
+::selection{background:#7b4fb8;color:#fff}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #09080a; color: #e4dccb; overflow-x: clip">
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(9,8,10,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px">Menu</button></sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap"><a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Loja</a><a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Grimório</a><a href="Casa.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Contactos</a></nav></sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98"><img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain"><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if></a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center">
+<a href="Pesquisa.dc.html" aria-label="Pesquisar" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></a>
+<a href="Conta.dc.html" aria-label="Conta" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg></a>
+<a href="Loja.dc.html" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6); color: #e4dccb"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span>Carrinho</span></sc-if><b style="font-weight: 500; color: #d9b36c">{{ cartN }}</b></a>
+</div>
+</div>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px"><a href="Loja.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Loja</a><a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Grimório</a><a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Contactos</a></nav></sc-if>
+</header>
+<main data-screen-label="Informação legal" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 56px clamp(20px, 3vw, 40px) 130px; box-sizing: border-box">
+<div style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 40px; border-bottom: 1px solid rgba(228,220,203,.12)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>Informação</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(44px, 6vw, 80px); line-height: 1; color: #efe6d3">{{ title }}</h1>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #8c8591">Última atualização · [data]</span>
+</div>
+<div style="display: flex; flex-direction: {{ layoutDir }}; gap: clamp(28px, 5vw, 80px); align-items: flex-start; margin-top: 44px">
+<nav aria-label="Documentos" style="flex: none; width: {{ sideW }}; position: {{ sidePos }}; top: 110px; display: flex; flex-direction: {{ navDir }}; flex-wrap: wrap; gap: {{ navGap }}">
+<sc-for list="{{ docs }}" as="d" hint-placeholder-count="6">
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ d.go }}" aria-current="{{ d.aria }}" style="position: relative; text-align: left; padding: 12px 0 12px 18px; font-size: 20px; color: {{ d.fg }}; border-left: 1px solid rgba(228,220,203,.14)" style-hover="color: #efe6d3"><i style="position: absolute; left: -1px; top: 8px; bottom: 8px; width: 2px; background: {{ d.bar }}"></i>{{ d.t }}</button></sc-if>
+<sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ d.go }}" aria-current="{{ d.aria }}" style="padding: 8px 14px; border-radius: 999px; font-size: 17px; color: {{ d.fg }}; background: {{ d.bg }}; border: 1px solid {{ d.bd }}">{{ d.t }}</button></sc-if>
+</sc-for>
+</nav>
+<article style="flex: 1 1 0; min-width: 0; max-width: 760px; display: flex; flex-direction: column">
+<sc-if value="{{ isText }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ secs }}" as="x" hint-placeholder-count="5">
+<section style="display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 18px; padding: 28px 0; border-bottom: 1px solid rgba(228,220,203,.10)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #d9b36c; padding-top: 8px">{{ x.n }}</span>
+<div style="display: flex; flex-direction: column; gap: 10px"><h2 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 28px; line-height: 1.15; color: #efe6d3">{{ x.h }}</h2><p style="margin: 0; font-size: 20px; line-height: 1.6; color: #cfc6b5; text-wrap: pretty">{{ x.p }}</p></div>
+</section>
+</sc-for>
+</sc-if>
+<sc-if value="{{ isFaq }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; border-top: 1px solid rgba(228,220,203,.14)">
+<sc-for list="{{ faq }}" as="f" hint-placeholder-count="6"><div style="border-bottom: 1px solid rgba(228,220,203,.14)"><button type="button" onClick="{{ f.go }}" aria-expanded="{{ f.open }}" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3" style-hover="color: #d9b36c">{{ f.q }}<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 18px; color: #d9b36c">{{ f.sign }}</span></button><sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}"><p style="margin: 0; padding: 0 0 24px; font-size: 20px; line-height: 1.55; color: #bdb4c4">{{ f.a }}</p></sc-if></div></sc-for>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-top: 40px; padding: 22px 24px; border: 1px solid rgba(228,220,203,.14)"><span style="font-size: 19px; color: #cfc6b5">Ficou alguma dúvida?</span><a href="Contactos.dc.html" style="padding: 13px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb" style-hover="border-color: #d9b36c; color: #e4dccb">Fala com a Casa →</a></div>
+</article>
+</div>
+</main>
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #e4dccb; color: #09080a; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;doc&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;termos&quot;,&quot;privacidade&quot;,&quot;cookies&quot;,&quot;devolucoes&quot;,&quot;faq&quot;,&quot;litigios&quot;],&quot;default&quot;:&quot;termos&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Revisão&quot;}}">
+class Component extends DCLogic {
+  state = { narrow: false, hNarrow: false, menuOpen: false, cartN: 0, toast: '', doc: 'termos', faq: -1 };
+  DOCS = [
+    ['termos', 'Termos e condições', [
+      ['Quem somos', '[Nome da empresa ou empresário], com o NIF [000 000 000] e sede em [morada], explora a loja online e o serviço de consultas Casa de Zé. Contacto: ola@casadeze.pt.'],
+      ['Encomendas', 'A encomenda fica confirmada depois do pagamento. Enviamos a confirmação por email com o resumo, a fatura e, depois do envio, o código de seguimento dos CTT.'],
+      ['Preços e pagamento', 'Os preços incluem IVA à taxa em vigor. Aceitamos MB WAY, Multibanco e cartão. As referências Multibanco são válidas durante 48 horas.'],
+      ['Envios', 'Enviamos por CTT para Portugal Continental, Madeira e Açores, em embalagem discreta. Os prazos e as tarifas estão na página de cada produto e no checkout.'],
+      ['Consultas', 'As consultas são marcadas e pagas online. Podes remarcar ou cancelar sem custo até 24 horas antes. Com menos de 24 horas, podes remarcar uma única vez.'],
+      ['Natureza dos serviços', 'As consultas e os trabalhos espirituais têm natureza espiritual e não substituem aconselhamento médico, psicológico, jurídico ou financeiro. Não garantimos resultados. Os serviços destinam-se a maiores de 18 anos.']
+    ]],
+    ['privacidade', 'Política de privacidade', [
+      ['Responsável pelo tratamento', '[Nome da empresa], NIF [000 000 000]. Para qualquer pedido sobre os teus dados, escreve para privacidade@casadeze.pt.'],
+      ['Que dados recolhemos', 'Nome, email, telemóvel, morada de entrega, NIF para fatura e o histórico de encomendas e consultas. A pergunta que escreves para uma consulta só é lida pelo Zé.'],
+      ['Para quê', 'Para processar encomendas e marcações, emitir faturas, enviar lembretes e, se autorizares, a newsletter. Não vendemos os teus dados.'],
+      ['Durante quanto tempo', 'Enquanto tiveres conta. As faturas são guardadas durante o prazo exigido pela lei fiscal. Os dados da newsletter são apagados quando cancelas a subscrição.'],
+      ['Os teus direitos', 'Podes pedir acesso, correção, portabilidade ou apagamento dos teus dados, na área de cliente ou por email. Podes também apresentar queixa à CNPD.']
+    ]],
+    ['cookies', 'Política de cookies', [
+      ['O que são', 'Pequenos ficheiros guardados no teu navegador para o site funcionar e para percebermos como é usado.'],
+      ['Essenciais', 'Guardam o carrinho, a sessão e a vaga reservada durante o checkout. Estão sempre ativos.'],
+      ['Estatística', 'Contam visitas e páginas vistas, de forma agregada. Só com a tua autorização.'],
+      ['Marketing', 'Permitem mostrar os vídeos do YouTube no Grimório e medir anúncios nas redes sociais. Só com a tua autorização.'],
+      ['Mudar a escolha', 'A qualquer momento, no ícone da lua no canto inferior esquerdo do site.']
+    ]],
+    ['devolucoes', 'Trocas e devoluções', [
+      ['Prazo', 'Tens 14 dias a contar da entrega para devolver um produto, sem precisares de dar motivo.'],
+      ['Condições', 'O produto deve estar por abrir e na embalagem original. Por razões de higiene, ervas abertas, óleos e velas usadas não podem ser devolvidos.'],
+      ['Como devolver', 'Pede a devolução na área de cliente. Enviamos uma etiqueta pré-paga por email e entregas o pacote num Ponto CTT.'],
+      ['Reembolso', 'Reembolsamos no método de pagamento original até 14 dias depois de recebermos o produto.'],
+      ['Consultas', 'Ao marcar, pedes que a consulta aconteça dentro do prazo de livre resolução. Depois de realizada, deixa de ser possível desistir e pedir reembolso.']
+    ]],
+    ['faq', 'Perguntas frequentes', null],
+    ['litigios', 'Resolução de litígios', [
+      ['Livro de Reclamações Eletrónico', 'Podes apresentar reclamação em livroreclamacoes.pt.'],
+      ['Resolução alternativa de litígios', 'Em caso de litígio, podes recorrer a [Entidade RAL], [morada e site da entidade]. Mais informação no Portal do Consumidor, em consumidor.gov.pt.'],
+      ['Plataforma europeia', 'Para compras feitas a partir de outro país da União Europeia, podes usar a plataforma de resolução de litígios em linha da Comissão Europeia.']
+    ]]
+  ];
+  FAQ = [['Quanto tempo demora a encomenda?', 'Preparamos em 24 a 48 horas. Depois, 2 a 4 dias úteis para o Continente e 5 a 8 para a Madeira e os Açores.'], ['A embalagem diz o que vem dentro?', 'Não. A caixa é neutra e o remetente aparece com um nome comercial discreto.'], ['Posso marcar uma consulta para outra pessoa?', 'Sim, com um vale de oferta. Quem o recebe escolhe o formato e a hora.'], ['Fazem consultas para fora de Portugal?', 'Sim, online ou gravadas. As horas são sempre de Lisboa.'], ['Como funcionam os trabalhos espirituais?', 'Começam com uma conversa gratuita de 20 minutos. Depois recebes a proposta por escrito, com o preço fechado, e só avanças se quiseres.'], ['Posso mudar a hora de uma consulta?', 'Sim, na área de cliente, sem custo até 24 horas antes.']];
+  componentDidMount() {
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    try { const l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); this.setState({ cartN: l && l.cart ? l.cart.reduce((a, c) => a + c.qty, 0) : 0 }); } catch (e) {}
+    const hs = () => { const k = location.hash.replace('#', ''); if (this.DOCS.some(d => d[0] === k)) this.setState({ doc: k }); }; hs(); this._hs = hs; addEventListener('hashchange', hs);
+    if (this.props.doc && !location.hash) this.setState({ doc: this.props.doc });
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); removeEventListener('hashchange', this._hs); }
+  componentDidUpdate(pp) { if (pp.doc !== this.props.doc && this.props.doc) this.setState({ doc: this.props.doc }); }
+  renderVals() {
+    const s = this.state, D = this.DOCS.find(d => d[0] === s.doc) || this.DOCS[0];
+    return {
+      narrow: s.narrow, wide: !s.narrow, hNarrow: s.hNarrow, hWide: !s.hNarrow, menuOpen: s.menuOpen && s.hNarrow, toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })), cartN: String(s.cartN),
+      docs: this.DOCS.map(([k, t]) => ({ t, go: () => { this.setState({ doc: k }); try { history.replaceState(null, '', '#' + k); } catch (e) {} window.scrollTo(0, 0); }, fg: k === s.doc ? '#efe6d3' : '#a9a0b2', bar: k === s.doc ? '#d9b36c' : 'transparent', aria: k === s.doc ? 'page' : 'false', bg: k === s.doc ? 'rgba(217,179,108,.12)' : 'transparent', bd: k === s.doc ? '#d9b36c' : 'rgba(228,220,203,.18)' })),
+      title: D[1], isFaq: !D[2], isText: !!D[2], secs: (D[2] || []).map(([h, p], i) => ({ h, p, n: String(i + 1).padStart(2, '0') })),
+      faq: this.FAQ.map(([q, a], j) => ({ q, a, open: s.faq === j, sign: s.faq === j ? '−' : '+', go: () => this.setState(x => ({ faq: x.faq === j ? -1 : j })) })),
+      sideW: s.narrow ? '100%' : '280px', navDir: s.narrow ? 'row' : 'column', navGap: s.narrow ? '8px' : '0', sidePos: s.narrow ? 'static' : 'sticky', layoutDir: s.narrow ? 'column' : 'row',
+      toast: s.toast, toastOp: s.toast ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

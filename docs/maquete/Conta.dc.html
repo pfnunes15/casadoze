@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#f2ebdd}
+body{margin:0;background:#f2ebdd;color:#1c1720;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#1c1720;text-decoration:none}a:hover{color:#7a561a}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input,select,textarea{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #7a561a;outline-offset:3px}
+input::placeholder,textarea::placeholder{color:#8a8290}
+::selection{background:#d9b36c;color:#1c1720}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; display: flex; flex-direction: column; background: #f2ebdd; color: #1c1720; overflow-x: clip">
+
+<header style="position: sticky; top: 0; z-index: 50; background: #09080a; border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px">Menu</button></sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}">
+<nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap">
+<a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Loja</a>
+<a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Sala</a>
+<a href="Grimorio.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Grimório</a>
+<a href="Casa.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a>
+<a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Contactos</a>
+</nav>
+</sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98">
+<img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain">
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if>
+</a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center">
+<button type="button" onClick="{{ goAcc }}" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e8cf98; border: 1px solid rgba(217,179,108,.6); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e8cf98" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg>{{ accLabel }}</button>
+<a href="Loja.dc.html" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6); color: #e4dccb"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><b style="font-weight: 500; color: #d9b36c">{{ cartN }}</b></a>
+</div>
+</div>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px">
+<a href="Loja.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Loja</a>
+<a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Sala</a>
+<a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Grimório</a>
+<a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">A Casa</a>
+<a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Contactos</a>
+</nav>
+</sc-if>
+</header>
+
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Entrar" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr))">
+<div style="display: flex; justify-content: center; align-items: center; padding: clamp(40px, 6vw, 90px) clamp(20px, 4vw, 60px)">
+<div style="width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #5b3a8e">A tua conta</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">{{ authTitle }}</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.45; color: #5f5764">{{ authSub }}</p>
+</div>
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div role="tablist" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 4px; border: 1px solid rgba(28,23,32,.14); background: #fbf8f1">
+<sc-for list="{{ authTabs }}" as="t" hint-placeholder-count="2"><button type="button" role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.go }}" style="padding: 12px 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; background: {{ t.bg }}; color: {{ t.fg }}; transition: background .25s, color .25s">{{ t.label }}</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Email</span><input type="email" autocomplete="email" placeholder="o.teu@email.pt" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="display: flex; justify-content: space-between; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Palavra-passe</span><button type="button" onClick="{{ toForgot }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #7a561a">Esqueci-me</button></span><span style="position: relative; display: block"><input type="{{ pwType }}" autocomplete="current-password" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0; padding-right: 92px" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"><button type="button" onClick="{{ pwToggle }}" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #5f5764">{{ pwLabel }}</button></span></label>
+<button type="button" onClick="{{ doLogin }}" style="height: 56px; margin-top: 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Entrar</button>
+<div style="display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px"><i style="flex: 1; height: 1px; background: rgba(28,23,32,.12)"></i>ou<i style="flex: 1; height: 1px; background: rgba(28,23,32,.12)"></i></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><button type="button" onClick="{{ doLogin }}" style="height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Google</button><button type="button" onClick="{{ doLogin }}" style="height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Apple</button></div>
+<button type="button" onClick="{{ toGuest }}" style="align-self: flex-start; margin-top: 8px; font-size: 18px; color: #5f5764">Compraste sem conta? <span style="color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4)">Encontrar encomenda</span></button>
+</div>
+</sc-if>
+<sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Nome</span><input type="text" autocomplete="given-name" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label><label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Apelido</span><input type="text" autocomplete="family-name" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label></div>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Email</span><input type="email" autocomplete="email" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Palavra-passe</span><input type="password" autocomplete="new-password" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"><span style="font-size: 16px; font-style: italic; color: #5f5764">Pelo menos 8 caracteres.</span></label>
+<label style="display: flex; gap: 12px; align-items: flex-start; font-size: 18px; line-height: 1.4; color: #3d3542"><input type="checkbox" checked="checked" style="margin-top: 5px; width: 17px; height: 17px; accent-color: #1c1720">Quero receber a lua do mês e o Guia do ritual de lua cheia</label>
+<label style="display: flex; gap: 12px; align-items: flex-start; font-size: 18px; line-height: 1.4; color: #3d3542"><input type="checkbox" style="margin-top: 5px; width: 17px; height: 17px; accent-color: #1c1720"><span>Li e aceito os <a href="Legal.dc.html#termos" style="color: #7a561a">Termos</a> e a <a href="#" onClick="{{ soon }}" style="color: #7a561a">Política de privacidade</a></span></label>
+<button type="button" onClick="{{ doSignup }}" style="height: 56px; margin-top: 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Criar conta</button>
+</div>
+</sc-if>
+<sc-if value="{{ isForgot }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Email da conta</span><input type="email" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<button type="button" onClick="{{ doForgot }}" style="height: 56px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Enviar link</button>
+<button type="button" onClick="{{ toLogin }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">← Voltar a entrar</button>
+</div>
+</sc-if>
+<sc-if value="{{ isGuest }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Email usado na compra</span><input type="email" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Número da encomenda</span><input type="text" placeholder="CZ-00000" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px; letter-spacing: .1em" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<button type="button" onClick="{{ doGuest }}" style="height: 56px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Ver encomenda</button>
+<button type="button" onClick="{{ toLogin }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">← Voltar a entrar</button>
+</div>
+</sc-if>
+</div>
+</div>
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<div style="position: relative; overflow: hidden; background: #09080a; min-height: 640px">
+<img src="assets/casa-de-ze.jpg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .75">
+<div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,8,10,.92), rgba(9,8,10,.15) 55%, rgba(9,8,10,.35))"></div>
+<div style="position: absolute; left: clamp(28px, 4vw, 56px); right: clamp(28px, 4vw, 56px); bottom: clamp(32px, 5vw, 64px); display: flex; flex-direction: column; gap: 20px; color: #efe6d3">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(32px, 3vw, 44px); line-height: 1.05; color: #f3ead6">O teu lugar à mesa da Casa</span>
+<div style="display: flex; flex-direction: column; gap: 10px; font-size: 20px; color: #e4dccb">
+<span style="display: flex; gap: 12px"><span style="color: #d9b36c">✦</span>Acompanha encomendas e envios</span>
+<span style="display: flex; gap: 12px"><span style="color: #d9b36c">✦</span>Remarca consultas sem escrever a ninguém</span>
+<span style="display: flex; gap: 12px"><span style="color: #d9b36c">✦</span>Guarda vales de oferta e moradas</span>
+</div>
+</div>
+</div>
+</sc-if>
+</main>
+</sc-if>
+
+<sc-if value="{{ logged }}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1; width: 100%; max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: clamp(28px, 4vw, 48px) clamp(20px, 3vw, 40px) 120px; box-sizing: border-box; display: flex; flex-direction: {{ layoutDir }}; gap: clamp(24px, 4vw, 56px); align-items: stretch">
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<aside style="flex: none; width: 260px; align-self: flex-start; position: sticky; top: 100px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid rgba(28,23,32,.12)">
+<span style="flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: #1c1720; color: #e8cf98; font-family: 'IM Fell English SC', Georgia, serif; font-size: 20px; letter-spacing: .06em">{{ initials }}</span>
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px; color: #1c1720">{{ fullName }}</span><span style="font-size: 16px; color: #5f5764; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ email }}</span></span>
+</div>
+<nav style="display: flex; flex-direction: column; gap: 4px; margin: 0 -14px">
+<sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+<button type="button" onClick="{{ n.go }}" aria-current="{{ n.aria }}" style="position: relative; display: grid; grid-template-columns: 22px minmax(0,1fr) auto; align-items: center; gap: 12px; padding: 12px 14px; text-align: left; font-size: 19px; color: {{ n.fg }}; background: {{ n.bg }}; border: 1px solid {{ n.bd }}; transition: background .2s, color .2s" style-hover="color: #1c1720; background: rgba(251,248,241,.7)">
+<i style="position: absolute; left: -1px; top: 10px; bottom: 10px; width: 2px; background: {{ n.bar }}"></i>
+<svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex: none; color: currentColor"><path d="{{ n.icon }}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>{{ n.label }}</span>
+<span style="display: {{ n.countOn }}; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #d9b36c; color: #1c1720; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px">{{ n.count }}</span>
+</button>
+</sc-for>
+</nav>
+<button type="button" onClick="{{ logout }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin: 0 -14px; font-size: 18px; color: #5f5764; border-top: 1px solid rgba(28,23,32,.12)" style-hover="color: #9b2f2f"><svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex: none; color: currentColor"><path d="{{ outIcon }}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Terminar sessão</button>
+</aside>
+</sc-if>
+<sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+<nav style="display: flex; gap: 6px; overflow-x: auto; margin: 0 calc(-1 * clamp(20px, 3vw, 40px)); padding: 0 clamp(20px, 3vw, 40px) 4px; scrollbar-width: none">
+<sc-for list="{{ navItems }}" as="n" hint-placeholder-count="6">
+<button type="button" onClick="{{ n.go }}" aria-current="{{ n.aria }}" style="flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 14px; white-space: nowrap; font-size: 18px; color: {{ n.fg }}; background: {{ n.bg }}; border: 1px solid {{ n.bd }}; border-radius: 999px"><svg viewBox="0 0 24 24" style="width: 17px; height: 17px; flex: none; color: currentColor"><path d="{{ n.icon }}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>{{ n.label }}<span style="display: {{ n.countOn }}; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 10px; background: #d9b36c; color: #1c1720; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px">{{ n.count }}</span></button>
+</sc-for>
+</nav>
+</sc-if>
+
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column">
+
+<sc-if value="{{ isResumo }}" hint-placeholder-val="{{ true }}">
+<section data-screen-label="Resumo" style="display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 12px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #5b3a8e">{{ todayLabel }}</span><h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">Olá, {{ firstName }}</h1></div>
+<span style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; border: 1px solid rgba(28,23,32,.12); background: #fbf8f1"><svg viewBox="0 0 20 20" style="width: 24px; height: 24px; flex: none"><circle cx="10" cy="10" r="8" fill="none" stroke="#7a561a" stroke-width="1"></circle><path d="{{ luaF }}" fill="#7a561a"></path></svg><span style="display: flex; flex-direction: column"><span style="font-size: 18px; color: #1c1720">{{ luaName }}</span><span style="font-size: 15px; font-style: italic; color: #5f5764">{{ luaTxt }}</span></span></span>
+</div>
+<sc-if value="{{ hasPend }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; padding: 18px 22px; border: 1px solid rgba(163,80,26,.35); background: rgba(163,80,26,.06)">
+<span style="flex: 1 1 320px; font-size: 19px; line-height: 1.4; color: #1c1720"><b style="font-weight: 500; color: #a3501a">A encomenda {{ pend.id }} aguarda pagamento.</b> Referência Multibanco de {{ pend.total }}, válida até {{ pend.until }}.</span>
+<button type="button" onClick="{{ pend.open }}" style="padding: 12px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; border-color: rgba(163,80,26,.5); color: #a3501a" style-hover="background: rgba(163,80,26,.08)">Ver referência</button>
+</div>
+</sc-if>
+<sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+<article style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 0; background: #1c1720; color: #efe6d3; overflow: hidden; box-shadow: 0 30px 60px -34px rgba(28,23,32,.6)">
+<div style="position: relative; min-height: 220px"><canvas ref="{{ next.cv }}" width="600" height="800" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover"></canvas><div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent 40%, #1c1720)"></div></div>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: clamp(22px, 3vw, 34px)">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #c9a7f5">Próxima consulta</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #e8cf98; padding: 5px 9px; border: 1px solid rgba(217,179,108,.5)">{{ next.countdown }}</span></div>
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: clamp(30px, 3vw, 40px); line-height: 1.05; color: #f3ead6">{{ next.name }}</span>
+<span style="font-size: 21px; color: #e4dccb">{{ next.when }}</span>
+<span style="display: flex; align-items: center; gap: 9px; font-size: 18px; color: #bdb4c4"><svg viewBox="0 0 24 24" style="width: 18px; height: 18px; flex: none; color: #d9b36c"><path d="{{ next.icon }}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>{{ next.fmtLabel }} · {{ next.place }}</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px">
+<sc-if value="{{ next.isOnline }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ next.join }}" style="padding: 14px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #09080a; background: #d9b36c; opacity: {{ next.joinDarkOp }}; cursor: {{ next.joinCur }}">{{ next.joinLabel }}</button></sc-if>
+<sc-if value="{{ next.isCasa }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ next.map }}" style="padding: 14px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; background: #d9b36c; color: #09080a">Como chegar</button></sc-if>
+<button type="button" onClick="{{ next.resch }}" style="padding: 14px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.3); color: #efe6d3" style-hover="border-color: #d9b36c">Remarcar</button>
+<button type="button" onClick="{{ goCons }}" style="padding: 14px 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #bdb4c4" style-hover="color: #d9b36c">Todas as consultas →</button>
+</div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{ noNext }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding: 26px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)"><span style="display: flex; flex-direction: column; gap: 6px"><span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720">Sem consultas marcadas</span><span style="font-size: 18px; color: #5f5764">Quando marcares, a próxima aparece aqui com o link e a hora.</span></span><button type="button" onClick="{{ newCons }}" style="padding: 14px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Marcar consulta</button></div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 24px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Encomenda em curso</span><svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex: none; color: #7a561a"><path d="M3 8l9-5 9 5v8l-9 5-9-5z M3 8l9 5 9-5 M12 13v8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+<sc-if value="{{ hasCur }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px">{{ cur.id }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; white-space: nowrap; color: {{ cur.chipFg }}; background: {{ cur.chipBg }}">{{ cur.chip }}</span></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px"><sc-for list="{{ cur.steps }}" as="x" hint-placeholder-count="5"><i style="height: 4px; background: {{ x.bg }}"></i></sc-for></div>
+<span style="font-size: 18px; color: #3d3542">{{ cur.eta }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .08em; color: #5f5764">CTT · {{ cur.track }}</span>
+<button type="button" onClick="{{ cur.open }}" style="align-self: flex-start; margin-top: auto; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">Seguir encomenda →</button>
+</sc-if>
+<sc-if value="{{ noCur }}" hint-placeholder-val="{{ false }}"><span style="font-size: 18px; color: #5f5764">Nada a caminho de momento.</span><a href="Loja.dc.html" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">Ir à loja →</a></sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 24px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Vales por usar</span><svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex: none; color: #7a561a"><path d="M3 9h18v4H3z M5 13h14v8H5z M12 9v12 M12 9C10 5 6 5 6 7.5S12 9 12 9S18 10 18 7.5S14 5 12 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 52px; line-height: .9">{{ valesN }}</span>
+<sc-if value="{{ hasVale }}" hint-placeholder-val="{{ true }}"><span style="font-size: 18px; color: #3d3542">{{ valeFirstName }}</span><span style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; padding: 6px 10px; border: 1px dashed rgba(122,86,26,.5); color: #7a561a">{{ valeFirst }}</span></sc-if>
+<button type="button" onClick="{{ goVales }}" style="align-self: flex-start; margin-top: auto; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">Ver vales →</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 24px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; padding-bottom: 8px">Atalhos</span>
+<a href="Consultas.dc.html" style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(28,23,32,.08); font-size: 19px">Marcar uma consulta<span style="color: #7a561a">→</span></a>
+<a href="Loja.dc.html" style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(28,23,32,.08); font-size: 19px">Ir à loja<span style="color: #7a561a">→</span></a>
+<button type="button" onClick="{{ goOrders }}" style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(28,23,32,.08); font-size: 19px; text-align: left">Pedir uma devolução<span style="color: #7a561a">→</span></button>
+<a href="Grimorio.dc.html" style="display: flex; justify-content: space-between; padding: 12px 0; font-size: 19px">Sessões gratuitas no Grimório<span style="color: #7a561a">→</span></a>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isOrders }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Encomendas" style="display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">Encomendas</h1>
+<div role="tablist" style="display: flex; padding: 4px; border: 1px solid rgba(28,23,32,.14); background: #fbf8f1"><sc-for list="{{ ofilters }}" as="t" hint-placeholder-count="3"><button type="button" role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.go }}" style="padding: 10px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; background: {{ t.bg }}; color: {{ t.fg }}">{{ t.label }}</button></sc-for></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{ orderList }}" as="o" hint-placeholder-count="3">
+<button type="button" onClick="{{ o.open }}" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 18px 22px; text-align: left; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35); transition: border-color .25s, transform .3s" style-hover="border-color: rgba(28,23,32,.35); transform: translateY(-2px)">
+<span style="display: flex; flex: none"><sc-for list="{{ o.thumbs }}" as="t" hint-placeholder-count="2"><span style="width: 52px; height: 64px; margin-right: -14px; overflow: hidden; border: 2px solid #fbf8f1; box-shadow: 0 4px 10px -4px rgba(28,23,32,.4)"><canvas ref="{{ t.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></span></sc-for></span>
+<span style="flex: 1 1 220px; display: flex; flex-direction: column; gap: 4px; min-width: 0; padding-left: 14px"><span style="display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 22px">{{ o.id }}</span><span style="font-size: 16px; color: #5f5764">{{ o.date }}</span></span><span style="font-size: 17px; color: #3d3542; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ o.count }} · {{ o.names }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; white-space: nowrap; color: {{ o.chipFg }}; background: {{ o.chipBg }}">{{ o.chip }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; min-width: 76px; text-align: right">{{ o.total }}</span>
+<span style="color: #7a561a; font-size: 18px">→</span>
+</button>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isOrder }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Encomenda" style="display: flex; flex-direction: column; gap: 28px">
+<button type="button" onClick="{{ backOrders }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">← Encomendas</button>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px 24px">
+<div style="display: flex; flex-direction: column; gap: 10px"><h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">{{ od.id }}</h1><span style="font-size: 18px; color: #5f5764">{{ od.date }}</span></div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; white-space: nowrap; font-size: 10.5px; padding: 7px 12px; color: {{ od.chipFg }}; background: {{ od.chipBg }}">{{ od.chip }}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 26px 22px 22px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35); overflow-x: auto">
+<sc-for list="{{ od.steps }}" as="x" hint-placeholder-count="5">
+<div style="position: relative; display: flex; flex-direction: column; gap: 8px; min-width: 96px; padding-right: 10px">
+<span style="position: relative; display: flex; align-items: center; height: 14px"><i style="position: relative; z-index: 1; width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; background: {{ x.dot }}; border: 1.5px solid {{ x.dotBd }}; box-shadow: {{ x.glow }}"></i><i style="display: {{ x.lineOn }}; position: absolute; left: 14px; right: 0; top: 6px; height: 2px; background: {{ x.line }}"></i></span>
+<span style="font-size: 17px; line-height: 1.2; color: {{ x.fg }}">{{ x.label }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .08em; color: #5f5764">{{ x.date }}</span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ od.isSent }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; padding: 20px 22px; border: 1px solid rgba(122,86,26,.3); background: rgba(217,179,108,.12)">
+<span style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 19px">A caminho · entrega prevista {{ od.eta }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; letter-spacing: .08em; color: #5f5764">CTT · {{ od.track }}</span></span>
+<button type="button" onClick="{{ soon }}" style="padding: 13px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Seguir nos CTT</button>
+</div>
+</sc-if>
+<sc-if value="{{ od.isPend }}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: rgba(163,80,26,.3); border: 1px solid rgba(163,80,26,.3)">
+<div style="background: #fbf8f1; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Entidade</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 20px">[00000]</span></div>
+<div style="background: #fbf8f1; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Referência</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 20px">[000 000 000]</span></div>
+<div style="background: #fbf8f1; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Montante</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 20px; color: #a3501a">{{ od.total }}</span></div>
+<div style="background: #fbf8f1; padding: 18px; display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Válida até</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px; padding-top: 3px">{{ od.mbUntil }}</span></div>
+</div>
+</sc-if>
+<sc-if value="{{ od.isRet }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 18px 22px; border: 1px solid rgba(28,23,32,.18); background: rgba(28,23,32,.04); font-size: 19px; line-height: 1.45">Pedido de devolução recebido. Enviámos a etiqueta pré-paga para o teu email. Entrega o pacote num Ponto CTT. O reembolso é feito até 14 dias depois de recebermos os artigos.</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 20px; align-items: start">
+<div style="display: flex; flex-direction: column; padding: 8px 24px 22px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<sc-for list="{{ od.items }}" as="i" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: {{ retCols }}; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(28,23,32,.08)">
+<sc-if value="{{ retOpen }}" hint-placeholder-val="{{ false }}"><button type="button" role="checkbox" aria-checked="{{ i.aria }}" aria-label="Devolver {{ i.name }}" onClick="{{ i.toggle }}" style="width: 22px; height: 22px; box-sizing: border-box; display: grid; place-items: center; border: 1.5px solid {{ i.ckBd }}; background: {{ i.ckBg }}; color: #f3ece0; font-size: 13px">{{ i.check }}</button></sc-if>
+<span style="display: block; width: 64px; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(28,23,32,.12)"><canvas ref="{{ i.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></span>
+<span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 20px; line-height: 1.15">{{ i.name }}</span><span style="font-size: 16px; font-style: italic; color: #5f5764">{{ i.v }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #5f5764">{{ i.q }} × {{ i.unit }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; white-space: nowrap">{{ i.total }}</span>
+</div>
+</sc-for>
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 18px; font-size: 18px">
+<div style="display: flex; justify-content: space-between"><span style="color: #5f5764">Subtotal</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ od.sub }}</span></div>
+<div style="display: flex; justify-content: space-between"><span style="color: #5f5764">Envio</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ od.ship }}</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; border-top: 1px solid rgba(28,23,32,.12)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 22px">Total</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 18px">{{ od.total }}</span></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: rgba(28,23,32,.10); border: 1px solid rgba(28,23,32,.10)">
+<div style="background: #fbf8f1; padding: 20px; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Entrega</span><span style="font-size: 18px; line-height: 1.4">{{ od.addr.name }}<br>{{ od.addr.l1 }}<br>{{ od.addr.cp }} {{ od.addr.city }}</span><span style="font-size: 15px; font-style: italic; color: #5f5764">Embalagem discreta</span></div>
+<div style="background: #fbf8f1; padding: 20px; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Pagamento</span><span style="font-size: 18px">{{ od.pay }}</span><button type="button" onClick="{{ invoice }}" style="align-self: flex-start; margin-top: 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">↓ Fatura (PDF)</button></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<button type="button" onClick="{{ od.reorder }}" style="flex: 1 1 180px; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Voltar a encomendar</button>
+<sc-if value="{{ od.canRet }}" hint-placeholder-val="{{ false }}"><sc-if value="{{ retOff }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ openRet }}" style="flex: 1 1 180px; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Pedir devolução</button></sc-if></sc-if>
+</div>
+<sc-if value="{{ od.canRet }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-style: italic; color: #5f5764">Podes devolver artigos por abrir até {{ od.retUntil }}.</span></sc-if>
+<sc-if value="{{ od.noRet }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-style: italic; color: #5f5764">O prazo de 14 dias para devolução já terminou.</span></sc-if>
+<sc-if value="{{ retOpen }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 22px; border: 1px solid #1c1720; background: #fbf8f1">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720; font-size: 23px">Devolver artigos</span>
+<span style="font-size: 17px; color: #3d3542">Marca à esquerda os artigos que queres devolver.</span>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Motivo</span><select style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0; appearance: auto"><option>Mudei de ideias</option><option>Chegou danificado</option><option>Não corresponde à descrição</option><option>Recebi o artigo errado</option><option>Outro</option></select></label>
+<textarea rows="3" placeholder="Queres acrescentar alguma coisa? (opcional)" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0; height: auto; padding: 12px 16px; resize: vertical" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></textarea>
+<span style="font-size: 16px; line-height: 1.45; color: #5f5764">Enviamos uma etiqueta pré-paga por email. Entregas o pacote num Ponto CTT e o reembolso é feito no método original até 14 dias depois de o recebermos.</span>
+<div style="display: flex; gap: 10px"><button type="button" onClick="{{ sendRet }}" style="flex: 2; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Enviar pedido</button><button type="button" onClick="{{ closeRet }}" style="flex: 1; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Cancelar</button></div>
+</div>
+</sc-if>
+<button type="button" onClick="{{ help }}" style="align-self: flex-start; font-size: 18px; color: #5f5764">Algum problema? <span style="color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4)">Fala com a Casa</span></button>
+</div>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isCons }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Consultas da conta" style="display: flex; flex-direction: column; gap: 24px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">Consultas</h1>
+<button type="button" onClick="{{ newCons }}" style="padding: 14px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">+ Marcar consulta</button>
+</div>
+<div role="tablist" style="display: flex; gap: 26px; border-bottom: 1px solid rgba(28,23,32,.14)"><sc-for list="{{ ctabs }}" as="t" hint-placeholder-count="2"><button type="button" role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.go }}" style="padding: 12px 0; margin-bottom: -1px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: {{ t.fg }}; border-bottom: 2px solid {{ t.bd }}">{{ t.label }}</button></sc-for></div>
+<sc-if value="{{ showUp }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{ upList }}" as="c" hint-placeholder-count="2">
+<article style="display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: clamp(16px, 2.4vw, 28px); padding: clamp(18px, 2.4vw, 26px); background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 12px 0; background: #1c1720; color: #efe6d3; align-self: start"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: #c9a7f5">{{ c.wd }}</span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 40px; line-height: 1; color: #f3ead6">{{ c.day }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; color: #e8cf98">{{ c.mon }}</span></div>
+<div style="display: flex; flex-direction: column; gap: 10px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 26px; line-height: 1.1">{{ c.name }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #7a561a">{{ c.countdown }}</span></div>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 18px; color: #3d3542"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; color: #1c1720">{{ c.time }}</span><span style="display: flex; align-items: center; gap: 7px"><svg viewBox="0 0 24 24" style="width: 17px; height: 17px; flex: none; color: #7a561a"><path d="{{ c.icon }}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>{{ c.fmtLabel }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #5f5764">{{ c.price }}</span></span>
+<span style="font-size: 17px; color: #5f5764">{{ c.place }}</span>
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: {{ c.policyFg }}"><i style="width: 6px; height: 6px; border-radius: 50%; background: {{ c.policyFg }}"></i>{{ c.policy }}</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; align-items: center">
+<sc-if value="{{ c.isOnline }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ c.join }}" style="padding: 12px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; background: {{ c.joinBg }}; color: {{ c.joinFg }}; border: 1px solid {{ c.joinBd }}; cursor: {{ c.joinCur }}">{{ c.joinLabel }}</button></sc-if>
+<sc-if value="{{ c.isCasa }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ c.map }}" style="padding: 12px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0; font-size: 10px" style-hover="background: #3a2f42">Como chegar</button></sc-if>
+<button type="button" onClick="{{ c.resch }}" style="padding: 12px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; font-size: 10px; opacity: {{ c.reschOp }}" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Remarcar</button>
+<button type="button" onClick="{{ c.cal }}" style="padding: 12px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; font-size: 10px" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">+ Calendário</button>
+<button type="button" onClick="{{ c.cancel }}" style="padding: 12px 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #9b2f2f" style-hover="text-decoration: underline">Cancelar</button>
+</div>
+</div>
+</article>
+</sc-for>
+<sc-if value="{{ upEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding: 50px 20px; text-align: center; border: 1px dashed rgba(28,23,32,.2); font-size: 20px; color: #5f5764">Sem consultas marcadas.</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ showPast }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{ pastList }}" as="c" hint-placeholder-count="2">
+<article style="display: flex; flex-direction: column; gap: 14px; padding: clamp(18px, 2.4vw, 26px); background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<div style="display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 18px; align-items: center">
+<span style="display: block; width: 64px; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(28,23,32,.12)"><canvas ref="{{ c.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 23px; line-height: 1.1">{{ c.name }}</span><span style="font-size: 17px; color: #5f5764">{{ c.when }} · {{ c.fmtLabel }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; white-space: nowrap; color: {{ c.chipFg }}; background: {{ c.chipBg }}">{{ c.chip }}</span>
+</div>
+<sc-if value="{{ c.isCanc }}" hint-placeholder-val="{{ false }}"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .1em; color: #5f5764">{{ c.refund }}</span></sc-if>
+<sc-if value="{{ c.isDone }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 20px; padding-top: 14px; border-top: 1px solid rgba(28,23,32,.08)">
+<div style="display: flex; align-items: center; gap: 12px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">{{ c.rateLabel }}</span><span style="display: flex"><sc-for list="{{ c.stars }}" as="st" hint-placeholder-count="5"><button type="button" onClick="{{ st.go }}" aria-label="{{ st.label }}" style="font-size: 22px; line-height: 1; padding: 0 2px; color: #7a561a" style-hover="transform: scale(1.2)">{{ st.ch }}</button></sc-for></span></div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap"><button type="button" onClick="{{ c.toggle }}" style="padding: 11px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; font-size: 10px" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">{{ c.toggleLabel }}</button><button type="button" onClick="{{ c.again }}" style="padding: 11px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0; font-size: 10px" style-hover="background: #3a2f42">Marcar de novo</button></div>
+</div>
+<sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 18px; padding: 18px; background: #f2ebdd; border: 1px solid rgba(28,23,32,.08)">
+<div style="aspect-ratio: 4 / 3; display: grid; place-items: center; border: 1px dashed rgba(28,23,32,.25); text-align: center; padding: 14px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px; line-height: 1.8">[Fotografia da tiragem]</span></div>
+<div style="display: flex; flex-direction: column; gap: 12px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Resumo do Zé</span><span style="font-size: 19px; line-height: 1.5; font-style: italic; color: #3d3542">[Resumo escrito enviado depois da consulta, com as cartas que saíram e os pontos principais da leitura.]</span><sc-if value="{{ c.isRec }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ soon }}" style="align-self: flex-start; padding: 11px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0; font-size: 10px" style-hover="background: #3a2f42">▶ Ouvir a leitura</button></sc-if></div>
+</div>
+</sc-if>
+</sc-if>
+</article>
+</sc-for>
+</div>
+</sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{ isVales }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Vales" style="display: flex; flex-direction: column; gap: 26px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">Vales de oferta</h1>
+<button type="button" onClick="{{ giftCons }}" style="padding: 14px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Oferecer uma consulta</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 22px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720; font-size: 22px">Recebeste um vale?</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><input ref="{{ valeRef }}" type="text" placeholder="VALE-XXXX-XXXX" onKeyDown="{{ valeKey }}" style="flex: 1 1 240px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0; width: auto; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px; letter-spacing: .14em; text-transform: uppercase" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"><button type="button" onClick="{{ redeem }}" style="flex: none; height: 52px; padding: 0 22px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Adicionar</button></div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .08em; color: {{ valeFg }}; min-height: 14px">{{ valeMsg }}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 16px">
+<sc-for list="{{ vales }}" as="v" hint-placeholder-count="2">
+<article style="position: relative; display: grid; grid-template-columns: 78px minmax(0, 1fr); background: #fbf8f1; border: 1px solid rgba(28,23,32,.12); opacity: {{ v.op }}; overflow: hidden">
+<div style="display: grid; place-items: center; background: #1c1720; color: #d9b36c; border-right: 2px dashed #f2ebdd"><svg viewBox="0 0 24 24" style="width: 30px; height: 30px; flex: none; color: #d9b36c"><path d="M3 9h18v4H3z M5 13h14v8H5z M12 9v12 M12 9C10 5 6 5 6 7.5S12 9 12 9S18 10 18 7.5S14 5 12 9" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 20px 22px">
+<div style="display: flex; justify-content: space-between; gap: 10px; align-items: flex-start"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 23px; line-height: 1.1">{{ v.n }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; white-space: nowrap; color: {{ v.chipFg }}; background: {{ v.chipBg }}">{{ v.chip }}</span></div>
+<span style="font-size: 17px; color: #5f5764">{{ v.mins }} · {{ v.from }}</span>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; letter-spacing: .16em; padding: 8px 12px; border: 1px dashed rgba(122,86,26,.55); color: #7a561a">{{ v.code }}</span><button type="button" onClick="{{ v.copy }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">Copiar</button></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding-top: 10px; border-top: 1px solid rgba(28,23,32,.08)"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .1em; color: #5f5764">{{ v.until }}</span><sc-if value="{{ v.act }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ v.use }}" style="padding: 11px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0; font-size: 10px" style-hover="background: #3a2f42">Usar vale</button></sc-if></div>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ isAddrs }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Moradas" style="display: flex; flex-direction: column; gap: 26px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">Moradas</h1>
+<sc-if value="{{ notEditing }}" hint-placeholder-val="{{ true }}">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px">
+<sc-for list="{{ addrs }}" as="a" hint-placeholder-count="2">
+<article style="display: flex; flex-direction: column; gap: 10px; padding: 22px; background: #fbf8f1; border: 1px solid {{ a.bd }}">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">{{ a.tag }}</span><sc-if value="{{ a.isDef }}" hint-placeholder-val="{{ false }}"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; white-space: nowrap; background: #1c1720; color: #f3ece0">Predefinida</span></sc-if></div>
+<span style="font-size: 19px; line-height: 1.45">{{ a.name }}<br>{{ a.l1 }}<br>{{ a.l2 }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #5f5764">{{ a.phone }}</span>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(28,23,32,.08)"><button type="button" onClick="{{ a.edit }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">Editar</button><sc-if value="{{ a.notDef }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ a.setDef }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px; color: #5f5764; border-color: rgba(28,23,32,.2)">Tornar predefinida</button></sc-if><button type="button" onClick="{{ a.remove }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px; color: #9b2f2f; border-color: rgba(155,47,47,.3)">Remover</button></div>
+</article>
+</sc-for>
+<button type="button" onClick="{{ addAddr }}" style="min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; border: 1px dashed rgba(28,23,32,.3); font-size: 19px; color: #5f5764" style-hover="border-color: #1c1720; color: #1c1720"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 36px; line-height: 1">+</span>Nova morada</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; padding: 20px 22px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<span style="display: flex; align-items: center; gap: 14px"><svg viewBox="0 0 24 24" style="width: 24px; height: 24px; flex: none; color: #7a561a"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764; font-size: 10px">Ponto CTT favorito</span><span style="font-size: 19px">{{ pickup }}</span><span style="font-size: 16px; color: #5f5764">{{ pickupAddr }}</span></span></span>
+<button type="button" onClick="{{ changePickup }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #7a561a; border-bottom: 1px solid rgba(122,86,26,.4); padding-bottom: 2px">Mudar</button>
+</div>
+</sc-if>
+<sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+<div ref="{{ addrFormRef }}" style="display: flex; flex-direction: column; gap: 14px; padding: clamp(20px, 3vw, 30px); background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35); max-width: 720px">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720">{{ afTitle }}</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Nome da morada</span><input data-f="tag" type="text" defaultValue="{{ af.tag }}" placeholder="Casa, Trabalho…" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Destinatário</span><input data-f="name" type="text" defaultValue="{{ af.name }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="grid-column: span 2; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Morada, andar e porta</span><input data-f="l1" type="text" defaultValue="{{ af.l1 }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Código postal</span><input data-f="cp" type="text" defaultValue="{{ af.cp }}" placeholder="0000-000" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Localidade</span><input data-f="city" type="text" defaultValue="{{ af.city }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="grid-column: span 2; display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Telemóvel para o estafeta</span><input data-f="phone" type="tel" defaultValue="{{ af.phone }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+</div>
+<label style="display: flex; gap: 12px; align-items: center; font-size: 18px; color: #3d3542"><input data-f="def" type="checkbox" defaultChecked="{{ af.def }}" style="width: 17px; height: 17px; accent-color: #1c1720">Usar como morada predefinida</label>
+<div style="display: flex; gap: 10px; margin-top: 6px"><button type="button" onClick="{{ saveAddr }}" style="flex: 2; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Guardar morada</button><button type="button" onClick="{{ cancelAddr }}" style="flex: 1; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Cancelar</button></div>
+</div>
+</sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{ isDados }}" hint-placeholder-val="{{ false }}">
+<section data-screen-label="Dados" style="display: flex; flex-direction: column; gap: 26px; max-width: 820px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 60px); line-height: 1; letter-spacing: .01em; color: #1c1720">Dados e preferências</h1>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: clamp(20px, 3vw, 30px); background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720">Dados pessoais</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Nome</span><input type="text" defaultValue="{{ u.first }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Apelido</span><input type="text" defaultValue="{{ u.last }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Email</span><input type="email" defaultValue="{{ u.email }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Telemóvel</span><input type="tel" defaultValue="{{ u.phone }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">NIF para faturas</span><input type="text" defaultValue="{{ u.nif }}" placeholder="Opcional" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Data de nascimento</span><input type="date" defaultValue="{{ u.birth }}" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"><span style="font-size: 15px; font-style: italic; color: #5f5764">Para a previsão do teu signo na newsletter.</span></label>
+</div>
+<button type="button" onClick="{{ saveDados }}" style="align-self: flex-start; height: 50px; padding: 0 22px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Guardar alterações</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; padding: clamp(20px, 3vw, 30px); background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720">Palavra-passe</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Atual</span><input type="password" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+<label style="display: flex; flex-direction: column; gap: 8px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Nova</span><input type="password" style="background: #fbf8f1; border: 1px solid rgba(28,23,32,.18); padding: 0 16px; height: 52px; font-size: 19px; color: #1c1720; width: 100%; box-sizing: border-box; min-width: 0" style-focus="border-color: #7a561a; box-shadow: 0 0 0 3px rgba(217,179,108,.3); outline: none"></label>
+</div>
+<button type="button" onClick="{{ savePw }}" style="align-self: flex-start; height: 50px; padding: 0 22px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Atualizar palavra-passe</button>
+</div>
+<div style="display: flex; flex-direction: column; padding: clamp(20px, 3vw, 30px); background: #fbf8f1; border: 1px solid rgba(28,23,32,.10); box-shadow: 0 1px 0 rgba(28,23,32,.03), 0 24px 48px -36px rgba(28,23,32,.35)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720; padding-bottom: 8px">Comunicações</span>
+<sc-for list="{{ prefs }}" as="p" hint-placeholder-count="4">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(28,23,32,.08)">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 19px">{{ p.label }}</span><span style="font-size: 16px; color: #5f5764">{{ p.sub }}</span></span>
+<button type="button" role="switch" aria-checked="{{ p.aria }}" onClick="{{ p.go }}" style="flex: none; position: relative; width: 44px; height: 24px; border-radius: 12px; background: {{ p.trk }}; transition: background .25s"><i style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fbf8f1; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .25s cubic-bezier(.2,.7,.1,1); transform: {{ p.knob }}"></i></button>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: clamp(20px, 3vw, 30px); border: 1px solid rgba(155,47,47,.25); background: rgba(155,47,47,.03)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720">Privacidade</span>
+<span style="font-size: 18px; line-height: 1.45; color: #3d3542">Podes pedir uma cópia dos teus dados ou apagar a conta a qualquer momento. As faturas são guardadas pelo prazo que a lei exige.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><button type="button" onClick="{{ exportData }}" style="height: 48px; padding: 0 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Descarregar os meus dados</button><button type="button" onClick="{{ askDel }}" style="height: 48px; padding: 0 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; color: #9b2f2f; border-color: rgba(155,47,47,.4)" style-hover="background: rgba(155,47,47,.06)">Apagar conta</button></div>
+</div>
+</section>
+</sc-if>
+
+</div>
+</div>
+</sc-if>
+
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+
+<div onClick="{{ closeR }}" style="position: fixed; inset: 0; z-index: 80; background: rgba(28,23,32,.45); backdrop-filter: blur(3px); transition: opacity .45s; opacity: {{ rOv }}; pointer-events: {{ rPe }}"></div>
+<aside aria-label="Remarcar consulta" style="position: fixed; top: 0; right: 0; bottom: 0; z-index: 81; width: min(520px, 100vw); box-sizing: border-box; background: #f2ebdd; box-shadow: -40px 0 80px -30px rgba(28,23,32,.5); display: flex; flex-direction: column; transition: transform .55s cubic-bezier(.2,.7,.1,1); transform: {{ rTf }}">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 22px 26px; border-bottom: 1px solid rgba(28,23,32,.10); background: #fbf8f1">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 28px">Remarcar</span>
+<button type="button" onClick="{{ closeR }}" aria-label="Fechar" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(28,23,32,.2)" style-hover="border-color: #1c1720">✕</button>
+</div>
+<div style="flex: 1; min-height: 0; overflow-y: auto; padding: 22px 26px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; background: #fbf8f1; border: 1px solid rgba(28,23,32,.10)">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 22px">{{ rd.name }}</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 17px; color: #3d3542"><svg viewBox="0 0 24 24" style="width: 16px; height: 16px; flex: none; color: #7a561a"><path d="{{ rd.icon }}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>{{ rd.fmt }}</span>
+<span style="font-size: 17px; color: #5f5764">Hora atual: <s>{{ rd.cur }}</s></span>
+</div>
+<span style="font-size: 17px; line-height: 1.45; color: {{ rd.policyFg }}">{{ rd.policy }}</span>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #5f5764">Dia</span>
+<div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin">
+<sc-for list="{{ rd.days }}" as="x" hint-placeholder-count="10">
+<button type="button" onClick="{{ x.go }}" aria-disabled="{{ x.dis }}" style="flex: none; width: 64px; padding: 10px 0; display: flex; flex-direction: column; align-items: center; gap: 2px; background: {{ x.bg }}; color: {{ x.fg }}; border: 1px solid {{ x.bd }}; cursor: {{ x.cur }}; transition: background .2s"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase">{{ x.wd }}</span><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; line-height: 1.1">{{ x.n }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: .08em; opacity: .8">{{ x.cnt }}</span></button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px">{{ rd.dayTitle }}</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px">
+<sc-for list="{{ rd.slots }}" as="x" hint-placeholder-count="6"><button type="button" onClick="{{ x.go }}" style="height: 46px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px; color: {{ x.fg }}; background: {{ x.bg }}; border: 1px solid {{ x.bd }}; text-decoration: {{ x.deco }}; cursor: {{ x.cur }}" style-hover="border-color: #1c1720">{{ x.t }}</button></sc-for>
+</div>
+<span style="font-size: 15px; font-style: italic; color: #5f5764">Horas de Lisboa.</span>
+</div>
+</div>
+<div style="flex: none; padding: 18px 26px 22px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(28,23,32,.10); background: #fbf8f1">
+<span style="font-size: 18px">{{ rd.sel }}</span>
+<button type="button" onClick="{{ rd.confirm }}" style="height: 54px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0; background: {{ rd.okBg }}">Confirmar nova hora</button>
+</div>
+</aside>
+
+<sc-if value="{{ cOn }}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px; background: rgba(28,23,32,.5); backdrop-filter: blur(3px)">
+<div role="dialog" aria-modal="true" aria-label="Cancelar consulta" style="width: min(520px, 100%); box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; padding: clamp(24px, 4vw, 36px); background: #fbf8f1; box-shadow: 0 40px 80px -30px rgba(28,23,32,.6)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720; font-size: 30px">Cancelar consulta?</span>
+<span style="font-size: 19px; color: #1c1720">{{ cd.name }} · {{ cd.when }}</span>
+<span style="font-size: 18px; line-height: 1.5; color: #3d3542">{{ cd.text }}</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px">
+<button type="button" onClick="{{ closeC }}" style="flex: 1 1 150px; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Manter consulta</button>
+<sc-if value="{{ cd.altOn }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ cd.alt }}" style="flex: 1 1 150px; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720" style-hover="border-color: #1c1720; background: rgba(28,23,32,.04)">Remarcar em vez disso</button></sc-if>
+<button type="button" onClick="{{ cd.confirm }}" style="flex: 1 1 150px; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; color: #9b2f2f; border-color: rgba(155,47,47,.45)" style-hover="background: rgba(155,47,47,.06)">Cancelar consulta</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ delOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 20px; background: rgba(28,23,32,.5); backdrop-filter: blur(3px)">
+<div role="dialog" aria-modal="true" aria-label="Apagar conta" style="width: min(500px, 100%); box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; padding: clamp(24px, 4vw, 36px); background: #fbf8f1; box-shadow: 0 40px 80px -30px rgba(28,23,32,.6)">
+<span style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 26px; line-height: 1.1; color: #1c1720; font-size: 30px">Apagar a conta?</span>
+<span style="font-size: 18px; line-height: 1.5; color: #3d3542">Apagamos os teus dados, moradas e preferências. As consultas marcadas mantêm-se e recebes os detalhes por email. Esta ação não pode ser desfeita.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px"><button type="button" onClick="{{ closeDel }}" style="flex: 1 1 150px; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #1c1720; color: #f3ece0" style-hover="background: #3a2f42">Manter conta</button><button type="button" onClick="{{ doDel }}" style="flex: 1 1 150px; height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(28,23,32,.25); color: #1c1720; color: #9b2f2f; border-color: rgba(155,47,47,.45)">Apagar conta</button></div>
+</div>
+</div>
+</sc-if>
+
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #1c1720; color: #f3ece0; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;signup&quot;,&quot;resumo&quot;,&quot;encomendas&quot;,&quot;encomenda&quot;,&quot;devolucao&quot;,&quot;consultas&quot;,&quot;remarcar&quot;,&quot;vales&quot;,&quot;moradas&quot;,&quot;dados&quot;],&quot;default&quot;:&quot;resumo&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Revisão&quot;},&quot;demoLive&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Revisão&quot;}}">
+class Component extends DCLogic {
+  state = { logged: false, mode: 'login', sec: 'resumo', oid: null, ofilter: 0, ctab: 0, open: {}, rId: null, rDay: null, rSlot: null, cId: null,
+    retOpen: false, retSel: {}, addrEdit: null, valeMsg: '', valeErr: false, narrow: false, hNarrow: false, menuOpen: false, toast: '', now: Date.now(),
+    showPw: false, delOpen: false, cartN: 0, data: this.seed(false) };
+
+  O_T = ['10:00', '11:30', '14:30', '16:00', '18:00', '21:00'];
+  P_T = ['10:00', '11:30', '14:30', '16:00'];
+  OST = { pend: ['Aguarda pagamento', '#a3501a', 'rgba(163,80,26,.10)'], prep: ['Em preparação', '#5b3a8e', 'rgba(91,58,142,.10)'], sent: ['Enviada', '#7a561a', 'rgba(217,179,108,.22)'], done: ['Entregue', '#3f6b3a', 'rgba(63,107,58,.10)'], ret: ['Devolução pedida', '#5f5764', 'rgba(28,23,32,.07)'] };
+  SIDX = { pend: 0, prep: 2, sent: 3, done: 4, ret: 4 };
+  FMTS = [['Online', 'video'], ['Presencial', 'casa'], ['Gravada', 'rec']];
+  IC = {
+    resumo: 'M4 4h7v7H4z M13 4h7v4h-7z M13 10h7v10h-7z M4 13h7v7H4z',
+    encomendas: 'M3 8l9-5 9 5v8l-9 5-9-5z M3 8l9 5 9-5 M12 13v8',
+    consultas: 'M4 6h16v14H4z M4 10h16 M8 3v4 M16 3v4',
+    vales: 'M3 9h18v4H3z M5 13h14v8H5z M12 9v12 M12 9C10 5 6 5 6 7.5S12 9 12 9S18 10 18 7.5S14 5 12 9',
+    moradas: 'M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+    dados: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21c1-4.5 15-4.5 16 0',
+    out: 'M14 4h5v16h-5 M10 8l-4 4 4 4 M6 12h10',
+    video: 'M3 7h11v10H3z M14 10.5l6-3v9l-6-3', casa: 'M3 11l9-7 9 7v9H3z M9.5 20v-5.5h5V20', rec: 'M4 11v2 M8 8v8 M12 5v14 M16 9v6 M20 11v2'
+  };
+  NAV = [['resumo', 'Resumo'], ['encomendas', 'Encomendas'], ['consultas', 'Consultas'], ['vales', 'Vales de oferta'], ['moradas', 'Moradas'], ['dados', 'Dados e preferências']];
+  LUA = [['Lua Nova', 'Bom para começos e intenções novas'], ['Lua Crescente', 'Bom para atrair e abrir caminhos'], ['Lua Cheia', 'Bom para carregar e agradecer'], ['Lua Minguante', 'Bom para limpar, cortar e libertar']];
+
+  seed(live) {
+    const now = Date.now(), H = 3600e3, D = 864e5, at = (days, h, m) => { const d = new Date(); d.setDate(d.getDate() + days); d.setHours(h, m || 0, 0, 0); return d.getTime(); };
+    return {
+      user: { first: 'Marta', last: 'Sousa', email: 'marta.sousa@email.pt', phone: '+351 912 345 678', nif: '', birth: '1991-10-08' },
+      prefs: { news: true, wa: true, sms: false, restock: true },
+      cons: [
+        { id: 'c1', n: 'Tarot · Leitura completa', d: 'moon', seed: 202, fmt: 0, mins: 60, price: 60, at: live ? now + 8 * 60e3 : at(2, 21), status: 'marcada', used: false },
+        { id: 'c2', n: 'Trabalhos espirituais', sub: 'Primeira conversa', d: 'candle', seed: 204, fmt: 1, mins: 20, price: 0, at: at(9, 16), status: 'marcada', used: false },
+        { id: 'c3', n: 'Baralho Cigano', d: 'tarot', seed: 233, fmt: 0, mins: 45, price: 45, at: at(-21, 18), status: 'realizada', rated: 5 },
+        { id: 'c4', n: 'Tarot · Três cartas', d: 'tarot', seed: 201, fmt: 2, mins: 30, price: 35, at: at(-48, 10), status: 'realizada', rated: 0 }
+      ],
+      orders: [
+        { id: 'CZ-10511', at: now - 1 * D, status: 'pend', pay: 'Multibanco', ship: 4.5, items: [{ pid: 12, v: 0, n: 'Kit Samhain', var: 'Edição limitada', d: 'moon', seed: 112, q: 1, pr: 44 }] },
+        { id: 'CZ-10482', at: now - 3 * D, status: 'sent', pay: 'MB WAY', ship: 0, track: 'RR 4821 0937 5 PT', items: [{ pid: 0, v: 0, n: 'Vela de Intenção', var: 'Cor: Verde', d: 'candle', seed: 100, q: 2, pr: 14 }, { pid: 1, v: 1, n: 'Óleo Lua Negra', var: 'Tamanho: 30 ml', d: 'oil', seed: 101, q: 1, pr: 28 }] },
+        { id: 'CZ-10377', at: now - 9 * D, status: 'done', delivered: now - 6 * D, pay: 'Cartão', ship: 4.5, items: [{ pid: 2, v: 1, n: 'Ametista Bruta', var: 'Tamanho: Média', d: 'crystal', seed: 102, q: 1, pr: 38 }, { pid: 5, v: 0, n: 'Molho de Sálvia', var: 'Tamanho: Pequeno', d: 'sage', seed: 105, q: 2, pr: 9 }] },
+        { id: 'CZ-10102', at: now - 62 * D, status: 'done', delivered: now - 58 * D, pay: 'MB WAY', ship: 0, items: [{ pid: 6, v: 0, n: 'Tarot da Casa', var: '78 cartas', d: 'tarot', seed: 106, q: 1, pr: 42 }] }
+      ],
+      vales: [
+        { code: 'VALE-LUA7-K2P9', n: 'Tarot · Três cartas', mins: 30, from: 'Oferta de Inês', until: now + 290 * D, status: 'ativo' },
+        { code: 'VALE-SOL3-8QWE', n: 'Baralho Cigano', mins: 45, from: 'Oferta de Rui', until: now + 120 * D, status: 'usado', usedAt: now - 21 * D }
+      ],
+      addrs: [
+        { tag: 'Casa', name: 'Marta Sousa', l1: 'Rua [x], 24, 2.º Esq.', cp: '1000-000', city: 'Lisboa', phone: '+351 912 345 678', def: true },
+        { tag: 'Trabalho', name: 'Marta Sousa', l1: 'Av. [x], 110', cp: '1050-000', city: 'Lisboa', phone: '', def: false }
+      ],
+      pickup: ['Ponto CTT · Papelaria Central', 'Rua [x], 12 · 9h–19h']
+    };
+  }
+
+  _cv = {}; _refs = {};
+  ref = (k) => this._refs['_' + k] || (this._refs['_' + k] = (el) => { this._refs[k] = el; });
+  cv(slot, draw, seed) { const k = slot + '|' + draw + '|' + seed; return this._cv[k] || (this._cv[k] = (el) => { if (!el) return; const go = () => window.CovilArt.paint(el, draw, seed); window.CovilArt ? go() : window.addEventListener('covilart', go, { once: true }); }); }
+  eur(n) { return n === 0 ? 'Gratuita' : n.toFixed(2).replace('.', ',') + ' €'; }
+  money(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+  fd(ts, o) { const s = new Intl.DateTimeFormat('pt-PT', o).format(new Date(ts)); return s.charAt(0).toUpperCase() + s.slice(1); }
+  dayLabel(ts) { const a = new Date(ts), b = new Date(this.state.now); const diff = Math.round((new Date(a.getFullYear(), a.getMonth(), a.getDate()) - new Date(b.getFullYear(), b.getMonth(), b.getDate())) / 864e5); if (diff === 0) return 'Hoje'; if (diff === 1) return 'Amanhã'; if (diff === -1) return 'Ontem'; return this.fd(ts, { weekday: 'long', day: 'numeric', month: 'long' }); }
+  hm(ts) { const d = new Date(ts); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  phase(ts) { const p = (((ts - Date.UTC(2000, 0, 6, 18, 14)) / 864e5 / 29.530588) % 1 + 1) % 1; return p < .03 || p > .97 ? 0 : p < .47 ? 1 : p < .53 ? 2 : 3; }
+  slots(dayTs, fmt, exclude) {
+    const d = new Date(dayTs), dow = d.getDay(); if (dow === 0 || (fmt === 1 && dow === 1)) return [];
+    const seed = d.getFullYear() * 372 + d.getMonth() * 31 + d.getDate(), busy = new Set(this.state.data.cons.filter(c => c.status === 'marcada' && c.id !== exclude).map(c => c.at));
+    return (fmt === 1 ? this.P_T : this.O_T).map((t, i) => { const r = ((seed * 9301 + i * 49297 + fmt * 7919) % 233280) / 233280, ts = new Date(d.getFullYear(), d.getMonth(), d.getDate(), +t.slice(0, 2), +t.slice(3)).getTime(); return { t, ts, free: r > 0.4 && ts > this.state.now + 2 * 3600e3 && !busy.has(ts) }; });
+  }
+
+  componentDidMount() {
+    let saved = null; try { saved = JSON.parse(localStorage.getItem('cz-conta-v1') || 'null'); } catch (e) {}
+    const st = { data: (saved && saved.data) || this.seed(!!this.props.demoLive), logged: saved ? !!saved.logged : false, sec: (saved && saved.sec) || 'resumo' };
+    try { const l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); st.cartN = l && l.cart ? l.cart.reduce((a, c) => a + c.qty, 0) : 0; } catch (e) {}
+    this.setState(st);
+    this._prevStart = this.props.startView; this._prevLive = this.props.demoLive;
+    if (this.props.startView) setTimeout(() => this.applyStart(this.props.startView), 0);
+    if (this.props.demoLive) setTimeout(() => this.setLive(true), 0);
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    this._tick = setInterval(() => this.setState({ now: Date.now() }), 20000);
+    this._key = (e) => { if (e.key === 'Escape') this.setState({ rId: null, cId: null, delOpen: false, menuOpen: false }); }; addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); removeEventListener('keydown', this._key); clearInterval(this._tick); }
+  componentDidUpdate() {
+    const s = this.state, ps = this._prev || s; this._prev = s;
+    if (this._prevStart !== this.props.startView) { this._prevStart = this.props.startView; if (this.props.startView) this.applyStart(this.props.startView); }
+    if (this._prevLive !== this.props.demoLive) { this._prevLive = this.props.demoLive; this.setLive(!!this.props.demoLive); }
+    if (ps.data !== s.data || ps.logged !== s.logged || ps.sec !== s.sec) { try { localStorage.setItem('cz-conta-v1', JSON.stringify({ data: s.data, logged: s.logged, sec: s.sec })); } catch (e) {} }
+    document.body.style.overflow = (s.rId || s.cId || s.delOpen) ? 'hidden' : '';
+  }
+  setLive(on) { const d = new Date(); d.setDate(d.getDate() + 2); d.setHours(21, 0, 0, 0); this.upd(x => { const c = x.cons.find(c => c.id === 'c1'); if (c) { c.at = on ? Date.now() + 8 * 60e3 : d.getTime(); c.status = 'marcada'; } return x; }); }
+  applyStart(v) {
+    if (v === 'login' || v === 'signup') { this.setState({ logged: false, mode: v }); return; }
+    const map = { encomenda: ['encomendas', 'CZ-10482'], devolucao: ['encomendas', 'CZ-10377'], remarcar: ['consultas', null] }, [sec, oid] = map[v] || [v, null];
+    this.setState({ logged: true, sec, oid, retOpen: v === 'devolucao', retSel: {}, rId: v === 'remarcar' ? 'c1' : null, rDay: null, rSlot: null, cId: null });
+    window.scrollTo(0, 0);
+  }
+  nav(sec) { this.setState({ sec, oid: null, retOpen: false, menuOpen: false, addrEdit: null, logged: true }); window.scrollTo(0, 0); }
+  upd(fn) { this.setState(s => ({ data: fn(JSON.parse(JSON.stringify(s.data))) })); }
+  say(t) { clearTimeout(this._tt); this.setState({ toast: t }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2800); }
+  countdown(c) { const diff = c.at - this.state.now; if (diff <= 0) return 'A decorrer'; if (diff < 3600e3) return 'Começa em ' + Math.ceil(diff / 60e3) + ' min'; if (diff < 864e5) return 'Começa em ' + Math.floor(diff / 3600e3) + ' h ' + String(Math.floor(diff / 60e3) % 60).padStart(2, '0') + ' min'; const n = Math.round(diff / 864e5); return 'Daqui a ' + n + (n === 1 ? ' dia' : ' dias'); }
+  reorder(o) {
+    let l = null; try { l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); } catch (e) {}
+    l = l || { cart: [] }; l.cart = l.cart || [];
+    o.items.forEach(i => { const f = l.cart.find(c => c.id === i.pid && c.v === i.v); if (f) f.qty += i.q; else l.cart.push({ id: i.pid, v: i.v, qty: i.q }); });
+    l.view = 'cart'; try { localStorage.setItem('cz-loja-v1', JSON.stringify(l)); } catch (e) {}
+    location.href = 'Loja.dc.html';
+  }
+
+  cCard(c, slot) {
+    const H = 3600e3, now = this.state.now, diff = c.at - now, hl = diff / H, F = this.FMTS[c.fmt], marc = c.status === 'marcada';
+    const live = c.fmt === 0 && diff <= 15 * 60e3 && diff > -c.mins * 60e3, canR = marc && (hl >= 24 || !c.used);
+    const policy = !marc ? '' : hl >= 24 ? 'Remarcação e cancelamento gratuitos até ' + this.fd(c.at - 24 * H, { weekday: 'short', day: 'numeric', month: 'short' }) + ' às ' + this.hm(c.at) : c.used ? 'Já remarcaste uma vez · sem novas alterações' : 'Menos de 24 h · podes remarcar uma vez';
+    const stars = [1, 2, 3, 4, 5].map(k => ({ ch: k <= (c.rated || 0) ? '★' : '☆', label: k + ' estrelas', go: () => { this.upd(x => { x.cons.find(y => y.id === c.id).rated = k; return x; }); this.say('Obrigado pela avaliação'); } }));
+    const st = c.status === 'cancelada' ? ['Cancelada', '#9b2f2f', 'rgba(155,47,47,.08)'] : ['Realizada', '#3f6b3a', 'rgba(63,107,58,.10)'];
+    return {
+      id: c.id, name: c.n, sub: c.sub || '', wd: this.fd(c.at, { weekday: 'short' }).replace('.', '').toUpperCase(), day: String(new Date(c.at).getDate()), mon: this.fd(c.at, { month: 'short' }).replace('.', '').toUpperCase(),
+      time: this.hm(c.at), when: this.dayLabel(c.at) + ' · ' + this.hm(c.at), fmtLabel: F[0] + ' · ' + c.mins + ' min', icon: this.IC[F[1]], price: this.eur(c.price),
+      place: c.fmt === 0 ? 'Videochamada · o link chega por email e SMS 24 h antes' : c.fmt === 1 ? 'Casa de Zé · [Morada completa]' : 'Leitura em áudio enviada por email',
+      countdown: marc ? this.countdown(c) : '', policy, policyFg: hl >= 24 ? '#3f6b3a' : '#a3501a',
+      isOnline: marc && c.fmt === 0, isCasa: marc && c.fmt === 1,
+      joinLabel: live ? 'Entrar na videochamada' : 'Link disponível 15 min antes', joinBg: live ? '#1c1720' : 'transparent', joinFg: live ? '#f3ece0' : '#5f5764', joinBd: live ? '#1c1720' : 'rgba(28,23,32,.2)', joinCur: live ? 'pointer' : 'not-allowed', joinDarkOp: live ? '1' : '.55',
+      join: live ? () => this.say('A abrir a videochamada…') : () => this.say('O link fica ativo 15 minutos antes da hora'),
+      map: () => this.say('Disponível na versão final'), cal: () => this.say('Adicionado ao calendário'),
+      resch: canR ? () => this.setState({ rId: c.id, rDay: null, rSlot: null }) : () => this.say('Esta consulta já foi remarcada uma vez'), reschOp: canR ? '1' : '.45',
+      cancel: () => this.setState({ cId: c.id }),
+      chip: st[0], chipFg: st[1], chipBg: st[2], isDone: c.status === 'realizada', isCanc: c.status === 'cancelada',
+      refund: c.price ? (c.refunded ? 'Reembolsado · ' + this.money(c.price) : 'Sem reembolso') : 'Conversa gratuita',
+      open: !!this.state.open[c.id], toggle: () => this.setState(s => ({ open: { ...s.open, [c.id]: !s.open[c.id] } })), toggleLabel: this.state.open[c.id] ? 'Fechar resumo' : 'Ver resumo da consulta',
+      isRec: c.fmt === 2, stars, rated: (c.rated || 0) > 0, rateLabel: (c.rated || 0) > 0 ? 'A tua avaliação' : 'Avaliar a consulta',
+      again: () => { location.href = 'Consultas.dc.html'; }, cv: this.cv(slot, c.d, c.seed)
+    };
+  }
+  oCard(o) {
+    const st = this.OST[o.status], sub = o.items.reduce((a, i) => a + i.pr * i.q, 0), n = o.items.reduce((a, i) => a + i.q, 0);
+    return { id: o.id, date: this.fd(o.at, { day: 'numeric', month: 'long', year: 'numeric' }), count: n + (n === 1 ? ' artigo' : ' artigos'), names: o.items.map(i => i.n).join(' · '),
+      total: this.money(sub + o.ship), chip: st[0], chipFg: st[1], chipBg: st[2],
+      thumbs: o.items.slice(0, 3).map((i, k) => ({ cv: this.cv('ot' + k, i.d, i.seed) })),
+      open: () => { this.setState({ sec: 'encomendas', oid: o.id, retOpen: false, retSel: {} }); window.scrollTo(0, 0); } };
+  }
+
+  renderVals() {
+    const s = this.state, d = s.data, now = s.now, H = 3600e3, D = 864e5, narrow = s.narrow, u = d.user;
+    const orders = d.orders.slice().sort((a, b) => b.at - a.at);
+    const up = d.cons.filter(c => c.status === 'marcada' && c.at + c.mins * 60e3 > now).sort((a, b) => a.at - b.at);
+    const past = d.cons.filter(c => !(c.status === 'marcada' && c.at + c.mins * 60e3 > now)).sort((a, b) => b.at - a.at);
+    const curOrders = orders.filter(o => ['pend', 'prep', 'sent'].includes(o.status));
+    const activeV = d.vales.filter(v => v.status === 'ativo' && v.until > now);
+    const counts = { encomendas: curOrders.length, consultas: up.length, vales: activeV.length };
+
+    // order detail
+    const o = s.oid ? d.orders.find(x => x.id === s.oid) : null;
+    let od = null;
+    if (o) {
+      const idx = this.SIDX[o.status], st = this.OST[o.status], sub = o.items.reduce((a, i) => a + i.pr * i.q, 0);
+      const dates = [o.at, o.status === 'pend' ? null : o.at + H, idx >= 2 ? o.at + D : null, idx >= 3 ? o.at + 2 * D : null, o.delivered || null];
+      const f = (ts) => this.fd(ts, { day: 'numeric', month: 'short' });
+      const canRet = o.status === 'done' && o.delivered && now - o.delivered < 14 * D;
+      od = { id: o.id, date: this.fd(o.at, { day: 'numeric', month: 'long', year: 'numeric' }) + ' · ' + this.hm(o.at), chip: st[0], chipFg: st[1], chipBg: st[2],
+        steps: ['Recebida', 'Paga', 'Preparada e consagrada', 'Enviada', 'Entregue'].map((label, k) => { const done = k <= idx && o.status !== 'ret' || (o.status === 'ret' && k <= 4), cur = k === idx && o.status !== 'done' && o.status !== 'ret';
+          return { label, date: dates[k] ? f(dates[k]) : (k === 4 && idx >= 3 ? 'Prevista ' + f(o.at + 5 * D) : '—'), dot: done ? '#7a561a' : '#fbf8f1', dotBd: done ? '#7a561a' : 'rgba(28,23,32,.25)', glow: cur ? '0 0 0 5px rgba(217,179,108,.35)' : 'none', line: k < idx ? '#7a561a' : 'rgba(28,23,32,.15)', lineOn: k < 4 ? 'block' : 'none', fg: done ? '#1c1720' : '#5f5764' }; }),
+        isSent: o.status === 'sent', isPend: o.status === 'pend', isRet: o.status === 'ret', track: o.track || '', eta: this.fd(o.at + 5 * D, { weekday: 'long', day: 'numeric', month: 'long' }),
+        mbUntil: this.fd(o.at + 48 * H, { day: 'numeric', month: 'short' }) + ' às ' + this.hm(o.at + 48 * H),
+        items: o.items.map((i, k) => ({ name: i.n, v: i.var, q: String(i.q), unit: this.money(i.pr), total: this.money(i.pr * i.q), cv: this.cv('od' + k, i.d, i.seed),
+          sel: !!s.retSel[k], check: s.retSel[k] ? '✓' : '', ckBg: s.retSel[k] ? '#1c1720' : '#fbf8f1', ckBd: s.retSel[k] ? '#1c1720' : 'rgba(28,23,32,.3)', aria: s.retSel[k] ? 'true' : 'false', toggle: () => this.setState(x => ({ retSel: { ...x.retSel, [k]: !x.retSel[k] } })) })),
+        sub: this.money(sub), ship: o.ship ? this.money(o.ship) : 'Grátis', total: this.money(sub + o.ship), pay: o.pay,
+        addr: d.addrs.find(a => a.def) || d.addrs[0],
+        canRet, retUntil: o.delivered ? this.fd(o.delivered + 14 * D, { day: 'numeric', month: 'long' }) : '', noRet: !canRet && o.status === 'done',
+        reorder: () => this.reorder(o) };
+    }
+    const nextC = up[0] ? this.cCard(up[0], 'rn') : null;
+    const curO = orders.find(x => x.status === 'sent' || x.status === 'prep');
+    const pendO = orders.find(x => x.status === 'pend');
+    const ph = this.phase(now);
+
+    // remarcar
+    const rc = s.rId ? d.cons.find(c => c.id === s.rId) : null;
+    let rd = null;
+    if (rc) {
+      const b = new Date(now); b.setHours(0, 0, 0, 0);
+      const days = []; for (let k = 0; k < 21; k++) { const ts = new Date(b.getFullYear(), b.getMonth(), b.getDate() + k).getTime(); days.push({ ts, sl: this.slots(ts, rc.fmt, rc.id) }); }
+      let di = s.rDay; if (di == null || !days[di].sl.some(x => x.free)) di = days.findIndex(x => x.sl.some(y => y.free));
+      const hl = (rc.at - now) / H;
+      rd = { name: rc.n, cur: this.dayLabel(rc.at) + ' · ' + this.hm(rc.at), fmt: this.FMTS[rc.fmt][0] + ' · ' + rc.mins + ' min', icon: this.IC[this.FMTS[rc.fmt][1]],
+        policy: hl >= 24 ? 'Faltam mais de 24 horas. A remarcação é gratuita e podes voltar a mudar mais tarde.' : 'Faltam menos de 24 horas. Podes remarcar uma única vez, sem custo.',
+        policyFg: hl >= 24 ? '#3f6b3a' : '#a3501a',
+        days: days.map((x, k) => { const n = x.sl.filter(y => y.free).length, on = k === di; return { wd: this.fd(x.ts, { weekday: 'short' }).replace('.', ''), n: String(new Date(x.ts).getDate()), mon: this.fd(x.ts, { month: 'short' }).replace('.', ''), cnt: n ? n + ' vagas' : '—',
+          go: n ? () => this.setState({ rDay: k, rSlot: null }) : () => {}, bg: on ? '#1c1720' : '#fbf8f1', fg: on ? '#f3ece0' : n ? '#1c1720' : '#a39ca6', bd: on ? '#1c1720' : 'rgba(28,23,32,.14)', cur: n ? 'pointer' : 'default', dis: n ? 'false' : 'true' }; }),
+        dayTitle: di >= 0 ? this.dayLabel(days[di].ts) : 'Sem vagas nas próximas 3 semanas',
+        slots: di >= 0 ? days[di].sl.map(x => { const on = s.rSlot === x.ts; return { t: x.t, go: x.free ? () => this.setState({ rDay: di, rSlot: x.ts }) : () => {}, bg: on ? '#d9b36c' : 'transparent', fg: on ? '#1c1720' : x.free ? '#1c1720' : '#a39ca6', bd: on ? '#d9b36c' : x.free ? 'rgba(28,23,32,.22)' : 'rgba(28,23,32,.08)', deco: x.free ? 'none' : 'line-through', cur: x.free ? 'pointer' : 'default' }; }) : [],
+        sel: s.rSlot ? 'Nova hora: ' + this.dayLabel(s.rSlot) + ' · ' + this.hm(s.rSlot) : 'Escolhe um dia e uma hora',
+        okBg: s.rSlot ? '#1c1720' : 'rgba(28,23,32,.25)',
+        confirm: () => { if (!s.rSlot) { this.say('Escolhe primeiro uma hora'); return; } const nt = s.rSlot; this.upd(x => { const c = x.cons.find(y => y.id === rc.id); if (hl < 24) c.used = true; c.at = nt; return x; }); this.setState({ rId: null, rSlot: null, rDay: null }); this.say('Consulta remarcada para ' + this.dayLabel(nt).toLowerCase() + ' às ' + this.hm(nt)); } };
+    }
+    const cc = s.cId ? d.cons.find(c => c.id === s.cId) : null;
+    let cd = null;
+    if (cc) {
+      const hl = (cc.at - now) / H, ok = hl >= 24;
+      cd = { name: cc.n, when: this.dayLabel(cc.at) + ' · ' + this.hm(cc.at),
+        text: cc.price === 0 ? 'Esta conversa é gratuita. Libertamos a vaga para outra pessoa.' : ok ? 'Recebes o reembolso total de ' + this.money(cc.price) + ' no método de pagamento original, em 3 a 5 dias úteis.' : 'Faltam menos de 24 horas. O valor de ' + this.money(cc.price) + ' não é reembolsado, mas ainda podes remarcar uma vez.',
+        altOn: !ok && !cc.used && cc.price > 0, alt: () => this.setState({ cId: null, rId: cc.id, rDay: null, rSlot: null }),
+        confirm: () => { this.upd(x => { const c = x.cons.find(y => y.id === cc.id); c.status = 'cancelada'; c.refunded = ok && c.price > 0; return x; }); this.setState({ cId: null }); this.say('Consulta cancelada'); } };
+    }
+    const ae = s.addrEdit, af = ae === 'new' ? { tag: '', name: u.first + ' ' + u.last, l1: '', cp: '', city: '', phone: u.phone, def: false } : ae != null ? d.addrs[ae] : null;
+    const tog = (k) => () => this.upd(x => { x.prefs[k] = !x.prefs[k]; return x; });
+    const sw = (on) => ({ trk: on ? '#1c1720' : 'rgba(28,23,32,.18)', knob: on ? 'translateX(20px)' : 'translateX(0)', aria: on ? 'true' : 'false' });
+
+    return {
+      layoutDir: narrow ? 'column' : 'row', retCols: s.retOpen ? '22px 64px minmax(0,1fr) auto' : '64px minmax(0,1fr) auto',
+      narrow, wide: !narrow, hNarrow: s.hNarrow, hWide: !s.hNarrow, cartN: String(s.cartN), logged: s.logged, loggedOut: !s.logged,
+      menuOpen: s.menuOpen && s.hNarrow, toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })),
+      accLabel: s.logged ? u.first : 'Entrar', goAcc: () => s.logged ? this.nav('resumo') : this.setState({ mode: 'login' }),
+      soon: (e) => { if (e) e.preventDefault(); this.say('Disponível na versão final'); },
+      toast: s.toast, toastOp: s.toast ? '1' : '0',
+
+      isAuth: !s.logged, isLogin: s.mode === 'login', isSignup: s.mode === 'signup', isForgot: s.mode === 'forgot', isGuest: s.mode === 'guest', showTabs: s.mode === 'login' || s.mode === 'signup',
+      authTitle: { login: 'Bem-vinda de volta', signup: 'Criar conta', forgot: 'Recuperar acesso', guest: 'Encontrar encomenda' }[s.mode],
+      authSub: { login: 'Entra para ver encomendas, consultas e vales.', signup: 'Leva menos de um minuto. Não precisas de conta para comprar.', forgot: 'Enviamos-te um link para escolheres uma nova palavra-passe.', guest: 'Compraste sem conta? Usa o email e o número da encomenda.' }[s.mode],
+      authTabs: [['login', 'Entrar'], ['signup', 'Criar conta']].map(([k, label]) => ({ label, go: () => this.setState({ mode: k }), bg: s.mode === k ? '#1c1720' : 'transparent', fg: s.mode === k ? '#f3ece0' : '#5f5764', aria: s.mode === k ? 'true' : 'false' })),
+      pwType: s.showPw ? 'text' : 'password', pwToggle: () => this.setState(x => ({ showPw: !x.showPw })), pwLabel: s.showPw ? 'Esconder' : 'Mostrar',
+      doLogin: () => { this.setState({ logged: true, sec: 'resumo', oid: null }); window.scrollTo(0, 0); },
+      doSignup: () => { this.setState({ logged: true, sec: 'resumo', oid: null }); this.say('Conta criada'); window.scrollTo(0, 0); },
+      doForgot: () => { this.setState({ mode: 'login' }); this.say('Enviámos o link para o teu email'); },
+      doGuest: () => { this.setState({ logged: true, sec: 'encomendas', oid: 'CZ-10482' }); window.scrollTo(0, 0); },
+      toForgot: () => this.setState({ mode: 'forgot' }), toGuest: () => this.setState({ mode: 'guest' }), toLogin: () => this.setState({ mode: 'login' }),
+
+      initials: (u.first[0] + u.last[0]).toUpperCase(), fullName: u.first + ' ' + u.last, email: u.email, firstName: u.first,
+      navItems: this.NAV.map(([k, label]) => { const on = s.sec === k; return { label, icon: this.IC[k], count: counts[k] ? String(counts[k]) : '', countOn: counts[k] ? 'grid' : 'none', go: () => this.nav(k), bg: on ? '#fbf8f1' : 'transparent', fg: on ? '#1c1720' : '#5f5764', bd: on ? 'rgba(28,23,32,.12)' : 'transparent', bar: on ? '#d9b36c' : 'transparent', aria: on ? 'page' : 'false' }; }),
+      logout: () => { this.setState({ logged: false, mode: 'login' }); this.say('Sessão terminada'); window.scrollTo(0, 0); }, outIcon: this.IC.out,
+      isResumo: s.logged && s.sec === 'resumo', isOrders: s.logged && s.sec === 'encomendas' && !o, isOrder: s.logged && s.sec === 'encomendas' && !!o, isCons: s.logged && s.sec === 'consultas', isVales: s.logged && s.sec === 'vales', isAddrs: s.logged && s.sec === 'moradas', isDados: s.logged && s.sec === 'dados',
+
+      todayLabel: this.fd(now, { weekday: 'long', day: 'numeric', month: 'long' }), luaName: this.LUA[ph][0], luaTxt: this.LUA[ph][1], luaF: ['', 'M10 2 A8 8 0 0 1 10 18 A4 8 0 0 0 10 2Z', 'M10 2 A8 8 0 1 0 10.01 2Z', 'M10 2 A8 8 0 0 0 10 18 A4 8 0 0 1 10 2Z'][ph],
+      hasNext: !!nextC, noNext: !nextC, next: nextC || {}, goCons: () => this.nav('consultas'),
+      hasPend: !!pendO, pend: pendO ? { id: pendO.id, total: this.money(pendO.items.reduce((a, i) => a + i.pr * i.q, 0) + pendO.ship), until: this.fd(pendO.at + 48 * H, { day: 'numeric', month: 'short' }) + ' às ' + this.hm(pendO.at + 48 * H), open: this.oCard(pendO).open } : {},
+      hasCur: !!curO, cur: curO ? { ...this.oCard(curO), idx: this.SIDX[curO.status], track: curO.track || 'A aguardar envio', steps: [0, 1, 2, 3, 4].map(k => ({ bg: k <= this.SIDX[curO.status] ? '#7a561a' : 'rgba(28,23,32,.14)' })), eta: 'Entrega prevista ' + this.fd(curO.at + 5 * D, { weekday: 'long', day: 'numeric' }).toLowerCase() } : {},
+      noCur: !curO,
+      valesN: String(activeV.length), valeFirst: activeV[0] ? activeV[0].code : '', valeFirstName: activeV[0] ? activeV[0].n + ' · ' + activeV[0].mins + ' min' : '', hasVale: activeV.length > 0, noVale: !activeV.length,
+      goVales: () => this.nav('vales'), goOrders: () => this.nav('encomendas'), goDados: () => this.nav('dados'),
+
+      ofilters: ['Todas', 'Em curso', 'Entregues'].map((label, k) => ({ label, go: () => this.setState({ ofilter: k }), bg: s.ofilter === k ? '#1c1720' : 'transparent', fg: s.ofilter === k ? '#f3ece0' : '#5f5764', aria: s.ofilter === k ? 'true' : 'false' })),
+      orderList: orders.filter(x => s.ofilter === 0 || (s.ofilter === 1 ? ['pend', 'prep', 'sent'].includes(x.status) : ['done', 'ret'].includes(x.status))).map(x => this.oCard(x)),
+      od: od || { steps: [], items: [], addr: {} }, backOrders: () => this.setState({ oid: null, retOpen: false }),
+      retOpen: s.retOpen, openRet: () => this.setState({ retOpen: true, retSel: {} }), closeRet: () => this.setState({ retOpen: false }), retOff: !s.retOpen,
+      sendRet: () => { if (!Object.values(s.retSel).some(Boolean)) { this.say('Escolhe pelo menos um artigo'); return; } this.upd(x => { x.orders.find(y => y.id === s.oid).status = 'ret'; return x; }); this.setState({ retOpen: false }); this.say('Pedido de devolução enviado'); },
+      invoice: () => this.say('A descarregar a fatura…'), help: () => this.say('Disponível na versão final'),
+
+      ctabs: [['Próximas', up.length], ['Anteriores', past.length]].map(([label, n], k) => ({ label: label + ' · ' + n, go: () => this.setState({ ctab: k }), fg: s.ctab === k ? '#1c1720' : '#5f5764', bd: s.ctab === k ? '#1c1720' : 'transparent', aria: s.ctab === k ? 'true' : 'false' })),
+      showUp: s.ctab === 0, showPast: s.ctab === 1, upList: up.map(c => this.cCard(c, 'cu')), pastList: past.map(c => this.cCard(c, 'cp')), upEmpty: !up.length,
+      newCons: () => { location.href = 'Consultas.dc.html'; },
+      rOn: !!rd, rd: rd || { days: [], slots: [] }, rOv: rd ? '1' : '0', rPe: rd ? 'auto' : 'none', rTf: rd ? 'translateX(0)' : 'translateX(105%)', closeR: () => this.setState({ rId: null }),
+      cOn: !!cd, cd: cd || {}, closeC: () => this.setState({ cId: null }),
+
+      vales: d.vales.map(v => { const exp = v.until < now, act = v.status === 'ativo' && !exp, st = act ? ['Por usar', '#3f6b3a', 'rgba(63,107,58,.10)'] : v.status === 'usado' ? ['Usado', '#5f5764', 'rgba(28,23,32,.07)'] : ['Expirado', '#9b2f2f', 'rgba(155,47,47,.08)'];
+        return { code: v.code, n: v.n, mins: v.mins + ' min', from: v.from, until: act ? 'Válido até ' + this.fd(v.until, { day: 'numeric', month: 'long', year: 'numeric' }) : v.status === 'usado' ? 'Usado a ' + this.fd(v.usedAt, { day: 'numeric', month: 'long' }) : 'Expirou', chip: st[0], chipFg: st[1], chipBg: st[2], act, op: act ? '1' : '.6',
+          copy: () => { try { navigator.clipboard.writeText(v.code); } catch (e) {} this.say('Código copiado'); }, use: () => { location.href = 'Consultas.dc.html'; } }; }),
+      valeRef: this.ref('vale'), valeMsg: s.valeMsg, valeFg: s.valeErr ? '#9b2f2f' : '#3f6b3a',
+      redeem: () => { const el = this._refs.vale, v = (el && el.value || '').trim().toUpperCase(); if (!/^VALE-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(v)) { this.setState({ valeErr: true, valeMsg: 'Código inválido. Confirma o formato VALE-XXXX-XXXX.' }); return; } if (d.vales.some(x => x.code === v)) { this.setState({ valeErr: true, valeMsg: 'Este vale já está na tua conta.' }); return; } this.upd(x => { x.vales.unshift({ code: v, n: 'Tarot · Leitura completa', mins: 60, from: 'Vale adicionado', until: Date.now() + 365 * D, status: 'ativo' }); return x; }); if (el) el.value = ''; this.setState({ valeErr: false, valeMsg: '✓ Vale adicionado à tua conta' }); },
+      valeKey: (e) => { if (e.key === 'Enter') e.currentTarget.blur(); },
+      giftCons: () => { location.href = 'Consultas.dc.html'; },
+
+      addrs: d.addrs.map((a, k) => ({ tag: a.tag || 'Morada', name: a.name, l1: a.l1, l2: a.cp + ' ' + a.city, phone: a.phone || '—', isDef: a.def, notDef: !a.def, bd: a.def ? '#1c1720' : 'rgba(28,23,32,.12)',
+        edit: () => this.setState({ addrEdit: k }), remove: () => { this.upd(x => { const was = x.addrs[k].def; x.addrs.splice(k, 1); if (was && x.addrs[0]) x.addrs[0].def = true; return x; }); this.say('Morada removida'); },
+        setDef: () => this.upd(x => { x.addrs.forEach((y, j) => { y.def = j === k; }); return x; }) })),
+      pickup: d.pickup[0], pickupAddr: d.pickup[1],
+      addAddr: () => this.setState({ addrEdit: 'new' }), editing: af != null, notEditing: af == null, af: af || {}, afTitle: ae === 'new' ? 'Nova morada' : 'Editar morada', afKey: String(ae),
+      addrFormRef: this.ref('addrForm'), cancelAddr: () => this.setState({ addrEdit: null }),
+      saveAddr: () => { const f = this._refs.addrForm, v = {}; if (f) f.querySelectorAll('[data-f]').forEach(i => { v[i.dataset.f] = i.type === 'checkbox' ? i.checked : i.value; }); if (!v.l1) { this.say('Falta a morada'); return; } this.upd(x => { const a = { tag: v.tag, name: v.name, l1: v.l1, cp: v.cp, city: v.city, phone: v.phone, def: !!v.def || !x.addrs.length }; if (a.def) x.addrs.forEach(y => { y.def = false; }); if (ae === 'new') x.addrs.push(a); else x.addrs[ae] = a; return x; }); this.setState({ addrEdit: null }); this.say('Morada guardada'); },
+      changePickup: () => this.say('Disponível na versão final'),
+
+      u, saveDados: () => this.say('Alterações guardadas'), savePw: () => this.say('Palavra-passe atualizada'),
+      prefs: [['news', 'A lua do mês', 'Newsletter com o calendário lunar e o ritual do mês'], ['wa', 'Lembretes por WhatsApp', 'Lembrete 24 h antes de cada consulta, com o link'], ['sms', 'Lembretes por SMS', 'Para quem não usa WhatsApp'], ['restock', 'Avisos de reposição', 'Quando um produto que pediste volta à loja']].map(([k, label, sub]) => ({ label, sub, go: tog(k), ...sw(d.prefs[k]) })),
+      exportData: () => this.say('Vais receber um ficheiro com os teus dados por email'),
+      delOpen: s.delOpen, askDel: () => this.setState({ delOpen: true }), closeDel: () => this.setState({ delOpen: false }),
+      doDel: () => { this.setState({ delOpen: false, logged: false, mode: 'login', data: this.seed(false), sec: 'resumo' }); this.say('Conta apagada'); window.scrollTo(0, 0); }
+    };
+  }
+}
+</script>
+</body>
+</html>

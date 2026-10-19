@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#09080a}
+body{margin:0;background:#09080a;color:#e4dccb;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#e4dccb;text-decoration:none}a:hover{color:#d9b36c}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input,select{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:1px solid #d9b36c;outline-offset:3px}
+input::placeholder{color:#7d7682}
+::selection{background:#7b4fb8;color:#fff}
+select option{background:#0e0b12;color:#e4dccb}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #09080a; color: #e4dccb; overflow-x: clip">
+
+<sc-if value="{{ annOn }}" hint-placeholder-val="{{ true }}">
+<div style="background: #d9b36c; color: #09080a; text-align: center; padding: 9px 20px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase">
+<span ref="{{ annRef }}" style="display: inline-block; transition: opacity .35s, transform .35s">{{ annText }}</span>
+</div>
+</sc-if>
+
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(9,8,10,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px" style-hover="border-color: rgba(217,179,108,.6)">Menu</button>
+</sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}">
+<nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase">
+<button type="button" onClick="{{ goShop }}" style="color: #d9b36c; border-bottom: 1px solid #d9b36c; padding-bottom: 3px">Loja</button>
+<a href="Consultas.dc.html" style="color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="color: #b9b0c2" style-hover="color: #d9b36c">Sala</a>
+<a href="Grimorio.dc.html" style="color: #b9b0c2" style-hover="color: #d9b36c">Grimório</a>
+<a href="Casa.dc.html" style="color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a>
+<a href="Contactos.dc.html" style="color: #b9b0c2" style-hover="color: #d9b36c">Contactos</a>
+</nav>
+</sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98">
+<img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain">
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if>
+</a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center; position: relative">
+<button type="button" onClick="{{ toggleSearch }}" aria-label="Pesquisar" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></button>
+<button type="button" onClick="{{ toggleAcc }}" aria-label="Conta" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid {{ accBd }}; border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg></button>
+<button type="button" onClick="{{ openDrawer }}" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span>Carrinho</span></sc-if><b ref="{{ cartBadgeRef }}" style="font-weight: 500; color: #d9b36c; display: inline-block">{{ cartCount }}</b></button>
+<sc-if value="{{ accOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: calc(100% + 12px); right: 0; width: min(340px, calc(100vw - 40px)); background: #0e0b12; border: 1px solid rgba(228,220,203,.16); padding: 26px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.9)">
+<sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 26px; color: #efe6d3">Entrar</span>
+<input type="email" placeholder="Email" style="background: transparent; border: 1px solid rgba(228,220,203,.2); padding: 12px 14px; font-size: 18px" style-focus="border-color: #d9b36c; outline: none">
+<input type="password" placeholder="Palavra-passe" style="background: transparent; border: 1px solid rgba(228,220,203,.2); padding: 12px 14px; font-size: 18px" style-focus="border-color: #d9b36c; outline: none">
+<button type="button" onClick="{{ login }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 14px; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Entrar</button>
+<div style="display: flex; justify-content: space-between; gap: 10px; font-size: 16px"><a href="#" onClick="{{ soon }}" style="color: #a9a0b2">Esqueci-me da palavra-passe</a><a href="Conta.dc.html" style="color: #d9b36c">Criar conta</a></div>
+<span style="font-size: 15px; font-style: italic; color: #8c8591; padding-top: 12px; border-top: 1px solid rgba(228,220,203,.1)">Não precisas de conta para comprar. A conta guarda as tuas moradas e o histórico de encomendas.</span>
+</sc-if>
+<sc-if value="{{ logged }}" hint-placeholder-val="{{ false }}">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 26px; color: #efe6d3">Olá, [Nome]</span>
+<a href="Conta.dc.html" style="font-size: 19px">As minhas encomendas</a>
+<a href="Conta.dc.html" style="font-size: 19px">Moradas guardadas</a>
+<a href="Conta.dc.html" style="font-size: 19px">Lista de desejos</a>
+<button type="button" onClick="{{ logout }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a9a0b2; padding-top: 12px">Terminar sessão</button>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</div>
+<sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+<div style="border-top: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: flex; align-items: center; gap: 14px">
+<svg viewBox="0 0 20 20" style="width: 18px; height: 18px; flex: none"><g fill="none" stroke="#d9b36c" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg>
+<input ref="{{ searchRef }}" type="search" value="{{ q }}" onChange="{{ onSearch }}" placeholder="Procurar velas, cristais, ervas…" style="flex: 1; min-width: 0; background: transparent; border: 0; font-size: 24px; font-style: italic; color: #efe6d3; outline: none">
+<button type="button" onClick="{{ toggleSearch }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #a9a0b2">Fechar ✕</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px">
+<button type="button" onClick="{{ goShop }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #d9b36c">Loja</button>
+<a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px">Sala</a>
+<a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px">Grimório</a>
+<a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px">A Casa</a>
+<a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px">Contactos</a>
+</nav>
+</sc-if>
+</header>
+
+<sc-if value="{{ isShop }}" hint-placeholder-val="{{ true }}">
+<main data-screen-label="Loja" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 48px clamp(20px, 3vw, 40px) 120px; box-sizing: border-box">
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; display: flex; gap: 10px"><a href="Landing Page.dc.html" style="color: #8c8591">Casa de Zé</a><span>/</span><span style="color: #e4dccb">Loja</span></div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 28px; margin-top: 36px">
+<div style="display: flex; flex-direction: column; gap: 18px; max-width: 640px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(52px, 7vw, 96px); line-height: .95; letter-spacing: .02em; color: #efe6d3">A Loja</h1>
+<p style="margin: 0; font-size: 22px; line-height: 1.5; color: #cfc6b5; text-wrap: pretty">Velas, óleos, cristais e ervas preparados à mão, no tempo certo da lua. Tudo é consagrado antes de seguir para ti.</p>
+</div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">{{ totalCount }} peças</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; padding: 22px 0; border-top: 1px solid rgba(228,220,203,.12); border-bottom: 1px solid rgba(228,220,203,.12)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #a77be0; align-self: center; margin-right: 8px">Procuro</span>
+<sc-for list="{{ intentChips }}" as="c" hint-placeholder-count="5">
+<button type="button" onClick="{{ c.go }}" style="display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 10px; border: 1px solid {{ c.bd }}; background: {{ c.bg }}; border-radius: 999px; transition: border-color .3s, background .3s" style-hover="border-color: rgba(217,179,108,.6)">
+<svg viewBox="0 0 60 60" style="width: 26px; height: 26px; overflow: visible"><path d="{{ c.glyph }}" fill="none" stroke="#d9b36c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span style="font-size: 19px; color: {{ c.fg }}">{{ c.label }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display: flex; gap: 52px; align-items: flex-start; margin-top: 44px">
+<aside style="display: {{ sbDisplay }}; position: {{ sbPos }}; top: {{ sbTop }}; inset: {{ sbInset }}; z-index: {{ sbZ }}; background: {{ sbBg }}; padding: {{ sbPad }}; flex: none; width: {{ sbW }}; box-sizing: border-box; flex-direction: column; gap: 34px; max-height: {{ sbMaxH }}; overflow-y: auto">
+<sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: space-between; align-items: center"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 32px; color: #efe6d3">Filtros</span><button type="button" onClick="{{ closeFilters }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; border: 1px solid rgba(228,220,203,.2); border-radius: 999px; padding: 9px 14px">✕</button></div>
+</sc-if>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0; padding-bottom: 10px">{{ g.title }}</span>
+<sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="4">
+<button type="button" onClick="{{ o.go }}" role="checkbox" aria-checked="{{ o.aria }}" style="display: grid; grid-template-columns: 16px 22px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 7px 0; text-align: left" style-hover="color: #d9b36c">
+<span style="width: 14px; height: 14px; box-sizing: border-box; border: 1px solid {{ o.bd }}; background: {{ o.bg }}; border-radius: {{ o.radius }}; display: grid; place-items: center; font-size: 10px; line-height: 1; color: #09080a; transition: background .25s, border-color .25s">{{ o.check }}</span>
+<svg viewBox="{{ o.vb }}" style="width: 18px; height: 18px; overflow: visible; display: {{ o.icon }}"><path d="{{ o.sd }}" fill="none" stroke="#d9b36c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></path><path d="{{ o.fd }}" fill="#d9b36c"></path></svg>
+<span style="font-size: 19px; color: {{ o.fg }}; transition: color .25s">{{ o.label }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #7d7682">{{ o.count }}</span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+<sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+<div style="position: sticky; bottom: 0; display: flex; gap: 10px; padding-top: 16px; background: #0b090e">
+<button type="button" onClick="{{ clearAll }}" style="flex: 1; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding: 16px; border: 1px solid rgba(228,220,203,.25)">Limpar</button>
+<button type="button" onClick="{{ closeFilters }}" style="flex: 2; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding: 16px; background: #d9b36c; color: #09080a">Ver {{ resultCount }} produtos</button>
+</div>
+</sc-if>
+</aside>
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<div style="position: sticky; top: 68px; z-index: 30; margin: 0 calc(-1 * clamp(20px, 3vw, 40px)); padding: 0 clamp(20px, 3vw, 40px); background: rgba(9,8,10,.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(228,220,203,.10); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="display: flex; align-items: center; gap: 8px; padding: 12px 0; overflow-x: auto; scrollbar-width: none">
+<span style="flex: none; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0; padding-right: 6px">Filtrar</span>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+<button type="button" onClick="{{ g.toggle }}" aria-expanded="{{ g.exp }}" style="flex: none; display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid {{ g.bd }}; background: {{ g.bg }}; font-size: 18px; color: #efe6d3; white-space: nowrap" style-hover="border-color: rgba(217,179,108,.6)">{{ g.title }}<span style="display: {{ g.nOn }}; min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 10px; background: #d9b36c; color: #09080a; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; place-items: center">{{ g.n }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; color: #d9b36c; transition: transform .25s; transform: {{ g.rot }}">▾</span></button>
+</sc-for>
+<sc-if value="{{ hasActive }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ clearAll }}" style="flex: none; margin-left: 4px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5); padding-bottom: 2px; white-space: nowrap">Limpar tudo</button></sc-if>
+</div>
+<sc-if value="{{ fgOpen }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 16px">
+<sc-for list="{{ fgOpts }}" as="o" hint-placeholder-count="4"><button type="button" onClick="{{ o.go }}" aria-pressed="{{ o.aria }}" style="display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 15px; border-radius: 999px; border: 1px solid {{ o.chipBd }}; background: {{ o.chipBg }}; font-size: 18px; color: {{ o.fg }}; white-space: nowrap" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="{{ o.vb }}" style="width: 15px; height: 15px; overflow: visible; display: {{ o.icon }}"><path d="{{ o.sd }}" fill="none" stroke="#d9b36c" stroke-width="1.2" vector-effect="non-scaling-stroke"></path><path d="{{ o.fd }}" fill="#d9b36c"></path></svg>{{ o.label }}<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; color: #8c8591">{{ o.count }}</span></button></sc-for>
+</div>
+</sc-if>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px">
+<div style="display: flex; align-items: center; gap: 14px">
+<sc-if value="{{ never }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ openFilters }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding: 11px 16px; border: 1px solid rgba(228,220,203,.25)">Filtros {{ activeCountLabel }}</button></sc-if>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #a9a0b2">{{ resultLabel }}</span>
+</div>
+<label style="display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">Ordenar
+<select value="{{ sort }}" onChange="{{ onSort }}" style="appearance: none; -webkit-appearance: none; background: transparent; border: 1px solid rgba(228,220,203,.25); padding: 10px 34px 10px 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #e4dccb; cursor: pointer; background-image: linear-gradient(45deg, transparent 50%, #d9b36c 50%), linear-gradient(135deg, #d9b36c 50%, transparent 50%); background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%; background-size: 5px 5px; background-repeat: no-repeat">
+<option value="rel">Relevância</option>
+<option value="new">Novidades</option>
+<option value="best">Mais vendidos</option>
+<option value="asc">Preço: mais baixo</option>
+<option value="desc">Preço: mais alto</option>
+</select>
+</label>
+</div>
+<sc-if value="{{ hasActive }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<sc-for list="{{ activeChips }}" as="a" hint-placeholder-count="2">
+<button type="button" onClick="{{ a.go }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding: 8px 12px; background: rgba(217,179,108,.12); border: 1px solid rgba(217,179,108,.5); color: #e8cf98" style-hover="background: rgba(217,179,108,.22)">{{ a.label }} ✕</button>
+</sc-for>
+<button type="button" onClick="{{ clearAll }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #a9a0b2; padding: 8px 6px; border-bottom: 1px solid rgba(228,220,203,.3)">Limpar tudo</button>
+</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 21vw, 236px), 1fr)); gap: 48px clamp(14px, 2vw, 26px); margin-top: 8px">
+<sc-for list="{{ products }}" as="p" hint-placeholder-count="9">
+<article style="display: flex; flex-direction: column; gap: 14px; min-width: 0">
+<button type="button" onClick="{{ p.open }}" aria-label="{{ p.name }}" style="position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14); box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); transition: transform .6s cubic-bezier(.2,.7,.1,1), border-color .5s, box-shadow .6s" style-hover="transform: translateY(-5px); border-color: rgba(217,179,108,.5); box-shadow: 0 40px 70px -24px rgba(123,79,184,.45)">
+<canvas ref="{{ p.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%; opacity: {{ p.imgOp }}"></canvas>
+<span style="position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #e4dccb; padding: 5px 8px; background: rgba(9,8,10,.62); backdrop-filter: blur(6px); border: 1px solid rgba(228,220,203,.16)"><svg viewBox="0 0 20 20" style="width: 11px; height: 11px"><circle cx="10" cy="10" r="8" fill="none" stroke="#e8cf98" stroke-width="1.4"></circle><path d="{{ p.moonF }}" fill="#e8cf98"></path></svg>{{ p.lua }}</span>
+<span style="position: absolute; top: 10px; right: 10px; display: {{ p.badgeOn }}; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; padding: 5px 8px; background: {{ p.badgeBg }}; color: {{ p.badgeFg }}">{{ p.badge }}</span>
+</button>
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<button type="button" onClick="{{ p.open }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px; line-height: 1.15; letter-spacing: .02em; color: #efe6d3" style-hover="color: #d9b36c">{{ p.name }}</button>
+<span style="font-size: 17px; font-style: italic; color: #a9a0b2">{{ p.line }}</span>
+</div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; color: #e8cf98; white-space: nowrap; padding-top: 4px">{{ p.price }}</span>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #a9a0b2"><span style="color: #d9b36c">★</span> {{ p.rating }} <span style="color: #7d7682">{{ p.rv }}</span></span>
+<button type="button" onClick="{{ p.add }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; padding: 9px 13px; border: 1px solid {{ p.addBd }}; color: {{ p.addFg }}; transition: background .3s, color .3s, border-color .3s" style-hover="background: #e4dccb; color: #09080a; border-color: #e4dccb">{{ p.addLabel }}</button>
+</div>
+</article>
+</sc-for>
+</div>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 80px 20px; text-align: center; border: 1px dashed rgba(228,220,203,.18)">
+<svg viewBox="0 0 40 40" style="width: 56px; height: 56px"><path d="M26 6 A15 15 0 1 0 34 30 A12 12 0 1 1 26 6Z" fill="none" stroke="#d9b36c" stroke-width="1"></path></svg>
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 30px; color: #efe6d3">Nada com esta combinação</span>
+<span style="font-size: 19px; color: #a9a0b2; max-width: 40ch">Tira um dos filtros ou procura por outra palavra. Se procuras algo que não está na loja, a Casa pode prepará-lo por encomenda.</span>
+<button type="button" onClick="{{ clearAll }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding: 14px 20px; background: #d9b36c; color: #09080a">Limpar filtros</button>
+</div>
+</sc-if>
+</div>
+</div>
+</main>
+</sc-if>
+
+<sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Produto" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 36px clamp(20px, 3vw, 40px) 40px; box-sizing: border-box">
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; display: flex; flex-wrap: wrap; gap: 10px"><button type="button" onClick="{{ goShop }}" style="color: #8c8591; letter-spacing: .18em; text-transform: uppercase" style-hover="color: #d9b36c">Loja</button><span>/</span><button type="button" onClick="{{ pd.goCat }}" style="color: #8c8591; letter-spacing: .18em; text-transform: uppercase" style-hover="color: #d9b36c">{{ pd.cat }}</button><span>/</span><span style="color: #e4dccb">{{ pd.name }}</span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: clamp(36px, 5vw, 80px); align-items: start; margin-top: 32px">
+<div style="position: {{ galPos }}; top: 120px; display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; aspect-ratio: 4 / 5; overflow: hidden; border: 1px solid rgba(228,220,203,.14); background: #0e0b12">
+<canvas ref="{{ pd.mainCv }}" width="600" height="800" style="display: {{ galCvDisplay }}; width: 100%; height: 100%; object-fit: cover; transform: {{ galTf }}; transform-origin: {{ galOrigin }}; transition: transform .8s cubic-bezier(.2,.7,.1,1); opacity: {{ pd.imgOp }}"></canvas>
+<div style="display: {{ galPhDisplay }}; position: absolute; inset: 0; place-items: center; text-align: center; padding: 24px; border: 1px dashed rgba(217,179,108,.35); background: radial-gradient(ellipse at 50% 40%, rgba(123,79,184,.16), transparent 70%)"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; line-height: 1.9">[Foto da embalagem discreta]<br>caixa fechada · 4:5</span></div>
+<span style="position: absolute; top: 14px; left: 14px; display: {{ pd.badgeOn }}; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; padding: 6px 10px; background: {{ pd.badgeBg }}; color: {{ pd.badgeFg }}">{{ pd.badge }}</span>
+<div style="position: absolute; right: 14px; bottom: 14px; display: flex; gap: 6px">
+<button type="button" onClick="{{ galPrev }}" aria-label="Anterior" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(9,8,10,.6); backdrop-filter: blur(6px); border: 1px solid rgba(228,220,203,.2); color: #e4dccb" style-hover="border-color: #d9b36c">←</button>
+<button type="button" onClick="{{ galNext }}" aria-label="Seguinte" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(9,8,10,.6); backdrop-filter: blur(6px); border: 1px solid rgba(228,220,203,.2); color: #e4dccb" style-hover="border-color: #d9b36c">→</button>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{ gal }}" as="g" hint-placeholder-count="4">
+<button type="button" onClick="{{ g.go }}" aria-label="{{ g.label }}" style="position: relative; aspect-ratio: 1 / 1; overflow: hidden; border: 1px solid {{ g.bd }}; opacity: {{ g.op }}; transition: border-color .3s, opacity .3s" style-hover="opacity: 1">
+<canvas ref="{{ g.cv }}" width="600" height="800" style="display: {{ g.cvDisplay }}; width: 100%; height: 133%; margin-top: -16%; transform: {{ g.tf }}; transform-origin: {{ g.origin }}"></canvas>
+<span style="display: {{ g.phDisplay }}; position: absolute; inset: 0; place-items: center; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #8c8591; background: #0e0b12">Caixa</span>
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 30px; min-width: 0">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0">{{ pd.cat }} · {{ pd.el }}</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(44px, 5vw, 68px); line-height: 1; letter-spacing: .02em; color: #efe6d3; text-wrap: balance">{{ pd.name }}</h1>
+<button type="button" onClick="{{ toReviews }}" style="align-self: flex-start; display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #a9a0b2" style-hover="color: #d9b36c"><span style="color: #d9b36c; letter-spacing: .1em">★★★★★</span>{{ pd.rating }} · {{ pd.rv }} avaliações</button>
+</div>
+<div style="display: flex; align-items: baseline; gap: 14px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 26px; color: #e8cf98">{{ pd.price }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #7d7682">IVA incluído</span></div>
+<p style="margin: 0; font-size: 22px; line-height: 1.55; color: #cfc6b5; text-wrap: pretty">{{ pd.desc }}</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: rgba(228,220,203,.12); border: 1px solid rgba(228,220,203,.12)">
+<div style="background: #09080a; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">Intenção</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 16px">
+<sc-for list="{{ pd.ints }}" as="i" hint-placeholder-count="1"><span style="display: flex; align-items: center; gap: 8px; font-size: 19px; color: #efe6d3"><svg viewBox="0 0 60 60" style="width: 22px; height: 22px; overflow: visible"><path d="{{ i.glyph }}" fill="none" stroke="#d9b36c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>{{ i.label }}</span></sc-for>
+<span style="display: {{ pd.noIntDisplay }}; font-size: 19px; color: #efe6d3">{{ pd.line }}</span>
+</div>
+</div>
+<div style="background: #09080a; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">Fase lunar recomendada</span>
+<span style="display: flex; align-items: center; gap: 12px"><svg viewBox="0 0 20 20" style="width: 26px; height: 26px; flex: none"><circle cx="10" cy="10" r="8" fill="none" stroke="#e8cf98" stroke-width="1"></circle><path d="{{ pd.moonF }}" fill="#e8cf98"></path></svg><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 19px; color: #efe6d3">{{ pd.lua }}</span><span style="font-size: 16px; font-style: italic; color: #a9a0b2">{{ pd.luaTxt }}</span></span></span>
+</div>
+</div>
+<sc-if value="{{ pd.hasV }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591">{{ pd.vLabel }}: <span style="color: #e4dccb">{{ pd.vSel }}</span></span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ pd.vOpts }}" as="v" hint-placeholder-count="3">
+<button type="button" onClick="{{ v.go }}" aria-pressed="{{ v.aria }}" style="display: flex; align-items: center; gap: 10px; padding: 12px 18px; font-size: 19px; border: 1px solid {{ v.bd }}; background: {{ v.bg }}; color: {{ v.fg }}; transition: border-color .25s, background .25s" style-hover="border-color: #d9b36c">{{ v.label }}<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; color: #a9a0b2">{{ v.extra }}</span></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ pd.inStock }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<div style="display: flex; align-items: center; border: 1px solid rgba(228,220,203,.25)">
+<button type="button" onClick="{{ qtyDec }}" aria-label="Menos" style="width: 50px; height: 56px; font-size: 22px" style-hover="color: #d9b36c">−</button>
+<span style="min-width: 32px; text-align: center; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px">{{ qty }}</span>
+<button type="button" onClick="{{ qtyInc }}" aria-label="Mais" style="width: 50px; height: 56px; font-size: 22px" style-hover="color: #d9b36c">+</button>
+</div>
+<button type="button" onClick="{{ addMain }}" style="flex: 1 1 220px; height: 58px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .22em; text-transform: uppercase; background: #d9b36c; color: #09080a; display: flex; justify-content: center; align-items: center; gap: 12px; transition: background .3s" style-hover="background: #e8cf98">Adicionar ao carrinho · {{ pd.lineTotal }}</button>
+</div>
+<span style="display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: {{ pd.stockFg }}"><i style="width: 7px; height: 7px; border-radius: 50%; background: {{ pd.stockFg }}"></i>{{ pd.stockTxt }}</span>
+</sc-if>
+<sc-if value="{{ pd.soldOut }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 1px solid rgba(224,134,60,.45); background: rgba(224,134,60,.06)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #e0863c">Esgotado · a Casa está a preparar mais</span>
+<sc-if value="{{ pd.notNotified }}" hint-placeholder-val="{{ true }}">
+<span style="font-size: 19px; color: #cfc6b5">Deixa o teu email e avisamos-te quando voltar. Só uma mensagem, sem newsletter.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<input type="email" placeholder="O teu email" style="flex: 1 1 220px; min-width: 0; background: transparent; border: 1px solid rgba(228,220,203,.25); padding: 0 16px; height: 54px; font-size: 19px" style-focus="border-color: #d9b36c; outline: none">
+<button type="button" onClick="{{ notifyMe }}" style="flex: none; height: 54px; padding: 0 22px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Avisar-me</button>
+</div>
+</sc-if>
+<sc-if value="{{ pd.notified }}" hint-placeholder-val="{{ false }}">
+<span style="font-size: 19px; color: #8e9c78">✓ Combinado. Vais receber um email assim que voltar à loja.</span>
+</sc-if>
+</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 14px; align-items: start; padding: 18px 20px; border: 1px solid rgba(228,220,203,.12); background: rgba(123,79,184,.06)">
+<svg viewBox="0 0 40 40" style="width: 34px; height: 34px"><g fill="none" stroke="#d9b36c" stroke-width="1.2" stroke-linejoin="round"><path d="M6 12l14-6 14 6v16l-14 6-14-6z"></path><path d="M6 12l14 6 14-6"></path><path d="M20 18v16"></path></g></svg>
+<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 20px; color: #efe6d3">Embalagem discreta</span><span style="font-size: 17px; line-height: 1.4; color: #a9a0b2">Caixa neutra, sem logótipo nem referência ao conteúdo. No remetente aparece apenas [Nome comercial].</span></span>
+</div>
+<div style="display: flex; flex-direction: column">
+<div role="tablist" style="display: flex; gap: 26px; border-bottom: 1px solid rgba(228,220,203,.14); overflow-x: auto">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+<button type="button" role="tab" onClick="{{ t.go }}" aria-selected="{{ t.aria }}" style="padding: 14px 0; white-space: nowrap; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: {{ t.fg }}; border-bottom: 1px solid {{ t.bd }}; margin-bottom: -1px; transition: color .25s, border-color .25s" style-hover="color: #d9b36c">{{ t.label }}</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column">
+<sc-for list="{{ tabRows }}" as="r" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: {{ tabCols }}; gap: 18px; padding: 16px 0; border-bottom: 1px solid rgba(228,220,203,.08); align-items: baseline">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #d9b36c">{{ r.k }}</span>
+<span style="font-size: 19px; line-height: 1.45; color: #cfc6b5">{{ r.v }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+
+<section style="margin-top: 130px; display: flex; flex-direction: column; gap: 34px">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>Completar o ritual</span>
+<h2 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(36px, 4vw, 52px); line-height: 1.05; color: #efe6d3">O que a Casa usa com esta peça</h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 20px; padding: clamp(20px, 3vw, 36px); border: 1px solid rgba(217,179,108,.22); background: linear-gradient(160deg, rgba(123,79,184,.10), rgba(9,8,10,0) 60%)">
+<div style="flex: 3 1 520px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 2vw, 22px)">
+<sc-for list="{{ kit }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 10px; opacity: {{ k.op }}; transition: opacity .3s; min-width: 0">
+<div style="position: relative; aspect-ratio: 1 / 1; overflow: hidden; border: 1px solid {{ k.bd }}">
+<canvas ref="{{ k.cv }}" width="600" height="800" style="display: block; width: 100%; height: 133%; margin-top: -16%"></canvas>
+<button type="button" onClick="{{ k.toggle }}" role="checkbox" aria-checked="{{ k.aria }}" aria-label="{{ k.name }}" style="position: absolute; top: 8px; left: 8px; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid {{ k.chkBd }}; background: {{ k.chkBg }}; color: #09080a; font-size: 13px; cursor: {{ k.cursor }}">{{ k.check }}</button>
+</div>
+<button type="button" onClick="{{ k.open }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 18px; line-height: 1.15; color: #efe6d3" style-hover="color: #d9b36c">{{ k.name }}</button>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px; color: #e8cf98">{{ k.price }} <span style="color: #7d7682; font-size: 10px; letter-spacing: .12em; text-transform: uppercase">{{ k.tag }}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="flex: 1 1 240px; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding-left: clamp(0px, 2vw, 28px); border-left: 1px solid rgba(228,220,203,.10)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">{{ kitCount }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 26px; color: #e8cf98">{{ kitTotal }}</span>
+<button type="button" onClick="{{ kitAdd }}" style="height: 54px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; border: 1px solid #d9b36c; color: #d9b36c; transition: background .3s, color .3s" style-hover="background: #d9b36c; color: #09080a">Adicionar seleção</button>
+</div>
+</div>
+</section>
+
+<section style="margin-top: 110px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(28px, 4vw, 64px); align-items: center">
+<a href="#" onClick="{{ soon }}" style="position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; border: 1px dashed rgba(217,179,108,.3); background: radial-gradient(ellipse at 50% 50%, rgba(123,79,184,.22), transparent 70%), #0e0b12" style-hover="border-color: rgba(217,179,108,.7)">
+<span style="position: absolute; top: 14px; left: 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #8c8591">[Miniatura do vídeo]</span>
+<span style="width: 74px; height: 74px; border-radius: 50%; border: 1px solid rgba(217,179,108,.7); display: grid; place-items: center; color: #d9b36c; font-size: 22px; padding-left: 4px; box-sizing: border-box; background: rgba(9,8,10,.5)">▶</span>
+<span style="position: absolute; right: 14px; bottom: 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #e4dccb; background: rgba(9,8,10,.7); padding: 3px 7px">[mm:ss]</span>
+</a>
+<div style="display: flex; flex-direction: column; gap: 18px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>No Grimório</span>
+<h2 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(32px, 3.4vw, 46px); line-height: 1.08; color: #efe6d3">Como usar: {{ pd.name }}</h2>
+<p style="margin: 0; font-size: 20px; line-height: 1.5; color: #cfc6b5">Sessão gratuita no YouTube, passo a passo, com o ritual completo para a {{ pd.luaLower }}.</p>
+<a href="#" onClick="{{ soon }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5); padding-bottom: 4px">▶ Ver no YouTube</a>
+</div>
+</section>
+
+<section ref="{{ reviewsRef }}" style="margin-top: 120px; scroll-margin-top: 110px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: clamp(28px, 4vw, 64px); align-items: start">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>Avaliações</span>
+<div style="display: flex; align-items: baseline; gap: 14px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 84px; line-height: .9; color: #efe6d3">{{ pd.rating }}</span><span style="display: flex; flex-direction: column; gap: 4px"><span style="color: #d9b36c; letter-spacing: .12em">★★★★★</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #8c8591">{{ pd.rv }} avaliações</span></span></div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{ dist }}" as="d" hint-placeholder-count="5">
+<div style="display: grid; grid-template-columns: 26px minmax(0,1fr) 30px; align-items: center; gap: 12px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #a9a0b2"><span>{{ d.star }}★</span><span style="position: relative; height: 4px; background: rgba(228,220,203,.1)"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: {{ d.w }}; background: #d9b36c"></i></span><span style="text-align: right">{{ d.n }}</span></div>
+</sc-for>
+</div>
+<button type="button" onClick="{{ soon }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding: 13px 18px; border: 1px solid rgba(228,220,203,.3)" style-hover="border-color: #d9b36c">Escrever avaliação</button>
+</div>
+<div style="grid-column: span 2; display: flex; flex-direction: column; min-width: 0">
+<sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+<article style="display: flex; flex-direction: column; gap: 12px; padding: 26px 0; border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px"><span style="color: #d9b36c; letter-spacing: .12em">{{ r.stars }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #7d7682">{{ r.date }}</span></div>
+<p style="margin: 0; font-size: 21px; line-height: 1.5; font-style: italic; color: #d6cebd">“{{ r.text }}”</p>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #a9a0b2">{{ r.who }} · <span style="color: #8e9c78">✓ Compra verificada</span> · <span style="color: #a77be0">{{ r.what }}</span></span>
+</article>
+</sc-for>
+</div>
+</section>
+
+<section style="margin-top: 120px; display: flex; flex-direction: column; gap: 34px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px">
+<h2 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(36px, 4vw, 52px); line-height: 1.05; color: #efe6d3">Para a mesma intenção</h2>
+<button type="button" onClick="{{ goShop }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5); padding-bottom: 4px">Ver toda a loja →</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 21vw, 260px), 1fr)); gap: 40px clamp(14px, 2vw, 26px)">
+<sc-for list="{{ related }}" as="p" hint-placeholder-count="4">
+<article style="display: flex; flex-direction: column; gap: 14px; min-width: 0">
+<button type="button" onClick="{{ p.open }}" aria-label="{{ p.name }}" style="position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14); transition: transform .6s cubic-bezier(.2,.7,.1,1), border-color .5s" style-hover="transform: translateY(-5px); border-color: rgba(217,179,108,.5)">
+<canvas ref="{{ p.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%; opacity: {{ p.imgOp }}"></canvas>
+<span style="position: absolute; top: 10px; right: 10px; display: {{ p.badgeOn }}; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; padding: 5px 8px; background: {{ p.badgeBg }}; color: {{ p.badgeFg }}">{{ p.badge }}</span>
+</button>
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+<button type="button" onClick="{{ p.open }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px; line-height: 1.15; color: #efe6d3" style-hover="color: #d9b36c">{{ p.name }}</button>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; color: #e8cf98; white-space: nowrap; padding-top: 4px">{{ p.price }}</span>
+</div>
+<button type="button" onClick="{{ p.add }}" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; padding: 9px 13px; border: 1px solid {{ p.addBd }}; color: {{ p.addFg }}" style-hover="background: #e4dccb; color: #09080a; border-color: #e4dccb">{{ p.addLabel }}</button>
+</article>
+</sc-for>
+</div>
+</section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isCart }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Carrinho" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 48px clamp(20px, 3vw, 40px) 120px; box-sizing: border-box">
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; display: flex; gap: 10px"><button type="button" onClick="{{ goShop }}" style="color: #8c8591; letter-spacing: .18em; text-transform: uppercase" style-hover="color: #d9b36c">Loja</button><span>/</span><span style="color: #e4dccb">Carrinho</span></div>
+<h1 style="margin: 32px 0 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(48px, 6vw, 80px); line-height: 1; color: #efe6d3">O teu carrinho</h1>
+<sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 22px; margin-top: 50px; padding: 90px 20px; text-align: center; border: 1px dashed rgba(228,220,203,.18)">
+<svg viewBox="0 0 40 40" style="width: 64px; height: 64px"><g fill="none" stroke="#d9b36c" stroke-width="1"><path d="M8 14 H32 L30 36 H10Z"></path><path d="M14 14 V10 a6 6 0 0 1 12 0 V14"></path><path d="M24 21 A5 5 0 1 0 26 28 A4 4 0 1 1 24 21Z"></path></g></svg>
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #efe6d3">O carrinho está vazio</span>
+<span style="font-size: 20px; color: #a9a0b2; max-width: 42ch">Começa pela intenção: proteção, amor, prosperidade, limpeza ou sono. A loja mostra-te o que a Casa prepara para cada uma.</span>
+<button type="button" onClick="{{ goShop }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 16px 24px; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Explorar a loja</button>
+</div>
+</sc-if>
+<sc-if value="{{ cartFull }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; gap: clamp(32px, 5vw, 72px); align-items: flex-start; margin-top: 44px">
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 20px 22px; border: 1px solid rgba(228,220,203,.12); margin-bottom: 10px">
+<span style="font-size: 19px; color: #e4dccb">{{ freeMsg }}</span>
+<span style="position: relative; height: 3px; background: rgba(228,220,203,.1)"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: {{ freePct }}; background: linear-gradient(90deg, #7b4fb8, #d9b36c); transition: width .6s"></i></span>
+</div>
+<sc-for list="{{ lines }}" as="l" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: clamp(84px, 12vw, 120px) minmax(0,1fr) auto; gap: clamp(14px, 2.4vw, 26px); padding: 26px 0; border-bottom: 1px solid rgba(228,220,203,.10); align-items: start">
+<button type="button" onClick="{{ l.open }}" style="display: block; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ l.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></button>
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<button type="button" onClick="{{ l.open }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 23px; line-height: 1.15; color: #efe6d3" style-hover="color: #d9b36c">{{ l.name }}</button>
+<span style="font-size: 17px; font-style: italic; color: #a9a0b2">{{ l.varLabel }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px; color: #8c8591">{{ l.unitLabel }}</span>
+<div style="display: flex; align-items: center; gap: 18px; margin-top: 8px">
+<div style="display: flex; align-items: center; border: 1px solid rgba(228,220,203,.22)">
+<button type="button" onClick="{{ l.dec }}" aria-label="Menos" style="width: 40px; height: 42px; font-size: 18px" style-hover="color: #d9b36c">−</button>
+<span style="min-width: 26px; text-align: center; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ l.qty }}</span>
+<button type="button" onClick="{{ l.inc }}" aria-label="Mais" style="width: 40px; height: 42px; font-size: 18px" style-hover="color: #d9b36c">+</button>
+</div>
+<button type="button" onClick="{{ l.remove }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8c8591; border-bottom: 1px solid rgba(228,220,203,.2); padding-bottom: 2px" style-hover="color: #e0863c">Remover</button>
+</div>
+</div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; color: #e8cf98; white-space: nowrap">{{ l.total }}</span>
+</div>
+</sc-for>
+<button type="button" onClick="{{ goShop }}" style="align-self: flex-start; margin-top: 26px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #a9a0b2" style-hover="color: #d9b36c">← Continuar a comprar</button>
+</div>
+<aside style="flex: 1 1 340px; max-width: 460px; position: {{ sumPos }}; top: 110px; display: flex; flex-direction: column; gap: 18px; padding: clamp(22px, 3vw, 34px); border: 1px solid rgba(217,179,108,.25); background: #0d0a11; box-sizing: border-box">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 28px; color: #efe6d3">Resumo</span>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 8px">
+<input ref="{{ codeRef }}" type="text" placeholder="Código de desconto" onKeyDown="{{ codeKey }}" style="flex: 1; min-width: 0; background: transparent; border: 1px solid {{ codeBd }}; padding: 0 14px; height: 48px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase" style-focus="border-color: #d9b36c; outline: none">
+<button type="button" onClick="{{ applyCode }}" style="flex: none; height: 48px; padding: 0 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.3)" style-hover="border-color: #d9b36c">Aplicar</button>
+</div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .12em; color: {{ codeFg }}; min-height: 14px">{{ codeMsg }}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid rgba(228,220,203,.12); font-size: 19px">
+<div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #cfc6b5">Subtotal</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ tSub }}</span></div>
+<sc-if value="{{ hasDisc }}" hint-placeholder-val="{{ false }}"><div style="display: flex; justify-content: space-between; gap: 10px; color: #8e9c78"><span>Desconto · {{ codeName }} <button type="button" onClick="{{ removeCode }}" style="font-size: 14px; color: #8c8591">✕</button></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">− {{ tDisc }}</span></div></sc-if>
+<div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #cfc6b5">Envio <span style="font-size: 15px; font-style: italic; color: #8c8591">· estimado para o Continente</span></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ tShip }}</span></div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-top: 16px; border-top: 1px solid rgba(228,220,203,.12)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Total</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 22px; color: #e8cf98">{{ tTotal }}</span></div>
+<button type="button" onClick="{{ goCheckout }}" style="height: 58px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .22em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Finalizar compra →</button>
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 16px; color: #a9a0b2">
+<span>✦ Embalagem discreta em todas as encomendas</span>
+<span>✦ Devoluções em 14 dias</span>
+<span>✦ MB WAY · Multibanco · Cartão</span>
+</div>
+</aside>
+</div>
+</sc-if>
+</main>
+</sc-if>
+
+<sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Checkout" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 48px clamp(20px, 3vw, 40px) 120px; box-sizing: border-box">
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; display: flex; gap: 10px"><button type="button" onClick="{{ goCart }}" style="color: #8c8591; letter-spacing: .18em; text-transform: uppercase" style-hover="color: #d9b36c">Carrinho</button><span>/</span><span style="color: #e4dccb">Finalizar compra</span></div>
+<div style="display: flex; flex-wrap: wrap; gap: clamp(32px, 5vw, 72px); align-items: flex-start; margin-top: 32px">
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 56px">
+
+<section style="display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px">
+<h2 style="margin: 0; display: flex; align-items: baseline; gap: 14px; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 34px; color: #efe6d3"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #a77be0">I</span>Contacto</h2>
+<sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}"><span style="font-size: 18px; color: #a9a0b2">Já tens conta? <button type="button" onClick="{{ toggleAcc }}" style="color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5)">Entrar</button></span></sc-if>
+</div>
+<input type="email" placeholder="Email" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px" style-focus="border-color: #d9b36c; outline: none">
+<button type="button" onClick="{{ toggleNews }}" role="checkbox" aria-checked="{{ newsAria }}" style="display: flex; align-items: center; gap: 12px; text-align: left; font-size: 18px; color: #cfc6b5"><span style="flex: none; width: 18px; height: 18px; box-sizing: border-box; border: 1px solid {{ newsBd }}; background: {{ newsBg }}; display: grid; place-items: center; color: #09080a; font-size: 12px">{{ newsCheck }}</span>Quero receber a lua do mês e o Guia do ritual de lua cheia</button>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; display: flex; align-items: baseline; gap: 14px; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 34px; color: #efe6d3"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #a77be0">II</span>Envio</h2>
+<div role="radiogroup" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid rgba(228,220,203,.22)">
+<sc-for list="{{ regions }}" as="r" hint-placeholder-count="3">
+<button type="button" role="radio" aria-checked="{{ r.aria }}" onClick="{{ r.go }}" style="padding: 14px 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; background: {{ r.bg }}; color: {{ r.fg }}; transition: background .25s, color .25s">{{ r.label }}</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ shipOpts }}" as="o" hint-placeholder-count="3">
+<button type="button" role="radio" aria-checked="{{ o.aria }}" onClick="{{ o.go }}" style="display: grid; grid-template-columns: 18px minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 18px 20px; text-align: left; border: 1px solid {{ o.bd }}; background: {{ o.bg }}; transition: border-color .25s, background .25s" style-hover="border-color: rgba(217,179,108,.6)">
+<span style="width: 16px; height: 16px; border-radius: 50%; box-sizing: border-box; border: 1px solid {{ o.dotBd }}; display: grid; place-items: center"><i style="width: 8px; height: 8px; border-radius: 50%; background: {{ o.dot }}"></i></span>
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 20px; color: #efe6d3">{{ o.label }}</span><span style="font-size: 16px; font-style: italic; color: #a9a0b2">{{ o.sub }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; color: {{ o.priceFg }}">{{ o.price }}</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{ isPickup }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 20px; border: 1px solid rgba(228,220,203,.14); background: #0d0a11">
+<div style="display: flex; gap: 8px"><input type="text" placeholder="Código postal ou localidade" style="flex: 1; min-width: 0; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 14px; height: 48px; font-size: 18px" style-focus="border-color: #d9b36c; outline: none"><button type="button" onClick="{{ soon }}" style="height: 48px; padding: 0 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.3)">Procurar</button></div>
+<sc-for list="{{ pickups }}" as="p" hint-placeholder-count="3">
+<button type="button" role="radio" aria-checked="{{ p.aria }}" onClick="{{ p.go }}" style="display: grid; grid-template-columns: 18px minmax(0,1fr) auto; gap: 14px; align-items: start; padding: 14px 4px; text-align: left; border-bottom: 1px solid rgba(228,220,203,.08)" style-hover="color: #d9b36c">
+<span style="margin-top: 4px; width: 16px; height: 16px; border-radius: 50%; box-sizing: border-box; border: 1px solid {{ p.dotBd }}; display: grid; place-items: center"><i style="width: 8px; height: 8px; border-radius: 50%; background: {{ p.dot }}"></i></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 19px; color: #efe6d3">{{ p.name }}</span><span style="font-size: 16px; color: #a9a0b2">{{ p.addr }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #8c8591">{{ p.dist }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ needsAddress }}" hint-placeholder-val="{{ true }}">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<input type="text" placeholder="Nome" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="text" placeholder="Apelido" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="text" placeholder="Morada" style="grid-column: span 2; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="text" placeholder="Andar, porta (opcional)" style="grid-column: span 2; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="text" placeholder="Código postal (0000-000)" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="text" placeholder="Localidade" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="tel" placeholder="Telemóvel" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+<input type="text" placeholder="NIF para fatura (opcional)" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 56px; font-size: 19px; min-width: 0" style-focus="border-color: #d9b36c; outline: none">
+</div>
+</sc-if>
+<span style="display: flex; align-items: center; gap: 10px; font-size: 17px; font-style: italic; color: #a9a0b2"><svg viewBox="0 0 40 40" style="width: 22px; height: 22px; flex: none"><g fill="none" stroke="#d9b36c" stroke-width="1.6" stroke-linejoin="round"><path d="M6 12l14-6 14 6v16l-14 6-14-6z"></path><path d="M6 12l14 6 14-6"></path></g></svg>Segue em embalagem discreta, sem referência ao conteúdo.</span>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; display: flex; align-items: baseline; gap: 14px; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: 34px; color: #efe6d3"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #a77be0">III</span>Pagamento</h2>
+<div style="display: flex; flex-direction: column; border: 1px solid rgba(228,220,203,.22)">
+<sc-for list="{{ payOpts }}" as="o" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid rgba(228,220,203,.12); background: {{ o.bg }}; transition: background .25s">
+<button type="button" role="radio" aria-checked="{{ o.aria }}" onClick="{{ o.go }}" style="display: grid; grid-template-columns: 18px minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 18px 20px; text-align: left">
+<span style="width: 16px; height: 16px; border-radius: 50%; box-sizing: border-box; border: 1px solid {{ o.dotBd }}; display: grid; place-items: center"><i style="width: 8px; height: 8px; border-radius: 50%; background: {{ o.dot }}"></i></span>
+<span style="font-size: 20px; color: #efe6d3">{{ o.label }}</span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8c8591">{{ o.sub }}</span>
+</button>
+<sc-if value="{{ o.isMbway }}" hint-placeholder-val="{{ false }}"><div style="padding: 0 20px 20px 54px; display: flex; flex-direction: column; gap: 8px"><input type="tel" placeholder="Número de telemóvel MB WAY" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 52px; font-size: 19px" style-focus="border-color: #d9b36c; outline: none"><span style="font-size: 16px; font-style: italic; color: #a9a0b2">Vais receber um pedido na app para confirmar.</span></div></sc-if>
+<sc-if value="{{ o.isMb }}" hint-placeholder-val="{{ false }}"><div style="padding: 0 20px 20px 54px"><span style="font-size: 17px; font-style: italic; color: #a9a0b2">A referência aparece no fim e segue por email. É válida durante 48 horas e a encomenda só é preparada depois do pagamento.</span></div></sc-if>
+<sc-if value="{{ o.isCard }}" hint-placeholder-val="{{ false }}"><div style="padding: 0 20px 20px 54px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px"><input type="text" placeholder="Número do cartão" style="grid-column: span 2; background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; letter-spacing: .1em; min-width: 0" style-focus="border-color: #d9b36c; outline: none"><input type="text" placeholder="MM / AA" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; min-width: 0" style-focus="border-color: #d9b36c; outline: none"><input type="text" placeholder="CVC" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 14px; min-width: 0" style-focus="border-color: #d9b36c; outline: none"></div></sc-if>
+</div>
+</sc-for>
+</div>
+<span style="display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #8c8591"><svg viewBox="0 0 40 40" style="width: 18px; height: 18px"><g fill="none" stroke="#8e9c78" stroke-width="2"><path d="M11 18V13a9 9 0 0 1 18 0v5"></path><path d="M8 18h24v16H8z"></path></g></svg>Pagamento encriptado · [Processador de pagamentos]</span>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px; padding-top: 30px; border-top: 1px solid rgba(228,220,203,.12)">
+<sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ toggleMkAcc }}" role="checkbox" aria-checked="{{ mkAria }}" style="display: flex; align-items: center; gap: 12px; text-align: left; font-size: 18px; color: #cfc6b5"><span style="flex: none; width: 18px; height: 18px; box-sizing: border-box; border: 1px solid {{ mkBd }}; background: {{ mkBg }}; display: grid; place-items: center; color: #09080a; font-size: 12px">{{ mkCheck }}</span>Criar conta com estes dados para acompanhar encomendas (opcional)</button>
+<sc-if value="{{ mkAccount }}" hint-placeholder-val="{{ false }}"><input type="password" placeholder="Escolhe uma palavra-passe" style="background: transparent; border: 1px solid rgba(228,220,203,.22); padding: 0 16px; height: 54px; font-size: 19px; margin-left: 30px" style-focus="border-color: #d9b36c; outline: none"></sc-if>
+</sc-if>
+<button type="button" onClick="{{ toggleTerms }}" role="checkbox" aria-checked="{{ termsAria }}" style="display: flex; align-items: center; gap: 12px; text-align: left; font-size: 18px; color: {{ termsFg }}"><span style="flex: none; width: 18px; height: 18px; box-sizing: border-box; border: 1px solid {{ termsBd }}; background: {{ termsBg }}; display: grid; place-items: center; color: #09080a; font-size: 12px">{{ termsCheck }}</span><span>Li e aceito os <a href="#" onClick="{{ soon }}" style="color: #d9b36c">Termos e condições</a> e a <a href="#" onClick="{{ soon }}" style="color: #d9b36c">Política de devoluções</a></span></button>
+<button type="button" onClick="{{ placeOrder }}" style="height: 64px; margin-top: 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; background: #d9b36c; color: #09080a; transition: background .3s" style-hover="background: #e8cf98">{{ payBtn }}</button>
+<span style="font-size: 15px; font-style: italic; color: #8c8591; text-align: center">Livro de Reclamações Eletrónico · Resolução alternativa de litígios: [Entidade RAL]</span>
+</section>
+</div>
+
+<aside style="flex: 1 1 340px; max-width: 460px; position: {{ sumPos }}; top: 110px; display: flex; flex-direction: column; gap: 18px; padding: clamp(22px, 3vw, 34px); border: 1px solid rgba(217,179,108,.25); background: #0d0a11; box-sizing: border-box">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 28px; color: #efe6d3">A tua encomenda</span><button type="button" onClick="{{ goCart }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #a9a0b2" style-hover="color: #d9b36c">Editar</button></div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{ lines }}" as="l" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: 56px minmax(0,1fr) auto; gap: 14px; align-items: center">
+<span style="position: relative; display: block; aspect-ratio: 3 / 4; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ l.cvS }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas><b style="position: absolute; top: -8px; right: -8px; min-width: 20px; height: 20px; border-radius: 10px; background: #a77be0; color: #09080a; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; font-weight: 500; display: grid; place-items: center">{{ l.qty }}</b></span>
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 18px; line-height: 1.15; color: #efe6d3">{{ l.name }}</span><span style="font-size: 15px; font-style: italic; color: #a9a0b2">{{ l.varLabel }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #e4dccb; white-space: nowrap">{{ l.total }}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 8px; padding-top: 14px; border-top: 1px solid rgba(228,220,203,.12)">
+<input ref="{{ codeRef }}" type="text" placeholder="Código de desconto" onKeyDown="{{ codeKey }}" style="flex: 1; min-width: 0; background: transparent; border: 1px solid {{ codeBd }}; padding: 0 14px; height: 46px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase" style-focus="border-color: #d9b36c; outline: none">
+<button type="button" onClick="{{ applyCode }}" style="flex: none; height: 46px; padding: 0 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.3)" style-hover="border-color: #d9b36c">Aplicar</button>
+</div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .12em; color: {{ codeFg }}; min-height: 14px; margin-top: -8px">{{ codeMsg }}</span>
+<div style="display: flex; flex-direction: column; gap: 12px; font-size: 19px">
+<div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #cfc6b5">Subtotal</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ tSub }}</span></div>
+<sc-if value="{{ hasDisc }}" hint-placeholder-val="{{ false }}"><div style="display: flex; justify-content: space-between; gap: 10px; color: #8e9c78"><span>Desconto · {{ codeName }} <button type="button" onClick="{{ removeCode }}" style="font-size: 14px; color: #8c8591">✕</button></span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">− {{ tDisc }}</span></div></sc-if>
+<div style="display: flex; justify-content: space-between; gap: 10px"><span style="color: #cfc6b5">Envio · {{ shipName }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ tShip }}</span></div>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-top: 16px; border-top: 1px solid rgba(228,220,203,.12)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Total</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 22px; color: #e8cf98">{{ tTotal }}</span></div>
+<span style="font-size: 15px; font-style: italic; color: #8c8591">IVA incluído à taxa em vigor.</span>
+</aside>
+</div>
+</main>
+</sc-if>
+
+<sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Confirmação" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 64px clamp(20px, 3vw, 40px) 120px; box-sizing: border-box; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px">
+<svg ref="{{ doneMoonRef }}" viewBox="0 0 80 80" style="width: 84px; height: 84px; overflow: visible"><circle cx="40" cy="40" r="36" fill="none" stroke="rgba(217,179,108,.35)" stroke-width="1"></circle><path d="M52 12 A30 30 0 1 0 68 58 A24 24 0 1 1 52 12Z" fill="#e8cf98"></path><circle cx="62" cy="22" r="2" fill="#a77be0"></circle></svg>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0">Encomenda {{ oNum }} · {{ oDate }}</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(40px, 5.4vw, 68px); line-height: 1.02; color: #efe6d3; text-wrap: balance; max-width: 16ch">Obrigado. A Casa já recebeu o teu pedido.</h1>
+<p style="margin: 0; font-size: 21px; line-height: 1.5; color: #cfc6b5; max-width: 50ch">Enviámos a confirmação para o teu email. Cada peça é preparada à mão e consagrada antes de sair.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: {{ doneCols }}; gap: clamp(20px, 2.6vw, 32px); align-items: start">
+<div style="position: relative; display: flex; flex-direction: column; border: 1px solid rgba(217,179,108,.3); background: #0d0a11; min-width: 0">
+
+<sc-if value="{{ oMbway }}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: 64px minmax(0,1fr) auto; gap: 18px; align-items: center; padding: 24px clamp(20px, 2.6vw, 30px); background: linear-gradient(100deg, rgba(217,179,108,.14), rgba(217,179,108,.02)); border-bottom: 1px solid rgba(217,179,108,.25)">
+<span style="position: relative; width: 56px; height: 56px; display: grid; place-items: center"><svg viewBox="0 0 56 56" style="position: absolute; inset: 0; width: 56px; height: 56px; transform: rotate(-90deg)"><circle cx="28" cy="28" r="25" fill="none" stroke="rgba(228,220,203,.12)" stroke-width="2"></circle><circle cx="28" cy="28" r="25" fill="none" stroke="#d9b36c" stroke-width="2" stroke-linecap="round" stroke-dasharray="157.1" stroke-dashoffset="{{ mbOffset }}" style="transition: stroke-dashoffset 1s linear"></circle></svg><svg viewBox="0 0 24 24" style="width: 22px; height: 22px"><path d="M8 3h8v18H8z M11 18h2" fill="none" stroke="#e8cf98" stroke-width="1.4" stroke-linecap="round"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 4px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #f3ead6">Confirma na app MB WAY</span><span style="font-size: 17px; line-height: 1.4; color: #cfc6b5">Enviámos um pedido de {{ oTotal }} para o teu telemóvel. A encomenda avança quando aceitares.</span></span>
+<span style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 28px; color: #e8cf98; font-variant-numeric: tabular-nums">{{ mbLeft }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591; font-size: 9.5px">restantes</span></span>
+</div>
+</sc-if>
+<sc-if value="{{ oMb }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 24px clamp(20px, 2.6vw, 30px); background: linear-gradient(100deg, rgba(217,179,108,.14), rgba(217,179,108,.02)); border-bottom: 1px solid rgba(217,179,108,.25)">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #f3ead6">Paga por Multibanco</span>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px 22px">
+<span style="display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">Entidade</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 22px; color: #efe6d3">[00000]</span></span>
+<span style="display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">Referência</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 22px; color: #efe6d3">[000 000 000]</span></span>
+<span style="display: flex; flex-direction: column; gap: 6px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">Montante</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 22px; color: #e8cf98">{{ oTotal }}</span></span>
+</div>
+<span style="font-size: 16px; font-style: italic; color: #a9a0b2">Válida até {{ oUntil }}. A encomenda é preparada depois do pagamento.</span>
+</div>
+</sc-if>
+<sc-if value="{{ oCard }}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 16px; align-items: center; padding: 22px clamp(20px, 2.6vw, 30px); background: linear-gradient(100deg, rgba(142,156,120,.16), rgba(142,156,120,.02)); border-bottom: 1px solid rgba(142,156,120,.3)">
+<span style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(169,184,146,.6); display: grid; place-items: center; color: #a9b892; font-size: 20px">✓</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #f3ead6">Pagamento confirmado</span><span style="font-size: 17px; color: #cfc6b5">{{ oTotal }} pagos com cartão.</span></span>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-direction: column; padding: 8px clamp(20px, 2.6vw, 30px) 0">
+<sc-for list="{{ oLines }}" as="l" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: 56px minmax(0,1fr) auto; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(228,220,203,.08)">
+<span style="display: block; width: 56px; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ l.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></span>
+<span style="display: flex; flex-direction: column; gap: 3px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px; line-height: 1.15; color: #efe6d3">{{ l.name }}</span><span style="font-size: 16px; font-style: italic; color: #a9a0b2">{{ l.varLabel }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #8c8591">Quantidade · {{ l.qty }}</span></span>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13.5px; color: #e4dccb; white-space: nowrap">{{ l.total }}</span>
+</div>
+</sc-for>
+</div>
+<div aria-hidden="true" style="position: relative; height: 28px; margin: 6px 0"><i style="position: absolute; left: -12px; top: 2px; width: 24px; height: 24px; border-radius: 50%; background: #09080a; border-right: 1px solid rgba(217,179,108,.3)"></i><i style="position: absolute; right: -12px; top: 2px; width: 24px; height: 24px; border-radius: 50%; background: #09080a; border-left: 1px solid rgba(217,179,108,.3)"></i><i style="position: absolute; left: 22px; right: 22px; top: 14px; border-top: 1px dashed rgba(228,220,203,.2)"></i></div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 0 clamp(20px, 2.6vw, 30px) 26px; font-size: 18px">
+<div style="display: flex; justify-content: space-between; gap: 12px"><span style="color: #a9a0b2">Subtotal</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ oSub }}</span></div>
+<sc-if value="{{ oHasDisc }}" hint-placeholder-val="{{ false }}"><div style="display: flex; justify-content: space-between; gap: 12px; color: #a9b892"><span>Desconto</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">− {{ oDisc }}</span></div></sc-if>
+<div style="display: flex; justify-content: space-between; gap: 12px"><span style="color: #a9a0b2">Envio · {{ oShip }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 13px">{{ oShipCost }}</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 14px; margin-top: 4px; border-top: 1px solid rgba(228,220,203,.12)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 26px; color: #efe6d3">Total</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 24px; color: #e8cf98">{{ oTotal }}</span></div>
+<span style="font-size: 14.5px; font-style: italic; color: #8c8591">IVA incluído. A fatura segue por email depois do pagamento.</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 20px; min-width: 0">
+<div style="display: flex; flex-direction: column; padding: 24px clamp(20px, 2.4vw, 28px); border: 1px solid rgba(228,220,203,.14)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591; padding-bottom: 18px">O que acontece agora</span>
+<sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 16px">
+<span style="position: relative; display: flex; justify-content: center"><i style="position: relative; z-index: 1; margin-top: 6px; width: 11px; height: 11px; border-radius: 50%; box-sizing: border-box; background: {{ st.dot }}; border: 1px solid {{ st.dotBd }}; box-shadow: {{ st.glow }}"></i><i style="display: {{ st.lineOn }}; position: absolute; top: 18px; bottom: -6px; left: 8px; width: 1px; background: rgba(228,220,203,.16)"></i></span>
+<span style="display: flex; flex-direction: column; gap: 3px; padding-bottom: 22px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 21px; color: {{ st.tfg }}">{{ st.title }}</span><span style="font-size: 16.5px; line-height: 1.4; color: #a9a0b2">{{ st.text }}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 22px clamp(20px, 2.4vw, 28px); border: 1px solid rgba(228,220,203,.14)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #8c8591">Entrega</span>
+<span style="font-size: 19px; color: #efe6d3">{{ oShip }}</span>
+<span style="font-size: 17px; line-height: 1.45; color: #bdb4c4">{{ oAddr }}</span>
+<span style="display: flex; align-items: center; gap: 10px; padding-top: 8px; font-size: 16px; font-style: italic; color: #a9a0b2"><svg viewBox="0 0 40 40" style="width: 20px; height: 20px; flex: none"><g fill="none" stroke="#d9b36c" stroke-width="1.6" stroke-linejoin="round"><path d="M6 12l14-6 14 6v16l-14 6-14-6z"></path><path d="M6 12l14 6 14-6"></path></g></svg>Embalagem discreta, sem referência ao conteúdo.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<a href="Conta.dc.html" style="height: 56px; display: grid; place-items: center; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98; color: #09080a">Seguir a encomenda</a>
+<button type="button" onClick="{{ goShop }}" style="height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25)" style-hover="border-color: #d9b36c">Voltar à loja</button>
+</div>
+<sc-if value="{{ oGuest }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 22px; background: linear-gradient(160deg, rgba(123,79,184,.16), rgba(9,8,10,0) 70%); border: 1px solid rgba(167,123,224,.3)">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 22px; color: #efe6d3">Guardar numa conta</span>
+<span style="font-size: 16.5px; line-height: 1.4; color: #a9a0b2">Só falta uma palavra-passe para acompanhares o envio e guardares a morada.</span>
+<a href="Conta.dc.html" style="align-self: flex-start; padding: 12px 16px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid #a77be0; color: #e4dccb" style-hover="background: #a77be0; color: #09080a">Criar conta</a>
+</div>
+</sc-if>
+</div>
+</div>
+
+<a href="Grimorio.dc.html" style="display: grid; grid-template-columns: 56px minmax(0,1fr) auto; gap: 20px; align-items: center; padding: 22px clamp(20px, 2.6vw, 30px); border-top: 1px solid rgba(228,220,203,.12); border-bottom: 1px solid rgba(228,220,203,.12)" style-hover="background: rgba(123,79,184,.06); color: #e4dccb">
+<span style="width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(217,179,108,.6); display: grid; place-items: center; color: #d9b36c; font-size: 16px; padding-left: 3px; box-sizing: border-box">▶</span>
+<span style="display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Enquanto esperas, aprende a usar as tuas peças</span><span style="font-size: 17px; color: #a9a0b2">Sessões gratuitas do Zé no Grimório, com rituais passo a passo.</span></span>
+<span style="color: #d9b36c; font-size: 22px">→</span>
+</a>
+</main>
+</sc-if>
+
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+
+<div onClick="{{ closeDrawer }}" style="position: fixed; inset: 0; z-index: 80; background: rgba(5,4,6,.62); backdrop-filter: blur(3px); transition: opacity .45s; opacity: {{ ovOp }}; pointer-events: {{ ovPe }}"></div>
+<aside aria-label="Carrinho" style="position: fixed; top: 0; right: 0; bottom: 0; z-index: 81; width: min(460px, 100vw); box-sizing: border-box; background: #0d0a11; border-left: 1px solid rgba(217,179,108,.25); box-shadow: -40px 0 80px -30px rgba(0,0,0,.9); display: flex; flex-direction: column; transition: transform .55s cubic-bezier(.2,.7,.1,1); transform: {{ drawerTf }}">
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 22px 26px; border-bottom: 1px solid rgba(228,220,203,.10)">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 26px; color: #efe6d3">Carrinho <span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #d9b36c">{{ cartCount }}</span></span>
+<button type="button" onClick="{{ closeDrawer }}" aria-label="Fechar" style="width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(228,220,203,.2)" style-hover="border-color: #d9b36c">✕</button>
+</div>
+<sc-if value="{{ hasLast }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 10px; padding: 14px 26px; background: rgba(142,156,120,.10); border-bottom: 1px solid rgba(142,156,120,.25); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #a9b892">✓ {{ lastName }} adicionado</div>
+</sc-if>
+<sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 18px; padding: 30px; text-align: center">
+<svg viewBox="0 0 40 40" style="width: 56px; height: 56px"><g fill="none" stroke="#d9b36c" stroke-width="1"><path d="M8 14 H32 L30 36 H10Z"></path><path d="M14 14 V10 a6 6 0 0 1 12 0 V14"></path></g></svg>
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 28px; color: #efe6d3">Ainda nada por aqui</span>
+<span style="font-size: 18px; color: #a9a0b2">Os mais procurados esta lua:</span>
+<div style="display: flex; flex-direction: column; gap: 8px; width: 100%">
+<sc-for list="{{ suggest }}" as="p" hint-placeholder-count="3">
+<button type="button" onClick="{{ p.open }}" style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 16px; border: 1px solid rgba(228,220,203,.14); font-size: 18px; text-align: left" style-hover="border-color: rgba(217,179,108,.6)"><span>{{ p.name }}</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #e8cf98">{{ p.price }}</span></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ cartFull }}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: rgba(217,179,108,.4) transparent">
+<div style="padding: 18px 26px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid rgba(228,220,203,.10)">
+<span style="font-size: 17px; color: #e4dccb">{{ freeMsg }}</span>
+<span style="position: relative; height: 3px; background: rgba(228,220,203,.1)"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: {{ freePct }}; background: linear-gradient(90deg, #7b4fb8, #d9b36c); transition: width .6s"></i></span>
+</div>
+<div style="flex: 1 0 auto; padding: 0 26px">
+<sc-for list="{{ lines }}" as="l" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: 64px minmax(0,1fr) auto; gap: 14px; padding: 18px 0; border-bottom: 1px solid rgba(228,220,203,.08); align-items: start">
+<span style="display: block; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ l.cvD }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></span>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 19px; line-height: 1.15; color: #efe6d3">{{ l.name }}</span>
+<span style="font-size: 15px; font-style: italic; color: #a9a0b2">{{ l.varLabel }}</span>
+<div style="display: flex; align-items: center; gap: 14px; margin-top: 4px">
+<div style="display: flex; align-items: center; border: 1px solid rgba(228,220,203,.2)">
+<button type="button" onClick="{{ l.dec }}" aria-label="Menos" style="width: 32px; height: 32px" style-hover="color: #d9b36c">−</button>
+<span style="min-width: 22px; text-align: center; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px">{{ l.qty }}</span>
+<button type="button" onClick="{{ l.inc }}" aria-label="Mais" style="width: 32px; height: 32px" style-hover="color: #d9b36c">+</button>
+</div>
+<button type="button" onClick="{{ l.remove }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: #8c8591" style-hover="color: #e0863c">Remover</button>
+</div>
+</div>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; color: #e8cf98; white-space: nowrap">{{ l.total }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="flex: none; padding: 18px 26px 22px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(228,220,203,.12); background: #0d0a11">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 20px; color: #cfc6b5">Subtotal</span><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 18px; color: #e8cf98">{{ tSubNet }}</span></div>
+<span style="font-size: 15px; font-style: italic; color: #8c8591">Envio e códigos de desconto no passo seguinte.</span>
+<button type="button" onClick="{{ goCheckout }}" style="height: 52px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Finalizar compra</button>
+<button type="button" onClick="{{ goCart }}" style="height: 46px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25)" style-hover="border-color: #d9b36c">Ver carrinho</button>
+</div>
+</sc-if>
+</aside>
+
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #e4dccb; color: #09080a; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;shop&quot;,&quot;product&quot;,&quot;drawer&quot;,&quot;cart&quot;,&quot;checkout&quot;,&quot;done&quot;],&quot;default&quot;:&quot;shop&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Revisão&quot;},&quot;freeShip&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:40,&quot;min&quot;:0,&quot;max&quot;:120,&quot;step&quot;:5,&quot;unit&quot;:&quot;€&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Loja&quot;},&quot;announcement&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Loja&quot;}}">
+class Component extends DCLogic {
+  state = { view: 'shop', pid: 0, cart: [], drawer: false, last: null,
+    f: { cat: [], int: [], lua: [], el: [], price: -1, stock: false }, sort: 'rel', q: '',
+    searchOpen: false, filtersOpen: false, menuOpen: false, accOpen: false, logged: false,
+    img: 0, vsel: 0, qty: 1, tab: 0, kitOff: {}, notified: {}, code: null, codeErr: false,
+    region: 0, ship: 0, pickup: 0, pay: 0, mkAccount: false, news: true, terms: false, termsErr: false,
+    order: null, ann: 0, narrow: false, toast: '' };
+
+  CATS = ['Velas & Óleos', 'Cristais & Amuletos', 'Ervas & Grimórios', 'Kits & Rituais'];
+  INTS = ['Proteção', 'Amor', 'Prosperidade', 'Limpeza energética', 'Sono e sonhos'];
+  GLYPHS = ['M10 30 Q30 12 50 30 Q30 48 10 30Z M30 24 a6 6 0 1 0 0.01 0 M30 6 a24 24 0 1 0 0.01 0', 'M24 18 a12 12 0 1 0 0.01 0 M36 18 a12 12 0 1 0 0.01 0', 'M30 20 a10 10 0 1 0 0.01 0 M30 6V12 M30 48V54 M6 30H12 M48 30H54 M13 13L17 17 M43 43L47 47 M47 13L43 17 M17 43L13 47', 'M22 54 C14 44 30 38 22 28 C16 20 26 14 22 6 M34 54 C26 44 42 38 34 28 C28 20 38 14 34 6 M46 50 C40 42 50 38 46 30', 'M36 10 A20 20 0 1 0 50 40 A16 16 0 1 1 36 10Z'];
+  LUAS = { nova: 'Lua Nova', cres: 'Lua Crescente', cheia: 'Lua Cheia', ming: 'Lua Minguante' };
+  LUA_TXT = { nova: 'Para começos e intenções novas', cres: 'Para atrair e abrir caminhos', cheia: 'Para carregar e agradecer', ming: 'Para limpar, cortar e libertar' };
+  MOON_F = { nova: '', cres: 'M10 2 A8 8 0 0 1 10 18 A4 8 0 0 0 10 2Z', cheia: 'M10 2 A8 8 0 1 0 10.01 2Z', ming: 'M10 2 A8 8 0 0 0 10 18 A4 8 0 0 1 10 2Z' };
+  MOON_S = 'M10 2 A8 8 0 1 0 10.01 2Z';
+  ELS = ['Fogo', 'Terra', 'Ar', 'Água'];
+  EL_D = ['M10 3 L18 17 L2 17Z', 'M2 3 L18 3 L10 17Z M5 9 H15', 'M10 3 L18 17 L2 17Z M5 11 H15', 'M2 3 L18 3 L10 17Z'];
+  PRICES = ['Até 15 €', '15 € a 30 €', '30 € ou mais'];
+  PR = [
+    { n: 'Vela de Intenção', cat: 0, pr: 14, lua: 'cres', int: [1, 2], el: 0, stock: 24, sold: 412, rt: 4.9, rv: 38, d: 'candle', line: 'Prosperidade e caminhos abertos', v: ['Cor', [['Verde', 0], ['Rosa', 0], ['Branca', 0]]], kit: [11, 5] },
+    { n: 'Óleo Lua Negra', cat: 0, pr: 18, lua: 'ming', int: [0], el: 3, stock: 12, sold: 268, rt: 4.8, rv: 21, d: 'oil', line: 'Proteção e corte de laços', v: ['Tamanho', [['10 ml', 0], ['30 ml', 10]]], kit: [10, 3] },
+    { n: 'Ametista Bruta', cat: 1, pr: 26, lua: 'cheia', int: [4], el: 2, stock: 9, sold: 190, rt: 5.0, rv: 17, d: 'crystal', line: 'Intuição e sono tranquilo', v: ['Tamanho', [['Pequena', 0], ['Média', 12], ['Grande', 28]]], kit: [5, 6] },
+    { n: 'Amuleto Crescente', cat: 1, pr: 32, lua: 'nova', int: [0], el: 1, stock: 6, sold: 144, rt: 4.9, rv: 12, d: 'amulet', line: 'Proteção em viagem', v: ['Metal', [['Latão', 0], ['Prata 925', 18]]], kit: [1, 10] },
+    { n: 'Kit Lua Cheia', cat: 3, pr: 38, lua: 'cheia', int: [3], el: 3, stock: 15, sold: 233, rt: 4.9, rv: 29, d: 'moon', line: 'Limpeza e gratidão', v: null, kit: [2, 5] },
+    { n: 'Molho de Sálvia', cat: 2, pr: 9, lua: 'ming', int: [3], el: 2, stock: 40, sold: 520, rt: 4.7, rv: 46, d: 'sage', line: 'Limpeza de espaços', v: ['Tamanho', [['Pequeno', 0], ['Grande', 5]]], kit: [0, 4] },
+    { n: 'Tarot da Casa', cat: 2, pr: 42, lua: 'nova', int: [], el: 2, stock: 7, sold: 98, rt: 5.0, rv: 14, d: 'tarot', line: 'Adivinhação e clareza', v: null, kit: [7, 2] },
+    { n: 'Grimório em Branco', cat: 2, pr: 48, lua: 'nova', int: [], el: 1, stock: 0, sold: 76, rt: 4.9, rv: 9, d: 'grimoire', line: 'Registo de feitiços', v: ['Capa', [['Couro negro', 0], ['Linho natural', 0]]], kit: [6, 0] },
+    { n: 'Óleo Rosa e Canela', cat: 0, pr: 16, lua: 'cres', int: [1], el: 0, stock: 18, isNew: true, sold: 40, rt: 4.8, rv: 6, d: 'oil', line: 'Amor-próprio e atração', v: ['Tamanho', [['10 ml', 0], ['30 ml', 9]]], kit: [9, 0] },
+    { n: 'Quartzo Rosa', cat: 1, pr: 22, lua: 'cheia', int: [1], el: 3, stock: 11, isNew: true, sold: 35, rt: 5.0, rv: 4, d: 'crystal', line: 'Amor e ternura', v: ['Tamanho', [['Pequeno', 0], ['Médio', 10]]], kit: [8, 0] },
+    { n: 'Vela Negra de Proteção', cat: 0, pr: 12, lua: 'ming', int: [0], el: 0, stock: 3, sold: 301, rt: 4.8, rv: 27, d: 'candle', line: 'Proteção da casa', v: null, kit: [1, 5] },
+    { n: 'Ervas de Abundância', cat: 2, pr: 11, lua: 'cres', int: [2], el: 1, stock: 22, sold: 122, rt: 4.7, rv: 11, d: 'sage', line: 'Prosperidade e fartura', v: null, kit: [0, 3] },
+    { n: 'Kit Samhain', cat: 3, pr: 44, lua: 'nova', int: [0, 3], el: 0, stock: 8, isNew: true, ltd: true, sold: 22, rt: 5.0, rv: 3, d: 'moon', line: 'Honrar os antepassados', v: null, kit: [10, 6] }
+  ];
+  DESC = {
+    candle: 'Vela vertida à mão em pequenas quantidades e consagrada na fase lunar indicada. Segue com o ritual escrito para a acender.',
+    oil: 'Óleo ritual macerado durante um ciclo lunar inteiro, com plantas escolhidas para esta intenção. Para ungir velas, amuletos ou os pulsos.',
+    crystal: 'Pedra natural escolhida peça a peça, limpa e carregada à luz da lua antes de seguir para ti. Cada uma tem forma e cor próprias.',
+    amulet: 'Amuleto trabalhado à mão e consagrado na Casa. Para usar junto ao corpo ou levar na mala.',
+    moon: 'Tudo o que precisas para o ritual numa só caixa: velas, ervas, sal e o ritual escrito à mão pelo Zé.',
+    sage: 'Ervas secas e atadas à mão para defumação. Para limpar a casa, o altar ou um objeto novo.',
+    tarot: 'Baralho completo de 78 cartas com o livreto da Casa e saco de linho. Para quem começa e para quem já lê.',
+    grimoire: 'Caderno cosido à mão para registar rituais, sonhos e fases da lua. Papel de algodão que aceita tinta e cera.'
+  };
+  HOW = {
+    candle: ['Limpa a vela com um pano seco e escolhe a fase lunar indicada.', 'Escreve a tua intenção num papel e coloca-o debaixo do castiçal.', 'Acende com fósforo e deixa arder em segurança. Apaga com um abafador, sem soprar.'],
+    oil: ['Agita suavemente o frasco antes de usar.', 'Unge a vela do centro para as pontas, ou aplica uma gota nos pulsos.', 'Guarda longe da luz direta e do calor.'],
+    crystal: ['Lava a pedra em água corrente quando chegar.', 'Deixa-a a carregar uma noite à luz da lua cheia.', 'Coloca-a junto à cama ou no teu altar.'],
+    amulet: ['Segura o amuleto e diz a tua intenção em voz baixa.', 'Usa-o junto ao corpo ou guarda-o na mala.', 'Recarrega-o a cada lua nova.'],
+    moon: ['Prepara o espaço e abre o kit na noite indicada.', 'Segue o ritual escrito à mão que vem dentro da caixa.', 'Guarda as cinzas e as ervas para devolver à terra.'],
+    sage: ['Acende a ponta e deixa a chama apagar-se sozinha.', 'Passa o fumo pelos cantos da casa, de janelas abertas.', 'Apaga num prato com areia ou terra.'],
+    tarot: ['Antes da primeira leitura, baralha as cartas com calma.', 'Guarda o baralho no saco de linho que o acompanha.', 'Consulta o livreto para o significado de cada carta.'],
+    grimoire: ['Na primeira página, escreve o teu nome e a data.', 'Regista rituais, sonhos e fases da lua.', 'Guarda-o num lugar só teu.']
+  };
+  MAT = {
+    candle: [['Cera', 'Soja e cera de abelha'], ['Pavio', 'Algodão sem chumbo'], ['Duração', 'Cerca de 6 horas'], ['Feito em', 'Casa de Zé, à mão']],
+    oil: [['Base', 'Óleo de amêndoa doce'], ['Plantas', 'Mirra, arruda e pimenta-preta'], ['Frasco', 'Vidro âmbar com conta-gotas'], ['Uso', 'Externo. Não ingerir']],
+    crystal: [['Pedra', 'Natural, não tratada'], ['Origem', '[Origem]'], ['Peso', 'Varia por peça'], ['Inclui', 'Saco de linho']],
+    amulet: [['Metal', 'Latão ou prata 925'], ['Corrente', '45 cm'], ['Acabamento', 'Martelado à mão'], ['Inclui', 'Bolsa de veludo']],
+    moon: [['Inclui', '2 velas, ervas, sal e ritual escrito'], ['Caixa', 'Cartão reciclado'], ['Ritual', 'Cerca de 30 minutos'], ['Feito em', 'Casa de Zé, à mão']],
+    sage: [['Planta', 'Sálvia branca seca'], ['Atado', 'Fio de algodão'], ['Tamanho', 'Varia por molho'], ['Uso', 'Em espaço ventilado']],
+    tarot: [['Cartas', '78, Arcanos Maiores e Menores'], ['Papel', 'Cartão mate 350 g'], ['Inclui', 'Livreto e saco de linho'], ['Tamanho', '7 × 12 cm']],
+    grimoire: [['Páginas', '200, papel de algodão'], ['Capa', 'Couro ou linho'], ['Encadernação', 'Cosida à mão'], ['Tamanho', 'A5']]
+  };
+  SHIPROWS = [['Continente', '2 a 4 dias úteis · 4,50 € · grátis acima de 40 €'], ['Madeira e Açores', '5 a 8 dias úteis · 7,90 €'], ['Ponto CTT', 'Levantas quando te der jeito · desde 3,50 €'], ['Devoluções', '14 dias, com o produto por abrir'], ['Embalagem', 'Discreta, sem referência ao conteúdo']];
+  PICKUPS = [['Ponto CTT · Papelaria Central', 'Rua [x], 12 · 9h–19h', '0,6 km'], ['Loja CTT · Centro', 'Av. [x], 40 · 9h–18h', '1,1 km'], ['Ponto CTT · Quiosque da Praça', 'Praça [x] · 8h–20h', '1,8 km']];
+  PAYS = [['MB WAY', 'Imediato'], ['Multibanco', 'Referência 48 h'], ['Cartão', 'Visa · Mastercard']];
+  ICONS = ['M4 14h20v14H4z M24 18h7l5 5v5H24 M10 31a3 3 0 1 0 0.01 0 M30 31a3 3 0 1 0 0.01 0', 'M11 18V13a9 9 0 0 1 18 0v5 M8 18h24v16H8z M20 24v5', 'M8 16a12 12 0 1 1 3 10 M8 8v8h8', 'M6 12l14-6 14 6v16l-14 6-14-6z M6 12l14 6 14-6 M20 18v16'];
+  GUAR = [['Envios', 'Continente em 2 a 4 dias úteis · Madeira e Açores em 5 a 8'], ['Pagamento seguro', 'MB WAY · Multibanco · Cartão'], ['Devoluções', '14 dias para devolver'], ['Embalagem discreta', 'Sem referência ao conteúdo no exterior']];
+  ANN = ['Portes grátis acima de 40 € no Continente', 'Coleção de Samhain disponível até 31 de outubro', 'Embalagem discreta em todas as encomendas'];
+  REVIEWS = [
+    ['★★★★★', 'Chegou muito bem embalado e o cheiro é suave. Uso nas noites de lua crescente, com o ritual que veio escrito.', 'M. S. · Lisboa', 'há 2 semanas'],
+    ['★★★★★', 'Gostei de receber as instruções escritas à mão. Nota-se o cuidado em cada detalhe da encomenda.', 'R. F. · Porto', 'há 1 mês'],
+    ['★★★★☆', 'Embalagem discreta como prometido. Demorou mais um dia do que o previsto, mas valeu a espera.', 'A. C. · Funchal', 'há 2 meses']
+  ];
+
+  _cv = {};
+  _refs = {};
+  ref = (k) => this._refs['_' + k] || (this._refs['_' + k] = (el) => { this._refs[k] = el; });
+  cv(slot, draw, seed) {
+    const k = slot + '|' + draw + '|' + seed;
+    return this._cv[k] || (this._cv[k] = (el) => { if (!el) return; const go = () => window.CovilArt.paint(el, draw, seed); window.CovilArt ? go() : window.addEventListener('covilart', go, { once: true }); });
+  }
+  fmt(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+  unit(p, v) { return p.pr + (p.v ? p.v[1][v || 0][1] : 0); }
+
+  componentDidMount() {
+    try { const d = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); if (d) this.setState({ cart: d.cart || [], view: d.view || 'shop', pid: d.pid || 0, order: d.order || null, logged: !!d.logged }); } catch (e) {}
+    this._prevStart = this.props.startView;
+    if (this.props.startView && this.props.startView !== 'shop') setTimeout(() => this.applyStart(this.props.startView), 0);
+    try { const u = new URLSearchParams(location.search), p = u.get('p'), v = u.get('view'); const cq = u.get('cat'); if (cq != null && this.CATS[+cq]) setTimeout(() => { this.setState({ f: { cat: [+cq], int: [], lua: [], el: [], price: -1, stock: false } }); this.go('shop'); }, 0); if (p != null && this.PR[+p]) setTimeout(() => this.go('product', +p), 0); else if (v === 'cart' || v === 'checkout') setTimeout(() => this.go(v), 0); else if (v === 'shop') setTimeout(() => this.go('shop'), 0); if (u.get('drawer')) setTimeout(() => this.setState({ drawer: true }), 50); if (p != null || v || cq != null) history.replaceState(null, '', location.pathname); } catch (e) {}
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    this._annT = setInterval(() => { const el = this._refs.ann; if (!el) return; el.style.opacity = '0'; el.style.transform = 'translateY(-6px)'; setTimeout(() => { this.setState(s => ({ ann: (s.ann + 1) % this.ANN.length }), () => { el.style.transform = 'translateY(6px)'; requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'none'; }); }); }, 350); }, 4200);
+    this._mbT = setInterval(() => { const o = this.state.order; if (this.state.view === 'done' && o && o.pay === 0) this.forceUpdate(); }, 1000);
+    this._key = (e) => { if (e.key === 'Escape') this.setState({ drawer: false, accOpen: false, searchOpen: false, filtersOpen: false }); }; addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); removeEventListener('keydown', this._key); clearInterval(this._annT); clearInterval(this._mbT); }
+  componentDidUpdate() {
+    const s = this.state, ps = this._prev || s, pv = this._prevStart;
+    this._prev = s; this._prevStart = this.props.startView;
+    if (pv !== undefined && pv !== this.props.startView && this.props.startView) this.applyStart(this.props.startView);
+    if (ps.cart !== s.cart || ps.view !== s.view || ps.pid !== s.pid || ps.order !== s.order || ps.logged !== s.logged) { try { localStorage.setItem('cz-loja-v1', JSON.stringify({ cart: s.cart, view: s.view, pid: s.pid, order: s.order, logged: s.logged })); } catch (e) {} }
+    if (ps.cart !== s.cart && s.cart.length >= ps.cart.length && this._refs.cartBadge) this._refs.cartBadge.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.7)' }, { transform: 'scale(1)' }], { duration: 450, easing: 'cubic-bezier(.2,.7,.1,1)' });
+    document.body.style.overflow = (s.drawer || (s.filtersOpen && s.narrow)) ? 'hidden' : '';
+  }
+  applyStart(v) {
+    const demo = [{ id: 0, v: 0, qty: 2 }, { id: 2, v: 1, qty: 1 }];
+    const cart = this.state.cart.length ? this.state.cart : demo;
+    if (v === 'cart' || v === 'checkout') this.setState({ cart }, () => this.go(v));
+    else if (v === 'done') { this.setState({ cart }, () => { this.setState({ terms: true }, () => this.placeOrder()); }); }
+    else if (v === 'drawer') this.setState({ cart, drawer: true, view: 'shop' });
+    else this.go(v, v === 'product' ? 0 : undefined);
+  }
+  go(view, pid) {
+    this.setState(s => ({ view, pid: pid ?? s.pid, img: 0, vsel: 0, qty: 1, tab: 0, kitOff: {}, drawer: false, searchOpen: view === 'shop' ? s.searchOpen : false, menuOpen: false, filtersOpen: false, accOpen: false, last: null }));
+    window.scrollTo(0, 0);
+  }
+  say(t) { clearTimeout(this._tt); this.setState({ toast: t }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+  add(id, v, qty, open = true) {
+    this.setState(s => {
+      const cart = s.cart.map(c => ({ ...c })), f = cart.find(c => c.id === id && c.v === v);
+      if (f) f.qty += qty; else cart.push({ id, v, qty });
+      return { cart, drawer: open, last: { id } };
+    });
+  }
+  setQty(k, d) { this.setState(s => { const cart = s.cart.map(c => ({ ...c })); cart[k].qty += d; return { cart: cart.filter(c => c.qty > 0), last: null }; }); }
+  removeLine(k) { this.setState(s => ({ cart: s.cart.filter((_, i) => i !== k), last: null })); }
+  lines() {
+    return this.state.cart.map((c, k) => { const p = this.PR[c.id], u = this.unit(p, c.v);
+      return { k, id: c.id, name: p.n, varLabel: p.v ? p.v[0] + ': ' + p.v[1][c.v][0] : p.line, unit: u, qty: c.qty, total: u * c.qty, d: p.d, seed: 100 + c.id }; });
+  }
+  totals() {
+    const s = this.state, FREE = this.props.freeShip ?? 40, lines = this.lines();
+    const sub = lines.reduce((a, l) => a + l.total, 0), disc = s.code ? Math.round(sub * 10) / 100 : 0, net = sub - disc;
+    const cost = (ship) => { const base = (s.region === 0 ? [4.5, 3.5, 0] : [7.9, 6.5, 0])[ship]; return !lines.length ? 0 : (s.region === 0 && net >= FREE ? 0 : base); };
+    const ship = cost(s.ship);
+    return { lines, sub, disc, net, ship, cost, total: net + ship, freeLeft: Math.max(0, FREE - net), freePct: Math.min(100, net / FREE * 100), FREE };
+  }
+  applyCode() {
+    const el = this._refs.code, v = (el && el.value || '').trim().toUpperCase();
+    if (!v) return;
+    if (v === 'LUA10') { this.setState({ code: 'LUA10', codeErr: false }); if (el) el.value = ''; }
+    else this.setState({ codeErr: true });
+  }
+  placeOrder() {
+    const s = this.state; if (!s.cart.length) { this.go('shop'); return; }
+    if (!s.terms) { this.setState({ termsErr: true }); this.say('Falta aceitar os termos'); return; }
+    const T = this.totals(), shipName = this.shipNames()[s.ship];
+    const until = new Date(Date.now() + 48 * 3600000);
+    const order = { num: 'CZ-' + String(Date.now() % 100000).padStart(5, '0'), at: Date.now(), sub: this.fmt(T.sub), disc: T.disc ? this.fmt(T.disc) : '', addr: s.ship === 1 ? this.PICKUPS[s.pickup][0] + ' · ' + this.PICKUPS[s.pickup][1] : s.ship === 2 ? 'Casa de Zé · [Morada] · combinamos o dia por mensagem' : '[Nome] · [Morada] · [Código postal] [Localidade]', eta: new Intl.DateTimeFormat('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(Date.now() + (s.region === 0 ? 4 : 8) * 864e5)), lines: T.lines.map(l => ({ name: l.name, varLabel: l.varLabel, qty: l.qty, total: this.fmt(l.total), d: l.d, seed: l.seed })), total: this.fmt(T.total), ship: shipName, shipCost: T.ship ? this.fmt(T.ship) : 'Grátis', pay: s.pay, guest: !s.logged && !s.mkAccount, until: new Intl.DateTimeFormat('pt-PT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(until) };
+    this.setState({ order, cart: [], code: null, terms: false, termsErr: false }, () => this.go('done'));
+  }
+  shipNames() { return ['Entrega em casa · CTT', 'Ponto de recolha CTT', 'Recolha na Casa']; }
+  card(i, slot) {
+    const p = this.PR[i], so = p.stock === 0;
+    const badge = so ? ['Esgotado', '#2a2430', '#e4dccb'] : p.ltd ? ['Edição limitada', '#e0863c', '#09080a'] : p.isNew ? ['Novo', '#a77be0', '#09080a'] : p.stock <= 3 ? ['Últimas ' + p.stock, '#e4dccb', '#09080a'] : null;
+    return { name: p.n, line: p.line, price: (p.v && p.v[1].some(o => o[1]) ? 'desde ' : '') + this.fmt(p.pr), lua: this.LUAS[p.lua].replace('Lua ', ''), moonF: this.MOON_F[p.lua],
+      rating: p.rt.toFixed(1).replace('.', ','), rv: '(' + p.rv + ')', open: () => this.go('product', i),
+      add: so ? () => this.go('product', i) : (p.v ? () => this.go('product', i) : () => this.add(i, 0, 1)),
+      addLabel: so ? 'Avisar-me' : (p.v ? 'Escolher' : '+ Adicionar'), addBd: so ? 'rgba(224,134,60,.5)' : 'rgba(228,220,203,.22)', addFg: so ? '#e0863c' : '#e4dccb',
+      badge: badge ? badge[0] : '', badgeOn: badge ? 'block' : 'none', badgeBg: badge ? badge[1] : 'transparent', badgeFg: badge ? badge[2] : '#fff',
+      imgOp: so ? '.45' : '1', cv: this.cv(slot, p.d, 100 + i) };
+  }
+
+  renderVals() {
+    const s = this.state, PR = this.PR, fmt = (n) => this.fmt(n), T = this.totals(), narrow = s.narrow;
+    const cartCount = s.cart.reduce((a, c) => a + c.qty, 0);
+    const f = s.f, q = s.q.trim().toLowerCase();
+    const setF = (k, v) => this.setState(st => { const nf = { ...st.f }; if (Array.isArray(nf[k])) nf[k] = nf[k].includes(v) ? nf[k].filter(x => x !== v) : [...nf[k], v]; else nf[k] = nf[k] === v ? (k === 'price' ? -1 : false) : v; return { f: nf }; });
+    const match = (p) => (!f.cat.length || f.cat.includes(p.cat)) && (!f.int.length || p.int.some(x => f.int.includes(x))) && (!f.lua.length || f.lua.includes(p.lua)) && (!f.el.length || f.el.includes(p.el)) && (f.price < 0 || [p.pr < 15, p.pr >= 15 && p.pr < 30, p.pr >= 30][f.price]) && (!f.stock || p.stock > 0) && (!q || (p.n + ' ' + p.line).toLowerCase().includes(q));
+    let list = PR.map((p, i) => i).filter(i => match(PR[i]));
+    const so = { new: (a, b) => (PR[b].isNew ? 1 : 0) - (PR[a].isNew ? 1 : 0) || b - a, best: (a, b) => PR[b].sold - PR[a].sold, asc: (a, b) => PR[a].pr - PR[b].pr, desc: (a, b) => PR[b].pr - PR[a].pr }[s.sort];
+    if (so) list = list.slice().sort(so); else list = list.slice().sort((a, b) => (PR[a].stock === 0) - (PR[b].stock === 0));
+    const opt = (label, on, go, count, x = {}) => ({ label, go, count: count == null ? '' : String(count), aria: on ? 'true' : 'false', chipBd: on ? '#d9b36c' : 'rgba(228,220,203,.2)', chipBg: on ? 'rgba(217,179,108,.14)' : 'transparent', check: on ? '✓' : '', bd: on ? '#d9b36c' : 'rgba(228,220,203,.3)', bg: on ? '#d9b36c' : 'transparent', fg: on ? '#efe6d3' : '#bdb4c4', radius: x.round ? '50%' : '0', vb: x.vb || '0 0 20 20', sd: x.sd || '', fd: x.fd || '', icon: (x.sd || x.fd) ? 'block' : 'none' });
+    const cnt = (fn) => PR.filter(fn).length;
+    const groups = [
+      { title: 'Categoria', opts: this.CATS.map((c, k) => opt(c, f.cat.includes(k), () => setF('cat', k), cnt(p => p.cat === k))) },
+      { title: 'Intenção', opts: this.INTS.map((c, k) => opt(c, f.int.includes(k), () => setF('int', k), cnt(p => p.int.includes(k)), { vb: '0 0 60 60', sd: this.GLYPHS[k] })) },
+      { title: 'Fase lunar', opts: Object.keys(this.LUAS).map(k => opt(this.LUAS[k].replace('Lua ', ''), f.lua.includes(k), () => setF('lua', k), cnt(p => p.lua === k), { sd: this.MOON_S, fd: this.MOON_F[k] || ' ' })) },
+      { title: 'Elemento', opts: this.ELS.map((c, k) => opt(c, f.el.includes(k), () => setF('el', k), cnt(p => p.el === k), { sd: this.EL_D[k] })) },
+      { title: 'Preço', opts: this.PRICES.map((c, k) => opt(c, f.price === k, () => setF('price', k), null, { round: true })) },
+      { title: 'Disponibilidade', opts: [opt('Só em stock', f.stock, () => setF('stock', true), cnt(p => p.stock > 0))] }
+    ];
+    const fo = s.fOpen ?? -1; groups.forEach((g, gi) => { const n = g.opts.filter(o => o.aria === 'true').length; Object.assign(g, { n: String(n), nOn: n ? 'inline-grid' : 'none', exp: fo === gi ? 'true' : 'false', rot: fo === gi ? 'rotate(180deg)' : 'none', bd: fo === gi || n ? '#d9b36c' : 'rgba(228,220,203,.2)', bg: fo === gi ? 'rgba(217,179,108,.12)' : 'transparent', toggle: () => this.setState(x => ({ fOpen: (x.fOpen ?? -1) === gi ? -1 : gi })) }); });
+    this._fg = { open: fo >= 0 && !!groups[fo], opts: fo >= 0 && groups[fo] ? groups[fo].opts : [] };
+    const chips = [];
+    f.cat.forEach(k => chips.push({ label: this.CATS[k], go: () => setF('cat', k) }));
+    f.int.forEach(k => chips.push({ label: this.INTS[k], go: () => setF('int', k) }));
+    f.lua.forEach(k => chips.push({ label: this.LUAS[k], go: () => setF('lua', k) }));
+    f.el.forEach(k => chips.push({ label: this.ELS[k], go: () => setF('el', k) }));
+    if (f.price >= 0) chips.push({ label: this.PRICES[f.price], go: () => setF('price', f.price) });
+    if (f.stock) chips.push({ label: 'Em stock', go: () => setF('stock', true) });
+    if (q) chips.push({ label: '“' + s.q.trim() + '”', go: () => this.setState({ q: '' }) });
+    const clearAll = () => this.setState({ f: { cat: [], int: [], lua: [], el: [], price: -1, stock: false }, q: '' });
+
+    // product
+    const pi = s.pid, P = PR[pi], pso = P.stock === 0, vi = s.vsel;
+    const tfs = ['none', 'scale(1.9)', 'scale(1.4)', 'none'], ors = ['50% 50%', '50% 36%', '50% 82%', '50% 50%'];
+    const badgeP = this.card(pi, 'x');
+    const kitIds = [pi, ...P.kit.filter(k => k !== pi)].slice(0, 3);
+    const kitSel = kitIds.filter((k, j) => j === 0 || !s.kitOff[k]);
+    const tabSets = [this.HOW[P.d].map((v, j) => ({ k: ['I', 'II', 'III'][j], v })), this.MAT[P.d].map(([k, v]) => ({ k, v })), this.SHIPROWS.map(([k, v]) => ({ k, v }))];
+    const n5 = Math.round(P.rv * .82), n4 = Math.round(P.rv * .14), n3 = Math.max(0, P.rv - n5 - n4);
+    const relIds = PR.map((p, i) => i).filter(i => i !== pi && (PR[i].int.some(x => P.int.includes(x)) || (!P.int.length && PR[i].cat === P.cat))).slice(0, 4);
+    while (relIds.length < 4) { const c = PR.findIndex((p, i) => i !== pi && !relIds.includes(i)); if (c < 0) break; relIds.push(c); }
+
+    const dot = (on) => ({ dot: on ? '#d9b36c' : 'transparent', dotBd: on ? '#d9b36c' : 'rgba(228,220,203,.35)' });
+    const shipNames = this.shipNames(), isl = s.region !== 0;
+    const shipSubs = [isl ? '5 a 8 dias úteis' : '2 a 4 dias úteis', 'Escolhe o ponto mais perto de ti', '[Morada] · combinamos o dia por mensagem'];
+    const ck = (on, err) => ({ bd: on ? '#d9b36c' : (err ? '#e0863c' : 'rgba(228,220,203,.35)'), bg: on ? '#d9b36c' : 'transparent', check: on ? '✓' : '', aria: on ? 'true' : 'false' });
+    const news = ck(s.news), mk = ck(s.mkAccount), terms = ck(s.terms, s.termsErr);
+    const o = s.order;
+    const lineVals = T.lines.map(l => ({ name: l.name, varLabel: l.varLabel, qty: String(l.qty), total: fmt(l.total), unitLabel: fmt(l.unit) + ' / un.', open: () => this.go('product', l.id), inc: () => this.setQty(l.k, 1), dec: () => this.setQty(l.k, -1), remove: () => this.removeLine(l.k), cv: this.cv('cl', l.d, l.seed), cvS: this.cv('cs', l.d, l.seed), cvD: this.cv('cd', l.d, l.seed) }));
+    const freeMsg = T.freeLeft > 0 ? 'Faltam ' + fmt(T.freeLeft) + ' para portes grátis no Continente' : '✦ Tens portes grátis no Continente';
+
+    return {
+      annOn: this.props.announcement ?? true, annText: this.ANN[s.ann], annRef: this.ref('ann'),
+      narrow, wide: !narrow, hNarrow: !!s.hNarrow, hWide: !s.hNarrow, cartCount: String(cartCount), cartBadgeRef: this.ref('cartBadge'),
+      toggleMenu: () => this.setState(st => ({ menuOpen: !st.menuOpen })), menuOpen: s.menuOpen && !!s.hNarrow,
+      toggleSearch: () => this.setState(st => ({ searchOpen: !st.searchOpen }), () => { if (this.state.searchOpen && this._refs.search) this._refs.search.focus(); }), searchOpen: s.searchOpen, searchRef: this.ref('search'), q: s.q,
+      onSearch: (e) => { const v = e.target.value; this.setState({ q: v }); if (this.state.view !== 'shop') this.setState({ view: 'shop' }); },
+      toggleAcc: () => this.setState(st => ({ accOpen: !st.accOpen })), accOpen: s.accOpen, accBd: s.logged ? '#d9b36c' : 'rgba(228,220,203,.18)',
+      logged: s.logged, loggedOut: !s.logged, login: () => { this.setState({ logged: true, accOpen: false }); this.say('Sessão iniciada'); }, logout: () => this.setState({ logged: false, accOpen: false }),
+      openDrawer: () => this.setState({ drawer: true, last: null }), closeDrawer: () => this.setState({ drawer: false }),
+      drawerTf: s.drawer ? 'translateX(0)' : 'translateX(105%)', ovOp: s.drawer ? '1' : '0', ovPe: s.drawer ? 'auto' : 'none',
+      hasLast: !!s.last && s.drawer, lastName: s.last ? PR[s.last.id].n : '',
+      goShop: () => this.go('shop'), goCart: () => this.go('cart'), goCheckout: () => { if (!s.cart.length) { this.go('shop'); return; } this.go('checkout'); },
+      soon: (e) => { if (e) e.preventDefault(); this.say('Disponível na versão final'); },
+      isShop: s.view === 'shop', isProduct: s.view === 'product', isCart: s.view === 'cart', isCheckout: s.view === 'checkout', isDone: s.view === 'done',
+      totalCount: String(PR.length),
+      intentChips: this.INTS.map((label, k) => { const on = f.int.includes(k); return { label, glyph: this.GLYPHS[k], go: () => setF('int', k), bd: on ? '#d9b36c' : 'rgba(228,220,203,.18)', bg: on ? 'rgba(217,179,108,.12)' : 'transparent', fg: on ? '#efe6d3' : '#cfc6b5' }; }),
+      groups, activeChips: chips, hasActive: chips.length > 0, clearAll, activeCountLabel: chips.length ? '(' + chips.length + ')' : '',
+      resultCount: String(list.length), resultLabel: list.length + (list.length === 1 ? ' produto' : ' produtos'), noResults: list.length === 0,
+      sort: s.sort, onSort: (e) => this.setState({ sort: e.target.value }),
+      products: list.map(i => this.card(i, 'g')),
+      never: false, hasActive: (() => { const f = s.f; return f.cat.length + f.int.length + f.lua.length + f.el.length + (f.price >= 0 ? 1 : 0) + (f.stock ? 1 : 0) > 0; })(), openFilters: () => this.setState({ filtersOpen: true }), closeFilters: () => this.setState({ filtersOpen: false }),
+      fgOpen: this._fg.open, fgOpts: this._fg.opts, sbDisplay: 'none', sbPos: narrow ? 'fixed' : 'sticky', sbTop: narrow ? '0' : '120px', sbInset: narrow ? '0' : 'auto', sbZ: narrow ? '85' : '1', sbBg: narrow ? '#0b090e' : 'transparent', sbPad: narrow ? '24px 24px 0' : '0', sbW: narrow ? '100%' : '240px', sbMaxH: narrow ? '100vh' : 'calc(100vh - 140px)',
+
+      pd: { name: P.n, cat: this.CATS[P.cat], goCat: () => { this.setState({ f: { cat: [P.cat], int: [], lua: [], el: [], price: -1, stock: false } }); this.go('shop'); },
+        el: this.ELS[P.el], rating: P.rt.toFixed(1).replace('.', ','), rv: String(P.rv), price: fmt(this.unit(P, vi)), lineTotal: fmt(this.unit(P, vi) * s.qty), desc: this.DESC[P.d], line: P.line,
+        ints: P.int.map(k => ({ label: this.INTS[k], glyph: this.GLYPHS[k] })), noIntDisplay: P.int.length ? 'none' : 'block',
+        lua: this.LUAS[P.lua], luaLower: this.LUAS[P.lua].toLowerCase().replace('lua', 'Lua'), luaTxt: this.LUA_TXT[P.lua], moonF: this.MOON_F[P.lua],
+        hasV: !!P.v, vLabel: P.v ? P.v[0] : '', vSel: P.v ? P.v[1][vi][0] : '',
+        vOpts: P.v ? P.v[1].map(([label, ex], j) => ({ label, extra: ex ? '+' + fmt(ex) : '', aria: j === vi ? 'true' : 'false', go: () => this.setState({ vsel: j }), bd: j === vi ? '#d9b36c' : 'rgba(228,220,203,.22)', bg: j === vi ? 'rgba(217,179,108,.10)' : 'transparent', fg: j === vi ? '#efe6d3' : '#bdb4c4' })) : [],
+        inStock: !pso, soldOut: pso, notified: !!s.notified[pi], notNotified: !s.notified[pi],
+        stockTxt: P.stock <= 3 ? 'Só restam ' + P.stock + ' · envio em 24 a 48 h' : 'Em stock · envio em 24 a 48 h', stockFg: P.stock <= 3 ? '#e0863c' : '#8e9c78',
+        badge: badgeP.badge, badgeOn: badgeP.badgeOn, badgeBg: badgeP.badgeBg, badgeFg: badgeP.badgeFg, imgOp: badgeP.imgOp,
+        mainCv: this.cv('pm', P.d, 100 + pi) },
+      galPos: narrow ? 'relative' : 'sticky', galTf: tfs[s.img], galOrigin: ors[s.img], galCvDisplay: s.img === 3 ? 'none' : 'block', galPhDisplay: s.img === 3 ? 'grid' : 'none',
+      galPrev: () => this.setState(st => ({ img: (st.img + 3) % 4 })), galNext: () => this.setState(st => ({ img: (st.img + 1) % 4 })),
+      gal: [0, 1, 2, 3].map(j => ({ label: ['Frente', 'Detalhe', 'Ritual', 'Embalagem'][j], go: () => this.setState({ img: j }), bd: j === s.img ? '#d9b36c' : 'rgba(228,220,203,.14)', op: j === s.img ? '1' : '.6', cv: this.cv('pt' + j, P.d, 100 + pi), tf: tfs[j], origin: ors[j], cvDisplay: j === 3 ? 'none' : 'block', phDisplay: j === 3 ? 'grid' : 'none' })),
+      qty: String(s.qty), qtyInc: () => this.setState(st => ({ qty: Math.min(st.qty + 1, P.stock || 1) })), qtyDec: () => this.setState(st => ({ qty: Math.max(1, st.qty - 1) })),
+      addMain: () => this.add(pi, P.v ? vi : 0, s.qty),
+      notifyMe: () => { this.setState(st => ({ notified: { ...st.notified, [pi]: true } })); this.say('Vamos avisar-te'); },
+      toReviews: () => { const el = this._refs.reviews; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 110, behavior: 'smooth' }); }, reviewsRef: this.ref('reviews'),
+      tabs: ['Como usar', 'Materiais', 'Envio e devoluções'].map((label, j) => ({ label, aria: j === s.tab ? 'true' : 'false', go: () => this.setState({ tab: j }), fg: j === s.tab ? '#efe6d3' : '#8c8591', bd: j === s.tab ? '#d9b36c' : 'transparent' })),
+      tabRows: tabSets[s.tab], tabCols: s.tab === 0 ? '40px minmax(0,1fr)' : 'minmax(110px, 160px) minmax(0,1fr)',
+      kit: kitIds.map((k, j) => { const on = j === 0 || !s.kitOff[k], p = PR[k], oos = p.stock === 0; return { name: p.n, price: fmt(p.pr), tag: j === 0 ? 'esta peça' : (oos ? 'esgotado' : ''), op: on ? '1' : '.45', bd: on ? 'rgba(217,179,108,.5)' : 'rgba(228,220,203,.14)', chkBd: on ? '#d9b36c' : 'rgba(228,220,203,.5)', chkBg: on ? '#d9b36c' : 'rgba(9,8,10,.6)', check: on ? '✓' : '', aria: on ? 'true' : 'false', cursor: j === 0 ? 'default' : 'pointer', toggle: j === 0 || oos ? () => {} : () => this.setState(st => ({ kitOff: { ...st.kitOff, [k]: !st.kitOff[k] } })), open: () => this.go('product', k), cv: this.cv('k' + j, p.d, 100 + k) }; }),
+      kitCount: kitSel.length + (kitSel.length === 1 ? ' peça selecionada' : ' peças selecionadas'), kitTotal: fmt(kitSel.reduce((a, k) => a + PR[k].pr, 0)),
+      kitAdd: () => { const ok = kitSel.filter(k => PR[k].stock > 0); if (!ok.length) { this.say('Esta peça está esgotada'); return; } this.setState(st => { const cart = st.cart.map(c => ({ ...c })); ok.forEach(k => { const v = k === pi ? (P.v ? vi : 0) : 0, x = cart.find(c => c.id === k && c.v === v); if (x) x.qty++; else cart.push({ id: k, v, qty: 1 }); }); return { cart, drawer: true, last: { id: pi } }; }); },
+      dist: [[5, n5], [4, n4], [3, n3], [2, 0], [1, 0]].map(([st, n]) => ({ star: String(st), n: String(n), w: (P.rv ? n / P.rv * 100 : 0) + '%' })),
+      reviews: this.REVIEWS.map(([stars, text, who, date]) => ({ stars, text, who, date, what: P.n + (P.v ? ' · ' + P.v[1][0][0] : '') })),
+      related: relIds.map(i => this.card(i, 'r')),
+
+      lines: lineVals, cartEmpty: !s.cart.length, cartFull: s.cart.length > 0, freeMsg, freePct: T.freePct + '%',
+      sumPos: narrow ? 'relative' : 'sticky',
+      codeRef: this.ref('code'), codeKey: (e) => { if (e.key === 'Enter') this.applyCode(); }, applyCode: () => this.applyCode(), removeCode: () => this.setState({ code: null }),
+      codeBd: s.codeErr ? '#e0863c' : 'rgba(228,220,203,.22)', codeFg: s.codeErr ? '#e0863c' : '#8e9c78', codeMsg: s.codeErr ? 'Este código não é válido.' : (s.code ? '✓ Código ' + s.code + ' aplicado: 10% de desconto' : 'Experimenta LUA10'), codeName: s.code || '',
+      hasDisc: !!s.code, tSub: fmt(T.sub), tDisc: fmt(T.disc), tShip: T.ship ? fmt(T.ship) : 'Grátis', tTotal: fmt(T.total), tSubNet: fmt(T.net),
+
+      newsAria: news.aria, newsBd: news.bd, newsBg: news.bg, newsCheck: news.check, toggleNews: () => this.setState(st => ({ news: !st.news })),
+      regions: ['Continente', 'Madeira', 'Açores'].map((label, j) => ({ label, aria: j === s.region ? 'true' : 'false', go: () => this.setState({ region: j }), bg: j === s.region ? '#d9b36c' : 'transparent', fg: j === s.region ? '#09080a' : '#cfc6b5' })),
+      shipOpts: shipNames.map((label, j) => { const on = j === s.ship, c = T.cost(j); return { label, sub: shipSubs[j], aria: on ? 'true' : 'false', go: () => this.setState({ ship: j }), bd: on ? '#d9b36c' : 'rgba(228,220,203,.18)', bg: on ? 'rgba(217,179,108,.07)' : 'transparent', price: c ? fmt(c) : 'Grátis', priceFg: c ? '#e4dccb' : '#8e9c78', ...dot(on) }; }),
+      isPickup: s.ship === 1, needsAddress: s.ship === 0,
+      pickups: this.PICKUPS.map(([name, addr, dist], j) => ({ name, addr, dist, aria: j === s.pickup ? 'true' : 'false', go: () => this.setState({ pickup: j }), ...dot(j === s.pickup) })),
+      payOpts: this.PAYS.map(([label, sub], j) => { const on = j === s.pay; return { label, sub, aria: on ? 'true' : 'false', go: () => this.setState({ pay: j }), bg: on ? 'rgba(217,179,108,.06)' : 'transparent', isMbway: on && j === 0, isMb: on && j === 1, isCard: on && j === 2, ...dot(on) }; }),
+      mkAccount: s.mkAccount, mkAria: mk.aria, mkBd: mk.bd, mkBg: mk.bg, mkCheck: mk.check, toggleMkAcc: () => this.setState(st => ({ mkAccount: !st.mkAccount })),
+      termsAria: terms.aria, termsBd: terms.bd, termsBg: terms.bg, termsCheck: terms.check, termsFg: s.termsErr && !s.terms ? '#e0863c' : '#cfc6b5', toggleTerms: () => this.setState(st => ({ terms: !st.terms, termsErr: false })),
+      payBtn: (s.pay === 1 ? 'Gerar referência · ' : 'Pagar ') + fmt(T.total), placeOrder: () => this.placeOrder(), shipName: shipNames[s.ship],
+
+      oNum: o ? o.num : 'CZ-00000', oTotal: o ? o.total : '', oUntil: o ? o.until : '', oMb: !!o && o.pay === 1, oMbway: !!o && o.pay === 0, oCard: !!o && o.pay === 2,
+      oLines: o ? o.lines.map((l, k) => ({ ...l, cv: this.cv('ol' + k, l.d || 'candle', l.seed || 100) })) : [], oDate: o && o.at ? new Intl.DateTimeFormat('pt-PT', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }).format(new Date(o.at)) : '', oSub: o ? (o.sub || o.total) : '', oDisc: o ? o.disc || '' : '', oHasDisc: !!(o && o.disc), oAddr: o ? (o.addr || '[Morada de entrega]') : '', doneCols: s.narrow ? 'minmax(0, 1fr)' : 'minmax(0, 1.45fr) minmax(300px, 1fr)', mbLeft: (() => { const left = Math.max(0, 300000 - (Date.now() - ((o && o.at) || Date.now()))); return String(Math.floor(left / 60000)).padStart(2, '0') + ':' + String(Math.floor(left / 1000) % 60).padStart(2, '0'); })(), mbOffset: (() => { const left = Math.max(0, 300000 - (Date.now() - ((o && o.at) || Date.now()))); return (157.1 * (1 - left / 300000)).toFixed(1); })(), oShip: o ? o.ship : '', oShipCost: o ? o.shipCost : '', oGuest: !o || o.guest, doneMoonRef: this.ref('doneMoon'),
+      steps: [['Recebida', o && o.at ? 'Hoje, às ' + new Date(o.at).toTimeString().slice(0, 5) : 'Hoje'], ['Preparada e consagrada', 'A Casa prepara cada peça à mão em 24 a 48 horas'], ['Enviada', 'Recebes o código de seguimento por email e SMS'], ['Entregue', o && o.eta ? 'Prevista até ' + o.eta : 'Em embalagem discreta']].map(([title, text], j) => ({ title, text, dot: j === 0 ? '#d9b36c' : 'transparent', dotBd: j === 0 ? '#d9b36c' : 'rgba(228,220,203,.35)', glow: j === 0 ? '0 0 0 4px rgba(217,179,108,.18)' : 'none', tfg: j === 0 ? '#efe6d3' : '#cfc6b5', lineOn: j < 3 ? 'block' : 'none' })),
+      suggest: PR.map((p, i) => i).filter(i => PR[i].stock > 0).sort((a, b) => PR[b].sold - PR[a].sold).slice(0, 3).map(i => ({ name: PR[i].n, price: this.fmt(PR[i].pr), open: () => this.go('product', i) })),
+      guar: this.GUAR.map(([title, text], j) => ({ title, text, icon: this.ICONS[j] })),
+      toast: s.toast, toastOp: s.toast ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

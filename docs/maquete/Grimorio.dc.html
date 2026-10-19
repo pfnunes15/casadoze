@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English+SC&display=swap">
+<script src="covil-art.js"></script>
+<style>
+html{background:#09080a}
+body{margin:0;background:#09080a;color:#e4dccb;font-family:'Cormorant Garamond','Iowan Old Style',Georgia,serif;-webkit-font-smoothing:antialiased}
+a{color:#e4dccb;text-decoration:none}a:hover{color:#d9b36c}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+input{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:1px solid #d9b36c;outline-offset:3px}
+input::placeholder{color:#7d7682}
+::selection{background:#7b4fb8;color:#fff}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #09080a; color: #e4dccb; overflow-x: clip">
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(9,8,10,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(228,220,203,.10)">
+<div style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 3vw, 40px); display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 16px">
+<div style="display: flex; align-items: center">
+<sc-if value="{{ hNarrow }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleMenu }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 9px 14px">Menu</button></sc-if>
+<sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><nav style="display: flex; gap: clamp(14px, 1.6vw, 26px); white-space: nowrap"><a href="Loja.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Loja</a><a href="Consultas.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid #d9b36c; padding-bottom: 3px" style-hover="color: #d9b36c">Grimório</a><a href="Casa.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2" style-hover="color: #d9b36c">Contactos</a></nav></sc-if>
+</div>
+<a href="Landing Page.dc.html" aria-label="Casa de Zé" style="display: flex; align-items: center; gap: 12px; color: #e8cf98"><img src="assets/sigil.svg" alt="" style="width: 50px; height: 38px; object-fit: contain"><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 15px; letter-spacing: .36em; white-space: nowrap">CASA DE ZÉ</span></sc-if></a>
+<div style="justify-self: end; display: flex; gap: 8px; align-items: center">
+<a href="Pesquisa.dc.html" aria-label="Pesquisar" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="5.5"></circle><path d="M12.5 12.5 L17 17"></path></g></svg></a>
+<a href="Conta.dc.html" aria-label="Conta" style="width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(228,220,203,.18); border-radius: 50%" style-hover="border-color: rgba(217,179,108,.6)"><svg viewBox="0 0 20 20" style="width: 16px; height: 16px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 17.5 C4.5 13 15.5 13 16.5 17.5"></path></g></svg></a>
+<a href="Loja.dc.html" style="height: 40px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #b9b0c2; color: #e4dccb; border: 1px solid rgba(228,220,203,.18); border-radius: 999px; padding: 0 14px; display: flex; gap: 9px; align-items: center" style-hover="border-color: rgba(217,179,108,.6); color: #e4dccb"><svg viewBox="0 0 20 20" style="width: 15px; height: 15px"><g fill="none" stroke="#e4dccb" stroke-width="1.3"><path d="M4 7 H16 L15 18 H5Z"></path><path d="M7 7 V5.5 a3 3 0 0 1 6 0 V7"></path></g></svg><sc-if value="{{ hWide }}" hint-placeholder-val="{{ true }}"><span>Carrinho</span></sc-if><b style="font-weight: 500; color: #d9b36c">{{ cartN }}</b></a>
+</div>
+</div>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><nav style="border-top: 1px solid rgba(228,220,203,.10); padding: 18px clamp(20px, 3vw, 40px) 26px; display: flex; flex-direction: column; gap: 6px"><a href="Loja.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Loja</a><a href="Consultas.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Consultas</a>
+<a href="Sala.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Sala</a><a href="Grimorio.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #d9b36c">Grimório</a><a href="Casa.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">A Casa</a><a href="Contactos.dc.html" style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 34px; color: #e4dccb">Contactos</a></nav></sc-if>
+</header>
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<main data-screen-label="Grimório" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 48px clamp(20px, 3vw, 40px) 120px; box-sizing: border-box">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: clamp(32px, 5vw, 72px); align-items: end">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>Sessões gratuitas no YouTube</span>
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(56px, 8vw, 110px); line-height: .92; letter-spacing: .02em; color: #efe6d3">Grimório</h1>
+<p style="margin: 0; font-size: 22px; line-height: 1.5; color: #cfc6b5; max-width: 46ch; text-wrap: pretty">Rituais, ervas e leituras explicados pelo Zé, para quem está a começar e para quem já pratica. Cada sessão mostra os produtos usados, para fazeres em casa.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px"><button type="button" onClick="{{ sub }}" style="padding: 15px 20px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">▶ Subscrever o canal</button><a href="Consultas.dc.html" style="padding: 14px 20px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb" style-hover="border-color: #d9b36c; color: #e4dccb">Marcar uma consulta</a></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #e8cf98">✦ Mais vista</span>
+<button type="button" onClick="{{ feat.go }}" aria-label="{{ feat.t }}" style="position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(228,220,203,.14); transition: border-color .4s" style-hover="border-color: rgba(217,179,108,.55)">
+<canvas ref="{{ feat.cv }}" width="600" height="800" style="position: absolute; left: 0; top: 50%; width: 100%; height: 178%; transform: translateY(-50%)"></canvas>
+<span style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,8,10,.85), rgba(9,8,10,.1) 60%)"></span>
+<span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 84px; height: 84px; border-radius: 50%; border: 1px solid rgba(232,207,152,.8); background: rgba(9,8,10,.45); backdrop-filter: blur(4px); display: grid; place-items: center; color: #e8cf98; font-size: 24px; padding-left: 4px; box-sizing: border-box">▶</span>
+<span style="position: absolute; right: 10px; bottom: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #efe6d3; background: rgba(9,8,10,.75); padding: 3px 7px">{{ feat.dur }}</span>
+<span style="position: absolute; left: 10px; top: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #e4dccb; padding: 5px 8px; background: rgba(9,8,10,.6); border: 1px solid rgba(228,220,203,.16)">{{ feat.theme }}</span>
+</button>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px"><button type="button" onClick="{{ feat.go }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 30px; line-height: 1.1; color: #efe6d3" style-hover="color: #d9b36c">{{ feat.t }}</button><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .1em; color: #8c8591">{{ feat.meta }}</span></div>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-top: 72px; padding: 22px 0; border-top: 1px solid rgba(228,220,203,.12); border-bottom: 1px solid rgba(228,220,203,.12)">
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ themes }}" as="c" hint-placeholder-count="6"><button type="button" onClick="{{ c.go }}" aria-pressed="{{ c.aria }}" style="padding: 8px 16px; border: 1px solid {{ c.bd }}; background: {{ c.bg }}; border-radius: 999px; font-size: 19px; color: {{ c.fg }}; transition: border-color .3s, background .3s" style-hover="border-color: rgba(217,179,108,.6)">{{ c.label }}</button></sc-for>
+</div>
+<input type="search" value="{{ q }}" onChange="{{ onQ }}" placeholder="Procurar sessões…" style="width: min(280px, 100%); background: transparent; border: 0; border-bottom: 1px solid rgba(228,220,203,.3); padding: 10px 2px; font-size: 20px; font-style: italic; color: #efe6d3; outline: none" style-focus="border-color: #d9b36c">
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 52px clamp(18px, 2.4vw, 32px); margin-top: 48px">
+<sc-for list="{{ vids }}" as="x" hint-placeholder-count="6"><article style="display: flex; flex-direction: column; gap: 14px; min-width: 0"><button type="button" onClick="{{ x.go }}" aria-label="{{ x.t }}" style="position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(228,220,203,.14); transition: border-color .4s" style-hover="border-color: rgba(217,179,108,.55)">
+<canvas ref="{{ x.cv }}" width="600" height="800" style="position: absolute; left: 0; top: 50%; width: 100%; height: 178%; transform: translateY(-50%)"></canvas>
+<span style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,8,10,.85), rgba(9,8,10,.1) 60%)"></span>
+<span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(232,207,152,.8); background: rgba(9,8,10,.45); backdrop-filter: blur(4px); display: grid; place-items: center; color: #e8cf98; font-size: 16px; padding-left: 4px; box-sizing: border-box">▶</span>
+<span style="position: absolute; right: 10px; bottom: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #efe6d3; background: rgba(9,8,10,.75); padding: 3px 7px">{{ x.dur }}</span>
+<span style="position: absolute; left: 10px; top: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #e4dccb; padding: 5px 8px; background: rgba(9,8,10,.6); border: 1px solid rgba(228,220,203,.16)">{{ x.theme }}</span>
+</button><button type="button" onClick="{{ x.go }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 23px; line-height: 1.15; color: #efe6d3" style-hover="color: #d9b36c">{{ x.t }}</button><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .1em; color: #8c8591">{{ x.meta }}</span></article></sc-for>
+</div>
+<sc-if value="{{ none }}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 70px 20px; text-align: center; border: 1px dashed rgba(228,220,203,.18)"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 30px; color: #efe6d3">Nenhuma sessão encontrada</span><button type="button" onClick="{{ clear }}" style="padding: 14px 20px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a">Ver todas</button></div></sc-if>
+<section style="margin-top: 130px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: clamp(28px, 4vw, 64px); align-items: center; padding: clamp(28px, 4vw, 56px); border: 1px solid rgba(217,179,108,.25); background: radial-gradient(ellipse 60% 80% at 15% 50%, rgba(123,79,184,.16), transparent 70%)">
+<div style="display: flex; flex-direction: column; gap: 14px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #a77be0; display: flex; align-items: center; gap: 14px"><span style="width: 32px; height: 1px; background: #a77be0"></span>A lua do mês</span><h2 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(36px, 4.2vw, 56px); line-height: 1.05; color: #efe6d3; text-wrap: balance">Uma sessão nova a cada lua</h2><p style="margin: 0; font-size: 20px; line-height: 1.5; color: #cfc6b5">Recebe o aviso das sessões, o calendário lunar e o Guia do ritual de lua cheia em PDF.</p></div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px"><input type="email" placeholder="O teu email" style="flex: 1 1 240px; min-width: 0; height: 56px; background: transparent; border: 1px solid rgba(228,220,203,.25); padding: 0 16px; font-size: 20px" style-focus="border-color: #d9b36c; outline: none"><button type="button" onClick="{{ news }}" style="flex: none; height: 56px; padding: 0 22px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Subscrever</button></div>
+</section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isVideo }}" hint-placeholder-val="{{ false }}">
+<main data-screen-label="Sessão" style="max-width: 1360px; margin: 0 auto; box-sizing: border-box; padding: 36px clamp(20px, 3vw, 40px) 120px; box-sizing: border-box">
+<div style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #8c8591; display: flex; flex-wrap: wrap; gap: 10px"><button type="button" onClick="{{ goList }}" style="color: #8c8591; letter-spacing: .18em; text-transform: uppercase" style-hover="color: #d9b36c">Grimório</button><span>/</span><span style="color: #e4dccb">{{ v.theme }}</span></div>
+<div style="display: grid; grid-template-columns: {{ vCols }}; gap: clamp(28px, 4vw, 56px); align-items: start; margin-top: 28px">
+<div style="display: flex; flex-direction: column; gap: 22px; min-width: 0">
+<button type="button" onClick="{{ play }}" aria-label="Ver vídeo" style="position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(228,220,203,.16); background: #000">
+<canvas ref="{{ v.cv }}" width="600" height="800" style="position: absolute; left: 0; top: 50%; width: 100%; height: 178%; transform: translateY(-50%); opacity: .75"></canvas>
+<span style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(9,8,10,.7))"></span>
+<span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 96px; height: 96px; border-radius: 50%; border: 1px solid rgba(232,207,152,.85); background: rgba(9,8,10,.45); backdrop-filter: blur(4px); display: grid; place-items: center; color: #e8cf98; font-size: 28px; padding-left: 5px; box-sizing: border-box">▶</span>
+<span style="position: absolute; left: 14px; bottom: 14px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #b9b0c2">[Vídeo do YouTube incorporado]</span>
+</button>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(36px, 4vw, 56px); line-height: 1.05; color: #efe6d3; text-wrap: balance">{{ v.t }}</h1>
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .1em; color: #a9a0b2">{{ v.dur }} · {{ v.meta }}</span>
+</div>
+<p style="margin: 0; font-size: 21px; line-height: 1.55; color: #cfc6b5; max-width: 62ch">{{ v.desc }}</p>
+<div style="display: flex; flex-direction: column; border-top: 1px solid rgba(228,220,203,.12)">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a77be0; padding: 18px 0 8px">Capítulos</span>
+<sc-for list="{{ v.ch }}" as="c" hint-placeholder-count="4"><button type="button" onClick="{{ c.go }}" style="display: grid; grid-template-columns: 70px minmax(0,1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid rgba(228,220,203,.08); text-align: left; font-size: 19px" style-hover="color: #d9b36c"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12.5px; color: #d9b36c">{{ c.t }}</span>{{ c.l }}</button></sc-for>
+</div>
+</div>
+<aside style="position: {{ asidePos }}; top: 110px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 24px; border: 1px solid rgba(217,179,108,.25); background: #0d0a11">
+<span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #e8cf98">Usado nesta sessão</span>
+<sc-for list="{{ v.prods }}" as="p" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: 64px minmax(0,1fr); gap: 14px; align-items: center">
+<a href="Loja.dc.html" style="display: block; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid rgba(228,220,203,.14)"><canvas ref="{{ p.cv }}" width="600" height="800" style="display: block; width: 100%; height: 100%"></canvas></a>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 20px; line-height: 1.15; color: #efe6d3">{{ p.n }}</span><div style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; color: #e8cf98">{{ p.price }}</span><button type="button" onClick="{{ p.add }}" style="padding: 8px 11px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; border: 1px solid {{ p.bd }}; color: {{ p.fg }}" style-hover="border-color: #d9b36c">{{ p.label }}</button></div></div>
+</div>
+</sc-for>
+<sc-if value="{{ v.many }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ v.addAll }}" style="height: 50px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Adicionar tudo · {{ v.total }}</button></sc-if>
+<a href="Loja.dc.html" style="align-self: flex-start; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #a9a0b2; border-bottom: 1px solid rgba(228,220,203,.25); padding-bottom: 3px">Ver na loja →</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid rgba(167,123,224,.3); background: linear-gradient(160deg, rgba(123,79,184,.16), rgba(9,8,10,0) 70%)">
+<span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Queres ir mais fundo?</span>
+<span style="font-size: 18px; line-height: 1.45; color: #bdb4c4">Numa consulta, o Zé olha para a tua pergunta em concreto.</span>
+<a href="Consultas.dc.html" style="align-self: flex-start; padding: 13px 18px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; border: 1px solid rgba(228,220,203,.25); color: #e4dccb; border-color: #a77be0" style-hover="background: #a77be0; color: #09080a">Marcar consulta</a>
+</div>
+</aside>
+</div>
+<section style="margin-top: 110px; display: flex; flex-direction: column; gap: 34px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px"><h2 style="margin: 0; font-family: 'IM Fell English SC', Georgia, serif; font-weight: 400; font-size: clamp(36px, 4.2vw, 56px); line-height: 1.05; color: #efe6d3; text-wrap: balance">Outras sessões</h2><button type="button" onClick="{{ goList }}" style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.5); padding-bottom: 4px">Todo o Grimório →</button></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 40px clamp(18px, 2.4vw, 32px)"><sc-for list="{{ related }}" as="x" hint-placeholder-count="3"><article style="display: flex; flex-direction: column; gap: 14px; min-width: 0"><button type="button" onClick="{{ x.go }}" aria-label="{{ x.t }}" style="position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(228,220,203,.14); transition: border-color .4s" style-hover="border-color: rgba(217,179,108,.55)">
+<canvas ref="{{ x.cv }}" width="600" height="800" style="position: absolute; left: 0; top: 50%; width: 100%; height: 178%; transform: translateY(-50%)"></canvas>
+<span style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,8,10,.85), rgba(9,8,10,.1) 60%)"></span>
+<span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; border-radius: 50%; border: 1px solid rgba(232,207,152,.8); background: rgba(9,8,10,.45); backdrop-filter: blur(4px); display: grid; place-items: center; color: #e8cf98; font-size: 16px; padding-left: 4px; box-sizing: border-box">▶</span>
+<span style="position: absolute; right: 10px; bottom: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; color: #efe6d3; background: rgba(9,8,10,.75); padding: 3px 7px">{{ x.dur }}</span>
+<span style="position: absolute; left: 10px; top: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: #e4dccb; padding: 5px 8px; background: rgba(9,8,10,.6); border: 1px solid rgba(228,220,203,.16)">{{ x.theme }}</span>
+</button><button type="button" onClick="{{ x.go }}" style="text-align: left; font-family: 'IM Fell English SC', Georgia, serif; font-size: 23px; line-height: 1.15; color: #efe6d3" style-hover="color: #d9b36c">{{ x.t }}</button><span style="font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .1em; color: #8c8591">{{ x.meta }}</span></article></sc-for></div>
+</section>
+</main>
+</sc-if>
+<dc-import name="Rodape" hint-size="100%,900px"></dc-import>
+<div style="position: fixed; z-index: 95; left: 50%; bottom: 28px; transform: translateX(-50%); font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: #e4dccb; color: #09080a; padding: 12px 18px; pointer-events: none; transition: opacity .4s; opacity: {{ toastOp }}; max-width: calc(100vw - 40px); text-align: center">{{ toast }}</div>
+<dc-import name="Cookies" hint-size="0px,0px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;list&quot;,&quot;video&quot;],&quot;default&quot;:&quot;list&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Revisão&quot;}}">
+class Component extends DCLogic {
+  state = { view: 'list', vid: 0, theme: -1, q: '', narrow: false, hNarrow: false, menuOpen: false, cartN: 0, toast: '', added: {} };
+  THEMES = ['Rituais da lua', 'Ervas e defumação', 'Tarot', 'Proteção', 'Sabbats'];
+  PR = { 0: ['Vela de Intenção', 14, 'candle'], 1: ['Óleo Lua Negra', 18, 'oil'], 2: ['Ametista Bruta', 26, 'crystal'], 3: ['Amuleto Crescente', 32, 'amulet'], 4: ['Kit Lua Cheia', 38, 'moon'], 5: ['Molho de Sálvia', 9, 'sage'], 6: ['Tarot da Casa', 42, 'tarot'], 10: ['Vela Negra de Proteção', 12, 'candle'], 11: ['Ervas de Abundância', 11, 'sage'], 12: ['Kit Samhain', 44, 'moon'] };
+  V = [
+    { t: 'Ritual de lua cheia para gratidão', th: 0, dur: '18:42', d: 3, views: 4820, draw: 'moon', seed: 301, prods: [4, 0], desc: 'Um ritual simples para fechar o ciclo com gratidão: limpar o espaço, acender a vela e escrever o que queres agradecer.', ch: [['00:00', 'Abertura'], ['02:15', 'Preparar o altar'], ['06:40', 'Acender a vela'], ['11:05', 'A carta de gratidão'], ['16:30', 'Fechar o ritual']] },
+    { t: 'Como limpar a casa com sálvia', th: 1, dur: '12:05', d: 10, views: 12300, draw: 'sage', seed: 302, prods: [5, 11], desc: 'Passo a passo para defumar a casa sem riscos: por onde começar, que divisões abrir e como apagar o molho.', ch: [['00:00', 'Abertura'], ['01:40', 'Antes de acender'], ['04:20', 'Divisão a divisão'], ['09:30', 'Apagar e guardar']] },
+    { t: 'Tiragem de Samhain ao vivo', th: 4, dur: '54:10', d: 17, views: 3150, draw: 'tarot', seed: 303, prods: [12, 6], desc: 'Sessão ao vivo com perguntas de quem estava a ver. Três cartas para honrar os antepassados e preparar o novo ciclo.', ch: [['00:00', 'Boas-vindas'], ['05:10', 'O que é o Samhain'], ['14:00', 'Primeira tiragem'], ['32:45', 'Perguntas ao vivo']] },
+    { t: 'As 22 cartas dos Arcanos Maiores', th: 2, dur: '41:30', d: 31, views: 21900, draw: 'tarot', seed: 304, prods: [6], desc: 'Do Louco ao Mundo: o significado de cada Arcano Maior, direito e invertido, explicado com calma.', ch: [['00:00', 'Introdução'], ['03:20', 'O Louco ao Carro'], ['17:50', 'A Força à Temperança'], ['29:10', 'O Diabo ao Mundo']] },
+    { t: 'Vela de proteção para a casa nova', th: 3, dur: '15:20', d: 45, views: 6700, draw: 'candle', seed: 305, prods: [10, 1], desc: 'Como preparar e acender uma vela de proteção quando mudas de casa, com o óleo certo e as palavras do ritual.', ch: [['00:00', 'Abertura'], ['02:30', 'Ungir a vela'], ['08:15', 'Acender e pedir'], ['13:00', 'Deixar arder']] },
+    { t: 'Lua nova: escrever intenções', th: 0, dur: '10:48', d: 58, views: 8900, draw: 'grimoire', seed: 306, prods: [0], desc: 'Como escrever intenções que se cumprem: concretas, no presente e com o tempo certo da lua.', ch: [['00:00', 'Abertura'], ['02:00', 'Porquê a lua nova'], ['05:30', 'Escrever a intenção'], ['09:10', 'Guardar o papel']] },
+    { t: 'Ametista: limpar e carregar cristais', th: 1, dur: '09:15', d: 72, views: 5400, draw: 'crystal', seed: 307, prods: [2], desc: 'Água, terra, lua ou fumo: as formas de limpar um cristal e quando usar cada uma.', ch: [['00:00', 'Abertura'], ['01:50', 'Limpar'], ['05:00', 'Carregar à lua']] },
+    { t: 'Amuletos para viagem', th: 3, dur: '13:02', d: 90, views: 4100, draw: 'amulet', seed: 308, prods: [3], desc: 'Como consagrar um amuleto antes de viajar e onde o levar.', ch: [['00:00', 'Abertura'], ['03:10', 'Consagrar'], ['09:40', 'Levar contigo']] },
+    { t: 'Ervas de abundância para o trabalho', th: 1, dur: '11:37', d: 104, views: 3800, draw: 'sage', seed: 309, prods: [11, 0], desc: 'Um saquinho de ervas para abrir caminhos no trabalho, com louro, canela e alecrim.', ch: [['00:00', 'Abertura'], ['02:40', 'As ervas'], ['07:20', 'Montar o saquinho']] }
+  ];
+  componentDidMount() {
+    this._rs = () => { const n = innerWidth < 900, hn = innerWidth < 1120; if (n !== this.state.narrow || hn !== this.state.hNarrow) this.setState({ narrow: n, hNarrow: hn }); }; this._rs(); addEventListener('resize', this._rs);
+    this.readCart();
+    try { const s = JSON.parse(localStorage.getItem('cz-grim-v1') || 'null'); if (s) this.setState({ view: s.view || 'list', vid: s.vid || 0 }); } catch (e) {}
+    this._ps = this.props.startView; if (this.props.startView === 'video') setTimeout(() => this.open(0), 0);
+  }
+  componentWillUnmount() { removeEventListener('resize', this._rs); }
+  componentDidUpdate() { if (this._ps !== this.props.startView) { this._ps = this.props.startView; this.props.startView === 'video' ? this.open(0) : this.setState({ view: 'list' }); } const k = this.state.view + this.state.vid; if (k !== this._lk) { this._lk = k; try { localStorage.setItem('cz-grim-v1', JSON.stringify({ view: this.state.view, vid: this.state.vid })); } catch (e) {} } }
+  readCart() { try { const l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); this.setState({ cartN: l && l.cart ? l.cart.reduce((a, c) => a + c.qty, 0) : 0 }); } catch (e) {} }
+  _cv = {};
+  cv(slot, draw, seed) { const k = slot + '|' + draw + '|' + seed; return this._cv[k] || (this._cv[k] = (el) => { if (!el) return; const go = () => window.CovilArt.paint(el, draw, seed); window.CovilArt ? go() : window.addEventListener('covilart', go, { once: true }); }); }
+  eur(n) { return n.toFixed(2).replace('.', ',') + ' €'; }
+  say(t) { clearTimeout(this._tt); this.setState({ toast: t }); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+  open(i) { this.setState({ view: 'video', vid: i, menuOpen: false }); window.scrollTo(0, 0); }
+  ago(d) { if (d < 7) return 'há ' + d + ' dias'; if (d < 30) return 'há ' + Math.round(d / 7) + ' semanas'; return 'há ' + Math.round(d / 30) + (Math.round(d / 30) === 1 ? ' mês' : ' meses'); }
+  addToCart(pid) {
+    let l = null; try { l = JSON.parse(localStorage.getItem('cz-loja-v1') || 'null'); } catch (e) {}
+    l = l || { cart: [] }; l.cart = l.cart || []; const f = l.cart.find(c => c.id === +pid && c.v === 0); if (f) f.qty++; else l.cart.push({ id: +pid, v: 0, qty: 1 });
+    try { localStorage.setItem('cz-loja-v1', JSON.stringify(l)); } catch (e) {}
+    this.setState(s => ({ added: { ...s.added, [pid]: true } })); this.readCart(); this.say(this.PR[pid][0] + ' adicionado ao carrinho');
+  }
+  card(i, slot) { const v = this.V[i]; return { t: v.t, theme: this.THEMES[v.th], dur: v.dur, meta: this.ago(v.d) + ' · ' + v.views.toLocaleString('pt-PT') + ' visualizações', cv: this.cv(slot, v.draw, v.seed), go: () => this.open(i), nprods: v.prods.length + (v.prods.length === 1 ? ' produto' : ' produtos') }; }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const list = this.V.map((v, i) => i).filter(i => (s.theme < 0 || this.V[i].th === s.theme) && (!q || (this.V[i].t + ' ' + this.V[i].desc).toLowerCase().includes(q)));
+    const feat = 3, V = this.V[s.vid];
+    return {
+      narrow: s.narrow, wide: !s.narrow, vCols: s.narrow ? 'minmax(0, 1fr)' : 'minmax(0, 1fr) 360px', asidePos: s.narrow ? 'static' : 'sticky', hNarrow: s.hNarrow, hWide: !s.hNarrow, menuOpen: s.menuOpen && s.hNarrow, toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })), cartN: String(s.cartN),
+      isList: s.view === 'list', isVideo: s.view === 'video', goList: () => { this.setState({ view: 'list' }); window.scrollTo(0, 0); },
+      feat: { ...this.card(feat, 'f'), desc: this.V[feat].desc },
+      themes: [{ label: 'Todas', on: s.theme < 0, k: -1 }, ...this.THEMES.map((t, k) => ({ label: t, on: s.theme === k, k }))].map(x => ({ label: x.label, go: () => this.setState({ theme: x.k }), bd: x.on ? '#d9b36c' : 'rgba(228,220,203,.18)', bg: x.on ? 'rgba(217,179,108,.12)' : 'transparent', fg: x.on ? '#efe6d3' : '#cfc6b5', aria: x.on ? 'true' : 'false' })),
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }),
+      vids: list.map(i => this.card(i, 'g')), none: !list.length, clear: () => this.setState({ theme: -1, q: '' }),
+      v: { t: V.t, theme: this.THEMES[V.th], dur: V.dur, meta: this.ago(V.d) + ' · ' + V.views.toLocaleString('pt-PT') + ' visualizações', desc: V.desc, cv: this.cv('pv', V.draw, V.seed),
+        ch: V.ch.map(([t, l]) => ({ t, l, go: () => this.say('No vídeo real, salta para ' + t) })),
+        prods: V.prods.map(p => ({ n: this.PR[p][0], price: this.eur(this.PR[p][1]), cv: this.cv('pp', this.PR[p][2], 100 + p), add: () => this.addToCart(p), label: s.added[p] ? '✓ No carrinho' : '+ Adicionar', bd: s.added[p] ? 'rgba(142,156,120,.6)' : 'rgba(228,220,203,.25)', fg: s.added[p] ? '#a9b892' : '#e4dccb' })),
+        total: this.eur(V.prods.reduce((a, p) => a + this.PR[p][1], 0)), addAll: () => V.prods.forEach(p => this.addToCart(p)), many: V.prods.length > 1 },
+      related: this.V.map((x, i) => i).filter(i => i !== s.vid).sort((a, b) => (this.V[b].th === V.th) - (this.V[a].th === V.th)).slice(0, 3).map(i => this.card(i, 'r')),
+      play: () => this.say('Aqui entra o vídeo do YouTube'), sub: () => this.say('Abre o canal no YouTube'), news: () => this.say('Subscrição registada'),
+      toast: s.toast, toastOp: s.toast ? '1' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

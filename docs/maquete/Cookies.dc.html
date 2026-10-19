@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<sc-if value="{{ show }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-label="Cookies" style="position: fixed; z-index: 120; left: clamp(12px, 2vw, 24px); bottom: clamp(12px, 2vw, 24px); width: min(460px, calc(100vw - 24px)); box-sizing: border-box; background: #0d0a11; color: #e4dccb; border: 1px solid rgba(217,179,108,.35); box-shadow: 0 30px 60px -20px rgba(0,0,0,.8); padding: 24px; display: flex; flex-direction: column; gap: 16px; font-family: 'Cormorant Garamond', Georgia, serif">
+<div style="display: flex; align-items: center; gap: 12px"><svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex: none"><path d="M15 3.5A9 9 0 1 0 20.5 9 A4 4 0 0 1 15 3.5Z" fill="none" stroke="#d9b36c" stroke-width="1.4"></path></svg><span style="font-family: 'IM Fell English SC', Georgia, serif; font-size: 24px; color: #efe6d3">Cookies na Casa</span></div>
+<span style="font-size: 18px; line-height: 1.45; color: #cfc6b5">Usamos cookies essenciais para o carrinho e as marcações funcionarem. Com a tua autorização, usamos também cookies de estatística e de marketing. <a href="Legal.dc.html#cookies" style="color: #d9b36c; border-bottom: 1px solid rgba(217,179,108,.4)">Saber mais</a></span>
+<sc-if value="{{ prefs }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; border-top: 1px solid rgba(228,220,203,.12)">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="3">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(228,220,203,.08)">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 19px; color: #efe6d3">{{ c.label }}</span><span style="font-size: 15.5px; line-height: 1.35; color: #a9a0b2">{{ c.sub }}</span></span>
+<button type="button" role="switch" aria-checked="{{ c.aria }}" aria-label="{{ c.label }}" onClick="{{ c.go }}" style="flex: none; position: relative; width: 42px; height: 24px; border-radius: 12px; border: 0; padding: 0; background: {{ c.trk }}; opacity: {{ c.op }}; cursor: {{ c.cur }}; transition: background .2s"><i style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #efe6d3; transition: transform .2s; transform: {{ c.knob }}"></i></button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" onClick="{{ acceptAll }}" style="flex: 1 1 140px; height: 46px; border: 0; cursor: pointer; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; background: #d9b36c; color: #09080a" style-hover="background: #e8cf98">Aceitar todos</button>
+<button type="button" onClick="{{ rejectAll }}" style="flex: 1 1 140px; height: 46px; cursor: pointer; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; background: transparent; color: #e4dccb; border: 1px solid rgba(228,220,203,.3)" style-hover="border-color: #d9b36c">Só essenciais</button>
+<button type="button" onClick="{{ third }}" style="flex: 1 1 100%; height: 40px; cursor: pointer; border: 0; background: transparent; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #a9a0b2" style-hover="color: #d9b36c">{{ thirdLabel }}</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ hidden }}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{ reopen }}" aria-label="Preferências de cookies" title="Preferências de cookies" style="position: fixed; z-index: 119; left: 14px; bottom: 14px; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; background: rgba(13,10,17,.85); border: 1px solid rgba(217,179,108,.35); opacity: .7" style-hover="opacity: 1"><svg viewBox="0 0 24 24" style="width: 18px; height: 18px"><path d="M15 3.5A9 9 0 1 0 20.5 9 A4 4 0 0 1 15 3.5Z" fill="none" stroke="#d9b36c" stroke-width="1.4"></path></svg></button>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { show: false, prefs: false, a: false, m: false };
+  componentDidMount() { let v = null; try { v = JSON.parse(localStorage.getItem('cz-cookies-v1') || 'null'); } catch (e) {} if (v) this.setState({ a: !!v.a, m: !!v.m }); else setTimeout(() => this.setState({ show: true }), 900); }
+  save(a, m) { try { localStorage.setItem('cz-cookies-v1', JSON.stringify({ a, m, at: Date.now() })); } catch (e) {} this.setState({ show: false, prefs: false, a, m }); }
+  renderVals() {
+    const s = this.state, sw = (on, fixed, go) => ({ aria: on ? 'true' : 'false', trk: on ? '#7b4fb8' : 'rgba(228,220,203,.2)', knob: on ? 'translateX(18px)' : 'none', op: fixed ? '.6' : '1', cur: fixed ? 'not-allowed' : 'pointer', go });
+    return {
+      show: s.show, hidden: !s.show, prefs: s.prefs,
+      cats: [{ label: 'Essenciais', sub: 'Carrinho, sessão e marcações. Sempre ativos.', ...sw(true, true, () => {}) }, { label: 'Estatística', sub: 'Para percebermos que páginas são mais vistas.', ...sw(s.a, false, () => this.setState(x => ({ a: !x.a }))) }, { label: 'Marketing', sub: 'Vídeos do YouTube e anúncios nas redes sociais.', ...sw(s.m, false, () => this.setState(x => ({ m: !x.m }))) }],
+      acceptAll: () => this.save(true, true), rejectAll: () => this.save(false, false),
+      third: s.prefs ? () => this.save(s.a, s.m) : () => this.setState({ prefs: true }), thirdLabel: s.prefs ? 'Guardar a minha escolha' : 'Escolher',
+      reopen: () => this.setState({ show: true, prefs: true })
+    };
+  }
+}
+</script>
+</body>
+</html>
