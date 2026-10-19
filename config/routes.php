@@ -28,6 +28,7 @@ declare(strict_types=1);
  * qualquer endereço escrito à sorte.
  */
 
+use Admedia\Cms\Controllers\Admin\CmsUpdateController;
 use Admedia\Cms\Controllers\Admin\FeatureController;
 use Admedia\Cms\Controllers\Admin\BlockPreviewController;
 use Admedia\Cms\Controllers\Admin\DashboardController;
@@ -211,6 +212,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
                na pasta config/ e mexe no esquema — por isso o controlador
                exige administrador, e não se fia só em a barra lateral o
                esconder. Ver Admedia\Cms\Features. */
+            /* Actualizar o CMS sem FTP: o pacote é enviado daqui, nunca
+               descarregado pelo site. Ver Admedia\Cms\Updater. */
+            $r->get ('/cms',          [CmsUpdateController::class, 'index']);
+            $r->post('/cms',          [CmsUpdateController::class, 'upload']);
+            $r->post('/cms/terminar', [CmsUpdateController::class, 'finish']);
+            
             $r->get ('/features',                [FeatureController::class, 'index']);
             $r->post('/features/{key}/install',  [FeatureController::class, 'install']);
             $r->post('/features/{key}/disable',  [FeatureController::class, 'disable']);
