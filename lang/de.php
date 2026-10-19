@@ -279,6 +279,7 @@ return [
     'loja.done.back'         => 'Zurück zum Laden',
     'loja.drawer.next'       => 'Versand und Rabattcodes im nächsten Schritt.',
     'loja.drawer.see'        => 'Korb ansehen',
+    'loja.announce.free'     => 'Kostenloser Versand ab :price auf dem Festland',
     'loja.kit.eyebrow'     => 'Das Ritual vervollständigen',
     'loja.kit.title'       => 'Was das Haus dazu verwendet',
     'loja.kit.add'         => 'Set hinzufügen',

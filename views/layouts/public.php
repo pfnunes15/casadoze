@@ -72,6 +72,11 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
          texto. */ ?>
 <a class="saltar" href="#conteudo"><?= e(__('site.skip')) ?></a>
 
+<?php /* A barra dourada do topo. Só onde a vista a pedir — `$anúncio = true` —,
+         que são as páginas da loja: a maquete não a põe na porta de entrada nem
+         nas páginas de texto. */ ?>
+<?php if (!empty($anúncio)) { require __DIR__ . '/../partials/anuncio.php'; } ?>
+
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <main id="conteudo">

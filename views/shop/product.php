@@ -44,6 +44,7 @@ use App\Services\Sigilos;
    o cabeçalho deixa de ser transparente — ver `.com-cabeçalho` na folha de
    estilo, e views/pages/composed.php, que faz o mesmo às páginas de blocos. */
 $bodyClass = 'com-cabeçalho';
+$anúncio   = true;
 
 $id   = (int)$product['id'];
 $nome = (string)$product['name'];

@@ -275,6 +275,7 @@ return [
     'loja.done.back'         => 'Retour à la boutique',
     'loja.drawer.next'       => "Livraison et codes de réduction à l'étape suivante.",
     'loja.drawer.see'        => 'Voir le panier',
+    'loja.announce.free'     => 'Livraison offerte au-delà de :price au Portugal continental',
     'loja.kit.eyebrow'     => 'Compléter le rituel',
     'loja.kit.title'       => 'Ce que la Maison utilise avec cette pièce',
     'loja.kit.add'         => "Ajouter l'ensemble",

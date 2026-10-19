@@ -41,6 +41,7 @@ use Admedia\Shop\Models\Attribute;
 use Admedia\Shop\Shop;
 
 $bodyClass = 'com-cabeçalho';
+$anúncio   = true;
 $pageTitle = __('loja.cart.checkout');
 
 $linhas   = $cart['lines'];

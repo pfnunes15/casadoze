@@ -24,6 +24,7 @@
 use Admedia\Shop\Shop;
 
 $bodyClass = 'com-cabeçalho';
+$anúncio   = true;
 $pageTitle = __('shop.thanks.title');
 
 $pago = in_array((string)$order['status'], ['paid', 'shipped'], true);

@@ -1049,6 +1049,38 @@
   }
 
   /* ---------------------------------------------------------------------
+     A barra dourada do topo: as frases rodam.
+
+     Uma de cada vez, cinco segundos cada. Sem isto fica a primeira — que é a
+     que interessa mais —, e por isso é ela que está escrita no documento com a
+     classe posta e as outras não têm `aria-hidden` por acaso: quem ouve a
+     página ouve uma frase e não três a dizer coisas diferentes ao mesmo tempo.
+
+     Parada com `prefers-reduced-motion`: texto que troca sozinho é movimento, e
+     quem pediu que a página ficasse quieta não pediu só que as coisas não
+     deslizassem.
+     --------------------------------------------------------------------- */
+  var anúncio = document.querySelector('[data-anúncio]');
+
+  if (anúncio && !queto) {
+    var frases = anúncio.querySelectorAll('.anúncio__frase');
+
+    if (frases.length > 1) {
+      var qual = 0;
+
+      setInterval(function () {
+        frases[qual].classList.remove('anúncio__frase--posta');
+        frases[qual].setAttribute('aria-hidden', 'true');
+
+        qual = (qual + 1) % frases.length;
+
+        frases[qual].classList.add('anúncio__frase--posta');
+        frases[qual].removeAttribute('aria-hidden');
+      }, 5000);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um

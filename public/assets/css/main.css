@@ -1585,9 +1585,14 @@ a.vídeo__moldura { border-style: solid; }
    O cabeçalho dessas páginas também deixa de ser transparente: sobre um fundo
    liso não há nada para se ler contra, e o ouro do logótipo sobre o preto do
    corpo ficava a flutuar sem pertencer a nada. */
-.com-cabeçalho main { padding-top: 84px; }
+/* **Fixo na porta de entrada, colado nas outras.** Na maquete o cabeçalho da
+   porta de entrada é `fixed` — passa por cima da fotografia de ecrã inteiro —
+   e o das páginas interiores é `sticky`, debaixo da barra dourada. Colado, o
+   cabeçalho ocupa o seu lugar no documento e o `main` deixa de precisar de
+   espaço em cima: era o `padding-top: 84px` que aqui estava. */
 .com-cabeçalho .cabeçalho {
-  background: rgba(9, 8, 10, .9);
+  position: sticky;
+  background: rgba(9, 8, 10, .94);
   border-bottom-color: var(--traco);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -4115,6 +4120,38 @@ a.vídeo__moldura { border-style: solid; }
   border: 1px solid rgba(228, 220, 203, .25);
 }
 .gaveta__botão--vazio:hover { background: none; border-color: var(--ouro); color: var(--ouro); }
+
+/* A barra dourada do topo da loja. Três frases que rodam; ver
+   views/partials/anuncio.php. A primeira é a que fica sem JavaScript. */
+.anúncio {
+  position: relative;
+  background: var(--ouro);
+  color: var(--fundo);
+  text-align: center;
+  padding: 9px 20px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  min-height: 32px;
+}
+.anúncio__frase {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .35s, transform .35s;
+}
+.anúncio__frase--posta { opacity: 1; transform: none; }
+
+/* Empilhadas no mesmo sítio para a barra não mudar de altura entre frases de
+   comprimentos diferentes — a primeira ocupa o espaço, as outras flutuam por
+   cima dela. Sem JavaScript só existe a primeira e isto não se nota. */
+.anúncio__frase:not(:first-child) {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 9px;
+}
 
 @media (min-width: 900px) {
   .navegação {

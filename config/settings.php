@@ -260,6 +260,16 @@ return [
                 'help'  => 'Por baixo do título «A Loja». Uma ou duas linhas sobre o que a '
                          . 'Casa vende e como o prepara.',
             ],
+            /* A linha do meio da barra dourada do topo da loja. As outras
+               duas saem do que a loja já sabe — os portes grátis e a embalagem
+               discreta —, e esta é a que muda com a época: «Colecção de Samhain
+               até 31 de Outubro». Vazia, a barra mostra só as outras duas. */
+            'shop.announce' => [
+                'type'  => 'text',
+                'label' => 'Aviso da barra do topo',
+                'help'  => 'Uma linha curta, em maiúsculas na barra dourada da loja. Para o que '
+                         . 'muda com a época. Deixe vazio para não a mostrar.',
+            ],
             'shop.email' => [
                 'type'   => 'text',
                 'global' => true,

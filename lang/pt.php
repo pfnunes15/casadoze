@@ -333,6 +333,7 @@ return [
     'loja.done.back'         => 'Voltar à loja',
     'loja.drawer.next'       => 'Envio e códigos de desconto no passo seguinte.',
     'loja.drawer.see'        => 'Ver o cesto',
+    'loja.announce.free'     => 'Portes grátis acima de :price no Continente',
     'loja.kit.eyebrow'     => 'Completar o ritual',
     'loja.kit.title'       => 'O que a Casa usa com esta peça',
     'loja.kit.add'         => 'Juntar o conjunto',

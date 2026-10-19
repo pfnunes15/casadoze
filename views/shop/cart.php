@@ -29,6 +29,7 @@ use Admedia\Shop\Shipping;
 use Admedia\Shop\Shop;
 
 $bodyClass = 'com-cabeçalho';
+$anúncio   = true;
 
 $pageTitle = __('shop.cart.title');
 
