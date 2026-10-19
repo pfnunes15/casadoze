@@ -200,6 +200,23 @@ return [
                           . 'antes de pagar.',
                 'placeholder' => 'whsec_...',
             ],
+            'shop.prices_show' => [
+                'type'   => 'select',
+                'global' => true,
+                'label'  => 'Como mostrar o preço',
+                'help'   => 'O preço que escreve num produto inclui sempre o IVA — é o que a '
+                          . 'lei obriga a mostrar a um consumidor, e é o que é cobrado. O que '
+                          . 'isto muda é só o que se lê ao lado dele. «Com IVA incluído» é o '
+                          . 'normal numa loja ao público; «sem IVA, à parte» mostra o valor '
+                          . 'sem imposto e o imposto a seguir, que é o que faz sentido a quem '
+                          . 'vende sobretudo a empresas.',
+                'choices' => [
+                    'gross'  => 'Só o preço, com IVA incluído',
+                    'both'   => 'O preço e, por baixo, quanto disso é IVA',
+                    'net'    => 'O valor sem IVA, e o IVA à parte',
+                ],
+            ],
+
             'shop.vat_rate' => [
                 'type'   => 'text',
                 'global' => true,

@@ -1,0 +1,43 @@
+/* ---------------------------------------------------------------------------
+   O mínimo para os preços com desconto e o cupão se lerem bem.
+
+   O desenho da loja é de cada site — esta folha não tem cores, tipos de letra
+   nem espaçamentos de marca, só o que impede a marcação nova de sair
+   amontoada: o preço antigo distinguir-se do novo, a etiqueta não colar ao
+   número, a caixa do cupão ficar numa linha.
+
+   Carrega-se depois da main.css do site, e um site que queira outra coisa
+   escreve-a na dele — estas regras são de especificidade mínima de propósito.
+   Sem ela nada parte: o <s> já vem riscado do navegador.
+
+   As classes, para quem quiser desenhá-las:
+     .price__was .price__now .price__label .price__tax
+     .cart-coupon .cart-coupon__box .cart-coupon__on
+     .cart-totals__discount .cart-totals__saved
+   --------------------------------------------------------------------------- */
+
+.price__was { opacity: .55; margin-right: .4em; }
+.price__now { font-weight: inherit; }
+
+/* O que a promoção se chama, ao lado do preço. */
+.price__label {
+  display: inline-block; margin-left: .5em;
+  padding: .05em .45em; border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: .72em; letter-spacing: .04em; text-transform: uppercase;
+  vertical-align: middle; opacity: .85;
+}
+
+/* «inclui 2,30 € de IVA», ou «+ 2,30 € IVA». Numa linha abaixo do número,
+   porque é uma nota sobre ele e não parte dele. */
+.price__tax { display: block; font-size: .78em; opacity: .7; }
+
+.cart-coupon { margin: 1rem 0; }
+.cart-coupon__box { display: inline-flex; gap: .4rem; flex-wrap: wrap; align-items: center; }
+.cart-coupon__box input { min-width: 9rem; }
+.cart-coupon__on { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+
+/* As linhas que tiram do total. Distinguidas das que somam, que é a única
+   coisa que um total precisa que se veja de relance. */
+.cart-totals__discount dd,
+.cart-totals__saved dd { font-variant-numeric: tabular-nums; }
