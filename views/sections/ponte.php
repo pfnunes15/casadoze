@@ -84,6 +84,17 @@ $repetições = 6;
          dela. */ ?>
 <div class="separador" aria-hidden="true">
   <span class="separador__fio separador__fio--esq" data-entra="risco"></span>
-  <img class="separador__sigilo" src="<?= asset('img/logotipo.png') ?>" alt="" loading="lazy" decoding="async">
+  <?php /* O sigilo em vector, e não o PNG. **Não é só peso** — o PNG tem 286 por
+           207 e o vector 96 por 92: com os 92px de largura que o desenho manda,
+           o PNG dava 67px de altura e o vector dá 88, e eram 21px a menos no
+           separador e em tudo o que vem abaixo dele. O desenho novo usa o
+           vector nas treze páginas. */ ?>
+  <?php /* O `width` e o `height` são os do `viewBox` e estão aqui por causa do
+           `loading="lazy"`: até a imagem entrar no ecrã o browser não sabe o
+           tamanho dela, e com `height: auto` e sem estes dois o separador fica
+           com 1px de alto e salta 88 quando a imagem chega. Com eles a caixa
+           está reservada desde o princípio. */ ?>
+  <img class="separador__sigilo" src="<?= asset('img/logotipo.svg') ?>" alt=""
+       width="96" height="92" loading="lazy" decoding="async">
   <span class="separador__fio separador__fio--dir" data-entra="risco"></span>
 </div>

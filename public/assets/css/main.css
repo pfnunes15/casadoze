@@ -146,8 +146,13 @@
 
   /* A largura do miolo, e a goteira. A goteira cresce com a janela — num
      telefone 20px é o que sobra, num ecrã largo 72px é o que a página precisa
-     para não colar o texto ao vidro. */
-  --miolo:   1280px;
+     para não colar o texto ao vidro.
+
+     **Eram 1280.** O desenho novo — `docs/maquete/Landing Page.dc.html` — põe
+     todas as secções a 1360, e com `box-sizing: border-box` em toda a folha é
+     1360 de conteúdo: a margem lateral está na secção, por fora desta caixa.
+     São 80px de largura em cada secção da página inteira. */
+  --miolo:   1360px;
   --goteira: clamp(24px, 5vw, 72px);
 
   /* A margem lateral das secções. Vinte no telefone e quarenta a partir dos
@@ -1410,9 +1415,9 @@ a.vídeo__moldura { border-style: solid; }
   background: radial-gradient(ellipse 50% 60% at 50% 0%, rgba(110, 60, 170, .22), transparent 70%), #070608;
   overflow: hidden;
 }
-/* Como a barra do topo, o rodapé é mais largo do que o miolo das secções: 1360
-   de conteúdo mais 40 de margem de cada lado. Com os 1280 das secções, o
-   conteúdo ficava a 244 em vez dos 204 da maquete. */
+/* Como a barra do topo, o rodapé põe a margem lateral por dentro dos 1360 e
+   fica com 1280 de conteúdo, onde as secções ficam com 1360. É o desenho, e
+   não mudou quando as secções passaram de 1280 para 1360. */
 .rodapé__miolo {
   max-width: 1360px;
   padding: 110px var(--goteira-secção) 0;
@@ -1854,10 +1859,12 @@ a.vídeo__moldura { border-style: solid; }
   gap: 16px;
   padding-block: 12px;
 
-  /* A barra é mais larga do que o miolo das secções: 1360 de conteúdo e não
-     1280. É o que põe o menu a começar em 164 e não em 204 — a maquete deixa a
-     navegação avançar para fora da coluna do texto, de propósito. */
-  max-width: 1440px;
+  /* A barra tem a margem lateral **por dentro** dos 1360, e as secções têm-na
+     por fora: aqui ficam 1280 de conteúdo, lá ficam 1360. O desenho inverteu-se
+     — era a barra a mais larga das duas — e isto é agora o que põe a navegação
+     a recuar para dentro da coluna do texto. Os 1360 são do desenho; a conta é
+     do `box-sizing: border-box` que a folha põe em tudo. */
+  max-width: 1360px;
   padding-inline: var(--goteira-secção);
 }
 

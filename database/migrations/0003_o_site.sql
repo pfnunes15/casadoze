@@ -28,7 +28,7 @@
 -- ---------------------------------------------------------------------------
 INSERT INTO settings (`key`, locale, value) VALUES
     ('site.name',    'pt', 'Casa de Zé'),
-    ('site.logo',    'pt', '/assets/img/logotipo.png'),
+    ('site.logo',    'pt', '/assets/img/logotipo.svg'),
 
     -- As cinco línguas da maquete, e o português como a principal.
     ('i18n.locales', 'pt', 'pt,en,fr,de,es'),
