@@ -252,4 +252,34 @@ return [
     'marcacao.already_happened' => 'Essa consulta já aconteceu.',
     'marcacao.cancelled'        => 'Marcação desmarcada. A hora voltou a ficar livre.',
     'marcacao.was_cancelled'    => 'Esta marcação já estava desmarcada.',
+
+    // ---------------------------------------------------------------------
+    // A loja, do lado de fora. Ver views/shop/.
+    //
+    // «Peças» e não «produtos» no cartão da intenção, e «produtos» aqui na
+    // contagem dos resultados: uma é a prateleira da Casa, a outra é o que o
+    // filtro devolveu. A maquete escreve as duas assim.
+    // ---------------------------------------------------------------------
+    'loja.title'          => 'A Loja',
+    'loja.breadcrumb'      => 'Onde está',
+    'loja.looking_for'     => 'Procuro',
+    'loja.filter'          => 'Filtrar',
+    'loja.clear'           => 'Limpar filtros',
+    'loja.choose'          => 'Escolher',
+    'loja.result'          => ':n produto',
+    'loja.results'         => ':n produtos',
+    'loja.filter.category' => 'Categoria',
+    'loja.filter.intent'   => 'Intenção',
+    'loja.filter.moon'     => 'Fase lunar',
+    'loja.filter.stock'    => 'Disponibilidade',
+    'loja.filter.in_stock' => 'Em stock',
+    'loja.sort'            => 'Ordenar',
+    'loja.sort.catalogue'  => 'Ordem da Casa',
+    'loja.sort.new'        => 'Novidades',
+    'loja.sort.cheap'      => 'Preço: mais baixo',
+    'loja.sort.dear'       => 'Preço: mais alto',
+    'loja.badge.new'       => 'Novo',
+    'loja.badge.few'       => 'Últimas',
+    'loja.empty'           => 'Nada com esta combinação',
+    'loja.empty.body'      => 'Tira um dos filtros ou procura por outra palavra. Se procuras algo que não está na loja, a Casa pode prepará-lo por encomenda.',
 ];

@@ -250,6 +250,16 @@ return [
                           . 'IVA nenhum.',
                 'placeholder' => '23',
             ],
+            /* A frase por baixo de «A Loja», na montra. Fica aqui e não numa
+               chave de tradução porque é texto da Casa e não da interface: quem
+               o escreve é quem vende, e muda-o quando a loja muda. Vazio
+               esconde o parágrafo, que é melhor do que um lugar-comum. */
+            'shop.intro' => [
+                'type'  => 'textarea',
+                'label' => 'Frase de entrada da loja',
+                'help'  => 'Por baixo do título «A Loja». Uma ou duas linhas sobre o que a '
+                         . 'Casa vende e como o prepara.',
+            ],
             'shop.email' => [
                 'type'   => 'text',
                 'global' => true,

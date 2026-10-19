@@ -40,6 +40,11 @@ return [
         'cart_add'    => '/carrinho/adicionar',
         'cart_update' => '/carrinho/actualizar',
         'cart_remove' => '/carrinho/remover',
+        /* Os cupões. Estavam por declarar, e o que estava por declarar não
+           ficava sem endereço: ficava com o do pacote, em inglês — um
+           /carrinho que submete para /cart/coupon. */
+        'cart_coupon'     => '/carrinho/cupao',
+        'cart_coupon_off' => '/carrinho/cupao/remover',
         'checkout'    => '/checkout',
         'thanks'      => '/encomenda/obrigado',
         'callback'    => '/pagamento/{gateway}/aviso',

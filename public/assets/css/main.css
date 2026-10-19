@@ -2705,6 +2705,317 @@ a.vídeo__moldura { border-style: solid; }
    =========================================================================== */
 
 /* O tablet: a navegação cabe na barra, e o painel deixa de fazer falta. */
+/* ---------------------------------------------------------------------------
+   A loja: a montra, com a fila do «Procuro» e a barra de filtros.
+
+   Mobile-first como o resto: aqui está o telefone, e o que cresce com a janela
+   está no @media mais abaixo. A coluna da loja é mais estreita do que as
+   secções da porta de entrada — 1360 **com** a margem por dentro, e portanto
+   1280 de conteúdo, como o cabeçalho e o rodapé. É o que a maquete faz, e faz
+   sentido: uma montra lê-se como uma página e não como uma faixa.
+   --------------------------------------------------------------------------- */
+.loja {
+  display: block;
+  width: 100%;
+  max-width: var(--miolo);
+  margin: 0 auto;
+  padding: 48px var(--goteira-secção) 120px;
+}
+
+/* As migalhas. */
+.migalhas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.migalhas a { color: var(--letra-tenue); }
+.migalhas a:hover { color: var(--ouro); }
+.migalhas [aria-current] { color: var(--letra); }
+
+/* O título e a contagem. `align-items: flex-end` põe a contagem na linha de
+   base da última linha do parágrafo, que é onde a maquete a tem. */
+.loja__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+  margin-top: 36px;
+}
+.loja__dizer {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 640px;
+}
+.loja__título {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(52px, 7vw, 96px);
+  line-height: .95;
+  letter-spacing: .02em;
+  color: var(--letra-forte);
+}
+.loja__entrada {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.5;
+  color: #cfc6b5;
+  text-wrap: pretty;
+}
+.loja__conta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+
+/* A fila do «Procuro»: as intenções, com o símbolo que a Casa lhes deu. */
+.procuro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(228, 220, 203, .12);
+  border-bottom: 1px solid rgba(228, 220, 203, .12);
+}
+.procuro__rótulo {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--roxo-claro);
+  margin-right: 8px;
+}
+.procuro__chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 10px;
+  border: 1px solid rgba(228, 220, 203, .18);
+  border-radius: 999px;
+  font-size: 19px;
+  color: var(--letra);
+  transition: border-color .3s, background .3s, color .3s;
+}
+.procuro__chip:hover { border-color: rgba(217, 179, 108, .6); color: var(--ouro); }
+.procuro__chip--aceso {
+  border-color: rgba(217, 179, 108, .7);
+  background: rgba(217, 179, 108, .12);
+  color: var(--ouro-claro);
+}
+.procuro__sigilo { width: 26px; height: 26px; overflow: visible; color: var(--ouro); flex: none; }
+
+/* A barra de filtros. Cola-se por baixo do cabeçalho — 68px é a altura dele —
+   e estica-se para fora da margem da coluna para o fundo esbatido chegar às
+   pontas, como na maquete. */
+.loja__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 44px;
+}
+.filtros {
+  position: sticky;
+  top: 68px;
+  z-index: 30;
+  margin-inline: calc(var(--goteira-secção) * -1);
+  padding-inline: var(--goteira-secção);
+  background: rgba(9, 8, 10, .95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(228, 220, 203, .10);
+  border-bottom: 1px solid rgba(228, 220, 203, .10);
+}
+.filtros__fila {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filtros__fila::-webkit-scrollbar { display: none; }
+.filtros__rótulo {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--roxo-claro);
+  padding-right: 6px;
+}
+.filtros__grupo {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 220, 203, .18);
+  background: none;
+  font-family: var(--prosa);
+  font-size: 18px;
+  color: var(--letra-forte);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .3s, background .3s;
+}
+.filtros__grupo:hover { border-color: rgba(217, 179, 108, .5); }
+.filtros__grupo[aria-expanded="true"] {
+  border-color: rgba(217, 179, 108, .7);
+  background: rgba(217, 179, 108, .10);
+}
+.filtros__grupo[data-contagem]::after {
+  content: attr(data-contagem);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ouro);
+}
+.filtros__seta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ouro);
+  transition: transform .25s;
+}
+.filtros__grupo[aria-expanded="true"] .filtros__seta { transform: rotate(180deg); }
+
+.filtros__limpar {
+  flex: none;
+  margin-left: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ouro);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid rgba(217, 179, 108, .5);
+  padding-bottom: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.filtros__opções {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0 16px;
+}
+.filtros__opção {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(228, 220, 203, .18);
+  background: none;
+  font-family: var(--prosa);
+  font-size: 18px;
+  color: var(--letra);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color .3s, background .3s, color .3s;
+}
+.filtros__opção:hover { border-color: rgba(217, 179, 108, .5); }
+.filtros__opção[aria-pressed="true"] {
+  border-color: rgba(217, 179, 108, .7);
+  background: rgba(217, 179, 108, .12);
+  color: var(--ouro-claro);
+}
+
+/* A contagem e a ordenação. */
+.loja__linha {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+.loja__resultado {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #a9a0b2;
+}
+.loja__ordenar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.loja__ordenar select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 1px solid rgba(228, 220, 203, .25);
+  padding: 10px 34px 10px 14px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--letra);
+  cursor: pointer;
+}
+.loja__ordenar select option { background: var(--fundo); }
+
+/* A grelha da loja é mais apertada do que a da montra da porta de entrada: lá
+   são oito cartões a servir de amostra, aqui é o catálogo. */
+.montra--loja {
+  grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 21vw, 236px), 1fr));
+  gap: 48px clamp(14px, 2vw, 26px);
+  margin-top: 8px;
+}
+
+/* O selo do estado, à direita por cima do desenho — a lua está à esquerda. */
+.produto__selo {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 5px 8px;
+}
+.produto__selo--esgotado { background: rgba(9, 8, 10, .75); color: var(--letra-tenue); }
+.produto__selo--poucas   { background: rgba(224, 134, 60, .9); color: #09080a; }
+.produto__selo--novo     { background: var(--ouro); color: var(--fundo); }
+
+.produto__nome a { color: inherit; }
+.produto__nome a:hover { color: var(--ouro); }
+.produto__pé { display: flex; justify-content: flex-end; }
+
+/* Nada com esta combinação. */
+.loja__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 80px 20px;
+  text-align: center;
+  border: 1px dashed rgba(228, 220, 203, .18);
+}
+.loja__vazioSigilo { width: 56px; height: 56px; color: var(--ouro); }
+.loja__vazioTítulo { font-family: var(--titulo); font-size: 30px; color: var(--letra-forte); }
+.loja__vazioDito   { font-size: 19px; color: #a9a0b2; max-width: 40ch; }
+
 @media (min-width: 900px) {
   .navegação {
     display: flex;

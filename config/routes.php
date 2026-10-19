@@ -47,6 +47,7 @@ use Admedia\Core\Middleware\AuthMiddleware;
 use Admedia\Core\Middleware\CsrfMiddleware;
 use Admedia\Core\Middleware\EditorOrAbove;
 use Admedia\Shop\Shop;
+use App\Controllers\IntentController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
 use App\Controllers\Admin\SlotAdminController;
@@ -76,6 +77,31 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
      *     https://o-site/_migrate?token=O_SÍMBOLO&seed-admin=o@email.pt&name=Nome
      */
     $r->get('/_migrate', [MigrationController::class, 'run']);
+
+    // ---------- A loja, do lado de fora ----------
+    /* Montra, categoria, ficha, cesto e checkout. Tudo do pacote: os
+       controladores, os modelos e o motor do dinheiro são de lá, e este site
+       só põe as vistas e os endereços — `config/shop.php`, em `paths`.
+     *
+     * A ordem é do pacote e conta: a montra, depois a categoria, e só então a
+     * ficha. O padrão da ficha é `/loja/{seja o que for}` e engolia a palavra
+     * «categoria» se viesse primeiro.
+     *
+     * **Fica dentro do grupo do CSRF**: olhar é um GET e não muda nada, mas
+     * tudo o que mexe no cesto é um POST e tem de trazer o símbolo.
+     *
+     * As contas de cliente — o `Shop::accountRoutes` — **não estão aqui, de
+     * propósito**: por omissão o pacote põe-nas em `/login` e `/logout`, que é
+     * exactamente onde está a porta de quem trabalha na Casa. Entram quando a
+     * `Conta` for construída, e com endereços próprios declarados. */
+    Shop::routes($r);
+
+    /* A loja vista por uma intenção. **Não é do pacote**: um CMS partilhado
+       arruma por categorias, e esta casa vende por razões — proteção, amor,
+       sono. O bloco «Comprar por intenção» da porta de entrada já apontava
+       para cá antes de este endereço existir, e dava 404 a quem lhe
+       carregasse. Ver App\Controllers\IntentController. */
+    $r->get('/intencao/{slug}', [IntentController::class, 'show']);
 
     // ---------- Entrar ----------
     $r->get ('/login',           [AuthController::class, 'showLogin']);
@@ -233,3 +259,16 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         });
     });
 });
+
+/* ---------- O aviso de quem recebeu o dinheiro ----------
+ *
+ * **Fora do grupo do CSRF**, e é por isso que é uma chamada à parte: quem bate
+ * a esta porta não é um browser e não traz símbolo nenhum. O que a autentica é
+ * a assinatura sobre o corpo do pedido, verificada pela biblioteca do próprio
+ * fornecedor — uma prova mais forte do que um símbolo de CSRF, porque prova que
+ * quem envia tem o segredo, e não apenas que um formulário saiu daqui.
+ *
+ * **É isto que faz uma encomenda passar a paga**, e não o comprador voltar ao
+ * site: quem volta pode ter fechado a janela antes de pagar, e quem paga pode
+ * fechá-la depois. */
+Shop::callbackRoutes($r);

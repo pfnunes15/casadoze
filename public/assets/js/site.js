@@ -643,6 +643,162 @@
   }
 
   /* ---------------------------------------------------------------------
+     A loja: a barra de filtros e a ordenação.
+
+     **Esconde cartões; não vai buscar outros.** São oito, já estão desenhados,
+     e ir ao servidor buscar os mesmos oito para esconder quatro era uma viagem
+     para nada. No dia em que a loja passar de umas dezenas de peças isto tem de
+     mudar para filtragem e paginação no servidor — ver a nota em
+     views/shop/index.php.
+
+     A barra está `hidden` no HTML e só aqui se mostra: uma barra de filtros que
+     não filtra é pior do que barra nenhuma, e sem JavaScript fica a montra
+     inteira, que é a resposta certa.
+
+     Dentro de um grupo as opções somam-se — «Velas» ou «Cristais» —, e entre
+     grupos multiplicam-se: «Velas» e «Proteção» é o que tem as duas coisas. É a
+     única leitura que não surpreende ninguém.
+     --------------------------------------------------------------------- */
+  var barra = document.querySelector('[data-filtros-loja]');
+  var grelhaDaLoja = document.querySelector('.montra--loja');
+
+  if (barra && grelhaDaLoja) {
+    barra.hidden = false;
+
+    var cartõesDaLoja = [].slice.call(grelhaDaLoja.querySelectorAll('.produto'));
+    var resultado = document.querySelector('[data-resultado]');
+    var vazio = document.querySelector('[data-vazio]');
+    var ordenar = document.querySelector('[data-ordenar]');
+
+    /* O molde da contagem — «:n produtos» — lido do que o servidor já escreveu,
+       para a frase ficar na língua da página sem a repetir em JavaScript. */
+    var moldeDoResultado = resultado
+      ? resultado.textContent.replace(/\d+/, '{n}')
+      : '{n}';
+
+    var escolhas = {};
+
+    function activas(grupo) {
+      return (escolhas[grupo] || []).length;
+    }
+
+    function passa(cartão) {
+      for (var grupo in escolhas) {
+        if (!escolhas.hasOwnProperty(grupo) || !escolhas[grupo].length) { continue; }
+        var suas = (cartão.getAttribute('data-' + grupo) || '').split(' ');
+        var alguma = false;
+        for (var i = 0; i < escolhas[grupo].length; i++) {
+          if (suas.indexOf(escolhas[grupo][i]) !== -1) { alguma = true; break; }
+        }
+        if (!alguma) { return false; }
+      }
+      return true;
+    }
+
+    function pintar() {
+      var quantos = 0;
+
+      for (var c = 0; c < cartõesDaLoja.length; c++) {
+        var fica = passa(cartõesDaLoja[c]);
+        cartõesDaLoja[c].hidden = !fica;
+        if (fica) { quantos++; }
+      }
+
+      if (resultado) {
+        resultado.textContent = moldeDoResultado.replace('{n}', String(quantos));
+      }
+      if (vazio) { vazio.hidden = quantos > 0; }
+
+      /* Os botões do grupo dizem quantas opções lá estão escolhidas, e o
+         «limpar» só existe quando há o que limpar. */
+      var algum = false;
+      var grupos = barra.querySelectorAll('[data-grupo]');
+      for (var g = 0; g < grupos.length; g++) {
+        var n = activas(grupos[g].getAttribute('data-grupo'));
+        if (n > 0) { algum = true; grupos[g].setAttribute('data-contagem', String(n)); }
+        else { grupos[g].removeAttribute('data-contagem'); }
+      }
+
+      var limpas = document.querySelectorAll('[data-limpar]');
+      for (var l = 0; l < limpas.length; l++) { limpas[l].hidden = !algum; }
+    }
+
+    /* Abrir e fechar um grupo. Um de cada vez: dois painéis abertos empurravam
+       a grelha para fora do ecrã. */
+    barra.addEventListener('click', function (ev) {
+      var alvo = ev.target.closest ? ev.target.closest('[data-grupo]') : null;
+      if (!alvo) { return; }
+
+      var qual = alvo.getAttribute('data-grupo');
+      var abrir = alvo.getAttribute('aria-expanded') !== 'true';
+
+      var todos = barra.querySelectorAll('[data-grupo]');
+      for (var g = 0; g < todos.length; g++) {
+        todos[g].setAttribute('aria-expanded', todos[g] === alvo && abrir ? 'true' : 'false');
+      }
+
+      var painéis = barra.querySelectorAll('[data-opções]');
+      for (var p = 0; p < painéis.length; p++) {
+        painéis[p].hidden = !(abrir && painéis[p].getAttribute('data-opções') === qual);
+      }
+    });
+
+    /* Escolher e desescolher uma opção. */
+    barra.addEventListener('click', function (ev) {
+      var opção = ev.target.closest ? ev.target.closest('[data-filtro]') : null;
+      if (!opção) { return; }
+
+      var grupo = opção.getAttribute('data-filtro');
+      var valor = opção.getAttribute('data-valor');
+      escolhas[grupo] = escolhas[grupo] || [];
+
+      var onde = escolhas[grupo].indexOf(valor);
+      if (onde === -1) { escolhas[grupo].push(valor); }
+      else { escolhas[grupo].splice(onde, 1); }
+
+      opção.setAttribute('aria-pressed', onde === -1 ? 'true' : 'false');
+      pintar();
+    });
+
+    /* Limpar tudo. Está em dois sítios — na barra e no «nada com esta
+       combinação» — e faz o mesmo nos dois. */
+    document.addEventListener('click', function (ev) {
+      var botão = ev.target.closest ? ev.target.closest('[data-limpar]') : null;
+      if (!botão) { return; }
+
+      escolhas = {};
+      var opções = barra.querySelectorAll('[data-filtro]');
+      for (var o = 0; o < opções.length; o++) { opções[o].setAttribute('aria-pressed', 'false'); }
+      pintar();
+    });
+
+    /* A ordenação. Mexe na ordem da grelha com `order` e não na do documento:
+       a ordem do documento é a que um leitor de ecrã e o teclado seguem, e
+       trocá-la por causa de um `<select>` visual é trocar duas coisas quando se
+       pediu uma. */
+    if (ordenar) {
+      ordenar.addEventListener('change', function () {
+        var como = ordenar.value;
+
+        var ordenados = cartõesDaLoja.slice().sort(function (a, b) {
+          if (como === 'barato') { return num(a, 'preco') - num(b, 'preco'); }
+          if (como === 'caro')   { return num(b, 'preco') - num(a, 'preco'); }
+          if (como === 'novos')  { return num(b, 'novo') - num(a, 'novo'); }
+          return num(a, 'ordem') - num(b, 'ordem');
+        });
+
+        for (var i = 0; i < ordenados.length; i++) {
+          ordenados[i].style.order = String(i);
+        }
+      });
+    }
+
+    function num(el, qual) {
+      return parseInt(el.getAttribute('data-' + qual), 10) || 0;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um
