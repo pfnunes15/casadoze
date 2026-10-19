@@ -895,6 +895,34 @@
   }
 
   /* ---------------------------------------------------------------------
+     O cesto: mexer na quantidade guarda sozinho.
+
+     Sem JavaScript há um botão «Actualizar», que é o que faz a página
+     funcionar sem ele. Com JavaScript o botão deixa de fazer falta: mudar o
+     número guarda, e um botão que é preciso carregar depois de já se ter
+     carregado é um passo a mais. O botão é escondido aqui e não no HTML,
+     porque sem isto a página ficava sem maneira de guardar.
+     --------------------------------------------------------------------- */
+  var cesto = document.querySelector('[data-cesto]');
+
+  if (cesto) {
+    var guardar = cesto.querySelector('[data-cesto-guardar]');
+    if (guardar) { guardar.hidden = true; }
+
+    var aGuardar = null;
+
+    cesto.addEventListener('change', function (ev) {
+      if (!ev.target.matches || !ev.target.matches('input[type="number"]')) { return; }
+
+      /* Meio segundo de espera: quem carrega três vezes no «+» pede três
+         somas, e sem isto eram três idas ao servidor e duas páginas
+         deitadas fora a meio. */
+      clearTimeout(aGuardar);
+      aGuardar = setTimeout(function () { cesto.submit(); }, 500);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um
