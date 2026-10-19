@@ -1,29 +1,30 @@
 # Casa de Zé
 
-> **Aviso: este repositório já não é o que está escrito a seguir.**
+> **Aviso: a parte pública é uma página só.**
 >
-> O site foi **reduzido à porta de entrada**. Saíram a loja pública, o cesto, o
-> checkout, as páginas de produto, as marcações, a entrada e o backoffice
-> inteiro. Ficou uma página — a `home` — construída contra a maquete aprovada em
-> `docs/maquete.html`, e os dados que ela lê.
+> O site foi reduzido à porta de entrada, construída contra a maquete aprovada em
+> `docs/maquete.html`. Saíram da web a loja pública, o cesto, o checkout, as
+> páginas de produto e a marcação de consultas. O texto abaixo descreve o
+> projecto inteiro, e parte dele já não está lá — o que saiu recupera-se do
+> histórico, no commit anterior à redução.
 >
-> A tabela de rotas tem **um** endereço: `GET /`. Quem procurar aqui o que o
-> texto abaixo descreve não o encontra.
+> **O backoffice está todo.** Páginas, blocos, menus, pedidos, definições,
+> utilizadores, o catálogo da loja e as consultas — marcações, horários,
+> encerramentos e vagas. A Casa edita o que está no ar.
 >
-> **O que saiu está no histórico**, no commit anterior a esta redução, e
-> recupera-se de lá. O resto do texto deste ficheiro fica como estava porque
-> continua a descrever o projecto que era — e porque é a ele que se volta se
-> alguém quiser o site inteiro de novo.
+> A parte pública tem dois endereços: `GET /` e o `/_migrate`, para alojamento
+> sem shell. Tudo o resto está atrás de `/admin` e da autenticação.
 >
-> Consequências que valem a aviso:
+> Três coisas por fechar antes de abrir ao público:
 >
-> - **A Casa já não tem como editar nada.** Sem backoffice, os textos mudam-se
->   por SQL ou por migração.
 > - **As existências em armazém estão a 12 e são inventadas** — ver
->   `database/migrations/0006_a_montra_da_maquete.sql`. Têm de ser corrigidas
->   antes de abrir.
+>   `database/migrations/0006_a_montra_da_maquete.sql`. Postas lá para a montra
+>   não dizer «Esgotado» nos oito produtos; têm de ser contadas a sério.
 > - O boletim do rodapé **não envia nada**, e o botão «+ Adicionar» conta no
 >   cesto do cabeçalho sem ir ao servidor: não há cesto para onde ir.
+> - **A marcação do lado de fora não existe.** A maquete não tem agenda na porta
+>   de entrada, e a secção das consultas leva botões, não um selector de dia e
+>   hora. Marca-se por telefone, pelo backoffice.
 
 O site, a loja e as consultas. O núcleo do CMS é o mesmo que corre a Quinta da
 Moscadinha, o Barbeito e o Blandy's — vem do pacote `admedia/cms`, não está
@@ -49,37 +50,37 @@ Duas coisas se vendem aqui, e são de naturezas diferentes:
 
 ## Onde o CMS vive
 
-O pacote é consumido por um repositório `path` do Composer apontado a `../cms`,
-com symlink. Este projecto fica **ao lado dos outros sites e do CMS**, que é o
-que faz esse `../cms` apontar para o sítio certo sem mais nada:
+**O pacote vem por versão, e não por symlink.** O `composer.json` aponta a um
+repositório `vcs` — o `admedia-cms-core` no GitHub — e pede `admedia/cms: ^2.11`.
+O `composer.lock` diz qual é a versão que este site corre, e é essa que vai para
+o servidor.
 
-```
-Documents/dev/
-  asjp/
-  barbeito/
-  blandywinelodge/
-  casadoze/            este projecto
-  cms/                 o pacote admedia/cms
-  madeiratraveltaxi/
-  quintadamoscadinha/
-  travellider/
-```
+Era um repositório `path` com symlink para `../cms`, e isso queria dizer que o
+site saltava para a versão nova no instante em que o repositório do CMS mudasse,
+sem ninguém o ter pedido. Por versão, a subida é um acto: `composer update
+admedia/cms`, ver o que mudou, e commitar o `lock`.
 
-O `vendor/admedia/cms` fica um symlink relativo — `../../../cms/`, o mesmo que o
-Barbeito tem — para a cópia de trabalho em `Documents/dev/cms`, que é a mesma que
-todos os outros usam. **Editar o CMS a partir daqui é editar esse repositório** —
-é o mesmo ficheiro —, e commita-se lá. Não há segunda cópia a divergir.
+O `preferred-install` pede `source`, por isso o `vendor/admedia/cms` é um clone
+do repositório e não um zip. **Dá para desenvolver o CMS ali dentro** — e
+commita-se lá, no repositório dele. Duas coisas a ter presentes quando se faz
+isso:
 
-Daí que o sítio no disco não seja indiferente: um projecto noutra pasta tem de
-inventar um symlink só para o `../cms` resolver, e um symlink inventado é uma
-coisa que não está no repositório e que a máquina seguinte não tem.
+- O que estiver por commitar no `vendor/` **não existe para mais ninguém**. O
+  `composer.lock` continua a apontar à versão etiquetada.
+- Publicar os assets com trabalho a meio no `vendor/` copia esse trabalho para
+  dentro deste repositório, e os dois ficam dessincronizados sem dar nas vistas.
+  Commitar e etiquetar primeiro, publicar depois.
 
 Depois de cada `composer install` ou `composer update`, publicar os assets do
 backoffice:
 
 ```bash
-php bin/cms-publish.php
+php vendor/admedia/cms/bin/cms-publish.php
 ```
+
+O guião vive no pacote. O `bin/preparar-staging.sh` procura-o primeiro em
+`bin/` deste projecto e só depois no `vendor/`, para um site poder trazer o seu
+— mas este não traz, e não deve: uma cópia no projecto envelhece em silêncio.
 
 O browser só alcança o que está debaixo do docroot, e `vendor/` não está — por
 isso a folha de estilo do backoffice, o guião dele e o editor de texto são
@@ -102,12 +103,12 @@ views/      modelos
 
 ```bash
 composer install
-php bin/cms-publish.php
+php vendor/admedia/cms/bin/cms-publish.php
 cp config/config.example.php config/config.php
 # editar config/config.php: base de dados, app.url, app_key
 mysql -e "CREATE DATABASE casadoze CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
 php bin/migrate.php
-ADMIN_EMAIL=voce@exemplo.pt ADMIN_NAME="O Seu Nome" php bin/seed-admin.php
+ADMIN_EMAIL=voce@exemplo.pt ADMIN_NAME="O Seu Nome" php vendor/admedia/cms/bin/seed-admin.php
 php bin/gerar-vagas.php
 php -S 127.0.0.1:8000 index.php
 ```
@@ -392,6 +393,12 @@ estava sempre a saltar de um ecrã para o outro a meio de uma chamada.
   se marcam por hora, e as que começam com uma conversa.
 - **Dias encerrados** — por mês, com os anuais marcados.
 
+Os três entram na barra lateral por `config/admin-nav.php`, que o CMS lê como lê
+os blocos e os menus. O pacote não traz nenhum ficheiro desses de propósito: sem
+ele a barra é a do CMS, e um site que tem trabalho próprio pendura-o ali. O
+contador das marcações é um closure — `Booking::upcomingCount()` —, para a
+consulta à base de dados só se pagar quando a barra é mesmo desenhada.
+
 O ecrã de uma vaga não é um quarto ecrã: é o detalhe de um dia do calendário, e
 abre-se de lá. É também onde se marca por telefone, que é onde se está a olhar
 quando o telefone toca — e onde se vê o aviso de que aquela hora se cruza com
@@ -447,10 +454,13 @@ Três coisas, e nenhuma é código:
    isto as encomendas nunca passam a pagas**, porque é o que prova que o
    pagamento é real: quem volta ao site pode ter fechado a janela antes de pagar,
    e quem paga pode fechá-la depois.
-3. **O stock.** As migrações semeiam os oito produtos com stock a **zero**, de
-   propósito: um produto sem stock mostra-se na montra e diz «esgotado» em vez de
-   se deixar comprar, e é isso que se quer enquanto ninguém contou o que está na
-   prateleira. Pôr um número inventado era prometer o que ninguém verificou.
+3. **O stock está a 12, e doze é inventado.** A migração `0002_a_loja.sql`
+   semeia os oito produtos a **zero**, de propósito — um produto sem stock
+   mostra-se na montra e diz «Esgotado» em vez de se deixar comprar. A
+   `0006_a_montra_da_maquete.sql` põe-nos a 12, porque com zero os oito cartões
+   diziam «Esgotado» e a montra da maquete não se via. Um e outro são
+   afirmações que ninguém verificou: **contar o que está na prateleira antes de
+   abrir.**
 
 Falta também o IVA confirmado — está a 23, o do continente — e as fotografias dos
 produtos, que a maquete não tinha: os cartões dela desenhavam cada produto num
@@ -478,9 +488,20 @@ Não há SSH no alojamento, por isso publicar é copiar ficheiros:
 5. Criar `storage/sessions/` e `storage/logs/` se não vierem, e confirmar que
    são escrevíveis e que não são alcançáveis pela web.
 
-Os passos do `bin/cms-publish.php` e do cron do `bin/gerar-vagas.php` saíram
-daqui com o backoffice e o motor de marcações — ver o aviso no topo deste
-ficheiro. Os guiões já não existem.
+Os assets do backoffice vão versionados — `public/assets/css/admin.css`,
+`public/assets/js/admin.js` e o resto —, por isso **não há nada a publicar no
+servidor**: o `cms-publish` corre-se em local, antes de commitar. Sem SSH não
+havia como o correr lá de qualquer maneira.
+
+O `bin/gerar-vagas.php` abre as vagas do calendário a partir dos horários das
+consultas, e quer um cron — no cPanel, uma vez por dia:
+
+```
+php /home/UTILIZADOR/public_html/bin/gerar-vagas.php
+```
+
+Enquanto não houver cron, as vagas abrem-se à mão no ecrã das marcações. Com a
+marcação pública fora do ar isso chega: quem marca é o Zé, ao telefone.
 
 ## Antes de lançar: correr os sites todos
 
@@ -488,21 +509,25 @@ ficheiro. Os guiões já não existem.
 cd ../cms && php bin/check-sites.php
 ```
 
-Os sites instalam o pacote por *path repository* com symlink, o que quer dizer que
-saltam para a versão nova no instante em que o repositório do CMS muda. Não há um
-`composer update` a servir de porta. Um site que ninguém abra é um site onde a
-regressão só aparece quando o cliente lá for.
+Este site já pede o pacote por versão — ver **Onde o CMS vive** —, mas nem todos
+pedem: os que ainda estão em *path repository* saltam para a versão nova no
+instante em que o repositório do CMS muda, sem um `composer update` a servir de
+porta. Um site que ninguém abra é um site onde a regressão só aparece quando o
+cliente lá for.
 
-Este projecto tem duas cópias de vistas do pacote, e as duas são dívida que esse
+Este projecto tem **uma** cópia de uma vista do pacote, e é dívida que esse
 verificador não apanha:
 
-- `views/layouts/admin.php` — copiado só para pôr «Consultas» na barra lateral.
-  Procure por «ACRESCENTADO NESTE SITE»; é a única diferença.
 - `views/pages/composed.php` — copiado porque o do pacote escreve as classes
   `page-view` e `page-shell`, que são do CSS do CMS e este site não tem.
 
-Quando o pacote mexer numa delas, a cópia não acompanha. Ao actualizar o CMS,
-compare os dois ficheiros.
+Quando o pacote lhe mexer, a cópia não acompanha. Ao actualizar o CMS, compare
+os dois ficheiros.
+
+Eram duas. O `views/layouts/admin.php` estava aqui copiado só para pôr
+«Consultas» na barra lateral — cento e quarenta linhas bifurcadas para
+acrescentar três. Saiu: o CMS 2.28 lê `config/admin-nav.php`, e é lá que os três
+ecrãs desta casa se penduram agora.
 
 ## Licença
 
