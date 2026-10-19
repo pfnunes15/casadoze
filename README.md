@@ -1,30 +1,39 @@
 # Casa de Zé
 
-> **Aviso: a parte pública é uma página só.**
+> **Aviso: a parte pública é a porta de entrada e a loja.**
 >
-> O site foi reduzido à porta de entrada, construída contra a maquete aprovada em
-> `docs/maquete.html`. Saíram da web a loja pública, o cesto, o checkout, as
-> páginas de produto e a marcação de consultas. O texto abaixo descreve o
-> projecto inteiro, e parte dele já não está lá — o que saiu recupera-se do
-> histórico, no commit anterior à redução.
+> O site tinha sido reduzido a uma página. **A loja voltou** — montra, ficha,
+> cesto, checkout e confirmação —, construída contra o desenho completo que
+> chegou a 19 de Outubro de 2026 e que está em `docs/maquete/`, com a leitura
+> desta casa em `docs/maquete/NOTAS.md`.
+>
+> Continua fora o resto do desenho: a Sala das tarólogas, o Grimório, a Casa,
+> os Contactos, o Legal, a Pesquisa, a Conta do cliente e o Painel. E a
+> marcação de consultas do lado de fora, que a maquete antiga não tinha e esta
+> tem.
 >
 > **O backoffice está todo.** Páginas, blocos, menus, pedidos, definições,
 > utilizadores, o catálogo da loja e as consultas — marcações, horários,
 > encerramentos e vagas. A Casa edita o que está no ar.
 >
-> A parte pública tem dois endereços: `GET /` e o `/_migrate`, para alojamento
-> sem shell. Tudo o resto está atrás de `/admin` e da autenticação.
+> A parte pública tem a porta de entrada, a loja (`/loja`, `/carrinho`,
+> `/checkout`, `/encomenda/obrigado`), as intenções (`/intencao/{etiqueta}`) e
+> o `/_migrate`, para alojamento sem shell. O resto está atrás de `/admin`.
 >
-> Três coisas por fechar antes de abrir ao público:
+> Por fechar antes de abrir ao público:
 >
 > - **As existências em armazém estão a 12 e são inventadas** — ver
 >   `database/migrations/0006_a_montra_da_maquete.sql`. Postas lá para a montra
 >   não dizer «Esgotado» nos oito produtos; têm de ser contadas a sério.
-> - O boletim do rodapé **não envia nada**, e o botão «+ Adicionar» conta no
->   cesto do cabeçalho sem ir ao servidor: não há cesto para onde ir.
-> - **A marcação do lado de fora não existe.** A maquete não tem agenda na porta
->   de entrada, e a secção das consultas leva botões, não um selector de dia e
->   hora. Marca-se por telefone, pelo backoffice.
+> - O boletim do rodapé **não envia nada**: não há lista onde guardar nem
+>   consentimento a ficar registado.
+> - **A marcação do lado de fora não existe.** A maquete antiga não tinha agenda
+>   na porta de entrada. A nova tem — `docs/maquete/Consultas.dc.html`, com
+>   calendário e vagas —, e isso está por construir. Até lá marca-se por
+>   telefone, pelo backoffice.
+> - **A loja não vende.** Faltam as zonas e os escalões de envio e as chaves do
+>   Stripe, e sem isso o cesto mostra-se e não deixa finalizar. Nenhuma das duas
+>   é código: ver **A loja**.
 
 O site, a loja e as consultas. O núcleo do CMS é o mesmo que corre a Quinta da
 Moscadinha, o Barbeito e o Blandy's — vem do pacote `admedia/cms`, não está

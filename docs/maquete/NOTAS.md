@@ -55,12 +55,30 @@ a `viewBox`, que é a mesma coisa escrita de outra maneira), mudou isto:
 
 Por ordem de quanto motor falta, e não por ordem de importância.
 
+### Já construído
+
+- **`Landing Page`** — a porta de entrada passou aos 1360, ganhou o sigilo em
+  vector, os cartões da montra ligam à ficha, o «+ Adicionar» junta a sério e
+  abre a gaveta lateral do cesto.
+- **`Loja`** — montra com a fila do «Procuro», a barra de filtros e a
+  ordenação; ficha com o conjunto «o que a Casa usa com esta peça»; cesto;
+  checkout em três passos; confirmação com os quatro passos do caminho da
+  encomenda. A barra dourada do topo roda três frases.
+
+  **Três coisas do desenho que não se fizeram, e porquê:** as estrelas de cada
+  peça e a secção das avaliações (não há tabela, e uma média inventada é um
+  número que ninguém disse), os campos do cartão dentro da página do checkout
+  (põe o site no âmbito do PCI-DSS — quem cobra tem página própria para isso) e
+  a morada de entrega pedida no checkout (vem pela mesma porta, e pedi-la duas
+  vezes dava duas versões dela). Está escrito por extenso no cabeçalho de cada
+  vista, em `views/shop/`.
+
+  **E duas que ficam à espera de quem decide:** as zonas e os escalões de envio
+  continuam vazios, porque quanto custa enviar o desenho escreve `[x]`; e sem
+  chaves de pagamento a loja mostra-se e não deixa finalizar, e diz porquê.
+
 ### Quase só vistas — o motor está no pacote
 
-- **`Loja`** — montra, ficha, cesto, checkout em três passos (Contacto, Envio,
-  Pagamento) e confirmação. O pacote tem catálogo, variantes, atributos,
-  relacionados, cupões, portes, IVA, Stripe e encomendas. O que não tem é o
-  checkout em três passos: o dele salta direito para o Stripe.
 - **`Casa`** — o Zé: percurso, quatro principios, FAQ. É conteúdo numa página de
   blocos.
 - **`Contactos`** — formulário com tópicos e consentimento. Os `enquiries` já
