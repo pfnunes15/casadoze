@@ -6,10 +6,17 @@
  * sessão. É a secção que liga o que se vê de graça ao que se vende: quem assiste
  * a um ritual com sálvia encontra o molho de sálvia a um clique.
  *
- * **As miniaturas ainda não existem.** Enquanto um vídeo não tiver endereço, o
- * cartão desenha a moldura tracejada com o botão de ver ao meio — que é o que a
- * maquete mostra, e é honesto: diz que ali vai estar um vídeo sem fingir que já
- * está. Preenchido o endereço, a moldura passa a ligação.
+ * **As sessões vêm da tabela `videos` e não dos itens deste bloco.** Eram itens
+ * até o Grimório passar a ter página própria; uma sessão escrita em dois sítios
+ * é uma que fica desactualizada num deles. O que este bloco traz é o título, a
+ * frase e o botão do canal.
+ *
+ * **A miniatura vem do YouTube**, do endereço de cada sessão. Enquanto esse
+ * endereço não estiver escrito, o cartão desenha a moldura tracejada com o
+ * botão de ver ao meio — diz que ali vai estar um vídeo sem fingir que já está.
+ *
+ * O cartão leva à página da sessão **neste site** e não ao YouTube: é lá que
+ * estão os capítulos e a peça que foi usada, e é de lá que se vai à loja.
  *
  * O endereço do canal vem das Definições — Redes > YouTube — e não se escreve
  * aqui: é o mesmo que o rodapé usa.
@@ -19,7 +26,12 @@
  * @var string $itemTag
  */
 
-$itens = $section['items'] ?? [];
+/* **As sessões vêm da tabela e não dos itens deste bloco.** Eram itens até o
+   Grimório passar a ter página própria; uma sessão escrita em dois sítios é uma
+   que fica desactualizada num deles. O bloco fica, porque é ele que põe o
+   Grimório na porta de entrada — o que ele traz é o título, a frase e o botão
+   do canal. Ver App\Models\Video e a migração 0019. */
+$itens = \App\Models\Video::published(null, 3);
 $canal = trim((string)setting('social.youtube'));
 
 $cta = trim((string)($section['cta_label'] ?? ''));
@@ -56,27 +68,29 @@ $cta = trim((string)($section['cta_label'] ?? ''));
     <div class="grimorio__vídeos">
       <?php foreach ($itens as $índice => $item): ?>
         <?php
-        $url      = trim((string)($item['url'] ?? ''));
-        $duração  = trim((string)($item['caption'] ?? ''));
-        $título   = trim((string)($item['title'] ?? ''));
-        $produto  = trim((string)($item['subtitle'] ?? ''));
-        $ondeEstá = trim((string)($item['link_label'] ?? '')) ?: '#loja';
-        $capa     = trim((string)($item['image'] ?? ''));
+        /* A ligação é para a página da sessão neste site e não para o YouTube:
+           é lá que estão os capítulos e a peça que foi usada, e é de lá que se
+           vai para a loja. O botão de ver o canal continua a ir para fora. */
+        $url      = locale_url('/grimorio/' . rawurlencode((string)$item['slug']));
+        $duração  = trim((string)$item['duration']);
+        $título   = trim((string)$item['title']);
+        $noTubo   = \App\Models\Video::noYouTube($item);
+        $capa     = $noTubo === null ? '' : \Admedia\Cms\Video::youtubeThumb($noTubo);
+
+        $peças    = \App\Models\Video::produtos((int)$item['id']);
+        $produto  = $peças === [] ? '' : (string)$peças[0]['name'];
+        $ondeEstá = $peças === [] ? '' : \Admedia\Shop\Shop::to('product', ['slug' => (string)$peças[0]['slug']]);
         ?>
         <article class="vídeo" data-entra="sobe" data-atraso="<?= (int)$índice * 100 ?>">
 
           <?php /* Com endereço é uma ligação; sem ele é uma moldura à espera. A
                    diferença tem de estar no elemento e não só na cor: um `<a>`
                    sem `href` é alcançável pelo teclado e não faz nada. */ ?>
-          <?php if ($url !== ''): ?>
-            <a class="vídeo__moldura" href="<?= e($url) ?>" rel="noopener" target="_blank"
-               aria-label="<?= e($título) ?>">
-          <?php else: ?>
-            <span class="vídeo__moldura vídeo__moldura--vazia">
-          <?php endif; ?>
+          <a class="vídeo__moldura<?= $capa === '' ? ' vídeo__moldura--vazia' : '' ?>"
+             href="<?= e($url) ?>" aria-label="<?= e($título) ?>">
 
             <?php if ($capa !== ''): ?>
-              <img class="vídeo__capa" src="<?= e(media_url($capa)) ?>" alt=""
+              <img class="vídeo__capa" src="<?= e($capa) ?>" alt=""
                    loading="lazy" decoding="async">
             <?php else: ?>
               <span class="vídeo__aviso"><?= e(__('grimorio.thumb')) ?></span>
@@ -88,13 +102,13 @@ $cta = trim((string)($section['cta_label'] ?? ''));
               <span class="vídeo__tempo"><?= e($duração) ?></span>
             <?php endif; ?>
 
-          <?php if ($url !== ''): ?></a><?php else: ?></span><?php endif; ?>
+          </a>
 
           <?php if ($título !== ''): ?>
             <<?= $itemTag ?> class="vídeo__nome"><?= e($título) ?></<?= $itemTag ?>>
           <?php endif; ?>
 
-          <?php if ($produto !== ''): ?>
+          <?php if ($produto !== '' && $ondeEstá !== ''): ?>
             <span class="vídeo__usado">
               <?= e(__('grimorio.related')) ?>:
               <a href="<?= e($ondeEstá) ?>"><?= e($produto) ?></a>

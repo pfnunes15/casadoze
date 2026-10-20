@@ -51,10 +51,12 @@ use App\Controllers\CheckoutPageController;
 use App\Controllers\GavetaController;
 use App\Controllers\BookingController;
 use App\Controllers\ConsultationController;
+use App\Controllers\GrimorioController;
 use App\Controllers\SalaController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
 use App\Controllers\Admin\PractitionerAdminController;
+use App\Controllers\Admin\VideoAdminController;
 use App\Controllers\Admin\SlotAdminController;
 
 $r = \Admedia\Core\App::instance()->router();
@@ -151,6 +153,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        partilhado por oito sites não tem tarólogas. */
     $r->get('/sala',          [SalaController::class, 'index']);
     $r->get('/sala/{slug}',   [SalaController::class, 'show']);
+
+    // ---------- O Grimório ----------
+    /* As sessões gratuitas do canal, com a peça da loja usada em cada uma — é
+       essa ligação que faz o Grimório vender. */
+    $r->get('/grimorio',         [GrimorioController::class, 'index']);
+    $r->get('/grimorio/{slug}',  [GrimorioController::class, 'show']);
 
     // ---------- O que alguém escreve à Casa ----------
     /* Só o POST: o formulário é um bloco e vive dentro de uma página — a dos
@@ -275,6 +283,14 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->post  ('/sala/{id}',           [PractitionerAdminController::class, 'update']);
         $r->post  ('/sala/{id}/publicar',  [PractitionerAdminController::class, 'togglePublish']);
         $r->delete('/sala/{id}',           [PractitionerAdminController::class, 'destroy']);
+
+        // ---------- O Grimório ----------
+        $r->get   ('/grimorio',               [VideoAdminController::class, 'index']);
+        $r->post  ('/grimorio',               [VideoAdminController::class, 'store']);
+        $r->get   ('/grimorio/{id}/edit',     [VideoAdminController::class, 'edit']);
+        $r->post  ('/grimorio/{id}',          [VideoAdminController::class, 'update']);
+        $r->post  ('/grimorio/{id}/publicar', [VideoAdminController::class, 'togglePublish']);
+        $r->delete('/grimorio/{id}',          [VideoAdminController::class, 'destroy']);
 
         $r->get   ('/encerramentos',             [ConsultationAdminController::class, 'closures']);
         $r->post  ('/encerramentos',             [ConsultationAdminController::class, 'storeClosure']);

@@ -47,5 +47,12 @@ return [
             'label' => 'A Sala',
             'url'   => '/admin/sala',
         ],
+        /* O Grimório. Fica no mesmo grupo porque é a mesma pessoa que o escreve
+           — o Zé grava as sessões — e porque o que elas vendem é a loja, que já
+           tem grupo seu logo abaixo. */
+        [
+            'label' => 'Grimório',
+            'url'   => '/admin/grimorio',
+        ],
     ],
 ];

@@ -452,24 +452,8 @@ return [
             ],
             'anchor'    => ['type' => 'anchor', 'advanced' => true],
         ],
-        'items' => [
-            'label'    => 'Sessões',
-            'singular' => 'sessão',
-            'fields'   => [
-                'title'    => ['type' => 'text', 'label' => 'Título da sessão'],
-                'url'      => [
-                    'type'  => 'url',
-                    'label' => 'Endereço do vídeo',
-                    'help'  => 'Vazio desenha a moldura à espera, como na maquete — diz que '
-                             . 'ali vai estar um vídeo sem fingir que já está.',
-                ],
-                'caption'  => ['type' => 'text', 'label' => 'Duração', 'help' => 'Escrita como se lê: «12:40».'],
-                'image'    => ['type' => 'image', 'label' => 'Miniatura'],
-                'subtitle' => ['type' => 'text', 'label' => 'Produto usado'],
-                'link_label' => ['type' => 'url', 'label' => 'Onde está esse produto', 'help' => 'Vazio leva à loja desta página.'],
-            ],
-        ],
     ],
+
 
     // -----------------------------------------------------------------------
     // A previsão dos signos.

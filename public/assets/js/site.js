@@ -1166,6 +1166,37 @@
   }
 
   /* ---------------------------------------------------------------------
+     O leitor do Grimório: o vídeo só entra quando alguém o pede.
+
+     **Um `<iframe>` do YouTube posto no documento traz consigo os guiões e os
+     cookies do YouTube antes de alguém ter dito que quer ver** — e a página de
+     cookies da Casa diz que este site não usa cookies de publicidade. Até ao
+     toque no botão o que está ali é uma imagem.
+     --------------------------------------------------------------------- */
+  var leitor = document.querySelector('[data-leitor]');
+
+  if (leitor) {
+    var verOVídeo = leitor.querySelector('[data-ver]');
+
+    if (verOVídeo) {
+      verOVídeo.addEventListener('click', function () {
+        var quadro = document.createElement('iframe');
+        var começo = parseInt(leitor.getAttribute('data-começo'), 10) || 0;
+
+        quadro.src = 'https://www.youtube-nocookie.com/embed/'
+          + encodeURIComponent(leitor.getAttribute('data-leitor'))
+          + '?autoplay=1&rel=0' + (começo > 0 ? '&start=' + começo : '');
+        quadro.title = document.title;
+        quadro.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture';
+        quadro.allowFullscreen = true;
+
+        leitor.innerHTML = '';
+        leitor.appendChild(quadro);
+      });
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um
