@@ -107,7 +107,7 @@ a { color: inherit; text-decoration: none; }
 }
 .admin-sidebar__brand:hover { background: rgba(255,255,255,.04); }
 .admin-sidebar__brand span {
-  font-weight: 600; color: #fff; font-size: 1rem; letter-spacing: 0.2px;
+  font-weight: 600; color: #fff; font-size: 1rem; letter-spacing: 0;
 }
 
 .admin-sidebar__nav { padding: 0.85rem 0.7rem; flex: 1; overflow-y: auto; }
@@ -117,9 +117,8 @@ a { color: inherit; text-decoration: none; }
 .admin-sidebar__nav h6 {
   padding: 1.1rem 0.85rem 0.4rem;
   margin: 0;
-  font-size: 0.66rem;
-  text-transform: uppercase;
-  letter-spacing: 1.3px;
+  font-size: 0.78rem;
+  letter-spacing: 0;
   color: rgba(255,255,255,.5);
   font-weight: 600;
 }
@@ -166,7 +165,7 @@ a { color: inherit; text-decoration: none; }
 .admin-guide[open] .admin-guide__summary::after { transform: rotate(45deg); }
 .admin-guide__intro { color: var(--muted); margin: 0.7rem 0 0.4rem; line-height: 1.55; }
 .admin-guide__group {
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.8px;
+  font-size: 0.82rem; letter-spacing: 0;
   color: var(--muted); font-weight: 700; margin: 1.4rem 0 0.7rem;
 }
 .admin-guide__group span { text-transform: none; letter-spacing: 0; font-weight: 400; opacity: 0.8; }
@@ -234,7 +233,7 @@ a { color: inherit; text-decoration: none; }
   flex-shrink: 0; font-size: 0.9rem;
 }
 .admin-sidebar__user strong { display: block; color: #fff; font-size: 0.85rem; }
-.admin-sidebar__user small { color: rgba(255,255,255,.6); font-size: 0.72rem; }
+.admin-sidebar__user small { color: rgba(255,255,255,.6); font-size: 0.82rem; }
 .admin-sidebar__user form { margin: 0.15rem 0 0; }
 .admin-sidebar__user button {
   background: none; border: none; color: rgba(255,255,255,.7);
@@ -308,7 +307,7 @@ a { color: inherit; text-decoration: none; }
 .stat-tile__icon--amber  { background: #fdf1dd; color: #d99412; }
 .stat-tile__icon--violet { background: #efe9fd; color: #7c4ddb; }
 .stat-tile__label {
-  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px;
+  font-size: 0.82rem; letter-spacing: 0;
   color: var(--muted); margin: 0 0 0.15rem; font-weight: 600;
 }
 .stat-tile__value { font-size: 1.7rem; font-weight: 700; margin: 0; line-height: 1; }
@@ -333,7 +332,7 @@ a { color: inherit; text-decoration: none; }
    of addresses are indistinguishable without their names. */
 .admin-table thead th {
   position: sticky; top: 0; z-index: 2;
-  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.8px;
+  font-size: 0.8rem; letter-spacing: 0;
   color: var(--muted); font-weight: 600;
   /* Opaque, or the rows read through it as it passes over them. */
   background: var(--surface-2);
@@ -479,8 +478,8 @@ a { color: inherit; text-decoration: none; }
 }
 .admin-chips__label {
   margin-right: .25rem;
-  color: var(--faint); font-size: .72rem; font-weight: 600;
-  letter-spacing: .4px; text-transform: uppercase;
+  color: var(--faint); font-size: .82rem; font-weight: 600;
+  letter-spacing: 0;
 }
 .admin-chips__aside {
   margin-left: .25rem;
@@ -547,7 +546,7 @@ a { color: inherit; text-decoration: none; }
 .menu-tabs a span {
   min-width: 1.4rem; padding: .05rem .35rem; border-radius: 999px;
   background: var(--surface-2); color: var(--muted);
-  font-size: .72rem; font-weight: 600; text-align: center;
+  font-size: .82rem; font-weight: 600; text-align: center;
 }
 .menu-tabs a.is-on span { background: var(--primary); color: #fff; }
 
@@ -582,13 +581,18 @@ a { color: inherit; text-decoration: none; }
   display: inline-flex; align-items: center;
   padding: .1rem .45rem; border-radius: 999px;
   background: var(--surface-2); color: var(--muted);
-  font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .4px;
+  font-size: .8rem; font-weight: 600; letter-spacing: 0;
 }
 
+/* A badge with no modifier still has to be visible. Without a background of
+   its own it was coloured text floating in a row of other text, which is not
+   a badge; and the modifiers below are a shared vocabulary, so a site that
+   invents a state nobody styled gets something legible rather than nothing. */
 .badge {
   display: inline-flex; align-items: center; gap: 0.3rem;
   padding: 0.2rem 0.6rem; border-radius: 999px;
-  font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+  background: var(--surface-2); color: var(--muted);
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0;
 }
 .badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.7; }
 .badge--published { background: var(--accent-bg); color: #0f7a5a; }
@@ -604,9 +608,16 @@ a { color: inherit; text-decoration: none; }
   border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow);
 }
 .field { margin-bottom: 1.25rem; }
+/* A field's label is a question being asked of somebody, so it is written
+   the way a question is written. It used to be 0.78rem, UPPERCASE and
+   letter-spaced — the typography of a column header in a report, applied to
+   "Nome da página". Small capitals are read letter by letter rather than by
+   word shape, which is slower for everybody and hard for the person this
+   backoffice is actually for; and at 0.78rem it was smaller than the help
+   text underneath it, so the explanation shouted louder than the question. */
 .field label {
-  display: block; font-weight: 600; font-size: 0.78rem;
-  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 0.45rem; color: #374151;
+  display: block; font-weight: 600; font-size: 0.95rem;
+  letter-spacing: 0; margin-bottom: 0.4rem; color: var(--text);
 }
 .field input[type="text"], .field input[type="email"], .field input[type="password"],
 .field input[type="number"], .field input[type="datetime-local"], .field input[type="date"],
@@ -621,8 +632,11 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 0 0 3px rgba(74,74,73,.14);
 }
 .field textarea { min-height: 220px; resize: vertical; }
-.field-error { color: var(--danger); font-size: 0.78rem; margin-top: 0.3rem; }
-.field-help  { color: var(--muted); font-size: 0.78rem; margin-top: 0.3rem; }
+.field-error { color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-top: 0.3rem; }
+/* The explanation under a field is the sentence that makes the field
+   answerable. At 0.78rem it was set like a footnote, which is the one way to
+   make sure it is not read. */
+.field-help  { color: var(--muted); font-size: 0.85rem; line-height: 1.45; margin-top: 0.3rem; }
 .field-checkbox { display: flex; align-items: center; gap: 0.5rem; }
 .field-checkbox label { display: inline; text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 0.88rem; margin: 0; }
 .admin-form .form-actions {
@@ -669,6 +683,15 @@ a { color: inherit; text-decoration: none; }
 }
 .badge--blocked   { background: var(--danger-bg); color: var(--danger); }
 
+/* The states a request passes through, in the one vocabulary every site's
+   own screens can reach for: a booking, an order, a job. Amber is the only
+   one that asks for anything — it is the colour of "nobody has touched
+   this", and the only badge in a list that should catch an eye. */
+.badge--new       { background: #fdf1dd; color: #9a6b10; }
+.badge--confirmed { background: var(--accent-bg); color: #0f7a5a; }
+.badge--done      { background: #eef1f6; color: #475569; }
+.badge--cancelled { background: var(--danger-bg); color: var(--danger); }
+
 /* The "(avançado)" hint on the menu's sections */
 .admin-sidebar__nav h6 .nav-hint { font-weight: 400; opacity: 0.6; font-size: 0.85em; }
 
@@ -690,9 +713,9 @@ a { color: inherit; text-decoration: none; }
 .admin-filter { padding: 0.6rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font: inherit; background: #fff; max-width: 100%; }
 .admin-search:focus, .admin-filter:focus { outline: none; border-color: var(--primary); }
 .admin-toolbar__count { color: var(--muted, #94a3b8); font-size: 0.9rem; }
-.doc-meta { font-size: 0.72rem; color: var(--muted, #94a3b8); margin-top: 0.2rem; }
+.doc-meta { font-size: 0.82rem; color: var(--muted, #94a3b8); margin-top: 0.2rem; }
 /* The filename smaller and breakable, so it does not stretch the table */
-.doc-meta code { font-size: 0.68rem; word-break: break-word; overflow-wrap: anywhere; }
+.doc-meta code { font-size: 0.8rem; word-break: break-word; overflow-wrap: anywhere; }
 .doc-empty { padding: 1.5rem; text-align: center; color: var(--muted, #94a3b8); }
 @media (max-width: 700px) {
   .admin-toolbar { flex-direction: column; align-items: stretch; }
@@ -770,10 +793,11 @@ body.modal-open { overflow: hidden; }
    field in, and an instruction read after the fact is not an instruction. */
 .field-help--above { margin: -.2rem 0 .5rem; }
 .field label + .field-help--above { margin-top: -.25rem; }
+/* Same decision as .field label above, one step smaller: this heads a group
+   of fields inside a field, not the screen. */
 .field-sublabel {
-  display: block; margin: 1rem 0 .45rem;
-  font-weight: 600; font-size: .78rem; text-transform: uppercase;
-  letter-spacing: .6px; color: #374151;
+  display: block; margin: 1.25rem 0 .45rem;
+  font-weight: 600; font-size: .88rem; letter-spacing: 0; color: var(--text);
 }
 .field-check {
   display: flex; align-items: center; gap: .55rem;
@@ -794,7 +818,7 @@ body.modal-open { overflow: hidden; }
 .field-duration__sep { font-weight: 600; font-size: 1.05rem; color: #374151; }
 .field-duration__unit,
 .field-money__unit {
-  font-size: .72rem; text-transform: uppercase; letter-spacing: .6px; color: #6b7280;
+  font-size: .82rem; letter-spacing: 0; color: #6b7280;
 }
 .field-duration__unit { margin-left: .35rem; }
 
@@ -818,7 +842,7 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
 .heading-row__level { flex: 0 0 auto; min-width: 230px; }
 .heading-row__level-label {
   display: block; margin-bottom: .3rem;
-  font-size: .68rem; text-transform: uppercase; letter-spacing: .6px;
+  font-size: .8rem; letter-spacing: 0;
   color: var(--faint); font-weight: 600;
 }
 .heading-row__level select { width: 100%; }
@@ -885,6 +909,95 @@ input[type="date"]:hover::-webkit-calendar-picker-indicator,
 input[type="time"]:hover::-webkit-calendar-picker-indicator,
 input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity: 1; }
 
+/* ---------------- O painel ----------------
+   Três perguntas, por ordem: o que precisa de si, onde ia, o que quer fazer.
+   Tudo aqui é um alvo grande — quem usa isto não é administrador de nada e
+   pode ter sessenta anos e um rato que não obedece. Nada com menos de 44px
+   de altura, e a linha inteira é o botão, nunca uma palavra dentro dela. */
+
+.admin-header--home h1 { font-size: 1.6rem; }
+
+/* 1. A precisar de si. Só existe quando existe mesmo: um cartão a dizer
+      «nada a fazer» ocupa o lugar do trabalho e ensina a ignorar o canto. */
+.needs { margin-bottom: 2rem; }
+/* "A precisar de si" is a sentence, so it is set like one. It used to be
+   0.74rem UPPERCASE and letter-spaced — the look of a column header in a
+   report, which is the one thing these three are not. Nothing in this
+   backoffice is in small capitals any more: a label is told apart from a
+   sentence by its size, weight and colour, which is enough, and small
+   capitals are read letter by letter by exactly the person this is for. */
+.needs__title, .resume__title, .doing__title {
+  margin: 0 0 .6rem; font-size: .95rem; font-weight: 600;
+  letter-spacing: 0; color: var(--muted);
+}
+
+.needs__item {
+  display: flex; align-items: center; gap: 1rem;
+  min-height: 56px; padding: .8rem 1.1rem; margin-bottom: .5rem;
+  background: var(--surface);
+  border: 1px solid var(--border); border-left: 4px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none; color: var(--text);
+  transition: border-color var(--transition), transform var(--transition);
+}
+.needs__item:hover { border-color: var(--primary); transform: translateX(2px); }
+.needs__item--urgent  { border-left-color: var(--danger); }
+.needs__item--waiting { border-left-color: #b7791f; }
+.needs__item--quiet   { border-left-color: var(--faint); }
+
+/* O número primeiro, porque é o que se lê antes de ler. */
+.needs__count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.2rem; height: 2.2rem; padding: 0 .4rem; border-radius: 999px;
+  background: var(--surface-2); color: var(--text);
+  font-size: 1.05rem; font-weight: 600; font-variant-numeric: tabular-nums;
+}
+.needs__item--urgent .needs__count  { background: var(--danger-bg); color: var(--danger); }
+.needs__item--waiting .needs__count { background: #fdf1dd; color: #9a6b10; }
+
+.needs__text { flex: 1; min-width: 0; }
+.needs__text strong { display: block; font-size: 1rem; font-weight: 600; }
+.needs__text small  { display: block; margin-top: .1rem; color: var(--muted); font-size: .84rem; }
+.needs__go { color: var(--faint); font-size: 1.2rem; }
+.needs__item:hover .needs__go { color: var(--primary); }
+
+/* 2. Onde ia. A linha inteira leva ao editor, não à ficha nem à lista:
+      mudar uma frase era Painel, Páginas, procurar entre setenta e sete,
+      Editar. */
+.resume { margin-bottom: 2rem; }
+.resume__list {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); overflow: clip;
+}
+.resume__item {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  min-height: 52px; padding: .7rem 1.1rem;
+  text-decoration: none; color: var(--text);
+}
+.resume__item + .resume__item { border-top: 1px solid var(--border); }
+.resume__item:hover { background: var(--surface-2); }
+.resume__name { font-weight: 600; font-size: .98rem; }
+.resume__when {
+  display: flex; align-items: center; gap: .5rem;
+  color: var(--faint); font-size: .8rem; white-space: nowrap;
+}
+
+/* 3. O que quer fazer. Cartões largos e poucos — a barra lateral já tem a
+      lista completa, e isto é para os quatro ou cinco de todos os dias. */
+.doing__grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .6rem;
+}
+.doing__card {
+  display: block; min-height: 72px; padding: .9rem 1.1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none; color: var(--text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.doing__card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); }
+.doing__card strong { display: block; font-size: 1rem; font-weight: 600; }
+.doing__card small  { display: block; margin-top: .2rem; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+
 /* ---------------- Tabs ----------------
    One screen in sections you switch between. The same row of tabs on every
    long form in the backoffice, because two screens that behave alike are one
@@ -910,7 +1023,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .admin-tab__count {
   padding: .05rem .4rem; border-radius: 999px;
   background: var(--surface-2); color: var(--muted);
-  font-size: .7rem; font-weight: 600;
+  font-size: .8rem; font-weight: 600;
 }
 .admin-tab__pick.is-on .admin-tab__count { background: var(--accent-bg); color: var(--accent); }
 
@@ -921,7 +1034,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .admin-tabs--links .admin-tab__pick { text-decoration: none; align-items: baseline; }
 .admin-tab__pick small {
   display: block; margin-top: .05rem;
-  font-size: .72rem; font-weight: 400; color: var(--faint);
+  font-size: .82rem; font-weight: 400; color: var(--faint);
 }
 .admin-tab__pick.is-on small { color: var(--muted); }
 
@@ -945,12 +1058,12 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    não é mau. */
 .features { margin-bottom: 2rem; }
 .features__title {
-  margin: 0 0 .75rem; font-size: .76rem; font-weight: 600;
-  letter-spacing: .6px; text-transform: uppercase; color: var(--faint);
+  margin: 0 0 .75rem; font-size: .95rem; font-weight: 600;
+  letter-spacing: 0; color: var(--muted);
 }
 .features__title span {
   margin-left: .3rem; padding: .05rem .4rem; border-radius: 999px;
-  background: var(--surface-2); color: var(--muted); font-size: .72rem;
+  background: var(--surface-2); color: var(--muted); font-size: .82rem;
 }
 
 .feature {
@@ -967,7 +1080,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .feature__selo {
   padding: .1rem .45rem; border-radius: 999px;
   background: var(--surface-2); color: var(--muted);
-  font-size: .68rem; font-weight: 600; letter-spacing: .3px; text-transform: uppercase;
+  font-size: .8rem; font-weight: 600; letter-spacing: 0;
 }
 .feature__selo--on { background: var(--accent-bg); color: var(--accent); }
 
@@ -978,12 +1091,11 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .feature__junta { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; margin: 0 0 .6rem; }
 .feature__junta > span:first-child {
   margin-right: .15rem;
-  font-size: .7rem; font-weight: 600; letter-spacing: .4px;
-  text-transform: uppercase; color: var(--faint);
+  font-size: .8rem; font-weight: 600; letter-spacing: 0; color: var(--faint);
 }
 .feature__entrada {
   padding: .12rem .5rem; border: 1px solid var(--border); border-radius: 999px;
-  background: var(--surface-2); color: var(--text); font-size: .76rem;
+  background: var(--surface-2); color: var(--text); font-size: .82rem;
 }
 
 .feature__depois { margin: 0 0 .7rem; color: var(--faint); font-size: .82rem; }
@@ -1003,7 +1115,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    errado. */
 .rule-state {
   display: inline-block; padding: .1rem .5rem; border-radius: 999px;
-  font-size: .72rem; font-weight: 600; letter-spacing: .2px; white-space: nowrap;
+  font-size: .82rem; font-weight: 600; letter-spacing: 0; white-space: nowrap;
 }
 .rule-state--on   { background: var(--accent-bg); color: var(--accent); }
 .rule-state--soon { background: #fdf1dd; color: #9a6b10; }
@@ -1021,8 +1133,8 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   border-radius: var(--radius-sm);
 }
 .rule-preview h3 {
-  margin: 0 0 .5rem; font-size: .72rem; font-weight: 600;
-  letter-spacing: .5px; text-transform: uppercase; color: var(--faint);
+  margin: 0 0 .5rem; font-size: .82rem; font-weight: 600;
+  letter-spacing: 0; color: var(--faint);
 }
 .rule-preview p {
   display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
@@ -1046,7 +1158,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   padding: .1rem .4rem; border-radius: 4px;
   background: var(--surface-2); border: 1px solid var(--border);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: .82rem; letter-spacing: .5px;
+  font-size: .82rem; letter-spacing: 0;
 }
 
 /* ---------------- Cards, advanced, save bar ---------------- */
@@ -1199,7 +1311,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   position: absolute; left: 50%; bottom: .6rem; transform: translateX(-50%); z-index: 2;
   padding: .3rem .8rem; border: 1px solid var(--border); border-radius: 999px;
   background: var(--surface); color: var(--muted);
-  font: inherit; font-size: .74rem; font-weight: 500; cursor: pointer;
+  font: inherit; font-size: .82rem; font-weight: 500; cursor: pointer;
   box-shadow: var(--shadow);
 }
 .canvas__more:hover { color: var(--ink, inherit); border-color: var(--primary); }
@@ -1238,15 +1350,14 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.1rem; height: 1.6rem; margin-right: .1rem;
   background: none; border: 0; padding: 0;
-  color: rgba(255,255,255,.55); font-size: .7rem; line-height: 1;
+  color: rgba(255,255,255,.55); font-size: .8rem; line-height: 1;
   letter-spacing: -2px; cursor: grab; touch-action: none;
 }
 .canvas__grip:hover { color: #fff; }
 .canvas__grip:active { cursor: grabbing; }
 
 .canvas__name {
-  font-size: .72rem; font-weight: 600; letter-spacing: .3px;
-  text-transform: uppercase; white-space: nowrap;
+  font-size: .82rem; font-weight: 600; letter-spacing: 0; white-space: nowrap;
 }
 
 /* What the frame reported. Empty almost always, so it takes no room until
@@ -1255,13 +1366,13 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .canvas__said {
   padding: .05rem .4rem; border-radius: 3px;
   background: rgba(255,255,255,.14);
-  font-size: .68rem; font-weight: 500; letter-spacing: .3px; white-space: nowrap;
+  font-size: .8rem; font-weight: 500; letter-spacing: 0; white-space: nowrap;
 }
 .canvas__said.is-good { background: rgba(47, 133, 90, .85); }
 .canvas__said.is-bad  { background: var(--danger, #c0392b); }
 .canvas__state {
   margin-left: .4rem; padding: .05rem .35rem; border-radius: 3px;
-  background: rgba(255,255,255,.18); font-weight: 500; letter-spacing: .4px;
+  background: rgba(255,255,255,.18); font-weight: 500; letter-spacing: 0;
 }
 .canvas__tools { display: flex; align-items: center; gap: .15rem; }
 .canvas__tools .inline-form { display: inline-flex; }
@@ -1275,7 +1386,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 }
 .canvas__tool:hover:not(:disabled) { background: rgba(255,255,255,.16); color: #fff; }
 .canvas__tool:disabled { opacity: .3; cursor: default; }
-.canvas__tool--text { font-size: .74rem; }
+.canvas__tool--text { font-size: .82rem; }
 .canvas__tool--danger:hover { background: var(--danger, #c0392b); color: #fff; }
 
 /* Where a block out of the palette is going to land. A real gap opening in the
@@ -1328,8 +1439,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 /* A heading over each group. Quiet: it is a shelf label, not a title — what
    the eye is looking for is the pictures below it. */
 .block-picker__group {
-  margin: 1.6rem 0 .7rem; font-size: .7rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: .8px; color: var(--muted);
+  margin: 1.6rem 0 .7rem; font-size: .8rem; font-weight: 600; letter-spacing: 0; color: var(--muted);
 }
 .block-picker__group:first-of-type { margin-top: .4rem; }
 
@@ -1423,7 +1533,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .outline__item:last-child { border-bottom: 0; }
 .outline__level {
   flex: 0 0 auto; min-width: 2.2rem; text-align: center;
-  font-size: .68rem; font-weight: 700; letter-spacing: .04em;
+  font-size: .8rem; font-weight: 700; letter-spacing: .04em;
   color: var(--muted); background: var(--surface-2);
   border-radius: 4px; padding: .12rem .3rem;
 }
@@ -1501,16 +1611,264 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .admin-locale { margin: 0 0 1.25rem; }
 .admin-locale__label {
   display: block; margin-bottom: .4rem;
-  font-size: .68rem; text-transform: uppercase; letter-spacing: .7px;
+  font-size: .8rem; letter-spacing: 0;
   color: var(--muted);
 }
 .admin-locale__row { display: flex; gap: .35rem; flex-wrap: wrap; }
 .admin-locale__pick {
   border: 1px solid var(--border, #d8dce3); background: transparent;
   color: inherit; border-radius: 6px; cursor: pointer;
-  padding: .28rem .55rem; font-size: .74rem; font-weight: 600; letter-spacing: .5px;
+  padding: .28rem .55rem; font-size: .82rem; font-weight: 600; letter-spacing: 0;
 }
 .admin-locale__pick:hover { border-color: var(--primary); color: var(--primary); }
 .admin-locale__pick.is-current {
   background: var(--primary); border-color: var(--primary); color: #fff; cursor: default;
 }
+
+/* ---------------- Apagar ----------------
+
+   Deliberately quiet and deliberately last. The red button that used to sit
+   on every row of every list is now one drawer at the foot of the thing
+   itself, closed, with the thing's own name written inside it.
+
+   Not a box shouting in red. A red box at the bottom of every editor is a
+   red box nobody reads after the third time; what stops the wrong deletion
+   is that it is shut, not that it is loud. The red only appears once it is
+   open and there is something to be red about. */
+.danger { margin-top: 2.5rem; border-top: 1px solid var(--border); }
+.danger__open {
+  padding: 1rem 0; cursor: pointer; user-select: none; list-style: none;
+  font-size: .9rem; font-weight: 600; color: var(--faint);
+}
+.danger__open::-webkit-details-marker { display: none; }
+.danger__open::before {
+  content: "▸"; margin-right: .5rem; display: inline-block;
+  transition: transform .26s cubic-bezier(.22, .61, .36, 1);
+}
+.danger[open] .danger__open { color: var(--danger); }
+.danger[open] .danger__open::before { transform: rotate(90deg); }
+.danger__body {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;
+  padding: 1.1rem 1.25rem; margin-bottom: 1.5rem;
+  background: var(--danger-bg); border: 1px solid var(--danger-line);
+  border-radius: 10px;
+}
+/* The sentence takes the room, the button takes what it needs. Below ~560px
+   they stack and the button goes full width, which is the only size a thumb
+   can be trusted with. */
+.danger__says { flex: 1 1 18rem; margin: 0; font-size: .9rem; color: var(--danger); }
+.danger__body form { margin: 0; }
+@media (max-width: 560px) {
+  .danger__body form, .danger__body .btn-admin { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .danger__open::before { transition: none; }
+}
+
+/* The address under a page's name, instead of a column of its own. Quiet,
+   not monospace: `/vinhos/duas-pipas-bastardo-reserva` set in code type and
+   given the widest column on the screen made every row look like a database
+   dump. It is still there — occasionally it is the thing you need, and it is
+   still what the search box matches on — it just stopped shouting. */
+.admin-table__under {
+  display: block; margin-top: .15rem;
+  font-size: .8rem; color: var(--faint);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 34rem;
+}
+
+/* ---------------- Escolher um ficheiro ----------------
+   See views/admin/partials/upload.php for why the native control is hidden.
+   The input is still in the layout and still focusable — `display:none` or
+   `visibility:hidden` would take it out of the tab order, and then the only
+   way to reach it would be the mouse. */
+.upload { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.upload__input {
+  position: absolute; width: 1px; height: 1px;
+  opacity: 0; overflow: hidden; clip-path: inset(50%);
+}
+.upload__pick {
+  display: inline-flex; align-items: center; cursor: pointer;
+  padding: .5rem .9rem; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: .9rem; font-weight: 600; color: var(--text);
+  transition: background var(--transition), border-color var(--transition);
+  /* Not `.field label`: that one is the question above the control, and this
+     is the control. Without this it inherited the block display and the
+     bottom margin and sat on its own line, half a centimetre from its name. */
+  margin: 0; letter-spacing: 0;
+}
+.upload__pick:hover { background: var(--surface-2); border-color: var(--muted); }
+/* The input is invisible, so its focus ring has to be drawn on the label —
+   otherwise tabbing to it lands on nothing anybody can see. */
+.upload__input:focus-visible + .upload__pick {
+  outline: 2px solid var(--primary); outline-offset: 2px;
+}
+.upload__input:disabled + .upload__pick { opacity: .45; cursor: not-allowed; }
+.upload__name { font-size: .88rem; color: var(--muted); }
+.upload__name.is-chosen { color: var(--text); font-weight: 600; }
+
+/* ---------------- Um texto, em várias línguas ----------------
+
+   The label once, and the languages stacked under it, each with its code in
+   front. Stacked and not side by side: a title is a sentence, sentences are
+   read along a line, and three half-width boxes in a row turn one sentence
+   into three cramped ones. Down the page they stay full width and read as
+   what they are — the same sentence, three times.
+
+   See views/admin/partials/translated.php. On a site with one language none
+   of this is drawn: no tag, no stack, one plain box exactly as before. */
+.lang-line { display: flex; align-items: stretch; gap: 0; }
+.lang-line + .lang-line { margin-top: .4rem; }
+.lang-line__tag {
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 3rem; cursor: pointer; user-select: none;
+  border: 1px solid var(--border); border-right: 0;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  background: var(--surface-2); color: var(--muted);
+  font-size: .8rem; font-weight: 700;
+  /* Beats `.field label`, which is the question above the control and is
+     block-level with a margin under it. This one is part of the control. */
+  margin: 0; letter-spacing: 0;
+}
+.lang-line__box { border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important; }
+.lang-line:focus-within .lang-line__tag { background: var(--highlight); color: var(--highlight-ink); }
+/* An empty translation is worth seeing without reading: it is the one state
+   the whole screen exists to make visible. */
+.lang-line__box:placeholder-shown, .lang-line__box:not(:placeholder-shown) { }
+@media (max-width: 560px) {
+  .lang-line { flex-wrap: wrap; }
+  .lang-line__tag {
+    flex: 1 0 100%; justify-content: flex-start; padding: .2rem .1rem;
+    border: 0; background: none; border-radius: 0;
+  }
+  .lang-line__box { border-radius: var(--radius-sm) !important; }
+}
+
+/* A tab that submits — the language a page is not written in yet. The form
+   must not become a flex item of its own height; it is only there to carry
+   the POST. See views/admin/partials/tabs.php. */
+.admin-tab__form { display: contents; }
+
+/* A reserva: a ficha do pedido como chegou, e o que a lista diz em voz baixa.
+   Os nomes são genéricos de propósito — um site com encomendas ou com
+   marcações precisa exactamente desta lista de pares. */
+.reserva-dl { margin: 0 0 1.5rem; }
+.reserva-dl > div {
+  display: flex; gap: 1rem; padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.reserva-dl > div:last-child { border-bottom: 0; }
+.reserva-dl dt { flex: 0 0 11rem; color: var(--muted); font-size: .9rem; }
+.reserva-dl dd { margin: 0; font-size: .95rem; }
+.reserva-nota {
+  margin: 0; padding: 1rem 1.15rem; border-radius: var(--radius-sm);
+  background: var(--surface-2); white-space: pre-line; line-height: 1.6;
+}
+/* O que ainda não tem valor, dito sem ocupar espaço de leitura. */
+.reserva__nodate { color: var(--faint); }
+.reserva__today  { color: var(--danger); }
+
+/* ---------------- Faixas que o site acrescenta à página inicial ----------------
+   Ver Admedia\Cms\AdminHome. Mesma aparência das faixas do próprio CMS, para
+   que uma página com duas do CMS e uma do site não pareça duas páginas. */
+.home-panel { margin-bottom: 2rem; }
+.home-panel__title {
+  margin: 0 0 .6rem; font-size: .95rem; font-weight: 600; color: var(--muted);
+}
+
+/* ---------------- A semana, uma coluna por pessoa ----------------
+
+   Uma grelha e não uma lista: a pergunta das oito da manhã é «quem leva o
+   quê, e quem está vazio», e isso precisa dos dias ao lado uns dos outros e
+   das pessoas ao lado umas das outras ao mesmo tempo. Uma lista responde a
+   uma das duas.
+
+   Rola na horizontal quando não cabe, e só ela: a página nunca rola de lado. */
+.week { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+/* Colunas todas iguais. Sem isto a largura de cada motorista vinha do que
+   lhe calhou nessa semana — quem tem muito fica largo, quem não tem nada
+   fica estreito — e é exactamente a comparação entre eles que esta grelha
+   existe para dar. Com `fixed`, quem está vazio ocupa o mesmo espaço que
+   quem está cheio, e vê-se. */
+.week__table { width: 100%; border-collapse: collapse; min-width: 44rem; table-layout: fixed; }
+.week__table th, .week__table td { border-bottom: 1px solid var(--border); vertical-align: top; }
+.week__table tr:last-child th, .week__table tr:last-child td { border-bottom: 0; }
+
+.week__corner { width: 6.5rem; }
+.week__who {
+  padding: .7rem .75rem; text-align: left; font-size: .9rem; font-weight: 600;
+  border-bottom: 2px solid var(--who, var(--border)) !important;
+}
+.week__who small { display: block; font-weight: 400; font-size: .78rem; color: var(--muted); }
+/* A coluna de quem ainda não tem dono. A única que pede alguma coisa. */
+.week__who--none { border-bottom-color: var(--danger) !important; color: var(--danger); }
+.week__who--none small { color: var(--danger); opacity: .75; }
+
+.week__day {
+  width: 6.5rem; padding: .7rem .75rem; text-align: left;
+  background: var(--surface-2); font-weight: 600;
+}
+.week__dayname { display: block; font-size: .9rem; }
+.week__daynum  { display: block; font-size: .8rem; color: var(--muted); font-weight: 400; }
+.week__row--today .week__day { color: var(--danger); }
+.week__row--today .week__dayname::after { content: ""; }
+
+.week__cell { padding: .45rem; min-width: 9rem; }
+.week__cell.is-empty::after {
+  /* Um traço e não nada: uma célula vazia tem de se distinguir de uma
+     célula que não chegou a desenhar. */
+  content: "—"; color: var(--faint); font-size: .85rem;
+}
+
+.trip {
+  display: block; margin-bottom: .3rem; padding: .35rem .5rem;
+  border-radius: var(--radius-sm); text-decoration: none;
+  background: color-mix(in srgb, var(--who, var(--muted)) 10%, var(--surface));
+  border-left: 3px solid var(--who, var(--muted));
+  color: var(--text);
+}
+.trip:last-child { margin-bottom: 0; }
+.trip:hover { background: color-mix(in srgb, var(--who, var(--muted)) 18%, var(--surface)); }
+.trip__when { display: block; font-size: .8rem; font-weight: 700; color: var(--who, var(--muted)); }
+.trip__what { display: block; font-size: .82rem; line-height: 1.35; overflow-wrap: anywhere; }
+.week__foot { margin: .75rem 0 0; font-size: .88rem; }
+
+/* O nome de quem leva a viagem, numa lista. */
+.who {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .9rem; font-weight: 600;
+}
+.who::before {
+  content: ""; width: .6rem; height: .6rem; border-radius: 50%;
+  background: var(--who, var(--muted)); flex: 0 0 auto;
+}
+
+/* A grelha de preços entre pontos. */
+.fare__arrow { color: var(--faint); margin: 0 .4rem; }
+.fare__box { max-width: 7rem; text-align: right; }
+
+@media (max-width: 560px) {
+  .week__corner, .week__day { width: 4.5rem; }
+  .week__cell { min-width: 7.5rem; }
+}
+
+/* ---------------- Em que línguas a página está escrita ----------------
+
+   Uma marca por língua, numa coluna da linha da página. Não um separador
+   por cima da lista: a página é uma, e partir a lista por língua mostrava
+   as mesmas sete páginas duas vezes como se fossem catorze.
+
+   Cheia = publicada. Contornada = escrita mas por publicar. Apagada e
+   tracejada = ainda não existe — e essa é a única que não é uma ligação,
+   porque não há para onde ir; escreve-se de dentro da página. */
+.langs { display: inline-flex; gap: .3rem; }
+.langs__one {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.1rem; padding: .12rem .3rem; border-radius: 999px;
+  font-size: .76rem; font-weight: 700; text-decoration: none;
+  border: 1px solid transparent;
+}
+.langs__one--live    { background: var(--accent-bg); color: #0f7a5a; }
+.langs__one--draft   { background: var(--surface); color: #9a6b10; border-color: #e2c98f; }
+.langs__one--missing { background: none; color: var(--faint); border: 1px dashed var(--border); }
+.langs__one--live:hover, .langs__one--draft:hover { outline: 2px solid currentColor; outline-offset: 1px; }

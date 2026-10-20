@@ -214,6 +214,9 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->post  ('/pages/{id}',         [PageAdminController::class, 'update']);
         $r->post  ('/pages/{id}/publish', [PageAdminController::class, 'togglePublish']);
         $r->post  ('/pages/{id}/menu',    [PageAdminController::class, 'addToMenu']);
+        // Start this page in a language it is not written in yet. POST, not
+        // GET: it creates a row. See Admedia\Cms\Translations.
+        $r->post  ('/pages/{id}/translate/{locale}', [PageAdminController::class, 'translate']);
         $r->delete('/pages/{id}',         [PageAdminController::class, 'destroy']);
 
         // Blocos. Um bloco grava num pedido só — os campos dele e todos os itens

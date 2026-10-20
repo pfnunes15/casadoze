@@ -1175,4 +1175,38 @@
   })();
 
 
+  /* ---------------- Escolher um ficheiro ----------------
+
+     The label beside the button says which file was picked. That is all this
+     does: the button itself is a <label for>, which opens the picker with no
+     script at all — see views/admin/partials/upload.php. With scripting off,
+     choosing a file still works; the name beside it simply does not change.
+
+     Delegated, because file fields are added to the page after load — a new
+     item in a block brings its own. */
+  document.addEventListener('change', function (e) {
+    var input = e.target;
+    if (!input || !input.matches || !input.matches('input[type="file"][data-upload]')) { return; }
+
+    var out = input.parentNode && input.parentNode.querySelector('[data-upload-name]');
+    if (!out) { return; }
+
+    var files = input.files;
+    if (!files || files.length === 0) {
+      /* Back to whatever the server wrote there — "Fica a que já lá está"
+         on a field that has an image, "Nenhuma escolhida" on one that does
+         not. Kept rather than guessed, because only the view knows which. */
+      if (out.dataset.was !== undefined) { out.textContent = out.dataset.was; }
+      out.classList.remove('is-chosen');
+      return;
+    }
+
+    if (out.dataset.was === undefined) { out.dataset.was = out.textContent; }
+    out.textContent = files.length === 1
+      ? files[0].name
+      : files.length + ' ficheiros escolhidos';
+    out.classList.add('is-chosen');
+  });
+
+
 })();
