@@ -29,6 +29,7 @@
 
 use App\Models\Consultation;
 use App\Models\ConsultationClosure;
+use App\Models\Practitioner;
 use App\Services\Datas;
 use App\Services\Lua;
 
@@ -84,6 +85,29 @@ $nomesDosDias = Datas::iniciais();
         <div class="consulta-ficha__prosa"><?= (string)$consulta['body'] ?></div>
       <?php elseif (trim((string)($consulta['summary'] ?? '')) !== ''): ?>
         <p class="consulta-ficha__prosa"><?= e((string)$consulta['summary']) ?></p>
+      <?php endif; ?>
+
+      <?php /* Com quem é. A agenda é da consulta e não da pessoa — ver
+               App\Controllers\SalaController —, e por isso isto diz quem a dá
+               em vez de pedir para escolher. Sem ninguém declarado na Sala não
+               se desenha: é o estado de um site que ainda não tem equipa. */ ?>
+      <?php $quemDá = Practitioner::daConsulta($id); ?>
+      <?php if ($quemDá !== []): ?>
+        <div class="consulta-ficha__quem">
+          <span class="peça__rótulo"><?= e(__('consultas.with')) ?></span>
+          <div class="consulta-ficha__gente">
+            <?php foreach ($quemDá as $pessoa): ?>
+              <a class="quem" href="<?= e(locale_url('/sala/' . rawurlencode((string)$pessoa['slug']))) ?>">
+                <?php if (trim((string)$pessoa['image']) !== ''): ?>
+                  <img src="<?= e(media_url((string)$pessoa['image'])) ?>" alt="" loading="lazy">
+                <?php else: ?>
+                  <span class="quem__iniciais"><?= e(Practitioner::iniciais($pessoa)) ?></span>
+                <?php endif; ?>
+                <span class="quem__nome"><?= e((string)$pessoa['name']) ?></span>
+              </a>
+            <?php endforeach; ?>
+          </div>
+        </div>
       <?php endif; ?>
 
       <div class="consulta-ficha__quadro">

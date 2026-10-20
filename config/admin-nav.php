@@ -40,5 +40,12 @@ return [
             'label' => 'Encerramentos',
             'url'   => '/admin/encerramentos',
         ],
+        /* Quem lê as cartas. Fica debaixo das consultas e não num grupo seu: é
+           quem as dá, e separá-las era pôr duas entradas na barra para a mesma
+           ida ao backoffice. */
+        [
+            'label' => 'A Sala',
+            'url'   => '/admin/sala',
+        ],
     ],
 ];

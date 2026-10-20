@@ -51,8 +51,10 @@ use App\Controllers\CheckoutPageController;
 use App\Controllers\GavetaController;
 use App\Controllers\BookingController;
 use App\Controllers\ConsultationController;
+use App\Controllers\SalaController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
+use App\Controllers\Admin\PractitionerAdminController;
 use App\Controllers\Admin\SlotAdminController;
 
 $r = \Admedia\Core\App::instance()->router();
@@ -143,6 +145,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
     $r->post('/marcar',                    [BookingController::class, 'store']);
     $r->get ('/marcacao/{token}',          [BookingController::class, 'show']);
     $r->post('/marcacao/{token}/cancelar', [BookingController::class, 'cancel']);
+
+    // ---------- A Sala ----------
+    /* Quem lê as cartas na Casa. Também é desta casa e não do pacote: um CMS
+       partilhado por oito sites não tem tarólogas. */
+    $r->get('/sala',          [SalaController::class, 'index']);
+    $r->get('/sala/{slug}',   [SalaController::class, 'show']);
 
     // ---------- O que alguém escreve à Casa ----------
     /* Só o POST: o formulário é um bloco e vive dentro de uma página — a dos
@@ -256,6 +264,17 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->post  ('/consultas/{id}/horario',  [ConsultationAdminController::class, 'storeSchedule']);
         $r->post  ('/horario/{scheduleId}',    [ConsultationAdminController::class, 'updateSchedule']);
         $r->delete('/horario/{scheduleId}',    [ConsultationAdminController::class, 'destroySchedule']);
+
+        // ---------- A Sala ----------
+        /* Quem lê as cartas. Não há ecrã de criação à parte: criar é guardar um
+           nome na lista e cair logo na edição, que é onde está tudo o que há
+           para escrever. */
+        $r->get   ('/sala',                [PractitionerAdminController::class, 'index']);
+        $r->post  ('/sala',                [PractitionerAdminController::class, 'store']);
+        $r->get   ('/sala/{id}/edit',      [PractitionerAdminController::class, 'edit']);
+        $r->post  ('/sala/{id}',           [PractitionerAdminController::class, 'update']);
+        $r->post  ('/sala/{id}/publicar',  [PractitionerAdminController::class, 'togglePublish']);
+        $r->delete('/sala/{id}',           [PractitionerAdminController::class, 'destroy']);
 
         $r->get   ('/encerramentos',             [ConsultationAdminController::class, 'closures']);
         $r->post  ('/encerramentos',             [ConsultationAdminController::class, 'storeClosure']);

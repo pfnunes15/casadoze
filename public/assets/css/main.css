@@ -4820,6 +4820,270 @@ a.vídeo__moldura { border-style: solid; }
 }
 .perdido__raiz:hover { color: var(--ouro); border-color: rgba(217, 179, 108, .6); }
 
+/* ---------------------------------------------------------------------------
+   A Sala: a equipa, e o perfil de cada pessoa.
+   --------------------------------------------------------------------------- */
+.sala,
+.perfil {
+  width: 100%;
+  max-width: var(--miolo);
+  margin: 0 auto;
+  padding: 48px var(--goteira-secção) 120px;
+}
+.sala__topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+  margin-top: 36px;
+}
+.sala__dizer { display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+.sala__h1 {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(52px, 7vw, 96px);
+  line-height: .95;
+  letter-spacing: .02em;
+  color: var(--letra-forte);
+}
+.sala__entrada { margin: 0; font-size: 22px; line-height: 1.5; color: #cfc6b5; text-wrap: pretty; }
+
+.filtros--sala { margin-top: 40px; }
+
+.sala__fila {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: clamp(18px, 2.4vw, 30px);
+  margin-top: 40px;
+}
+
+.taróloga {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid var(--traco);
+  background: linear-gradient(160deg, rgba(123, 79, 184, .07), transparent 60%);
+  transition: border-color .4s;
+}
+.taróloga:hover { border-color: rgba(217, 179, 108, .45); }
+
+.taróloga__retrato {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--traco);
+  background: radial-gradient(ellipse at 50% 35%, rgba(123, 79, 184, .22), #0e0b12 70%);
+}
+.taróloga__retrato img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.taróloga__iniciais {
+  font-family: var(--titulo);
+  font-size: clamp(44px, 6vw, 64px);
+  letter-spacing: .06em;
+  color: var(--ouro);
+  opacity: .8;
+}
+
+.taróloga__dizer { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.taróloga__papel {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--roxo-claro);
+}
+.taróloga__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--letra-forte);
+}
+.taróloga__nome a { color: inherit; }
+.taróloga__nome a:hover { color: var(--ouro); }
+
+.taróloga__specs { display: flex; flex-wrap: wrap; gap: 6px; }
+.taróloga__spec {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1px solid rgba(217, 179, 108, .3);
+  color: var(--ouro-claro);
+}
+
+.taróloga__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  color: #a9a0b2;
+}
+
+.taróloga__pé {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(228, 220, 203, .10);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.taróloga__quantas {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.taróloga__botão {
+  padding: 9px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  border: 1px solid rgba(217, 179, 108, .5);
+  color: var(--ouro);
+  transition: background .3s, color .3s;
+}
+.taróloga__botão:hover { background: var(--ouro); color: var(--fundo); }
+
+.principios-sala { margin-top: 100px; }
+
+/* O perfil. */
+.perfil__par {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+  margin-top: 32px;
+}
+.perfil__retrato {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border: 1px solid var(--traco);
+  background: radial-gradient(ellipse at 50% 35%, rgba(123, 79, 184, .22), #0e0b12 70%);
+}
+.perfil__retrato img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.perfil__iniciais { font-size: clamp(64px, 10vw, 120px); }
+
+.perfil__dizer { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.perfil__papel {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--roxo-claro);
+}
+.perfil__nome {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1;
+  color: var(--letra-forte);
+}
+.perfil__dito {
+  margin: 0;
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--ouro-claro);
+  border-left: 1px solid rgba(217, 179, 108, .4);
+  padding-left: 18px;
+}
+.perfil__prosa { font-size: 20px; line-height: 1.55; color: #cfc6b5; }
+.perfil__prosa p { margin: 0 0 12px; }
+.perfil__prosa > :last-child { margin-bottom: 0; }
+
+.perfil__quadro {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--traco);
+  border: 1px solid var(--traco);
+}
+.perfil__quadro > div { background: var(--fundo); padding: 16px 18px; display: flex; flex-direction: column; gap: 5px; }
+.perfil__quadro dt {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.perfil__quadro dd { margin: 0; font-size: 18px; color: var(--letra-forte); }
+.perfil__specs { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.perfil__leituras { margin-top: 90px; display: flex; flex-direction: column; gap: 22px; }
+.perfil__lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.leitura {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px;
+  border: 1px solid var(--traco);
+  transition: border-color .3s;
+}
+.leitura:hover { border-color: rgba(217, 179, 108, .5); }
+.leitura__nome { font-family: var(--titulo); font-size: 21px; color: var(--letra-forte); }
+.leitura__meta { font-family: var(--mono); font-size: 11px; color: var(--ouro-claro); }
+.leitura__vaga {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #a9a0b2;
+}
+.leitura__vaga i { width: 6px; height: 6px; border-radius: 50%; background: #8e9c78; flex: none; }
+.leitura__vaga--sem i { background: var(--letra-tenue); }
+.perfil__nota { margin: 0; font-size: 17px; font-style: italic; color: var(--letra-tenue); max-width: 70ch; }
+
+/* Com quem é a consulta. Na ficha da consulta, a ligar à Sala. */
+.consulta-ficha__quem { display: flex; flex-direction: column; gap: 12px; }
+.consulta-ficha__gente { display: flex; flex-wrap: wrap; gap: 10px; }
+.quem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px 7px 7px;
+  border: 1px solid rgba(228, 220, 203, .18);
+  border-radius: 999px;
+  transition: border-color .3s;
+}
+.quem:hover { border-color: rgba(217, 179, 108, .6); }
+.quem img,
+.quem__iniciais {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex: none;
+  object-fit: cover;
+}
+.quem__iniciais {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, rgba(123, 79, 184, .35), #0e0b12 80%);
+  font-family: var(--titulo);
+  font-size: 14px;
+  color: var(--ouro);
+}
+.quem__nome { font-size: 18px; color: var(--letra); }
+.quem:hover .quem__nome { color: var(--ouro); }
+
 @media (min-width: 900px) {
   .navegação {
     display: flex;

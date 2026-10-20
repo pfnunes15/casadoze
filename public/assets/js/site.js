@@ -659,13 +659,17 @@
      grupos multiplicam-se: «Velas» e «Proteção» é o que tem as duas coisas. É a
      única leitura que não surpreende ninguém.
      --------------------------------------------------------------------- */
-  var barra = document.querySelector('[data-filtros-loja]');
-  var grelhaDaLoja = document.querySelector('.montra--loja');
+  /* Serve dois sítios: a montra da loja e a fila da Sala. São a mesma coisa —
+     uma barra de grupos, cartões com `data-` por onde filtrar, uma contagem e
+     um «limpar» — e escrevê-la duas vezes era ter duas que divergiam. O que
+     muda entre as duas é o que se conta no fim, e isso lê-se do HTML. */
+  var barra = document.querySelector('[data-filtros-loja], [data-filtros-sala]');
+  var grelhaDaLoja = document.querySelector('.montra--loja, [data-sala]');
 
   if (barra && grelhaDaLoja) {
     barra.hidden = false;
 
-    var cartõesDaLoja = [].slice.call(grelhaDaLoja.querySelectorAll('.produto'));
+    var cartõesDaLoja = [].slice.call(grelhaDaLoja.querySelectorAll('.produto, .taróloga'));
     var resultado = document.querySelector('[data-resultado]');
     var vazio = document.querySelector('[data-vazio]');
     var ordenar = document.querySelector('[data-ordenar]');
@@ -685,7 +689,11 @@
     function passa(cartão) {
       for (var grupo in escolhas) {
         if (!escolhas.hasOwnProperty(grupo) || !escolhas[grupo].length) { continue; }
-        var suas = (cartão.getAttribute('data-' + grupo) || '').split(' ');
+        /* Separados por `|` quando os valores têm espaços — «Amor e
+           relações» — e por espaço quando são slugs. Partir pelos dois
+           serve os dois casos sem o HTML ter de dizer qual é. */
+        var cru = cartão.getAttribute('data-' + grupo) || '';
+        var suas = cru.indexOf('|') !== -1 ? cru.split('|') : cru.split(' ');
         var alguma = false;
         for (var i = 0; i < escolhas[grupo].length; i++) {
           if (suas.indexOf(escolhas[grupo][i]) !== -1) { alguma = true; break; }
