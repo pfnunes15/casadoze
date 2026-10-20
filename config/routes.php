@@ -4,10 +4,9 @@ declare(strict_types=1);
 /**
  * A tabela de rotas. Carregada pelo front controller depois do boot.
  *
- * **A parte pública é uma página só.** A loja, o checkout, as páginas de
- * produto e as marcações saíram quando o site foi reduzido à porta de entrada.
- * O que ficou são os dados que ela lê — os produtos da montra, as etiquetas das
- * intenções, as consultas da lista —, que continuam na base de dados.
+ * **A parte pública tem a porta de entrada, a loja e as consultas.** O site
+ * chegou a estar reduzido a uma página; a loja voltou, e as consultas também —
+ * com a agenda, que a maquete antiga não tinha e a nova tem.
  *
  * **O backoffice está ligado.** Páginas, blocos, menus, pedidos, definições,
  * utilizadores e a loja. Vem todo do pacote: os controladores, as vistas e o
@@ -18,14 +17,12 @@ declare(strict_types=1);
  * pacote: marcações, vagas, horários e encerramentos. Um CMS partilhado não tem
  * consultas de tarot.
  *
- * O que continua fora é a marcação do lado de fora — o `/marcar`, as vagas em
- * JSON e a página de uma marcação. A porta de entrada não tem agenda: a maquete
- * não a tem, e a secção das consultas leva botões, não um selector de dia e
- * hora. O que o backoffice serve é marcar por telefone e ver quem vem.
+ * O que continua fora é o resto do desenho: a Sala das tarólogas, o Grimório, a
+ * Pesquisa, a Conta do cliente e o Painel. Ver `docs/maquete/NOTAS.md`.
  *
- * O apanha-tudo `/{slug}` continua fora. Com uma página pública só não há
- * segundo `slug` para apanhar, e deixá-lo de pé era servir a mesma página em
- * qualquer endereço escrito à sorte.
+ * O apanha-tudo `/{slug}` voltou, e está **no fim de tudo**: qualquer endereço
+ * que não seja nenhum dos de cima é procurado como página do CMS, e uma rota
+ * escrita depois dele nunca seria alcançada — nem o `/admin`.
  */
 
 use Admedia\Cms\Controllers\Admin\CmsUpdateController;
@@ -38,6 +35,7 @@ use Admedia\Cms\Controllers\Admin\MenuAdminController;
 use Admedia\Cms\Controllers\Admin\PageAdminController;
 use Admedia\Cms\Controllers\Admin\SectionAdminController;
 use Admedia\Cms\Controllers\Admin\SettingsController;
+use Admedia\Cms\Controllers\ContactController;
 use Admedia\Cms\Controllers\PageController;
 use Admedia\Core\Controllers\AuthController;
 use Admedia\Core\Controllers\MigrationController;
@@ -145,6 +143,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
     $r->post('/marcar',                    [BookingController::class, 'store']);
     $r->get ('/marcacao/{token}',          [BookingController::class, 'show']);
     $r->post('/marcacao/{token}/cancelar', [BookingController::class, 'cancel']);
+
+    // ---------- O que alguém escreve à Casa ----------
+    /* Só o POST: o formulário é um bloco e vive dentro de uma página — a dos
+       Contactos, hoje —, e volta sempre à página de onde saiu. Um GET para ele
+       seria uma segunda página a pedir a mesma coisa. */
+    $r->post('/contacto', [ContactController::class, 'store']);
 
     // ---------- Entrar ----------
     $r->get ('/login',           [AuthController::class, 'showLogin']);
@@ -310,6 +314,18 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
             $r->delete('/users/{id}',          [UserAdminController::class, 'destroy']);
         });
     });
+
+    /* ---------- O apanha-tudo ----------
+     *
+     * **Tem de ser a última.** Qualquer endereço que não seja nenhum dos de
+     * cima é procurado como página do CMS, e uma rota escrita depois desta
+     * nunca é alcançada.
+     *
+     * Saiu com a redução, e a razão escrita na altura era que com uma página
+     * pública só não havia segundo `slug` para apanhar — deixá-lo de pé era
+     * servir a porta de entrada em qualquer endereço escrito à sorte. Agora há
+     * páginas: A Casa, os Contactos, o Legal. */
+    $r->get('/{slug}', [PageController::class, 'show']);
 });
 
 /* ---------- O aviso de quem recebeu o dinheiro ----------

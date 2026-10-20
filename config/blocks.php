@@ -518,6 +518,90 @@ return [
     ],
 
     // -----------------------------------------------------------------------
+    // As páginas de texto: perguntas, princípios e contacto.
+    //
+    // Três blocos escritos para as páginas que o desenho novo trouxe — a Casa,
+    // os Contactos e o Legal. Nenhum é da porta de entrada, e é por isso que
+    // estão juntos aqui e não no meio dos outros.
+    // -----------------------------------------------------------------------
+
+    'perguntas' => [
+        'label'   => 'Perguntas frequentes',
+        'summary' => 'Uma lista de perguntas que se abrem. Para o que se pergunta antes de '
+                   . 'marcar, ou antes de comprar.',
+        'sample' => [
+            'heading' => 'Antes de marcares',
+            'items'   => [
+                ['title' => 'Preciso de levar alguma coisa?', 'body' => 'Só uma pergunta.'],
+            ],
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading' => ['type' => 'heading', 'label' => 'Título'],
+            'anchor'  => ['type' => 'anchor', 'advanced' => true],
+        ],
+        'items' => [
+            'label'    => 'Perguntas',
+            'singular' => 'pergunta',
+            'fields'   => [
+                'title' => ['type' => 'text', 'label' => 'A pergunta'],
+                'body'  => ['type' => 'textarea', 'rows' => 4, 'label' => 'A resposta'],
+            ],
+        ],
+    ],
+
+    'principios' => [
+        'label'   => 'Princípios',
+        'summary' => 'Uma fila numerada do que não muda, ou dos passos de uma coisa. Os '
+                   . 'números são postos pela página e não se escrevem.',
+        'sample' => [
+            'heading' => 'Quatro coisas que não mudam',
+            'items'   => [
+                ['title' => 'Preço fechado', 'body' => 'Sabe-se o que custa antes de começar.'],
+            ],
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading' => ['type' => 'heading', 'label' => 'Título'],
+            'body'    => ['type' => 'textarea', 'rows' => 3, 'label' => 'Entrada'],
+            'anchor'  => ['type' => 'anchor', 'advanced' => true],
+        ],
+        'items' => [
+            'label'    => 'Princípios',
+            'singular' => 'princípio',
+            'fields'   => [
+                'title' => ['type' => 'text', 'label' => 'O quê'],
+                'body'  => ['type' => 'textarea', 'rows' => 3, 'label' => 'O detalhe'],
+            ],
+        ],
+    ],
+
+    'contacto' => [
+        'label'   => 'Falar com a Casa',
+        'summary' => 'O formulário de contacto, com a morada e o horário ao lado. O que lá '
+                   . 'for escrito fica em Pedidos, no backoffice.',
+        'sample' => [
+            'heading' => 'Falar com a Casa',
+            'body'    => '<p>Escreve, e a Casa responde.</p>',
+        ],
+        'fields' => [
+            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading' => ['type' => 'heading', 'label' => 'Título'],
+            'body'    => ['type' => 'richtext', 'label' => 'Texto'],
+            'anchor'  => ['type' => 'anchor', 'advanced' => true],
+        ],
+        'items' => [
+            'label'    => 'Assuntos',
+            'singular' => 'assunto',
+            'help'     => 'As caixas que quem escreve pode ticar. Sem nenhum, o formulário '
+                        . 'não as mostra.',
+            'fields'   => [
+                'title' => ['type' => 'text', 'label' => 'O assunto'],
+            ],
+        ],
+    ],
+
+    // -----------------------------------------------------------------------
     // Prosa.
     //
     // O bloco que serve para o que não tem bloco. Está em último porque é o que

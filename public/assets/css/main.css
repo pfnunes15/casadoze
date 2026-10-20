@@ -4593,6 +4593,233 @@ a.vídeo__moldura { border-style: solid; }
 .outra__nome { font-family: var(--titulo); font-size: 21px; color: var(--letra-forte); }
 .outra__meta { font-family: var(--mono); font-size: 11px; color: var(--letra-tenue); }
 
+/* ---------------------------------------------------------------------------
+   As páginas de texto: perguntas, princípios e contacto.
+   --------------------------------------------------------------------------- */
+
+/* Perguntas frequentes. `<details>` e `<summary>`, e por isso o triângulo do
+   browser tem de sair: o sinal é desenhado por nós, do lado direito. */
+.secção--perguntas { padding-block: 100px 80px; }
+.perguntas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.perguntas__dizer { display: flex; flex-direction: column; gap: 16px; }
+.perguntas__título {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.05;
+  color: var(--letra-forte);
+}
+.perguntas__lista { display: flex; flex-direction: column; border-top: 1px solid rgba(228, 220, 203, .14); }
+
+.pergunta { border-bottom: 1px solid rgba(228, 220, 203, .14); }
+.pergunta__título {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.pergunta__título::-webkit-details-marker { display: none; }
+.pergunta__nome {
+  margin: 0;
+  font-family: var(--prosa);
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.3;
+  color: var(--letra-forte);
+}
+.pergunta[open] .pergunta__nome { color: var(--ouro-claro); }
+
+/* O sinal: um mais que se deita quando a pergunta abre. Dois riscos e não um
+   caracter, para rodar sem saltar de linha de base. */
+.pergunta__sinal { position: relative; width: 14px; height: 14px; flex: none; }
+.pergunta__sinal::before,
+.pergunta__sinal::after {
+  content: '';
+  position: absolute;
+  background: var(--ouro);
+  transition: transform .3s, opacity .3s;
+}
+.pergunta__sinal::before { left: 0; right: 0; top: 50%; height: 1px; margin-top: -.5px; }
+.pergunta__sinal::after  { top: 0; bottom: 0; left: 50%; width: 1px; margin-left: -.5px; }
+.pergunta[open] .pergunta__sinal::after { transform: rotate(90deg); opacity: 0; }
+
+.pergunta__resposta {
+  margin: 0;
+  padding: 0 0 24px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: #bdb4c4;
+  max-width: 60ch;
+}
+
+/* Princípios: a fila numerada. Os números são um contador do CSS — escritos no
+   backoffice, apagar o segundo de quatro deixava a lista a contar 01, 03, 04. */
+.secção--principios { padding-block: 100px 80px; }
+.principios__dizer { display: flex; flex-direction: column; gap: 16px; }
+.principios__título {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.05;
+  color: var(--letra-forte);
+}
+.principios__entrada { margin: 0; font-size: 20px; line-height: 1.5; color: #cfc6b5; max-width: 60ch; }
+
+.principios {
+  counter-reset: principio;
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  border-top: 1px solid rgba(228, 220, 203, .14);
+}
+.principio {
+  counter-increment: principio;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 30px 28px 0 0;
+}
+.principio::before {
+  content: counter(principio, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: var(--roxo-claro);
+}
+.principio::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ouro);
+}
+.principio__nome { margin: 0; font-family: var(--titulo); font-weight: 400; font-size: 26px; color: var(--letra-forte); }
+.principio__dito { margin: 0; font-size: 19px; line-height: 1.45; color: #a9a0b2; }
+
+/* Falar com a Casa. */
+.secção--contacto { padding-block: 100px 80px; }
+.contacto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+}
+.contacto__dizer { display: flex; flex-direction: column; gap: 18px; }
+.contacto__título {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1;
+  color: var(--letra-forte);
+}
+.contacto__prosa { font-size: 20px; line-height: 1.5; color: #cfc6b5; }
+.contacto__prosa p { margin: 0 0 12px; }
+.contacto__prosa > :last-child { margin-bottom: 0; }
+
+.contacto__dados { display: flex; flex-direction: column; gap: 16px; margin: 10px 0 0; }
+.contacto__dados > div { display: flex; flex-direction: column; gap: 4px; }
+.contacto__dados dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+.contacto__dados dd { margin: 0; font-size: 19px; line-height: 1.45; color: var(--letra); }
+
+.contacto__caixa {
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(217, 179, 108, .25);
+  background: linear-gradient(160deg, rgba(123, 79, 184, .10), transparent 60%);
+}
+.contacto__forma { display: flex; flex-direction: column; gap: 10px; }
+.contacto__forma .campo__rótulo { margin-top: 8px; }
+.contacto__assuntos { display: flex; flex-wrap: wrap; gap: 8px; border: 0; margin: 0; padding: 0; }
+.contacto__assuntos legend { padding: 0 0 10px; }
+.contacto__assuntos .hora { flex: 1 1 140px; }
+
+.campo--errado { border-color: #e0863c; }
+.campo__erro { font-size: 16px; color: #e0863c; }
+
+.contacto__erro {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(224, 134, 60, .45);
+  background: rgba(224, 134, 60, .06);
+  font-size: 17px;
+  color: #cfc6b5;
+}
+.contacto__feito { display: flex; flex-direction: column; gap: 10px; }
+.contacto__feitoTítulo { font-family: var(--titulo); font-size: 30px; color: var(--letra-forte); }
+.contacto__feitoDito { margin: 0; font-size: 19px; line-height: 1.5; color: #bdb4c4; }
+
+/* A página que não existe. Três saídas e não uma: quem cai aqui vinha a
+   caminho de alguma coisa. */
+.perdido {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 110px var(--goteira-secção) 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+.perdido__lua { width: 92px; height: 92px; }
+.perdido__sobrescrita {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--roxo-claro);
+}
+.perdido__título {
+  margin: 0;
+  font-family: var(--titulo);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1.02;
+  color: var(--letra-forte);
+  text-wrap: balance;
+}
+.perdido__dito { margin: 0; font-size: 20px; line-height: 1.5; color: #a9a0b2; }
+.perdido__saídas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+.perdido__raiz {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+  border-bottom: 1px solid rgba(228, 220, 203, .3);
+  padding-bottom: 4px;
+}
+.perdido__raiz:hover { color: var(--ouro); border-color: rgba(217, 179, 108, .6); }
+
 @media (min-width: 900px) {
   .navegação {
     display: flex;
