@@ -36,8 +36,18 @@ $consultas = Consultation::published();
 $romanos = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V', 6 => 'VI',
             7 => 'VII', 8 => 'VIII', 9 => 'IX', 10 => 'X', 11 => 'XI', 12 => 'XII'];
 
-// Onde levar quem carrega no botão. Vazio não desenha botão nenhum: um botão
-// sem destino é um botão que não faz nada.
+/* Onde levar quem carrega no botão.
+   -------------------------------------------------------------------------
+   **Cada consulta tem agora ficha própria**, e é para lá que o botão leva: é
+   onde está a agenda. Antes levavam todas ao mesmo sítio — o `readings.talk_url`
+   das Definições — porque não havia fichas: a loja e as marcações tinham sido
+   retiradas e o botão só podia apontar para a âncora do contacto.
+
+   A que se marca por conversa continua a ir ao `talk_url`: um trabalho que se
+   prepara depois de uma conversa não tem horas para escolher.
+
+   Vazio não desenha botão nenhum: um botão sem destino é um botão que não faz
+   nada. */
 $urlDaConversa = trim((string)setting('readings.talk_url'));
 ?>
 <section class="secção secção--consultas"<?= $section['anchor'] !== '' ? ' id="' . e($section['anchor']) . '"' : '' ?>>
@@ -101,8 +111,11 @@ $urlDaConversa = trim((string)setting('readings.talk_url'));
                 <span class="consulta__preço">
                   <?= $preço !== null ? e(money((int)$preço)) : e(__('consultas.on_request')) ?>
                 </span>
-                <?php if ($urlDaConversa !== ''): ?>
-                  <a class="consulta__botão" href="<?= e($urlDaConversa) ?>">
+                <?php $destino = $marcável
+                        ? locale_url('/consultas/' . rawurlencode((string)$consulta['slug']))
+                        : $urlDaConversa; ?>
+                <?php if ($destino !== ''): ?>
+                  <a class="consulta__botão" href="<?= e($destino) ?>">
                     <?= e(__($marcável ? 'consultas.book' : 'consultas.talk')) ?>
                   </a>
                 <?php endif; ?>
@@ -114,11 +127,9 @@ $urlDaConversa = trim((string)setting('readings.talk_url'));
 
         <div class="consultas__pé" data-entra="sobe">
           <p class="consultas__nota"><?= e(__('consultas.disclaimer')) ?></p>
-          <?php if ($urlDaConversa !== ''): ?>
-            <a class="consultas__agenda" href="<?= e($urlDaConversa) ?>">
-              <?= e(__('consultas.agenda')) ?> <span aria-hidden="true">&rarr;</span>
-            </a>
-          <?php endif; ?>
+          <a class="consultas__agenda" href="<?= e(locale_url('/consultas')) ?>">
+            <?= e(__('consultas.agenda')) ?> <span aria-hidden="true">&rarr;</span>
+          </a>
         </div>
       </div>
 

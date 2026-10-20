@@ -51,6 +51,8 @@ use App\Controllers\IntentController;
 use App\Controllers\KitController;
 use App\Controllers\CheckoutPageController;
 use App\Controllers\GavetaController;
+use App\Controllers\BookingController;
+use App\Controllers\ConsultationController;
 use App\Controllers\Admin\BookingAdminController;
 use App\Controllers\Admin\ConsultationAdminController;
 use App\Controllers\Admin\SlotAdminController;
@@ -124,6 +126,25 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        quem desenha o cesto é a vista em PHP, e um JSON obrigava a escrever a
        gaveta uma segunda vez em JavaScript. Ver App\Controllers\GavetaController. */
     $r->get('/carrinho/gaveta', [GavetaController::class, 'show']);
+
+    // ---------- As consultas, do lado de fora ----------
+    /* **Voltaram.** Saíram na redução, e a razão escrita na altura era que a
+       maquete não tinha agenda na porta de entrada. O desenho novo tem — ver
+       `docs/maquete/Consultas.dc.html`, com calendário, vagas e remarcação.
+     *
+     * A ordem conta: `/consultas/vagas` é literal e tem de vir antes de
+     * `/consultas/{slug}`, que de outra maneira o engolia e tentava abrir uma
+     * consulta chamada «vagas».
+     *
+     * O `/marcar` é um POST e não tem GET: o formulário vive dentro da ficha da
+     * consulta, e um GET para ele seria uma segunda página a pedir o mesmo. */
+    $r->get ('/consultas',         [ConsultationController::class, 'index']);
+    $r->get ('/consultas/vagas',   [BookingController::class, 'slots']);
+    $r->get ('/consultas/{slug}',  [ConsultationController::class, 'show']);
+
+    $r->post('/marcar',                    [BookingController::class, 'store']);
+    $r->get ('/marcacao/{token}',          [BookingController::class, 'show']);
+    $r->post('/marcacao/{token}/cancelar', [BookingController::class, 'cancel']);
 
     // ---------- Entrar ----------
     $r->get ('/login',           [AuthController::class, 'showLogin']);

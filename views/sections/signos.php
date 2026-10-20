@@ -22,6 +22,7 @@
  * @var string $itemTag
  */
 
+use App\Services\Datas;
 use App\Services\Signos;
 
 $agora = new \DateTimeImmutable('now', new \DateTimeZone(date_default_timezone_get()));
@@ -37,35 +38,15 @@ $cores     = explode('|', __('signos.colors'));
 $medidores = explode('|', __('signos.meters'));
 $sorte     = explode('|', __('signos.lucky'));
 
-/* As datas por extenso. Sem a extensão `intl` cai para o formato do PHP, que diz
-   o mês em inglês — feio, e melhor do que uma página em branco. */
-$curto = static function (int $mês, int $dia) use ($agora): string {
-    $data = $agora->setDate(2001, $mês, $dia);
+/* As datas por extenso vivem em App\Services\Datas — a mesma função estava
+   escrita aqui, no «Agora na Casa» e no calendário das consultas. */
+$curto = static fn(int $mês, int $dia): string => Datas::diaCurtoSemAno(
+    (new \DateTimeImmutable())->setDate(2001, $mês, $dia)
+);
 
-    if (!class_exists(\IntlDateFormatter::class)) {
-        return $data->format('j M');
-    }
-
-    return (new \IntlDateFormatter(
-        str_replace('-', '_', current_locale()),
-        \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, null, null, 'd MMM'
-    ))->format($data) ?: $data->format('j M');
-};
-
-$diaDaSemana = static function (int $quantos) use ($segunda): string {
-    $data = $segunda->modify('+' . $quantos . ' days');
-
-    if (!class_exists(\IntlDateFormatter::class)) {
-        return $data->format('l');
-    }
-
-    $nome = (new \IntlDateFormatter(
-        str_replace('-', '_', current_locale()),
-        \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, null, null, 'EEEE'
-    ))->format($data) ?: $data->format('l');
-
-    return mb_convert_case(mb_substr($nome, 0, 1), MB_CASE_UPPER) . mb_substr($nome, 1);
-};
+$diaDaSemana = static fn(int $quantos): string => Datas::diaDaSemana(
+    $segunda->modify('+' . $quantos . ' days')
+);
 
 $semanaDe = $curto((int)$segunda->format('n'), (int)$segunda->format('j'));
 $semanaA  = $curto((int)$domingo->format('n'), (int)$domingo->format('j'));

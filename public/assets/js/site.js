@@ -1081,6 +1081,83 @@
   }
 
   /* ---------------------------------------------------------------------
+     A agenda de uma consulta: trocar de mês e escolher o dia.
+
+     **Não acrescenta horas nenhumas.** Os meses e as horas de cada dia estão
+     todos no documento, desenhados pelo servidor; o que isto faz é esconder os
+     outros. Sem JavaScript vê-se a agenda inteira, dia a dia, e os dias do
+     calendário são âncoras que levam às horas desse dia — uma agenda que só
+     existe depois de o JavaScript correr é uma agenda que não existe para quem
+     a procura.
+
+     A classe `agenda--viva` é posta aqui e é ela que liga as regras de
+     esconder: sem isto, quem não tem JavaScript ficava com a agenda escondida
+     e sem maneira de a abrir.
+     --------------------------------------------------------------------- */
+  var agenda = document.querySelector('[data-agenda]');
+
+  if (agenda && agenda.querySelector('[data-mês]')) {
+    agenda.classList.add('agenda--viva');
+
+    var meses = agenda.querySelectorAll('[data-mês]');
+    var noMês = 0;
+
+    /* As setas estão `hidden` no HTML: sem JavaScript não trocam de mês
+       nenhum, e os meses estão todos à vista de qualquer maneira. */
+    var setas = agenda.querySelectorAll('.mês__seta');
+    for (var s0 = 0; s0 < setas.length; s0++) { setas[s0].hidden = false; }
+
+    function mostrarMês(qual) {
+      noMês = Math.max(0, Math.min(meses.length - 1, qual));
+      for (var m = 0; m < meses.length; m++) {
+        if (m === noMês) { meses[m].removeAttribute('data-fora'); }
+        else { meses[m].setAttribute('data-fora', ''); }
+      }
+    }
+
+    agenda.addEventListener('click', function (ev) {
+      var seta = ev.target.closest ? ev.target.closest('[data-mês-anterior], [data-mês-seguinte]') : null;
+      if (!seta || seta.disabled) { return; }
+      mostrarMês(noMês + (seta.hasAttribute('data-mês-seguinte') ? 1 : -1));
+    });
+
+    /* Escolher um dia mostra as horas dele. O `preventDefault` é por causa da
+       âncora: sem JavaScript ela serve para saltar até à lista, e com
+       JavaScript a lista já está à vista e saltar só mexia a página. */
+    var listas = agenda.querySelectorAll('[data-horas]');
+
+    function mostrarDia(ymd) {
+      for (var l = 0; l < listas.length; l++) {
+        var é = listas[l].getAttribute('data-horas') === ymd;
+        if (é) { listas[l].removeAttribute('data-fora'); }
+        else { listas[l].setAttribute('data-fora', ''); }
+      }
+
+      var dias = agenda.querySelectorAll('[data-dia]');
+      for (var d = 0; d < dias.length; d++) {
+        dias[d].classList.toggle('dia--escolhido', dias[d].getAttribute('data-dia') === ymd);
+      }
+    }
+
+    agenda.addEventListener('click', function (ev) {
+      var dia = ev.target.closest ? ev.target.closest('[data-dia]') : null;
+      if (!dia) { return; }
+      ev.preventDefault();
+      mostrarDia(dia.getAttribute('data-dia'));
+    });
+
+    /* O dia que abre é o primeiro com horas, e o mês é o dele: um calendário
+       que abre em Outubro com as horas de Novembro não se percebe. */
+    var primeira = listas.length ? listas[0].getAttribute('data-horas') : '';
+    if (primeira) {
+      mostrarDia(primeira);
+      for (var k = 0; k < meses.length; k++) {
+        if (meses[k].getAttribute('data-mês') === primeira.slice(0, 7)) { mostrarMês(k); break; }
+      }
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      O boletim da lua.
 
      **Não envia nada, e é de propósito.** Para o fazer a sério era preciso um

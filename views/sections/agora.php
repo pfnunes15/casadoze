@@ -20,6 +20,7 @@
  * @var string $itemTag
  */
 
+use App\Services\Datas;
 use App\Services\Lua;
 
 $opções = \Admedia\Cms\Models\PageSection::options($section);
@@ -35,34 +36,12 @@ $faseDeAgora = Lua::fase($agora->getTimestamp());
 $nomeDeAgora = __('lua.' . Lua::nomeDaFase($faseDeAgora));
 $luzDeAgora  = Lua::luzPorCento($faseDeAgora);
 
-/* As datas por extenso, na língua de quem lê. O IntlDateFormatter é o que sabe
-   que em francês se diz «octobre 2026» e em alemão «Oktober 2026»; sem a
-   extensão `intl` instalada volta ao formato do PHP, que diz o mês em inglês —
-   feio, e melhor do que uma página em branco. */
-$porExtenso = static function (\DateTimeImmutable $quando, string $padrão, string $reserva): string {
-    if (!class_exists(\IntlDateFormatter::class)) {
-        return $quando->format($reserva);
-    }
+/* As datas por extenso vivem em App\Services\Datas. Estavam escritas aqui,
+   nos signos e no calendário das consultas — três cópias da mesma função são
+   duas que ficam para trás. */
 
-    return (new \IntlDateFormatter(
-        str_replace('-', '_', current_locale()),
-        \IntlDateFormatter::NONE,
-        \IntlDateFormatter::NONE,
-        null,
-        null,
-        $padrão
-    ))->format($quando) ?: $quando->format($reserva);
-};
-
-/* «Outubro de 2026», e não «outubro 2026»: em português o mês vem ligado ao ano
-   por «de», e a primeira letra sobe porque aqui o mês abre uma linha. O
-   IntlDateFormatter devolve-o em minúscula, que é o correcto no meio de uma
-   frase e não no princípio de uma. */
-$mêsPorExtenso = mb_convert_case(
-    mb_substr($porExtenso($agora, "LLLL 'de' yyyy", 'F Y'), 0, 1),
-    MB_CASE_UPPER
-) . mb_substr($porExtenso($agora, "LLLL 'de' yyyy", 'F Y'), 1);
-$dataDoSabbat   = $porExtenso($sabbat['quando'], "d 'de' LLLL", 'j F');
+$mêsPorExtenso = Datas::mêsEAno($agora);
+$dataDoSabbat  = Datas::diaCurto($sabbat['quando']);
 
 $faltam = (int)$sabbat['faltam'];
 $quanto = $faltam === 0

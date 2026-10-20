@@ -323,6 +323,15 @@ return [
                          . 'quando é que a ligação chega — não cole aqui a ligação, que é '
                          . 'diferente em cada sessão.',
             ],
+            /* A frase por baixo de «Consultas», na página da lista. Texto da
+               Casa e não da interface: quem o escreve é quem dá as consultas.
+               Vazia esconde o parágrafo. */
+            'readings.intro' => [
+                'type'  => 'textarea',
+                'label' => 'Frase de entrada das consultas',
+                'help'  => 'Por baixo do título «Consultas». Uma ou duas linhas sobre o que a '
+                         . 'Casa faz à mesa.',
+            ],
             'readings.cancel_hours' => [
                 'type'   => 'number',
                 'min'    => 0,
