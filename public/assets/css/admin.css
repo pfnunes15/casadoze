@@ -248,7 +248,16 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 1.75rem; gap: 1rem; flex-wrap: wrap;
 }
 .admin-header h1 { margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
-.admin-header > div { display: flex; gap: 0.6rem; }
+/* The title and its one-line subtitle sit on a line together, which is how
+   every screen here reads: «Páginas  13 páginas.» The row has to wrap, and
+   the title must not be the thing that wraps — squeezing «Definições do
+   site» onto two lines to make room for a sentence beside it gets the
+   hierarchy exactly backwards. */
+.admin-header > div { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: baseline; }
+.admin-header > div > h1 { flex: 0 0 auto; }
+/* A second sentence is not a subtitle any more — it is a paragraph, and it
+   takes its own line. */
+.admin-header__sub + .admin-header__sub { flex: 1 0 100%; margin-top: .15rem; }
 
 /* ---------------- Cards ---------------- */
 .admin-card {
@@ -1299,7 +1308,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    where the reasoning for the number is. A block being written in, or one
    somebody unfolded, is shown whole: the cursor can be below the cut, and a
    cursor you cannot see is worse than a long page. */
-.canvas__shot--tall { max-height: 520px; }
+.canvas__shot--tall { max-height: 1100px; }
 .canvas__block.is-open .canvas__shot--tall,
 .canvas__block.is-writing .canvas__shot--tall { max-height: none; }
 .canvas__block.is-open .canvas__shot--tall::after,
@@ -1719,29 +1728,32 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    of this is drawn: no tag, no stack, one plain box exactly as before. */
 .lang-line { display: flex; align-items: stretch; gap: 0; }
 .lang-line + .lang-line { margin-top: .4rem; }
-.lang-line__tag {
+/* `.field .lang-line__tag` and not `.lang-line__tag`: this is a <label>
+   inside a .field, and `.field label` — the question above the control, set
+   block-level with a margin under it — has two classes to this one's one and
+   wins on specificity alone. Written flat, the tag inherited `display:block`
+   and sat above its own box instead of beside it. */
+.field .lang-line__tag {
   display: flex; align-items: center; justify-content: center;
   flex: 0 0 3rem; cursor: pointer; user-select: none;
   border: 1px solid var(--border); border-right: 0;
   border-radius: var(--radius-sm) 0 0 var(--radius-sm);
   background: var(--surface-2); color: var(--muted);
   font-size: .8rem; font-weight: 700;
-  /* Beats `.field label`, which is the question above the control and is
-     block-level with a margin under it. This one is part of the control. */
   margin: 0; letter-spacing: 0;
 }
-.lang-line__box { border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important; }
-.lang-line:focus-within .lang-line__tag { background: var(--highlight); color: var(--highlight-ink); }
-/* An empty translation is worth seeing without reading: it is the one state
-   the whole screen exists to make visible. */
-.lang-line__box:placeholder-shown, .lang-line__box:not(:placeholder-shown) { }
+/* Junto à etiqueta: cantos direitos do lado dela. Com `.field` à frente,
+   pela mesma razão de especificidade que a etiqueta acima — e por isso sem
+   `!important`, que seria esconder o problema em vez de o resolver. */
+.field .lang-line__box { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.field .lang-line:focus-within .lang-line__tag { background: var(--highlight); color: var(--highlight-ink); }
 @media (max-width: 560px) {
   .lang-line { flex-wrap: wrap; }
-  .lang-line__tag {
+  .field .lang-line__tag {
     flex: 1 0 100%; justify-content: flex-start; padding: .2rem .1rem;
     border: 0; background: none; border-radius: 0;
   }
-  .lang-line__box { border-radius: var(--radius-sm) !important; }
+  .field .lang-line__box { border-radius: var(--radius-sm); }
 }
 
 /* A tab that submits — the language a page is not written in yet. The form
@@ -1844,8 +1856,14 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 }
 
 /* A grelha de preços entre pontos. */
+/* A grelha de percursos: o preço encostado ao símbolo e à largura do que
+   lá cabe. Uma caixa larga e vazia no meio de uma coluna é um campo que
+   não parece um preço — e sem o € ao lado a coluna podia ser qualquer
+   outra coisa. */
 .fare__arrow { color: var(--faint); margin: 0 .4rem; }
-.fare__box { max-width: 7rem; text-align: right; }
+.fare__cell  { display: inline-flex; align-items: center; gap: .35rem; }
+.fare__cell::after { content: "€"; color: var(--faint); font-size: .9rem; }
+.fare__box   { width: 6rem; max-width: 6rem; text-align: right; }
 
 @media (max-width: 560px) {
   .week__corner, .week__day { width: 4.5rem; }
@@ -1872,3 +1890,48 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .langs__one--draft   { background: var(--surface); color: #9a6b10; border-color: #e2c98f; }
 .langs__one--missing { background: none; color: var(--faint); border: 1px dashed var(--border); }
 .langs__one--live:hover, .langs__one--draft:hover { outline: 2px solid currentColor; outline-offset: 1px; }
+
+/* ---------------- A frota, e as regras de agravamento ---------------- */
+.frota__foto { width: 5.5rem; }
+.frota__foto img {
+  display: block; width: 4.5rem; height: 3rem; object-fit: cover;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+}
+.frota__sem  { color: var(--faint); font-size: .8rem; }
+.frota__file { margin-top: .4rem; font-size: .82rem; }
+.frota__drop { margin: .35rem 0 0; font-size: .82rem; }
+
+/* Uma regra é um cartão e não uma linha de tabela: tem nove campos, e nove
+   colunas numa tabela é uma tabela que se lê de lado. */
+.regra {
+  padding: 1.1rem 1.25rem; margin-bottom: 1rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.regra.is-off { opacity: .55; }
+.regra__linha { display: flex; flex-wrap: wrap; gap: 1rem; }
+.regra__linha > .field { flex: 1 1 14rem; margin-bottom: .75rem; }
+.regra__valor { display: flex; gap: .4rem; }
+.regra__valor .field-number { width: 6rem; }
+.regra__valor select { width: 4.5rem; }
+.regra__dias { display: flex; flex-wrap: wrap; gap: .3rem; }
+/* Os dias como botões que se carregam, e não sete caixas numa lista: a
+   pergunta é «que dias», e a resposta lê-se melhor como uma semana. */
+.regra__dia { position: relative; }
+.regra__dia input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.regra__dia span {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.6rem; padding: .4rem .2rem; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: .82rem; font-weight: 600; color: var(--muted);
+}
+.regra__dia input:checked + span { background: var(--accent-bg); color: #0f7a5a; border-color: #0f7a5a; }
+.regra__dia input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+.regra__estado { display: flex; flex-direction: column; justify-content: flex-end; }
+/* A regra dita por extenso, por baixo dela: nove campos não se lêem de
+   relance, e uma frase lê-se. */
+.regra__diz {
+  margin: .25rem 0 0; padding-top: .75rem; border-top: 1px solid var(--border);
+  font-size: .88rem; color: var(--muted);
+}
+.regra__novo { margin: 2rem 0 .75rem; font-size: .95rem; color: var(--muted); }

@@ -890,92 +890,106 @@
    --------------------------------------------------------------------------- */
 (function () {
   'use strict';
+  /* A gaveta das «Definições avançadas», e **só** ela.
+     Dentro de um IIFE próprio por uma razão que custou caro: o que estava
+     aqui era `if (!drawers.length) return;` no corpo desta função, que
+     continua por mais trezentas linhas. Numa página sem gaveta nenhuma —
+     e uma página de sistema não desenha a dela — esse `return` levava
+     consigo o ajuste da altura dos blocos na tela, a procura no catálogo
+     de blocos e o nome do ficheiro escolhido. Sem erro nenhum na consola:
+     a função simplesmente acabava ali.
+     O sintoma era a tela a desenhar cada bloco com cento e cinquenta
+     pixéis, que é a altura por omissão de um <iframe> a que ninguém
+     mexeu. */
+  (function () {
+    'use strict';
 
-  const drawers = document.querySelectorAll('details.admin-card--advanced');
-  if (!drawers.length) return;
+    const drawers = document.querySelectorAll('details.admin-card--advanced');
+    if (!drawers.length) return;
 
-  // Whoever asked the system for no motion keeps the behaviour they always had:
-  // the browser opens and closes in one go, and nothing here interferes.
-  const stillness = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Whoever asked the system for no motion keeps the behaviour they always had:
+    // the browser opens and closes in one go, and nothing here interferes.
+    const stillness = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  const DURATION = 260;
-  const EASING   = 'cubic-bezier(.22, .61, .36, 1)';
+    const DURATION = 260;
+    const EASING   = 'cubic-bezier(.22, .61, .36, 1)';
 
-  drawers.forEach((drawer) => {
-    const summary = drawer.querySelector('summary');
-    if (!summary) return;
+    drawers.forEach((drawer) => {
+      const summary = drawer.querySelector('summary');
+      if (!summary) return;
 
-    let animation = null;
+      let animation = null;
 
-    /* Open or closed is what was asked for, and not what the attribute says:
-       during a close the drawer stays `open` — that is what lets the content be
-       seen shrinking — and a second click halfway would be read as "close
-       again" instead of "open after all". */
-    let isOpen = drawer.open;
+      /* Open or closed is what was asked for, and not what the attribute says:
+         during a close the drawer stays `open` — that is what lets the content be
+         seen shrinking — and a second click halfway would be read as "close
+         again" instead of "open after all". */
+      let isOpen = drawer.open;
 
-    /* The height of the closed drawer: the summary, which is the only thing
-       visible, plus the box's frame. Measured on the spot and not stored up
-       front, because the summary can break onto two lines when the window
-       narrows. */
-    const closedHeight = () => {
-      const box = getComputedStyle(drawer);
-      return summary.getBoundingClientRect().height
-        + parseFloat(box.borderTopWidth) + parseFloat(box.borderBottomWidth)
-        + parseFloat(box.paddingTop) + parseFloat(box.paddingBottom);
-    };
-
-    summary.addEventListener('click', (event) => {
-      if (stillness.matches) return;
-
-      // The browser was about to open or close; from here on this is in charge.
-      event.preventDefault();
-
-      /* The height the drawer is at right now — read before cancelling whatever
-         was running, because cancelling returns it to where it started from and
-         the drawer jumped. */
-      const from = drawer.getBoundingClientRect().height;
-      if (animation) { animation.cancel(); animation = null; }
-
-      const isClosing = isOpen;
-      isOpen = !isOpen;
-      let to;
-
-      if (isClosing) {
-        // It stays open the whole way; it only closes at the end.
-        to = closedHeight();
-      } else {
-        drawer.open = true;
-        to = drawer.getBoundingClientRect().height;
-      }
-
-      drawer.style.overflow = 'hidden';
-
-      const thisRun = drawer.animate(
-        { height: [from + 'px', to + 'px'] },
-        { duration: DURATION, easing: EASING }
-      );
-      animation = thisRun;
-
-      /* The cancel notice does not arrive the instant you cancel: it arrives
-         later, when another animation is already in charge of the drawer.
-         Without this guard, the dead one would tidy away what the new one had
-         just set — and the drawer was left opening with its content
-         overflowing. */
-      const tidyUp = () => {
-        if (animation !== thisRun) return;
-        drawer.style.overflow = '';
-        animation = null;
+      /* The height of the closed drawer: the summary, which is the only thing
+         visible, plus the box's frame. Measured on the spot and not stored up
+         front, because the summary can break onto two lines when the window
+         narrows. */
+      const closedHeight = () => {
+        const box = getComputedStyle(drawer);
+        return summary.getBoundingClientRect().height
+          + parseFloat(box.borderTopWidth) + parseFloat(box.borderBottomWidth)
+          + parseFloat(box.paddingTop) + parseFloat(box.paddingBottom);
       };
 
-      thisRun.onfinish = () => {
-        if (animation !== thisRun) return;
-        if (isClosing) drawer.open = false;
-        tidyUp();
-      };
+      summary.addEventListener('click', (event) => {
+        if (stillness.matches) return;
 
-      thisRun.oncancel = tidyUp;
+        // The browser was about to open or close; from here on this is in charge.
+        event.preventDefault();
+
+        /* The height the drawer is at right now — read before cancelling whatever
+           was running, because cancelling returns it to where it started from and
+           the drawer jumped. */
+        const from = drawer.getBoundingClientRect().height;
+        if (animation) { animation.cancel(); animation = null; }
+
+        const isClosing = isOpen;
+        isOpen = !isOpen;
+        let to;
+
+        if (isClosing) {
+          // It stays open the whole way; it only closes at the end.
+          to = closedHeight();
+        } else {
+          drawer.open = true;
+          to = drawer.getBoundingClientRect().height;
+        }
+
+        drawer.style.overflow = 'hidden';
+
+        const thisRun = drawer.animate(
+          { height: [from + 'px', to + 'px'] },
+          { duration: DURATION, easing: EASING }
+        );
+        animation = thisRun;
+
+        /* The cancel notice does not arrive the instant you cancel: it arrives
+           later, when another animation is already in charge of the drawer.
+           Without this guard, the dead one would tidy away what the new one had
+           just set — and the drawer was left opening with its content
+           overflowing. */
+        const tidyUp = () => {
+          if (animation !== thisRun) return;
+          drawer.style.overflow = '';
+          animation = null;
+        };
+
+        thisRun.onfinish = () => {
+          if (animation !== thisRun) return;
+          if (isClosing) drawer.open = false;
+          tidyUp();
+        };
+
+        thisRun.oncancel = tidyUp;
+      });
     });
-  });
+  })();
 
   /* ------------------------------------------------------------------ */
   /* The page canvas: fitting a 1280px page into this column.             */
@@ -998,13 +1012,26 @@
   /* doubles in width when it does.                                       */
   (function () {
     var PAGE_WIDTH = 1280;
-    /* Past this a block is cut off and faded out. It is a compromise: the
-       editor is meant to show the page, and cutting a block is not showing it
-       — but a hero is 1500px tall and a wine list 6700, and three of those in
-       a row is a page nobody can scan to find the part they came to change.
-       Kept generous enough that what is on screen is still recognisably the
-       block, and matched by .canvas__shot--tall in admin.css. */
-    var TALL = 520;
+    /* The screen the page is measured against.
+       A block written with `min-height: 100svh` — a hero, a booking panel —
+       has no height of its own: it is as tall as the screen it is on. Inside
+       a frame with no height set, that screen is the 150px an <iframe>
+       defaults to, so the block asked for 150px, the frame was then sized to
+       what the block asked for, and the whole thing settled on a strip of
+       heading with the picture behind it. Every full-screen block on the
+       canvas was a forty-pixel sliver, and the taller the block was meant to
+       be the less of it there was.
+       So the frame is given a real screen to be measured on first, and 800
+       is the height that goes with the 1280 above. */
+    var PAGE_HEIGHT = 800;
+    /* Past this a block is folded and faded out, with a button to open it.
+       The editor is meant to show the page, and folding a block is not
+       showing it — so this is set where an ordinary block, hero included,
+       is never folded, and only the ones that are a page in themselves are:
+       a wine list is 6700px, and three of those in a row is a canvas nobody
+       can scan to find the part they came to change.
+       Matched by .canvas__shot--tall in admin.css. */
+    var TALL = 1100;
     var shots = Array.prototype.slice.call(document.querySelectorAll('[data-shot]'));
     if (!shots.length) return;
 
@@ -1017,10 +1044,45 @@
 
       var doc;
       try { doc = frame.contentDocument; } catch (e) { return; }
-      if (!doc || !doc.documentElement) return;
+      if (!doc || !doc.documentElement || !doc.body) return;
 
-      var height = doc.documentElement.scrollHeight;
+      /* How tall the block is, with the frame at a given height.
+         The body and not the documentElement: documentElement.scrollHeight
+         is at least the viewport, so every short block would come back the
+         height of the frame it was measured in. The body is as tall as
+         what is actually in it. */
+      function drawnAt(viewport) {
+        frame.style.height = viewport + 'px';
+        return Math.max(
+          doc.body.scrollHeight,
+          Math.round(doc.body.getBoundingClientRect().height)
+        );
+      }
+
+      /* Two measurements, because some blocks have no height of their own.
+         A hero is "one screen tall" and a band of photographs is "a screen
+         each": ask them inside a 150px frame and they answer 150, which is
+         how the whole canvas ended up as a column of slivers.
+
+         So they are measured on a real screen first, and then asked again
+         on a taller one. A block that answers the same both times has a
+         height of its own and is shrunk to it. A block that grows with the
+         frame does not, and is left at the screen it was measured on —
+         shrinking it below that is what cut the hero's own heading in half,
+         because the block clips what does not fit and the frame had stopped
+         being a screen. */
+      var height    = drawnAt(PAGE_HEIGHT);
+      var taller    = drawnAt(PAGE_HEIGHT + 400);
+      var ownHeight = taller === height;
+
+      if (!(height > 0)) {
+        height = doc.documentElement.scrollHeight;
+      }
       if (!(height > 0)) return;
+
+      if (!ownHeight) {
+        height = Math.max(height, PAGE_HEIGHT);
+      }
 
       frame.style.height = height + 'px';
       shot.style.height = Math.round(height * scale) + 'px';
