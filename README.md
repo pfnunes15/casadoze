@@ -1,24 +1,26 @@
 # Casa de Zé
 
-> **Aviso: a parte pública é a porta de entrada e a loja.**
+> **Aviso: o site está construído contra o desenho completo.**
 >
-> O site tinha sido reduzido a uma página. **A loja voltou** — montra, ficha,
-> cesto, checkout e confirmação —, construída contra o desenho completo que
-> chegou a 19 de Outubro de 2026 e que está em `docs/maquete/`, com a leitura
-> desta casa em `docs/maquete/NOTAS.md`.
+> Chegou a 19 de Outubro de 2026, está em `docs/maquete/`, e a leitura desta
+> casa sobre o que ele pede está em `docs/maquete/NOTAS.md`. O site tinha sido
+> reduzido a uma página; não está.
 >
-> Continua fora o resto do desenho: a Sala das tarólogas, o Grimório, a Casa,
-> os Contactos, o Legal, a Pesquisa, a Conta do cliente e o Painel. E a
-> marcação de consultas do lado de fora, que a maquete antiga não tinha e esta
-> tem.
+> **Dez das treze páginas do desenho estão feitas**: a porta de entrada, a
+> loja, as consultas (com agenda, que a maquete antiga não tinha), a Sala, o
+> Grimório, A Casa, os Contactos, o Legal, o 404 e o rodapé. Continuam fora a
+> Pesquisa, a Conta do cliente e o Painel.
 >
 > **O backoffice está todo.** Páginas, blocos, menus, pedidos, definições,
 > utilizadores, o catálogo da loja e as consultas — marcações, horários,
 > encerramentos e vagas. A Casa edita o que está no ar.
 >
 > A parte pública tem a porta de entrada, a loja (`/loja`, `/carrinho`,
-> `/checkout`, `/encomenda/obrigado`), as intenções (`/intencao/{etiqueta}`) e
-> o `/_migrate`, para alojamento sem shell. O resto está atrás de `/admin`.
+> `/checkout`, `/encomenda/obrigado`), as intenções (`/intencao/{etiqueta}`),
+> as consultas (`/consultas`, `/marcar`, `/marcacao/{símbolo}`), a Sala
+> (`/sala`), o Grimório (`/grimorio`), as páginas do CMS pelo apanha-tudo
+> `/{slug}`, e o `/_migrate` para alojamento sem shell. O resto está atrás de
+> `/admin`.
 >
 > Por fechar antes de abrir ao público:
 >
@@ -27,10 +29,13 @@
 >   não dizer «Esgotado» nos oito produtos; têm de ser contadas a sério.
 > - O boletim do rodapé **não envia nada**: não há lista onde guardar nem
 >   consentimento a ficar registado.
-> - **A marcação do lado de fora não existe.** A maquete antiga não tinha agenda
->   na porta de entrada. A nova tem — `docs/maquete/Consultas.dc.html`, com
->   calendário e vagas —, e isso está por construir. Até lá marca-se por
->   telefone, pelo backoffice.
+> - **O texto legal é um rascunho.** É o do designer, adaptado ao que o site faz
+>   — a maquete descrevia MB WAY, Multibanco, área de cliente e etiqueta
+>   pré-paga dos CTT, que não existem —, e tem de ser lido por quem responde
+>   por ele antes de abrir.
+> - **Três dos quatro nomes da Sala estão entre parênteses rectos.** Só o do Zé
+>   é real; os outros são o lugar marcado pelo designer.
+> - **As três sessões do Grimório não têm vídeo.** Os endereços não foram dados.
 > - **A loja não vende.** Faltam as zonas e os escalões de envio e as chaves do
 >   Stripe, e sem isso o cesto mostra-se e não deixa finalizar. Nenhuma das duas
 >   é código: ver **A loja**.
