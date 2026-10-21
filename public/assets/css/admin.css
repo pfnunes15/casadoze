@@ -42,8 +42,8 @@
   --surface:     var(--white, #ffffff);
   --surface-2:   #f7f5ef;
   --surface-2:   color-mix(in srgb, var(--admin-canvas, #f4f1ea) 55%, var(--white, #ffffff));
-  --border:      #e3e0d8;
-  --border:      color-mix(in srgb, var(--admin-ink, #1b2426) 12%, var(--white, #ffffff));
+  --border:      #eae8e2;
+  --border:      color-mix(in srgb, var(--admin-ink, #1b2426) 9%, var(--white, #ffffff));
   --text:        var(--admin-ink, #1b2426);
   --muted:       var(--admin-muted, #6b7a7c);
   --faint:       #9aa5a6;
@@ -71,10 +71,15 @@
   --sidebar-2:   var(--admin-chrome-dark, #3f3f3e);
   --sidebar-tx:  rgba(255,255,255,.82);
   --sidebar-w:   256px;
-  --radius:      10px;
-  --radius-sm:   7px;
-  --shadow:      0 1px 2px rgba(27,36,38,.04), 0 1px 3px rgba(27,36,38,.08);
-  --shadow-md:   0 4px 12px rgba(27,36,38,.10);
+  /* Cantos e profundidade.
+     Era tudo caixa branca com um risco de um pixel à volta: o desenho de uma
+     folha de cálculo, onde nada está à frente de nada. Os cantos abriram e o
+     risco passou a ser sombra — o que separa uma caixa do fundo é ela estar
+     um bocadinho acima, que é como se lê um cartão. */
+  --radius:      14px;
+  --radius-sm:   10px;
+  --shadow:      0 1px 2px rgba(27,36,38,.04), 0 2px 6px rgba(27,36,38,.06);
+  --shadow-md:   0 6px 20px rgba(27,36,38,.10);
   --transition:  150ms ease;
 }
 
@@ -146,10 +151,18 @@ a { color: inherit; text-decoration: none; }
 }
 .admin-sidebar__nav a svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.85; }
 .admin-sidebar__nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+/* Onde se está.
+   Era o rectângulo inteiro pintado da cor da marca, com texto escuro por
+   cima: lê-se à primeira, mas é o que mais faz a barra parecer de outra
+   década, e com dezasseis entradas é um berro no meio de uma lista calma.
+   A marca fica — numa barra à esquerda, que é a altura do item — e o fundo
+   passa a ser o mesmo branco translúcido do rato por cima, um pouco mais
+   firme. */
 .admin-sidebar__nav a.active {
-  background: var(--highlight);
-  color: var(--highlight-ink);
+  background: rgba(255,255,255,.12);
+  color: #fff;
   font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--highlight);
 }
 .admin-sidebar__nav a.active svg { opacity: 1; }
 .admin-sidebar__nav a.sub {
@@ -190,7 +203,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--text); font-size: 0.9rem; line-height: 1.55;
 }
 
-/* Collapsible "Definições" (advanced) */
+/* As definições, num item que abre */
 .admin-nav-adv { width: 100%; margin-top: 0.5rem; }
 .admin-nav-adv > summary {
   display: flex; align-items: center; gap: 0.7rem;
@@ -214,7 +227,13 @@ a { color: inherit; text-decoration: none; }
   transition: transform var(--transition);
 }
 .admin-nav-adv[open] > summary::after { transform: rotate(45deg); }
+/* As linhas de dentro ficam um degrau à direita e um ponto mais calmas: é o
+   que diz que pertencem ao item que abriu, e não à barra toda. */
 .admin-nav-adv__items { margin-top: 2px; }
+.admin-nav-adv__items a {
+  padding-left: 2.1rem;
+  font-size: .845rem;
+}
 
 /* The way out of the backoffice, in the foot rather than in the list.
    Quieter than a nav item, because leaving is not one of the things the
@@ -274,7 +293,7 @@ a { color: inherit; text-decoration: none; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.6rem 1.75rem;
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow);
 }
@@ -353,8 +372,11 @@ a { color: inherit; text-decoration: none; }
   position: sticky; top: 0; z-index: 2;
   font-size: 0.8rem; letter-spacing: 0;
   color: var(--muted); font-weight: 600;
-  /* Opaque, or the rows read through it as it passes over them. */
-  background: var(--surface-2);
+  /* Opaco, ou as linhas lêem-se através dele quando lhes passa por cima.
+     Branco e não cinzento: a faixa cinzenta por cima de linhas brancas é o
+     desenho de uma folha de cálculo. O que diz que aquela linha é o título
+     das colunas é o tamanho, a cor e o risco por baixo. */
+  background: var(--surface);
   border-bottom: 0;
   box-shadow: inset 0 -1px 0 var(--border);
 }
@@ -1211,33 +1233,33 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   font-size: .82rem; letter-spacing: 0;
 }
 
-/* ---------------- Cards, advanced, save bar ---------------- */
-.admin-card--advanced { padding: 0; }
-.admin-card--advanced > summary {
-  padding: 1.1rem 1.5rem; cursor: pointer; user-select: none;
-  font-weight: 600; font-size: .95rem; list-style: none;
+/* O bloco visto, por cima do bloco escrito. Fecha-se para quem já sabe o que
+   está a mudar e quer o formulário no topo do ecrã. */
+.block-look {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  margin-bottom: 1.25rem;
 }
-.admin-card--advanced > summary::-webkit-details-marker { display: none; }
-/* The arrow rotates instead of swapping glyph. Swapped, the triangle jumped
-   from one side to the other; rotated, it follows the drawer opening — which is
-   what it is saying. The `inline-block` is what makes it rotatable: an `inline`
-   does not accept transforms. */
-.admin-card--advanced > summary::before {
-  content: "▸"; color: var(--faint); margin-right: .5rem;
-  display: inline-block;
-  transition: transform .26s cubic-bezier(.22, .61, .36, 1);
+.block-look > summary {
+  padding: .7rem 1.1rem; cursor: pointer; user-select: none; list-style: none;
+  font-size: .85rem; font-weight: 600; color: var(--muted);
+  display: flex; align-items: center; gap: .5rem;
 }
-.admin-card--advanced[open] > summary::before { transform: rotate(90deg); }
-
-/* Whoever asked the system for no motion does not get it here either. The
-   drawer still opens and closes — it just stops doing it slowly. See the same
-   decision in admin.js. */
+.block-look > summary::-webkit-details-marker { display: none; }
+.block-look > summary::before {
+  content: ''; flex: none;
+  width: 7px; height: 7px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--transition);
+}
+.block-look[open] > summary::before { transform: rotate(45deg); }
+.block-look[open] > summary { border-bottom: 1px solid var(--border); }
 @media (prefers-reduced-motion: reduce) {
-  .admin-card--advanced > summary::before { transition: none; }
+  .block-look > summary::before { transition: none; }
 }
-.admin-card--advanced > *:not(summary) { padding-inline: 1.5rem; }
-.admin-card--advanced > *:last-child { padding-bottom: 1.5rem; }
-.admin-card--advanced .field { padding-inline: 0; }
+
+/* ---------------- Cards, save bar ---------------- */
 
 .save-bar {
   display: flex; align-items: center; justify-content: space-between;
@@ -1552,11 +1574,48 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .item-card.is-dragging { opacity: .45; }
 .item-card[data-removed] { opacity: .5; }
 .item-card[data-removed] .item-card__fields { display: none; }
+/* A barra é o <summary> do card: fechada é a linha inteira do item, e é nela
+   que se carrega para abrir. Sem o triângulo do browser — a seta é desenhada
+   aqui, à esquerda, onde começa a linha. */
 .item-card__bar {
   display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
-  padding: .6rem .9rem; border-bottom: 1px solid var(--border);
+  padding: .6rem .9rem;
+  cursor: pointer; list-style: none;
 }
-.item-card[data-removed] .item-card__bar { border-bottom: 0; }
+.item-card__bar::-webkit-details-marker { display: none; }
+.item-card__fold[open] > .item-card__bar { border-bottom: 1px solid var(--border); }
+.item-card__bar:hover { background: var(--surface); }
+.item-card__thumb {
+  flex: none;
+  width: 44px; height: 32px; border-radius: 4px; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.item-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* O nome e os números numa coluna só, e a crescer: é o que empurra os botões
+   para a direita, sem precisar de uma margem automática em cada um. */
+.item-card__said {
+  flex: 1 1 12rem; min-width: 0;
+  display: flex; flex-direction: column; gap: .1rem;
+}
+.item-card__name {
+  font-weight: 600; font-size: .92rem; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.item-card__name em { color: var(--faint); font-weight: 400; }
+.item-card__note { font-size: .8rem; color: var(--muted); }
+/* A seta que roda: diz que a linha abre, e para que lado está. */
+.item-card__bar::after {
+  content: ''; order: -1; flex: none;
+  width: 7px; height: 7px;
+  border-right: 2px solid var(--faint); border-bottom: 2px solid var(--faint);
+  transform: rotate(-45deg);
+  transition: transform var(--transition);
+}
+.item-card__fold[open] > .item-card__bar::after { transform: rotate(45deg); }
+@media (prefers-reduced-motion: reduce) {
+  .item-card__bar::after { transition: none; }
+}
+.item-card[data-removed] .item-card__fold[open] > .item-card__bar { border-bottom: 0; }
 .item-card__handle {
   cursor: grab; background: none; border: 0; color: var(--faint);
   font-size: 1.1rem; line-height: 1; padding: .2rem;
@@ -1817,6 +1876,23 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   margin: 0; padding: 1rem 1.15rem; border-radius: var(--radius-sm);
   background: var(--surface-2); white-space: pre-line; line-height: 1.6;
 }
+/* A conta do pagamento. A mesma lista da reserva, com os números à direita:
+   uma coluna de valores alinhada é o que deixa somar com os olhos. */
+.pagar-dl { margin: 0 0 1.25rem; }
+.pagar-dl > div {
+  display: flex; gap: 1rem; justify-content: space-between;
+  padding: .5rem 0; border-bottom: 1px solid var(--border);
+}
+.pagar-dl > div:last-child { border-bottom: 0; }
+.pagar-dl dt { color: var(--muted); font-size: .9rem; }
+.pagar-dl dd { margin: 0; font-size: .95rem; font-variant-numeric: tabular-nums; }
+
+/* A ligação do cliente: é para copiar inteira, e por isso lê-se inteira. */
+.pagar-link {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .82rem;
+}
+
 /* O que ainda não tem valor, dito sem ocupar espaço de leitura. */
 .reserva__nodate { color: var(--faint); }
 .reserva__today  { color: var(--danger); }
@@ -1942,6 +2018,31 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .frota__file { margin-top: .4rem; font-size: .82rem; }
 .frota__drop { margin: .35rem 0 0; font-size: .82rem; }
 
+/* A matrícula. Em maiúsculas e com as letras todas à mesma distância: é um
+   código e lê-se como um código, não como uma palavra. */
+.frota__matricula {
+  width: 8.5rem;
+  text-transform: uppercase;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .06em;
+}
+
+/* O que a viatura tem: sete respostas de sim ou não, numa grelha que cabe na
+   célula. Caixas e não texto livre — o site mostra sempre a mesma coisa
+   escrita da mesma maneira. */
+.frota__tem { min-width: 20rem; }
+.frota__sinal {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  margin: 0 .9rem .25rem 0;
+  font-size: .84rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.frota__sinal input { margin: 0; }
+.frota__nota { margin-top: .45rem; font-size: .85rem; }
+
 /* Uma regra é um cartão e não uma linha de tabela: tem nove campos, e nove
    colunas numa tabela é uma tabela que se lê de lado. */
 .regra {
@@ -1950,8 +2051,24 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   border-radius: var(--radius); box-shadow: var(--shadow);
 }
 .regra.is-off { opacity: .55; }
-.regra__linha { display: flex; flex-wrap: wrap; gap: 1rem; }
-.regra__linha > .field { flex: 1 1 14rem; margin-bottom: .75rem; }
+.regra__linha { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; }
+/* Cada campo é uma coluna com a caixa sempre na última linha: um campo com
+   uma frase de ajuda e outro sem ela ficavam com as caixas a alturas
+   diferentes — era o que se via no «De que dia / Até que dia». Alinhar pelo
+   fundo resolve-o para todos os campos, incluindo os que vierem a seguir,
+   em vez de obrigar a inventar uma frase de ajuda só para empatar. */
+.regra__linha > .field {
+  flex: 1 1 14rem;
+  margin-bottom: .75rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-content: start;
+}
+.regra__linha > .field > label:first-child { grid-row: 1; }
+.regra__linha > .field > .field-help--above { grid-row: 2; align-self: start; }
+.regra__linha > .field > input,
+.regra__linha > .field > select,
+.regra__linha > .field > .regra__dias { grid-row: 3; }
 .regra__valor { display: flex; gap: .4rem; }
 .regra__valor .field-number { width: 6rem; }
 .regra__valor select { width: 4.5rem; }
@@ -1994,3 +2111,9 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    ser lidos como um par. */
 .field-pair { display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: flex-end; }
 .field-pair > .field { flex: 1 1 16rem; }
+
+/* As três maneiras de pagar, explicadas por baixo da escolha. */
+.pay-help { margin: .6rem 0 0; padding-left: 1.1rem; color: var(--muted); font-size: .85rem; line-height: 1.55; }
+.pay-help strong { color: var(--text); }
+.pagar-corte { margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border); }
+.pagar-desistir { margin-top: .75rem; }

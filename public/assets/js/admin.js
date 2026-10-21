@@ -402,6 +402,33 @@
     var card = event.target.closest('[data-item]');
     if (!card) return;
 
+    /* A barra do card é o <summary>: carregar nela abre e fecha. Os botões e
+       a caixa de «visível» vivem lá dentro — ficam na linha, que é onde são
+       precisos — e carregar num deles não é pedir para abrir o card.
+
+       Travar a abertura é travar o que o browser ia fazer com aquele clique,
+       e isso inclui marcar a caixa. Por isso a caixa é marcada aqui: sem este
+       par de linhas, «visível» parecia não responder. */
+    var caixa = event.target.closest('.item-card__visible');
+    if (caixa) {
+      var marca = caixa.querySelector('input[type="checkbox"]');
+      /* Travar a abertura trava o clique todo, e o browser desfaz com ele a
+         marca que já tinha posto. Guarda-se o valor que o clique pedia — já
+         trocado se o clique foi na caixa, por trocar se foi no texto ao lado —
+         e repõe-se assim que o browser acabar de o desfazer. */
+      if (marca && !marca.disabled) {
+        var pedido = event.target === marca ? marca.checked : !marca.checked;
+        event.preventDefault();
+        setTimeout(function () { marca.checked = pedido; }, 0);
+      } else {
+        event.preventDefault();
+      }
+      return;
+    }
+    if (event.target.closest('[data-item-handle], [data-item-move], [data-item-remove]')) {
+      event.preventDefault();
+    }
+
     if (event.target.closest('[data-item-remove]')) {
       event.preventDefault();
       card.hasAttribute('data-removed') ? restore(card) : remove(card);
@@ -418,6 +445,14 @@
   });
 
   if (addBtn) addBtn.addEventListener('click', function (e) { e.preventDefault(); add(); });
+
+  /* Um campo por preencher dentro de um card fechado é um campo que o browser
+     não consegue mostrar: a mensagem sai apontada a nada e o formulário parece
+     não fazer nada. O card abre-se antes de ele ter de falar. */
+  form.addEventListener('invalid', function (event) {
+    var fold = event.target.closest && event.target.closest('[data-item-fold]');
+    if (fold && !fold.open) fold.open = true;
+  }, true);
 
   // ---- Dragging -----------------------------------------------------------
   // The arrows above do the same job for anyone not using a mouse, so this is
@@ -874,122 +909,16 @@
 })();
 
 /* ---------------------------------------------------------------------------
-   The "Definições avançadas" drawers open and close with motion.
-
-   A <details> opens all at once: the content appears in one go and the page
-   jumps below it. Here the box grows from the closed height to the open one,
-   and shrinks back the other way — the same thing the browser does, but with
-   the path in sight, which is what tells whoever clicked that what appeared
-   came from there.
-
-   It animates the height of the <details> itself and not of a wrapper around
-   the content: the CSS counts on the box's direct children — `> *:not(summary)`,
-   `> *:last-child` — and wrapping them broke those rules. The `overflow` is
-   hidden only while the motion lasts, so it does not clip whatever is focused
-   once the drawer has settled.
+   The page editor: the canvas, the block catalogue and the file fields.
    --------------------------------------------------------------------------- */
 (function () {
   'use strict';
-  /* A gaveta das «Definições avançadas», e **só** ela.
-     Dentro de um IIFE próprio por uma razão que custou caro: o que estava
-     aqui era `if (!drawers.length) return;` no corpo desta função, que
-     continua por mais trezentas linhas. Numa página sem gaveta nenhuma —
-     e uma página de sistema não desenha a dela — esse `return` levava
-     consigo o ajuste da altura dos blocos na tela, a procura no catálogo
-     de blocos e o nome do ficheiro escolhido. Sem erro nenhum na consola:
-     a função simplesmente acabava ali.
-     O sintoma era a tela a desenhar cada bloco com cento e cinquenta
-     pixéis, que é a altura por omissão de um <iframe> a que ninguém
-     mexeu. */
-  (function () {
-    'use strict';
-
-    const drawers = document.querySelectorAll('details.admin-card--advanced');
-    if (!drawers.length) return;
-
-    // Whoever asked the system for no motion keeps the behaviour they always had:
-    // the browser opens and closes in one go, and nothing here interferes.
-    const stillness = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const DURATION = 260;
-    const EASING   = 'cubic-bezier(.22, .61, .36, 1)';
-
-    drawers.forEach((drawer) => {
-      const summary = drawer.querySelector('summary');
-      if (!summary) return;
-
-      let animation = null;
-
-      /* Open or closed is what was asked for, and not what the attribute says:
-         during a close the drawer stays `open` — that is what lets the content be
-         seen shrinking — and a second click halfway would be read as "close
-         again" instead of "open after all". */
-      let isOpen = drawer.open;
-
-      /* The height of the closed drawer: the summary, which is the only thing
-         visible, plus the box's frame. Measured on the spot and not stored up
-         front, because the summary can break onto two lines when the window
-         narrows. */
-      const closedHeight = () => {
-        const box = getComputedStyle(drawer);
-        return summary.getBoundingClientRect().height
-          + parseFloat(box.borderTopWidth) + parseFloat(box.borderBottomWidth)
-          + parseFloat(box.paddingTop) + parseFloat(box.paddingBottom);
-      };
-
-      summary.addEventListener('click', (event) => {
-        if (stillness.matches) return;
-
-        // The browser was about to open or close; from here on this is in charge.
-        event.preventDefault();
-
-        /* The height the drawer is at right now — read before cancelling whatever
-           was running, because cancelling returns it to where it started from and
-           the drawer jumped. */
-        const from = drawer.getBoundingClientRect().height;
-        if (animation) { animation.cancel(); animation = null; }
-
-        const isClosing = isOpen;
-        isOpen = !isOpen;
-        let to;
-
-        if (isClosing) {
-          // It stays open the whole way; it only closes at the end.
-          to = closedHeight();
-        } else {
-          drawer.open = true;
-          to = drawer.getBoundingClientRect().height;
-        }
-
-        drawer.style.overflow = 'hidden';
-
-        const thisRun = drawer.animate(
-          { height: [from + 'px', to + 'px'] },
-          { duration: DURATION, easing: EASING }
-        );
-        animation = thisRun;
-
-        /* The cancel notice does not arrive the instant you cancel: it arrives
-           later, when another animation is already in charge of the drawer.
-           Without this guard, the dead one would tidy away what the new one had
-           just set — and the drawer was left opening with its content
-           overflowing. */
-        const tidyUp = () => {
-          if (animation !== thisRun) return;
-          drawer.style.overflow = '';
-          animation = null;
-        };
-
-        thisRun.onfinish = () => {
-          if (animation !== thisRun) return;
-          if (isClosing) drawer.open = false;
-          tidyUp();
-        };
-
-        thisRun.oncancel = tidyUp;
-      });
-    });
-  })();
+  /* Nada de `return` cedo no corpo desta função: ela continua por mais
+     trezentas linhas, e um `return` guardado atrás de um «se não há isto na
+     página» leva consigo tudo o que vem depois — o ajuste da altura dos blocos
+     na tela, a procura no catálogo e o nome do ficheiro escolhido. Já aconteceu,
+     sem erro nenhum na consola: a função acabava ali. Cada parte verifica o que
+     precisa onde precisa. */
 
   /* ------------------------------------------------------------------ */
   /* The page canvas: fitting a 1280px page into this column.             */
