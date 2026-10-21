@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "admedia/cms",
-            "version": "v2.34.1",
+            "version": "v2.35.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfnunes15/admedia-cms-core.git",
-                "reference": "bb3cc001e017c22d980cffd603f84eda3154a365"
+                "reference": "a932ad3ec04353867f37e136088636755604ffc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/bb3cc001e017c22d980cffd603f84eda3154a365",
-                "reference": "bb3cc001e017c22d980cffd603f84eda3154a365",
+                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/a932ad3ec04353867f37e136088636755604ffc3",
+                "reference": "a932ad3ec04353867f37e136088636755604ffc3",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,8 @@
                 "psr-4": {
                     "Admedia\\Core\\": "src/Core/",
                     "Admedia\\Cms\\": "src/Cms/",
-                    "Admedia\\Shop\\": "src/Shop/"
+                    "Admedia\\Shop\\": "src/Shop/",
+                    "Admedia\\Viagens\\": "src/Viagens/"
                 },
                 "files": [
                     "src/Core/helpers.php"
@@ -41,7 +42,7 @@
                 "proprietary"
             ],
             "description": "The CMS shared between Admedia's sites: a small framework, an optional content layer of pages and blocks, and an optional shop.",
-            "time": "2026-10-20T15:26:11+00:00"
+            "time": "2026-10-21T11:31:30+00:00"
         }
     ],
     "packages-dev": [],
