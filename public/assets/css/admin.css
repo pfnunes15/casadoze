@@ -638,15 +638,46 @@ a { color: inherit; text-decoration: none; }
   display: block; font-weight: 600; font-size: 0.95rem;
   letter-spacing: 0; margin-bottom: 0.4rem; color: var(--text);
 }
+/* Uma caixa de escrever é uma caixa de escrever, esteja onde estiver.
+   
+   Isto estava preso a `.field`, e por isso tudo o que vive dentro de uma
+   tabela — os preços dos percursos, as linhas dos motoristas, as da frota,
+   as variantes de um produto — ficava com o desenho cru do navegador, ao
+   lado de campos desenhados. Metade de um backoffice com um aspecto e a
+   outra metade com outro.
+   
+   E faltava `time` na lista. Em lado nenhum: uma hora era uma caixa sem
+   desenho mesmo dentro de um `.field`, o que se via no ecrã dos
+   agravamentos. Vão aqui os tipos todos que este backoffice usa, e os que
+   há-de usar. */
 .field input[type="text"], .field input[type="email"], .field input[type="password"],
-.field input[type="number"], .field input[type="datetime-local"], .field input[type="date"],
-.field input[type="file"], .field select, .field textarea {
-  width: 100%; padding: 0.7rem 0.9rem;
+.field input[type="number"], .field input[type="search"], .field input[type="tel"],
+.field input[type="url"], .field input[type="date"], .field input[type="time"],
+.field input[type="datetime-local"], .field input[type="month"], .field input[type="week"],
+.field input[type="file"], .field select, .field textarea,
+.admin-table input[type="text"], .admin-table input[type="email"],
+.admin-table input[type="number"], .admin-table input[type="search"],
+.admin-table input[type="tel"], .admin-table input[type="url"],
+.admin-table input[type="date"], .admin-table input[type="time"],
+.admin-table input[type="datetime-local"], .admin-table select, .admin-table textarea {
+  padding: 0.7rem 0.9rem;
   border: 1px solid #d8dde6; border-radius: var(--radius-sm);
   background: #fff; font-family: inherit; font-size: 0.9rem; color: var(--text);
   transition: border var(--transition), box-shadow var(--transition);
 }
-.field input:focus, .field select:focus, .field textarea:focus {
+
+/* A largura inteira é da coluna de um formulário, e não de uma célula de
+   tabela — numa tabela quem manda na largura é a coluna. */
+.field input[type="text"], .field input[type="email"], .field input[type="password"],
+.field input[type="number"], .field input[type="search"], .field input[type="tel"],
+.field input[type="url"], .field input[type="date"], .field input[type="time"],
+.field input[type="datetime-local"], .field input[type="month"], .field input[type="week"],
+.field input[type="file"], .field select, .field textarea {
+  width: 100%;
+}
+
+.field input:focus, .field select:focus, .field textarea:focus,
+.admin-table input:focus, .admin-table select:focus, .admin-table textarea:focus {
   outline: none; border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(74,74,73,.14);
 }
@@ -1957,3 +1988,9 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .fare__pick { display: inline-flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 .fare__pick select { width: auto; min-width: 11rem; }
 .fare__novo { font-weight: 700; font-size: .88rem; color: var(--muted); margin-right: .25rem; }
+
+/* Dois campos lado a lado, quando são as duas metades da mesma pergunta —
+   de onde e para onde. Empilham abaixo de 620px, que é onde deixariam de
+   ser lidos como um par. */
+.field-pair { display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: flex-end; }
+.field-pair > .field { flex: 1 1 16rem; }
