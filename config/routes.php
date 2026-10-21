@@ -101,6 +101,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
      * propósito**: por omissão o pacote põe-nas em `/login` e `/logout`, que é
      * exactamente onde está a porta de quem trabalha na Casa. Entram quando a
      * `Conta` for construída, e com endereços próprios declarados. */
+    /* As contas de quem compra ou reserva. Sempre: um site onde ninguém se
+       regista fica com seis endereços que ninguém visita, e isso não custa
+       nada — enquanto um site que ganha clientes e não tem as rotas é um
+       site onde o email que acabou de sair leva a um 404. */
+    \Admedia\Core\Accounts\Accounts::routes($r);
+
     Shop::routes($r);
 
     /* A loja vista por uma intenção. **Não é do pacote**: um CMS partilhado

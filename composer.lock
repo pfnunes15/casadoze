@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "admedia/cms",
-            "version": "v2.37.0",
+            "version": "v2.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfnunes15/admedia-cms-core.git",
-                "reference": "1e7549e3023f39beb4a0f8fdc793b20623daab8e"
+                "reference": "84f88e5da0e2557f92be962769badd5297013e42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/1e7549e3023f39beb4a0f8fdc793b20623daab8e",
-                "reference": "1e7549e3023f39beb4a0f8fdc793b20623daab8e",
+                "url": "https://api.github.com/repos/pfnunes15/admedia-cms-core/zipball/84f88e5da0e2557f92be962769badd5297013e42",
+                "reference": "84f88e5da0e2557f92be962769badd5297013e42",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,7 @@
                 "proprietary"
             ],
             "description": "The CMS shared between Admedia's sites: a small framework, an optional content layer of pages and blocks, and an optional shop.",
-            "time": "2026-10-21T16:10:34+00:00"
+            "time": "2026-10-21T17:02:39+00:00"
         }
     ],
     "packages-dev": [],
