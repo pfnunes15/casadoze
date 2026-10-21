@@ -1935,3 +1935,8 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   font-size: .88rem; color: var(--muted);
 }
 .regra__novo { margin: 2rem 0 .75rem; font-size: .95rem; color: var(--muted); }
+
+/* Um percurso ainda sem preço. Marcado e não escondido: um ponto novo traz
+   sete linhas destas, e são elas o trabalho que falta fazer. */
+.fare__row--empty > td:first-child { color: var(--muted); }
+.fare__row--empty .fare__box { background: color-mix(in srgb, var(--danger-bg) 45%, var(--surface)); }
