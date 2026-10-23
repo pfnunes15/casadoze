@@ -4852,9 +4852,19 @@ a.vídeo__moldura { border-style: solid; }
 
 .filtros--sala { margin-top: 40px; }
 
+/* auto-fit and not auto-fill, with the row centred.
+   -------------------------------------------------------------------------
+   auto-fill keeps the empty tracks it made, so two people on a wide screen sat
+   left with two empty columns beside them. auto-fit collapses the empty ones,
+   and justify-content then centres what is left.
+
+   The cap matters as much as the floor: with `1fr` and nothing above it, two
+   cards stretched to half the page each. 360 is about as wide as a portrait
+   card reads before the 4:5 frame starts to look like a poster. */
 .sala__fila {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 360px));
+  justify-content: center;
   gap: clamp(18px, 2.4vw, 30px);
   margin-top: 40px;
 }
