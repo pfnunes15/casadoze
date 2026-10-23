@@ -45,11 +45,26 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
 <header class="cabeçalho" id="cabeçalho" data-cabeçalho>
   <div class="miolo cabeçalho__linha">
 
-    <?php /* A esquerda: as ligações num ecrã largo, o botão do painel num
-             estreito. Os dois estão no documento e é a folha que mostra um
-             deles — e não o JavaScript, que chegaria depois de a página
-             desenhar e faria a barra saltar. */ ?>
-    <div>
+    <?php /* The name comes first, in the document and on the left of the bar.
+             It used to sit in the middle, between the links and the pills, and
+             the three fought over the same row: the links are set to nowrap and
+             overflowed under the name on anything narrower than a desktop. With
+             the name on one side the middle belongs to the menu alone. */ ?>
+    <a class="marca" href="<?= e(locale_url('/')) ?>" aria-label="<?= e($nome) ?>">
+      <?php if ($logo !== ''): ?>
+        <?php /* O `alt` vazio é de propósito: o nome está escrito ao lado, em
+                 texto, e um leitor de ecrã que leia os dois diz o nome da casa
+                 duas vezes seguidas. */ ?>
+        <img src="<?= e(media_url($logo)) ?>" alt="">
+      <?php endif; ?>
+      <span><?= e(mb_strtoupper($nome)) ?></span>
+    </a>
+
+    <?php /* O menu ao centro num ecrã largo, o botão do painel num estreito. Os
+             dois estão no documento e é a folha que mostra um deles — e não o
+             JavaScript, que chegaria depois de a página desenhar e faria a
+             barra saltar. */ ?>
+    <div class="cabeçalho__meio">
       <button type="button" class="pílula cabeçalho__menu" data-abrir-painel
               aria-expanded="false" aria-controls="painel">
         <?= e(__('site.menu')) ?>
@@ -66,15 +81,6 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
       <?php endif; ?>
     </div>
 
-    <a class="marca" href="<?= e(locale_url('/')) ?>" aria-label="<?= e($nome) ?>">
-      <?php if ($logo !== ''): ?>
-        <?php /* O `alt` vazio é de propósito: o nome está escrito ao lado, em
-                 texto, e um leitor de ecrã que leia os dois diz o nome da casa
-                 duas vezes seguidas. */ ?>
-        <img src="<?= e(media_url($logo)) ?>" alt="">
-      <?php endif; ?>
-      <span><?= e(mb_strtoupper($nome)) ?></span>
-    </a>
 
     <div class="cabeçalho__fim">
       <?php if ($idiomas !== []): ?>

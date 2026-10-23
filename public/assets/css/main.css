@@ -5273,13 +5273,22 @@ a.vídeo__moldura { border-style: solid; }
 .texto__pé { margin: 34px 0 0; }
 
 @media (min-width: 900px) {
+  /* The menu sits in the middle column and the two sides are equal, which is
+     what puts it in the middle of the page rather than in the middle of
+     whatever space happens to be left. `auto | 1fr | auto` centred it inside
+     its own column and that column was off-centre, because the name is 295
+     wide and the pills are 161.
+
+     The name used to be the middle column, with the links on the left. The two
+     were then reaching for the same centre, and the links — set to nowrap —
+     won by overflowing under the name. */
   .cabeçalho__linha {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     padding-block: 14px;
   }
   .cabeçalho__fim { justify-self: end; }
-  .marca { justify-self: center; }
+  .marca { justify-self: start; }
   .marca img { width: 54px; height: 40px; }
   .marca span {
     position: static;
@@ -5331,17 +5340,16 @@ a.vídeo__moldura { border-style: solid; }
   }
 }
 
-/* O menu completo só a partir de 1340px, e não dos 900 do resto do cabeçalho.
+/* The full menu from 1160px up, and the Menu button below it.
    -------------------------------------------------------------------------
-   A barra é uma grelha de `1fr | auto | 1fr` com a marca ao meio, e as seis
-   entradas têm `white-space: nowrap`: não quebram, transbordam. Com «Covil
-   Ancestral» ao centro são precisos 1328px para as duas colunas laterais
-   caberem — abaixo disso o menu passava por baixo do nome.
+   The six entries are nowrap — they do not wrap, they overflow — and they need
+   about 480px. The two side columns are equal, so each has to hold the wider of
+   the two things in them, which is the name at 295. 480 + 295 + 295 + the
+   gutters lands just under 1160.
 
-   Era 900 enquanto o nome era mais curto e as entradas eram quatro. Entre os
-   dois limiares fica o botão «Menu», que abre o mesmo painel do telemóvel e
-   cabe sempre. */
-@media (min-width: 1340px) {
+   It was 1340 while the name sat in the middle column and the links fought it
+   for the same centre. */
+@media (min-width: 1160px) {
   .navegação {
     display: flex;
     gap: clamp(14px, 1.6vw, 26px);
