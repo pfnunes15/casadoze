@@ -53,7 +53,11 @@ $outras = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() : 
 <?php /* A imagem com que a página abre. Escrita por views/pages/composed.php; o
          endereço tem de ser o mesmo que o bloco desenha, ou isto pede-a duas
          vezes. */ ?>
-<?php if (!empty($preloadImage)): ?>
+<?php if (!empty($preloadSrcset)): ?>
+<link rel="preload" as="image" fetchpriority="high"
+      imagesrcset="<?= e($preloadSrcset[0]) ?>" imagesizes="min(62vh, 80vw)"
+      type="<?= e($preloadSrcset[1]) ?>">
+<?php elseif (!empty($preloadImage)): ?>
 <link rel="preload" href="<?= e($preloadImage) ?>" as="image" fetchpriority="high">
 <?php endif; ?>
 </head>

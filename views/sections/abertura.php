@@ -51,9 +51,15 @@ $imagem = trim((string)$section['image']);
              fotografia no backoffice tem de chegar ao ecrã, e uma folha de
              estilo com o nome do ficheiro lá dentro só se troca com um
              programador. */ ?>
+    <?php /* AVIF and WebP, never the original: this is the largest thing on the
+             page and the one the visitor waits for. image-set() and not srcset
+             because a background cannot carry one — see App\Services\Imagens.
+
+             A photograph uploaded through the backoffice has no variants yet and
+             falls back to itself, which is why media_url() is still the input. */ ?>
     <div class="abertura__foto" role="img"
          aria-label="<?= e($section['image_alt'] ?: ($section['heading'] ?? '')) ?>"
-         style="background-image: url('<?= e(media_url($imagem)) ?>')"></div>
+         style="background-image: <?= \App\Services\Imagens::fundo($imagem) ?>"></div>
   </div>
   <?php endif; ?>
 

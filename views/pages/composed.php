@@ -35,6 +35,10 @@ $bodyClass = $abreSobCabeçalho ? '' : 'com-cabeçalho';
    ou o browser pede-a duas vezes. */
 $aberturaImagem = trim((string)($sections[0]['image'] ?? ''));
 $preloadImage   = $aberturaImagem !== '' ? media_url($aberturaImagem) : null;
+
+/* With variants on disk the preload asks for the same set the stylesheet will
+   pick from, by width — otherwise the browser fetches the photograph twice. */
+$preloadSrcset = $aberturaImagem !== '' ? \App\Services\Imagens::precarga($aberturaImagem) : null;
 ?>
 <?php if (!empty($isPreview)): ?>
     <div class="miolo"><p class="aviso">Pré-visualização — ainda não foi guardada.</p></div>
