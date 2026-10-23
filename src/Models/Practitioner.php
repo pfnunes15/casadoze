@@ -106,11 +106,14 @@ final class Practitioner
         );
     }
 
+    /** Particles that carry no initial: "Rogério de Exu" is RE, not RD. */
+    private const PARTICULAS = ['de', 'da', 'do', 'das', 'dos', 'e', 'di', 'du', 'del', 'van', 'von'];
+
     /**
-     * As iniciais, para onde não há retrato.
+     * The initials, for where there is no portrait.
      *
-     * Dos parênteses rectos de um nome por escrever — `[Helena]` — tira as duas
-     * primeiras letras do que lá está dentro, e não um `[` e um `H`.
+     * Square brackets around a name nobody has written yet — `[Helena]` — are
+     * stripped first, so the result is an H and not a `[`.
      */
     public static function iniciais(array $pessoa): string
     {
@@ -118,6 +121,12 @@ final class Practitioner
         $out  = '';
 
         foreach (preg_split('/\s+/u', $nome, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $palavra) {
+            if (in_array(mb_strtolower($palavra), self::PARTICULAS, true)) {
+                continue;
+            }
+
+            /* An apostrophe carries a name behind it — D'Exu — and the letter
+               that matters is the one in front of it, which is already first. */
             $out .= mb_substr($palavra, 0, 1);
             if (mb_strlen($out) >= 2) {
                 break;
