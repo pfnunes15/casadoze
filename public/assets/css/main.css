@@ -1881,11 +1881,11 @@ a.vídeo__moldura { border-style: solid; }
 }
 .marca img { width: 36px; height: 26px; object-fit: contain; }
 
-/* **No telefone fica só o sigilo.** Num ecrã de 386, depois do botão do menu e
-   das duas pastilhas, sobram setenta e cinco pixéis para a marca — e «CASA DE
-   ZÉ» não cabe em setenta e cinco. Escrito à mesma e escondido com `clip-path`:
-   o nome continua a ser lido por quem ouve a página, e o `aria-label` da
-   ligação continua lá. A partir dos 900 volta a ver-se. */
+/* On a phone the sigil stands alone. On a 386px screen, after the menu button
+   and the two pills, about seventy-five pixels are left for the brand, and no
+   name the house has had fits in seventy-five. Written anyway and hidden with
+   clip-path, so it is still read aloud and the link keeps its aria-label. From
+   900 up it shows again — see the breakpoint at the end of this sheet. */
 .marca span {
   position: absolute;
   width: 1px;
