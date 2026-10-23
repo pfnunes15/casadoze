@@ -15,13 +15,14 @@
 return [
 
     /*
-     * O que vai à frente do número de uma encomenda: CZ-2026-0007.
+     * What goes in front of an order number: CA-2026-0007.
      *
-     * Escrito e não deduzido do nome do site: «casadoze» dava «CAS», e o
-     * número de uma encomenda é o que o comprador tem no e-mail quando
-     * telefona a perguntar por ela.
+     * Written out and not derived from the site name, because the number is
+     * what a buyer reads back over the phone. Changed from CZ when the house
+     * was renamed; safe to change because no order had been placed yet. Once
+     * one has, leave it alone — an order keeps the reference it was given.
      */
-    'reference_prefix' => 'CZ',
+    'reference_prefix' => 'CA',
 
     /*
      * Onde a loja vive, neste site, em português.

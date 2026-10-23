@@ -2,7 +2,7 @@
 /**
  * Les mots de ce site, en français.
  *
- * Seulement ce qui appartient à la Casa de Zé : ce que le CMS dit déjà — la
+ * Seulement ce qui appartient à la Covil Ancestral : ce que le CMS dit déjà — la
  * boutique, le panier, les e-mails de commande — vient du catalogue du paquet.
  * Ce qui manque ici retombe sur l'anglais et jamais sur un bouton vide.
  */
@@ -172,8 +172,8 @@ return [
     'grimorio.others'    => 'Autres séances',
     'grimorio.empty'     => 'Aucune séance avec ce thème',
     'sala.title'        => 'La Salle',
-    'sala.eyebrow'      => 'Qui lit les cartes à la Maison',
-    'sala.intro'        => "L'équipe de tarologues et de cartomanciennes de la Casa de Zé. Chacune a son jeu et sa façon de lire.",
+    'sala.eyebrow'      => 'Qui veille sur le chemin au Covil',
+    'sala.intro'        => "Celles et ceux qui veillent sur le chemin spirituel au Covil Ancestral. Chacun a ses oracles et sa façon de lire.",
     'sala.one'          => ':n personne',
     'sala.many'         => ':n personnes',
     'sala.profile'      => 'Profil',
@@ -190,8 +190,8 @@ return [
     'sala.filter.fmt'   => 'Format',
     'sala.filter.lang'  => 'Langue',
     'sala.booking_note' => "L'agenda appartient à chaque lecture et non à chaque personne : vous choisissez la lecture et l'heure, et la Maison vous dit avec qui.",
-    'sala.rule.1'        => 'Choisies par Zé',
-    'sala.rule.1.body'   => 'Toutes ont lu à la table avec Zé avant d\'entrer dans la Salle.',
+    'sala.rule.1'        => 'La même racine',
+    'sala.rule.1.body'   => 'Chacun, dans la Salle, a appris au Covil et travaille sur les mêmes fondements.',
     'sala.rule.2'        => 'Les mêmes règles',
     'sala.rule.2.body'   => "Prix fixe, aucune promesse de résultat, et annulation libre jusqu'au délai indiqué dans les Conditions.",
     'sala.rule.3'        => 'Changez quand vous voulez',
@@ -210,7 +210,7 @@ return [
     'consultas.next_slot'  => 'Prochaine place · :when',
     'consultas.no_slots'   => 'Aucune place dans les prochaines semaines',
     'consultas.book'       => 'Réserver',
-    'consultas.talk'       => 'Parler à Zé',
+    'consultas.talk'       => 'Parler au Covil',
     'consultas.agenda'     => 'Voir l’agenda',
     'consultas.mode.ambos'      => 'En ligne ou sur place',
     'consultas.mode.presencial' => 'Sur place',
@@ -232,7 +232,7 @@ return [
     'marcacao.people'         => 'Combien de personnes',
     'marcacao.mode'           => 'Où',
     'marcacao.note'           => 'Ce qui vous amène',
-    'marcacao.note_help'      => 'Facultatif. Cela aide Zé à préparer la table.',
+    'marcacao.note_help'      => 'Facultatif. Cela nous aide à préparer la consultation.',
     'marcacao.consent'        => 'J’autorise la Maison à conserver ces données pour traiter la réservation.',
     'marcacao.submit'         => 'Confirmer la réservation',
     'marcacao.phone_optional' => 'facultatif',

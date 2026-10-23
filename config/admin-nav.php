@@ -5,7 +5,7 @@ declare(strict_types=1);
  * As linhas que esta casa pendura na barra do backoffice.
  *
  * O CMS sabe de páginas, menus, pedidos e loja. Não sabe de consultas de tarot,
- * e não deve saber: um pacote partilhado por oito sites não tem agenda do Zé. É
+ * e não deve saber: um pacote partilhado por oito sites não tem a agenda do Covil. É
  * aqui que os três ecrãs desta casa entram na barra, lidos por
  * Admedia\Cms\AdminNav.
  *
@@ -48,7 +48,7 @@ return [
             'url'   => '/admin/sala',
         ],
         /* O Grimório. Fica no mesmo grupo porque é a mesma pessoa que o escreve
-           — o Zé grava as sessões — e porque o que elas vendem é a loja, que já
+           — quem grava as sessões é quem dá as consultas — e porque o que elas vendem é a loja, que já
            tem grupo seu logo abaixo. */
         [
             'label' => 'Grimório',

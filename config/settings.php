@@ -47,7 +47,7 @@ return [
                 'type'  => 'text',
                 'label' => 'Nome do site',
                 'help'  => 'Usado quando não há logótipo, e como texto alternativo dele.',
-                'placeholder' => 'Casa de Zé',
+                'placeholder' => 'Covil Ancestral',
             ],
             'site.tagline' => [
                 'type'  => 'text',
@@ -344,7 +344,7 @@ return [
             ],
             'readings.talk_url' => [
                 'type'  => 'url',
-                'label' => 'Onde levar o «Falar com o Zé»',
+                'label' => 'Onde levar o «Falar com o Covil»',
                 'help'  => 'O botão das consultas que não têm agenda — os trabalhos espirituais. '
                          . 'Costuma ser a âncora do formulário de contacto, #contacto, ou o '
                          . 'WhatsApp. Vazio não desenha botão nenhum nessas consultas.',

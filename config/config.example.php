@@ -4,7 +4,7 @@
 
 return [
     'app' => [
-        'name'     => "Casa de Zé",
+        'name'     => "Covil Ancestral",
         'url'      => 'https://example.com',   // no trailing slash
         'env'      => 'production',            // 'development' turns on full error reporting
         'debug'    => false,                   // must stay false when env is 'production'

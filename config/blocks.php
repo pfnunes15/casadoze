@@ -68,7 +68,7 @@ return [
         'under_header'  => true,
         'heading_level' => 1,
         'sample' => [
-            'heading'   => 'Casa de Zé',
+            'heading'   => 'Covil Ancestral',
             'cta_label' => 'Entrar na loja',
         ],
         'fields' => [
@@ -312,7 +312,7 @@ return [
         'sample' => [
             'eyebrow' => 'Consultas',
             'heading' => 'Senta-te à mesa da Casa',
-            'body'    => 'Leituras e trabalhos feitos pelo Zé, presencialmente ou à distância.',
+            'body'    => 'Leituras e trabalhos espirituais, presencialmente ou à distância.',
         ],
         'fields' => [
             'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
@@ -350,7 +350,7 @@ return [
                    . 'não faz.',
         'sample' => [
             'eyebrow' => 'Quem está por trás',
-            'heading' => 'O Zé',
+            'heading' => 'Quem cuida do caminho',
         ],
         'fields' => [
             'eyebrow'   => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
@@ -600,10 +600,13 @@ return [
             'body'    => '<p>E o que há para dizer debaixo dele.</p>',
         ],
         'fields' => [
-            'eyebrow' => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
-            'heading' => ['type' => 'heading', 'label' => 'Título'],
-            'body'    => ['type' => 'richtext', 'label' => 'Texto'],
-            'anchor'  => ['type' => 'anchor', 'advanced' => true],
+            'eyebrow'   => ['type' => 'eyebrow', 'label' => 'Sobrescrita'],
+            'heading'   => ['type' => 'heading', 'label' => 'Título'],
+            'body'      => ['type' => 'richtext', 'label' => 'Texto'],
+            'cta_label' => ['type' => 'text', 'label' => 'Texto do botão',
+                            'help'  => 'Deixe vazio para não haver botão.'],
+            'cta_url'   => ['type' => 'url', 'label' => 'Para onde vai o botão'],
+            'anchor'    => ['type' => 'anchor', 'advanced' => true],
         ],
     ],
 ];

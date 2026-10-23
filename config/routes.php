@@ -254,7 +254,7 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
 
              Marcações     o calendário (onde marcar) e a lista (quem vem)
              Consultas     o que é, quanto dura, quanto custa, e quando é
-             Encerramentos os dias em que o Zé não atende
+             Encerramentos os dias em que o Covil não atende
 
            O ecrã de uma vaga não é um quarto ecrã: é o detalhe de um dia do
            calendário, e abre-se de lá.

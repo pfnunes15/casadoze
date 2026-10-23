@@ -2,7 +2,7 @@
 /**
  * As palavras deste site, em português.
  *
- * Só o que é da Casa de Zé. Tudo o que o CMS já diz — a loja, o cesto, os
+ * Só o que é da Covil Ancestral. Tudo o que o CMS já diz — a loja, o cesto, os
  * e-mails de encomenda — vem do catálogo do pacote, e uma linha escrita aqui com
  * a mesma chave passa-lhe à frente. Ver Admedia\Core\Lang.
  *
@@ -212,8 +212,8 @@ return [
     'grimorio.others'    => 'Outras sessões',
     'grimorio.empty'     => 'Nenhuma sessão com este tema',
     'sala.title'        => 'A Sala',
-    'sala.eyebrow'      => 'Quem lê as cartas na Casa',
-    'sala.intro'        => 'A equipa de tarólogas e cartomantes da Casa de Zé. Cada uma tem o seu baralho e a sua forma de ler.',
+    'sala.eyebrow'      => 'Quem cuida do caminho no Covil',
+    'sala.intro'        => 'Quem cuida do caminho espiritual no Covil Ancestral. Cada pessoa tem os seus oráculos e a sua forma de ler.',
     'sala.one'          => ':n pessoa',
     'sala.many'         => ':n pessoas',
     'sala.profile'      => 'Perfil',
@@ -230,8 +230,8 @@ return [
     'sala.filter.fmt'   => 'Formato',
     'sala.filter.lang'  => 'Língua',
     'sala.booking_note' => 'A agenda é de cada leitura e não de cada pessoa: escolhes a leitura e a hora, e a Casa diz-te com quem é.',
-    'sala.rule.1'        => 'Escolhidas pelo Zé',
-    'sala.rule.1.body'   => 'Todas leram à mesa com o Zé antes de entrarem na Sala.',
+    'sala.rule.1'        => 'A mesma raiz',
+    'sala.rule.1.body'   => 'Quem está na Sala aprendeu no Covil, e trabalha com os mesmos fundamentos.',
     'sala.rule.2'        => 'As mesmas regras',
     'sala.rule.2.body'   => 'Preço fechado, sem promessas de resultado, e desmarcação livre até à antecedência indicada nos Termos.',
     'sala.rule.3'        => 'Muda quando quiseres',
@@ -250,7 +250,7 @@ return [
     'consultas.next_slot'  => 'Próxima vaga · :when',
     'consultas.no_slots'   => 'Sem vagas nas próximas semanas',
     'consultas.book'        => 'Marcar',
-    'consultas.talk'        => 'Falar com o Zé',
+    'consultas.talk'        => 'Falar com o Covil',
     'consultas.agenda'      => 'Ver agenda',
     'consultas.mode.ambos'      => 'Online ou presencial',
     'consultas.mode.presencial' => 'Presencial',
@@ -280,7 +280,7 @@ return [
     'marcacao.people'   => 'Quantas pessoas',
     'marcacao.mode'     => 'Onde',
     'marcacao.note'     => 'O que te traz',
-    'marcacao.note_help' => 'Não é obrigatório. Ajuda o Zé a preparar a mesa.',
+    'marcacao.note_help' => 'Não é obrigatório. Ajuda a preparar a consulta.',
     'marcacao.consent'  => 'Autorizo a Casa a guardar estes dados para tratar da marcação.',
     'marcacao.submit'   => 'Confirmar marcação',
     'marcacao.phone_optional' => 'opcional',
