@@ -9,15 +9,19 @@ material de conversa do designer e não o desenho.
 
 ## As imagens
 
-Quatro das oito são **os mesmos bytes** que já estão em `public/assets/img/`,
+Três das oito são **os mesmos bytes** que já estão em `public/assets/img/`,
 com outro nome:
 
 | no desenho | no site |
 |---|---|
 | `casa-de-ze.jpg` | `abertura.jpg` |
-| `casa-de-ze-lettering.png` | `faixa.png` |
 | `sigil.png` | `logotipo.png` |
 | `ze-retrato-2.png` | `ze.png` |
+
+A quarta era o letreiro do rodapé, `casa-de-ze-lettering.png`. Já não está no
+site: era meio mega de imagem com o nome da casa escrito dentro, e com a mudança
+para Covil Ancestral ficou errado. O rodapé desenha-o agora em SVG, em
+`views/partials/letreiro.php`, a partir do nome que está nas Definições.
 
 Ficam aqui à mesma, com os nomes do desenho, para as páginas abrirem num browser
 sem truques — que é para o que serve uma referência.

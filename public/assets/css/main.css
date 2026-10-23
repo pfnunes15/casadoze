@@ -1526,14 +1526,20 @@ a.vídeo__moldura { border-style: solid; }
   justify-content: center;
   padding: 0 var(--goteira-secção) 40px;
 }
-.rodapé__letreiro img {
+.letreiro {
   width: min(680px, 100%);
   height: auto;
-  /* A proporção do ficheiro, para o espaço estar guardado antes de a imagem
-     chegar. Sem isto, uma imagem adiada ocupa zero até carregar e o fundo da
-     página dá um salto de duzentos e tal pixéis debaixo dos olhos de quem lá
-     está a ler. */
-  aspect-ratio: 1080 / 370;
+  /* O `viewBox` já dá a proporção, e portanto o espaço está guardado antes de a
+     letra chegar: a caixa não muda quando a fonte acaba de carregar. E que
+     transborde em vez de cortar — a largura da caixa é uma estimativa feita a
+     contar letras, e num nome muito largo é melhor passar por fora do que
+     ficar com o fim do nome cortado. */
+  overflow: visible;
+}
+.letreiro__nome {
+  font-family: var(--titulo);
+  font-size: 92px;
+  letter-spacing: 6px;
 }
 
 .rodapé__ressalva {

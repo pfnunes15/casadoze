@@ -146,12 +146,11 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
     </div>
   </div>
 
-  <?php /* O letreiro, em grande, a fechar a página. `alt` vazio e `aria-hidden`
-           porque o nome da Casa já foi dito no cabeçalho e nos direitos aqui
-           em baixo: lê-lo uma terceira vez só atrapalha quem ouve. */ ?>
-  <div class="rodapé__letreiro">
-    <img src="<?= asset('img/faixa.png') ?>" alt="" aria-hidden="true"
-         loading="lazy" decoding="async" data-entra="sobe">
+  <?php /* O letreiro, em grande, a fechar a página. Era uma imagem com o nome
+           escrito nela; agora é desenhado, e por isso segue o nome que estiver
+           nas Definições em vez de ficar preso ao que o designer escreveu. */ ?>
+  <div class="rodapé__letreiro" data-entra="sobe">
+    <?php partial('partials/letreiro', ['nome' => $nome]); ?>
   </div>
 
   <?php /* A ressalva. Dita aqui **e** onde se marca: aqui porque tem de estar em
