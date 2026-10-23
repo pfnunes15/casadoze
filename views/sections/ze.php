@@ -32,7 +32,7 @@ $imagem = trim((string)$section['image']);
                de 1,06 para 1. É a única da página que entra assim. */ ?>
       <div class="ze__retrato" data-entra="cortina">
         <div class="ze__foto" role="img" aria-label="<?= e($section['image_alt'] ?: ($section['heading'] ?? '')) ?>"
-             style="background-image: url('<?= e(media_url($imagem)) ?>')"></div>
+             style="background-image: <?= \App\Services\Imagens::fundo($imagem) ?>"></div>
         <div class="ze__sombra" aria-hidden="true"></div>
         <div class="ze__fio" aria-hidden="true"></div>
       </div>
