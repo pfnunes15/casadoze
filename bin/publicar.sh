@@ -32,9 +32,16 @@
 #   public/assets/uploads/  O que a Casa carregou pelo backoffice. É do
 #                       servidor, e de lá não sai.
 #   docs/               3,4 MB de maquetes que o site não serve.
+#   *.md                README, notas, changelogs — do pacote também. Vivem no
+#                       git e na máquina de desenvolvimento, e num servidor são
+#                       só superfície: contam o que o site é e onde está o que
+#                       interessa, a quem for ver.
 #   .git/ e .access     História e credenciais anotadas à mão.
 #   vendor/admedia/cms/.git/  1,4 MB, e com o endereço do repositório privado
 #                       lá dentro. Já foi enviado uma vez por engano.
+#
+# A licença do TinyMCE é a excepção, e é obrigatória: é software de terceiros
+# distribuído com o site, e a licença acompanha-o.
 #
 # O `--delete` do rsync **está ligado**, e é a diferença que mais conta em
 # relação ao FTP: o que deixou de existir aqui desaparece de lá. Sem isso, uma
@@ -116,6 +123,16 @@ OPCOES=(
   --exclude=/vendor/admedia/cms/.git/
   --exclude=.DS_Store
   --exclude=*.zip
+  # A documentação fica no git e na máquina de desenvolvimento. A licença do
+  # TinyMCE é software de terceiros e tem de acompanhar o que se distribui.
+  --include=*/license.md
+  --include=*/LICENSE.md
+  --exclude=*.md
+  --exclude=.editorconfig
+  --exclude=phpunit.xml
+  --exclude=phpunit.xml.dist
+  --exclude=.phpcs.xml
+  --exclude=phpstan.neon
 )
 
 if [ "$A_SERIO" != "1" ]; then
@@ -144,6 +161,21 @@ if [ "$MIGRAR" = "1" ]; then
   echo
   echo "Migrações:"
   ssh "$SERVIDOR" "cd ~/$REMOTO && php bin/migrate.php"
+fi
+
+# ---------------------------------------------------------------------------
+# Confirmar que não foi parar lá o que não devia.
+#
+# Um `--exclude` escrito ao contrário não dá erro: deixa passar, e ninguém dá
+# por isso. Por isso pergunta-se ao servidor em vez de se confiar na lista.
+# ---------------------------------------------------------------------------
+SOBRAS=$(ssh "$SERVIDOR" "cd ~/$REMOTO && find . \( -name '*.md' ! -iname 'license.md' \) -o -name '.git' -o -name '.claude' -o -name '.access' -o -name 'phpunit.xml*' 2>/dev/null | head -20")
+
+if [ -n "$SOBRAS" ]; then
+  echo
+  echo "AVISO — isto está no servidor e não devia:" >&2
+  echo "$SOBRAS" >&2
+  echo "Apague-o à mão, e veja o que falta aos --exclude deste guião." >&2
 fi
 
 echo
