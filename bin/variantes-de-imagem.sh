@@ -21,7 +21,8 @@ cd "$(git rev-parse --show-toplevel)"
 ORIGEM="${1:?falta o ficheiro de origem}"
 NOME="${2:?falta o nome}"
 shift 2
-LARGURAS=("${@:-640 960 1280}")
+LARGURAS=("$@")
+[ ${#LARGURAS[@]} -gt 0 ] || LARGURAS=(640 960 1280)
 
 [ -f "$ORIGEM" ] || { echo "Não encontro $ORIGEM" >&2; exit 1; }
 for t in cwebp avifenc sips; do

@@ -98,6 +98,7 @@ final class PractitionerAdminController extends Controller
             'years'        => $req->int('years'),
             'image'        => $req->string('image'),
             'image_alt'    => $req->string('image_alt'),
+            'image_focus'  => $req->string('image_focus'),
             'specialties'  => $req->string('specialties'),
             'formats'      => $req->string('formats'),
             'languages'    => $req->string('languages'),

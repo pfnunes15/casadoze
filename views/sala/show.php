@@ -45,7 +45,14 @@ $langs   = Practitioner::lista($pessoa, 'languages');
 
     <div class="perfil__retrato">
       <?php if ($retrato !== ''): ?>
-        <img src="<?= e(media_url($retrato)) ?>" alt="<?= e((string)($pessoa['image_alt'] ?: $pessoa['name'])) ?>">
+        <?php /* The portrait is the largest thing on a profile: it is never
+                 lazy, and it is asked for ahead of the rest. */ ?>
+        <?php $fontes = \App\Services\Imagens::srcset($retrato); ?>
+        <img src="<?= e($fontes[1] ?? media_url($retrato)) ?>"
+             <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="(min-width: 900px) 520px, 100vw"' : '' ?>
+             alt="<?= e((string)($pessoa['image_alt'] ?: $pessoa['name'])) ?>"
+             width="1254" height="1254" fetchpriority="high" decoding="async"
+                 style="object-position: <?= e((string)($pessoa['image_focus'] ?? 'center')) ?>">
       <?php else: ?>
         <span class="taróloga__iniciais perfil__iniciais"><?= e(Practitioner::iniciais($pessoa)) ?></span>
       <?php endif; ?>

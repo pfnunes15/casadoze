@@ -105,7 +105,11 @@ foreach (['specialties' => 'sala.filter.spec', 'formats' => 'sala.filter.fmt', '
 
         <a class="taróloga__retrato" href="<?= e($perfil) ?>" tabindex="-1" aria-hidden="true">
           <?php if ($retrato !== ''): ?>
-            <img src="<?= e(media_url($retrato)) ?>" alt="" loading="lazy">
+            <?php $fontes = \App\Services\Imagens::srcset($retrato); ?>
+            <img src="<?= e($fontes[1] ?? media_url($retrato)) ?>"
+                 <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="(min-width: 900px) 260px, 100vw"' : '' ?>
+                 alt="" width="1254" height="1254" loading="lazy" decoding="async"
+                 style="object-position: <?= e((string)($p['image_focus'] ?? 'center')) ?>">
           <?php else: ?>
             <?php /* Sem retrato, as iniciais. Um rectângulo vazio onde devia
                      estar uma cara diz que falta uma fotografia; as iniciais

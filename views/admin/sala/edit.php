@@ -100,6 +100,16 @@ $id = (int)$pessoa['id'];
             É melhor do que um rectângulo vazio onde devia estar uma cara.
         </small>
 
+        <label for="image_focus">De onde recortar</label>
+        <input id="image_focus" type="text" name="image_focus" maxlength="40"
+               value="<?= e((string)($pessoa['image_focus'] ?? 'center')) ?>" placeholder="center">
+        <small>
+            Os cartões são mais altos do que largos e a fotografia não é: o browser
+            recorta-a, e por omissão recorta pelo meio. Se a pessoa estiver de lado,
+            escreva <code>right center</code> ou <code>left center</code>; se a cara
+            estiver em cima, <code>center 30%</code>.
+        </small>
+
         <label for="image_alt">Descrição da fotografia</label>
         <input id="image_alt" type="text" name="image_alt" maxlength="255"
                value="<?= e((string)$pessoa['image_alt']) ?>">

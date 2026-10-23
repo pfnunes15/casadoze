@@ -196,6 +196,7 @@ final class Practitioner
             'years'        => max(0, (int)($d['years'] ?? 0)),
             'image'        => mb_substr(trim((string)($d['image'] ?? '')), 0, 255),
             'image_alt'    => mb_substr(trim((string)($d['image_alt'] ?? '')), 0, 255),
+            'image_focus'  => mb_substr(trim((string)($d['image_focus'] ?? '')), 0, 40) ?: 'center',
             'specialties'  => trim((string)($d['specialties'] ?? '')),
             'formats'      => trim((string)($d['formats'] ?? '')),
             'languages'    => trim((string)($d['languages'] ?? '')),

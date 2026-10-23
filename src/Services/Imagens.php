@@ -22,8 +22,12 @@ namespace App\Services;
  */
 final class Imagens
 {
-    /** The widths bin/variantes-de-imagem.sh is asked for. */
-    private const LARGURAS = [640, 960, 1254];
+    /**
+     * Every width bin/variantes-de-imagem.sh has been asked for, across the
+     * site. Only the ones that exist on disk for a given photograph are used,
+     * so listing a width nothing was generated at costs nothing.
+     */
+    private const LARGURAS = [480, 640, 720, 960, 1254];
 
     /**
      * A `background-image` value for a photograph, as wide as the screen needs.
@@ -58,6 +62,35 @@ final class Imagens
         $reserva = self::menor($variantes['webp'] ?? []);
 
         return "url('" . $reserva . "'); background-image: image-set(" . implode(', ', $fontes) . ")";
+    }
+
+    /**
+     * An `<img>`'s sources, as `[srcset, src]`, or null when there are none.
+     *
+     * WebP and not AVIF: an `<img>` takes one srcset, and offering both formats
+     * means a `<picture>` with two `<source>` elements. Worth it for the hero,
+     * which is the one the visitor waits for; not for a portrait in a list,
+     * where the markup cost outweighs the thirty per cent.
+     *
+     * `src` is the smallest, for anything that ignores srcset.
+     *
+     * @return array{0:string,1:string}|null
+     */
+    public static function srcset(string $caminho): ?array
+    {
+        $webp = self::variantes($caminho)['webp'] ?? [];
+
+        if ($webp === []) {
+            return null;
+        }
+
+        ksort($webp);
+        $srcset = [];
+        foreach ($webp as $largura => $url) {
+            $srcset[] = $url . ' ' . $largura . 'w';
+        }
+
+        return [implode(', ', $srcset), reset($webp)];
     }
 
     /**
