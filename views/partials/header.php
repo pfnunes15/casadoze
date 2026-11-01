@@ -105,7 +105,17 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
       </div>
       <?php endif; ?>
 
-      <?php /* A porta de quem compra, ao lado do cesto. **É a do cliente e não a
+      <?php if ($app->hasShop()): ?>
+      <a class="pílula" href="<?= e(\Admedia\Shop\Shop::to('cart')) ?>">
+        <?= e(__('site.cart')) ?>
+        <?php /* Sempre escrito, mesmo a zero: um contador que só aparece quando
+                 há alguma coisa faz a barra mudar de largura no instante em que
+                 se põe a primeira peça no cesto. */ ?>
+        <span class="pílula__conta"><?= (int)$cesto ?></span>
+      </a>
+      <?php endif; ?>
+
+      <?php /* A porta de quem compra, a seguir ao cesto. **É a do cliente e não a
                da equipa**: quem passa por aqui veio comprar ou marcar, e a
                gestão do site entra por `/admin`, que não tem nada que estar no
                menu de um site público.
@@ -126,16 +136,6 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
           <path d="M4.8 20c.6-3.6 3.6-5.6 7.2-5.6s6.6 2 7.2 5.6"/>
         </svg>
       </a>
-
-      <?php if ($app->hasShop()): ?>
-      <a class="pílula" href="<?= e(\Admedia\Shop\Shop::to('cart')) ?>">
-        <?= e(__('site.cart')) ?>
-        <?php /* Sempre escrito, mesmo a zero: um contador que só aparece quando
-                 há alguma coisa faz a barra mudar de largura no instante em que
-                 se põe a primeira peça no cesto. */ ?>
-        <span class="pílula__conta"><?= (int)$cesto ?></span>
-      </a>
-      <?php endif; ?>
     </div>
   </div>
 </header>
