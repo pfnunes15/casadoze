@@ -188,19 +188,41 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        seria uma segunda página a pedir a mesma coisa. */
     $r->post('/contacto', [ContactController::class, 'store']);
 
-    // ---------- Entrar ----------
-    $r->get ('/login',           [AuthController::class, 'showLogin']);
-    $r->post('/login',           [AuthController::class, 'login']);
-    $r->post('/logout',          [AuthController::class, 'logout']);
-    $r->get ('/password/forgot', [AuthController::class, 'showForgot']);
-    $r->post('/password/forgot', [AuthController::class, 'sendReset']);
-    $r->get ('/password/reset',  [AuthController::class, 'showReset']);
-    $r->post('/password/reset',  [AuthController::class, 'doReset']);
+    // ---------- A porta da equipa ----------
+    /* Debaixo do `/admin` e já não na raiz do site. Os endereços estão escritos
+       em `config/auth.php` e lidos daqui, para não haver duas listas a ter de
+       concordar: o `AuthMiddleware` manda para o `admin_login` de lá, e se esta
+       linha dissesse outra coisa o encaminhamento ia dar a um 404.
+
+       **Fora do grupo do backoffice, de propósito.** Estas são as quatro
+       páginas que alguém sem sessão tem de poder ver; dentro do grupo, o
+       middleware mandava quem chega à entrada para a entrada, outra vez. */
+    $porta = static fn(string $chave, string $reserva): string
+        => \Admedia\Core\Auth::doors()[$chave] ?? $reserva;
+
+    /* A morada antiga. Era `/login` e quem lá trabalha tem-na no browser; um 404
+       a quem só quer entrar é meia hora perdida a perguntar porquê. Permanente
+       porque a mudança é permanente — não há aqui nada para indexar, o 301 é
+       para o histórico do browser e não para um motor de busca. */
+    $r->get('/login', static fn(): \Admedia\Core\Response
+        => \Admedia\Core\Response::redirect(\Admedia\Core\Auth::adminLoginPath(), 301));
+
+    $r->get ($porta('admin_login',  '/admin/entrar'), [AuthController::class, 'showLogin']);
+    $r->post($porta('admin_login',  '/admin/entrar'), [AuthController::class, 'login']);
+    $r->post($porta('admin_logout', '/admin/sair'),   [AuthController::class, 'logout']);
+    $r->get ($porta('admin_forgot', '/admin/recuperar'), [AuthController::class, 'showForgot']);
+    $r->post($porta('admin_forgot', '/admin/recuperar'), [AuthController::class, 'sendReset']);
+    $r->get ($porta('admin_reset',  '/admin/nova-palavra-passe'), [AuthController::class, 'showReset']);
+    $r->post($porta('admin_reset',  '/admin/nova-palavra-passe'), [AuthController::class, 'doReset']);
 
     // ---------- A conta de quem entrou ----------
-    $r->group(['middleware' => [AuthMiddleware::class]], function ($r) {
-        $r->get ('/profile',          [AuthController::class, 'profile']);
-        $r->post('/profile/password', [AuthController::class, 'changePassword']);
+    $r->group(['middleware' => [AuthMiddleware::class]], function ($r) use ($porta) {
+        /* O `/password` colado ao fim não é escolha nossa: a vista do perfil é a
+           do pacote e escreve `adminProfilePath() . '/password'` no `action`.
+           Traduzi-lo aqui deixava o formulário a submeter para um 404. */
+        $perfil = $porta('admin_profile', '/admin/perfil');
+        $r->get ($perfil,               [AuthController::class, 'profile']);
+        $r->post($perfil . '/password', [AuthController::class, 'changePassword']);
     });
 
     // ---------- O backoffice ----------
