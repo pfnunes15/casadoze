@@ -20,8 +20,10 @@ declare(strict_types=1);
  * gente — ver Admedia\Core\Accounts\CustomerAuth e as duas vistas,
  * views/auth/login.php e views/account/login.php.
  *
- * O resto da conta do cliente fica em `/conta/…` — registar, recuperar, sair.
- * Só a entrada mudou.
+ * A conta do cliente inteira mora debaixo do `/login`, como a da equipa mora
+ * debaixo do `/admin`. Um prefixo por porta: quem olha para um endereço sabe
+ * de qual das duas se trata, e não há um `/conta` e um `/login` a falar da
+ * mesma coisa.
  */
 
 return [
@@ -36,10 +38,10 @@ return [
 
     // ------------------------------------------------------------- os clientes
     'customer_login'  => '/login',
-    'customer_logout' => '/conta/sair',
-    'customer_set'    => '/conta/definir',
-    'customer_forgot' => '/conta/recuperar',
-    'customer_reset'  => '/conta/nova-palavra-passe',
-    'customer_signup' => '/conta/registar',
+    'customer_logout' => '/login/sair',
+    'customer_set'    => '/login/definir',
+    'customer_forgot' => '/login/recuperar',
+    'customer_reset'  => '/login/nova-palavra-passe',
+    'customer_signup' => '/login/registar',
     'customer_home'   => '/account',
 ];

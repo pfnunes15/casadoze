@@ -105,11 +105,21 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        regista fica com seis endereços que ninguém visita, e isso não custa
        nada — enquanto um site que ganha clientes e não tem as rotas é um
        site onde o email que acabou de sair leva a um 404. */
-    /* A porta antiga do cliente. Esteve em `/conta/entrar` o tempo suficiente
-       para alguém a ter guardado; agora a entrada é `/login` e isto leva-os lá.
-       As outras páginas da conta não mudaram de sítio. */
-    $r->get('/conta/entrar', static fn(): \Admedia\Core\Response
-        => \Admedia\Core\Response::redirect(\Admedia\Core\Accounts\CustomerAuth::loginPath(), 301));
+    /* As moradas antigas da conta. Estiveram em `/conta/…` e agora estão debaixo
+       do `/login`; estas três linhas levam lá quem as tiver guardadas. O `/conta`
+       sozinho vai à entrada, que é o que quem o escreve está à procura. */
+    $antigas = [
+        '/conta'           => 'customer_login',
+        '/conta/entrar'    => 'customer_login',
+        '/conta/registar'  => 'customer_signup',
+        '/conta/recuperar' => 'customer_forgot',
+    ];
+    foreach ($antigas as $velha => $chave) {
+        $r->get($velha, static fn(): \Admedia\Core\Response => \Admedia\Core\Response::redirect(
+            locale_url(\Admedia\Core\Auth::doors()[$chave]),
+            301
+        ));
+    }
 
     \Admedia\Core\Accounts\Accounts::routes($r);
 
