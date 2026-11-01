@@ -105,6 +105,12 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        regista fica com seis endereços que ninguém visita, e isso não custa
        nada — enquanto um site que ganha clientes e não tem as rotas é um
        site onde o email que acabou de sair leva a um 404. */
+    /* A porta antiga do cliente. Esteve em `/conta/entrar` o tempo suficiente
+       para alguém a ter guardado; agora a entrada é `/login` e isto leva-os lá.
+       As outras páginas da conta não mudaram de sítio. */
+    $r->get('/conta/entrar', static fn(): \Admedia\Core\Response
+        => \Admedia\Core\Response::redirect(\Admedia\Core\Accounts\CustomerAuth::loginPath(), 301));
+
     \Admedia\Core\Accounts\Accounts::routes($r);
 
     /* Entrar, a sério. O `Accounts::routes` só regista o GET do formulário — o
@@ -199,13 +205,6 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        middleware mandava quem chega à entrada para a entrada, outra vez. */
     $porta = static fn(string $chave, string $reserva): string
         => \Admedia\Core\Auth::doors()[$chave] ?? $reserva;
-
-    /* A morada antiga. Era `/login` e quem lá trabalha tem-na no browser; um 404
-       a quem só quer entrar é meia hora perdida a perguntar porquê. Permanente
-       porque a mudança é permanente — não há aqui nada para indexar, o 301 é
-       para o histórico do browser e não para um motor de busca. */
-    $r->get('/login', static fn(): \Admedia\Core\Response
-        => \Admedia\Core\Response::redirect(\Admedia\Core\Auth::adminLoginPath(), 301));
 
     $r->get ($porta('admin_login',  '/admin/entrar'), [AuthController::class, 'showLogin']);
     $r->post($porta('admin_login',  '/admin/entrar'), [AuthController::class, 'login']);

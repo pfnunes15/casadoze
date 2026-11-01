@@ -14,9 +14,14 @@ declare(strict_types=1);
  * com sessão, `/admin` é o painel. Os dois não podem ser o mesmo endereço — a
  * porta a redirecionar para si própria é um ciclo sem fim.
  *
- * A porta de quem compra fica onde estava, em `/conta/entrar`. É outra tabela,
- * outra sessão e outra gente — ver Admedia\Core\Accounts\CustomerAuth e as duas
- * vistas, views/auth/login.php e views/account/login.php.
+ * A porta de quem compra ficou com o `/login` que a equipa largou. É a porta
+ * do site e é por ela que passa quem lá chega; a outra é uma ferramenta de
+ * trabalho e mora onde se trabalha. São outra tabela, outra sessão e outra
+ * gente — ver Admedia\Core\Accounts\CustomerAuth e as duas vistas,
+ * views/auth/login.php e views/account/login.php.
+ *
+ * O resto da conta do cliente fica em `/conta/…` — registar, recuperar, sair.
+ * Só a entrada mudou.
  */
 
 return [
@@ -30,7 +35,7 @@ return [
     'admin_logout'  => '/admin/sair',
 
     // ------------------------------------------------------------- os clientes
-    'customer_login'  => '/conta/entrar',
+    'customer_login'  => '/login',
     'customer_logout' => '/conta/sair',
     'customer_set'    => '/conta/definir',
     'customer_forgot' => '/conta/recuperar',
