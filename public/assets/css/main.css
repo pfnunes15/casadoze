@@ -1960,6 +1960,30 @@ a.vídeo__moldura { border-style: solid; }
   color: var(--ouro);
 }
 
+/* A pílula que só leva um ícone: redonda e não oval, porque sem palavra lá
+   dentro o `padding` de 14 aos lados deixava-a com cara de comprimido. */
+.pílula--ícone {
+  position: relative;
+  padding: 0;
+  width: 35px;
+  height: 35px;
+  justify-content: center;
+  flex: none;
+  color: var(--letra-fraca);
+}
+.pílula--ícone:hover { color: var(--ouro-claro); }
+
+/* A área de toque, invisível e maior do que o botão. Os 35px da maquete são o
+   desenho e ficam; o dedo precisa de 44, e num alvo que é só um ícone — sem
+   palavra ao lado para acertar — a diferença decide-se entre carregar e falhar.
+   Num `::after` para não mexer na linha do cabeçalho. */
+.pílula--ícone::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+}
+
 /* A seta do selector de idioma. */
 .pílula__seta {
   font-size: 8px;

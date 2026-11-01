@@ -105,6 +105,28 @@ $idiomas = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() :
       </div>
       <?php endif; ?>
 
+      <?php /* A porta de quem compra, ao lado do cesto. **É a do cliente e não a
+               da equipa**: quem passa por aqui veio comprar ou marcar, e a
+               gestão do site entra por `/admin`, que não tem nada que estar no
+               menu de um site público.
+
+               Só o ícone, sem palavra, que é o que cabe ao lado do cesto num
+               telefone — e por isso leva `aria-label`, senão é uma ligação sem
+               nome nenhum para quem a ouve. O nome muda com o estado: a mesma
+               pessoa, já com sessão, não quer «entrar» outra vez. */ ?>
+      <?php $temSessão = \Admedia\Core\Accounts\CustomerAuth::instance()->check(); ?>
+      <a class="pílula pílula--ícone"
+         href="<?= e($temSessão
+             ? \Admedia\Core\Accounts\CustomerAuth::homePath()
+             : \Admedia\Core\Accounts\CustomerAuth::loginPath()) ?>"
+         aria-label="<?= e($temSessão ? __('site.account') : __('site.signin')) ?>">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.6"/>
+          <path d="M4.8 20c.6-3.6 3.6-5.6 7.2-5.6s6.6 2 7.2 5.6"/>
+        </svg>
+      </a>
+
       <?php if ($app->hasShop()): ?>
       <a class="pílula" href="<?= e(\Admedia\Shop\Shop::to('cart')) ?>">
         <?= e(__('site.cart')) ?>

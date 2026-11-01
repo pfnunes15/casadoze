@@ -19,6 +19,8 @@ return [
     'site.lang'       => 'Language',
     'site.cart'       => 'Basket',
     'site.scroll'     => 'Scroll',
+    'site.signin'     => 'Sign in to my account',
+    'site.account'    => 'My account',
 
     'footer.where'      => 'Where',
     'footer.contact'    => 'Talk to the House',

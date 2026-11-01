@@ -32,6 +32,8 @@ return [
     'site.lang'       => 'Idioma',
     'site.cart'       => 'Cesto',
     'site.scroll'     => 'Desce',
+    'site.signin'     => 'Entrar na minha conta',
+    'site.account'    => 'A minha conta',
 
     'footer.where'     => 'Onde',
     'footer.contact'   => 'Falar com a Casa',

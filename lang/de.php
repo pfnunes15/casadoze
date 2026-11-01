@@ -18,6 +18,8 @@ return [
     'site.lang'       => 'Sprache',
     'site.cart'       => 'Korb',
     'site.scroll'     => 'Scrollen',
+    'site.signin'     => 'Bei meinem Konto anmelden',
+    'site.account'    => 'Mein Konto',
 
     'footer.where'      => 'Wo',
     'footer.contact'    => 'Mit dem Haus sprechen',

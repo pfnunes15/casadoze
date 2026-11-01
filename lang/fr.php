@@ -18,6 +18,8 @@ return [
     'site.lang'       => 'Langue',
     'site.cart'       => 'Panier',
     'site.scroll'     => 'Défiler',
+    'site.signin'     => 'Me connecter à mon compte',
+    'site.account'    => 'Mon compte',
 
     'footer.where'      => 'Où',
     'footer.contact'    => 'Parler à la Maison',
