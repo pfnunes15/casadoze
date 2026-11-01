@@ -107,6 +107,22 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
        site onde o email que acabou de sair leva a um 404. */
     \Admedia\Core\Accounts\Accounts::routes($r);
 
+    /* Entrar, a sério. O `Accounts::routes` só regista o GET do formulário — o
+       POST que verifica a palavra-passe vive no `Shop::accountRoutes`, e esse
+       não é chamado aqui porque põe a porta do cliente em `/login`, que é a da
+       equipa. Sem esta linha o formulário de `/conta/entrar` submetia para
+       `/login` e era o `AuthController` da equipa a responder-lhe: um cliente
+       com a palavra-passe certa levava sempre «credenciais inválidas», porque
+       estava a ser procurado na tabela errada.
+
+       O controlador é o da loja por ser onde o método está. Verifica contra
+       `customers` pelo `CustomerAuth`, com um balde de tentativas só dele
+       (`shop_login`), e devolve quem falha a `CustomerAuth::loginPath()`. */
+    $r->post(
+        \Admedia\Core\Auth::doors()['customer_login'] ?? '/conta/entrar',
+        [\Admedia\Shop\Controllers\AccountController::class, 'login']
+    );
+
     Shop::routes($r);
 
     /* A loja vista por uma intenção. **Não é do pacote**: um CMS partilhado

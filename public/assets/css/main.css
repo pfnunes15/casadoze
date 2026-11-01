@@ -1741,7 +1741,10 @@ a.vídeo__moldura { border-style: solid; }
   100%   { transform: translateX(300%); }
 }
 
-.botão--largo { width: 100%; }
+/* A largura toda, e a letra ao meio. O `.botão` é um `space-between` por causa
+   da seta que a maquete lhe põe à direita; num botão que enche a linha e só
+   leva uma palavra, isso deixava-a encostada à esquerda. */
+.botão--largo { width: 100%; justify-content: center; }
 
 /* O botão a ouro: o contorno dourado da montra e do Grimório. Ao passar o rato
    enche-se de ouro e a letra escurece — e **tem de vir depois de `.botão:hover`**,
@@ -5400,4 +5403,259 @@ a.vídeo__moldura { border-style: solid; }
     justify-content: center;
   }
   .abertura__desce { display: flex; }
+}
+
+/* ---------------------------------------------------------------------------
+   As duas portas.
+
+   A da equipa e a de quem compra, e são duas de propósito. Entram contra
+   tabelas diferentes, com sessões diferentes, e quem chega a uma raramente
+   queria a outra — ver views/auth/login.php e views/account/login.php.
+
+   A da equipa (`.entrada`) não tem o site à volta: sem menu, sem cesto, sem
+   rodapé. É uma ferramenta e não uma página, e a moldura deixa-a de fora
+   quando a vista pede `$semMoldura`.
+
+   A do cliente (`.porta`) fica dentro do site, porque quem entra por ali está
+   a meio de comprar ou de marcar e tirar-lhe o menu era deixá-lo sem caminho.
+   --------------------------------------------------------------------------- */
+
+/* --------------------------------- a da equipa */
+body.entrada {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* `dvh` e não `vh`: no Safari do iPhone a barra de endereço entra na conta do
+     `vh` e o cartão ficava meio tapado por ela. */
+  min-height: 100dvh;
+  padding: clamp(32px, 8vw, 72px) var(--goteira-secção);
+  background:
+    radial-gradient(900px 600px at 50% -10%, rgba(123, 79, 184, .18), transparent 70%),
+    var(--fundo);
+}
+body.entrada > main { width: 100%; }
+
+.entrada__folha {
+  width: min(420px, 100%);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.entrada__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.entrada__marca img { width: 52px; height: auto; opacity: .9; }
+.entrada__marca span {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .28em;
+  color: var(--ouro);
+}
+
+.entrada__caixa {
+  background: var(--fundo-caixa);
+  border: 1px solid var(--traco);
+  padding: clamp(26px, 6vw, 38px);
+}
+.entrada__título {
+  font-family: var(--titulo);
+  font-size: clamp(34px, 7vw, 42px);
+  line-height: 1.1;
+  color: var(--letra-forte);
+  margin: 10px 0 26px;
+}
+.entrada__dizer {
+  margin: -14px 0 26px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--letra-fraca);
+}
+
+.entrada__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+
+.entrada__pé {
+  margin: 22px 0 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.entrada__pé a { color: var(--letra-tenue); text-decoration: none; }
+.entrada__pé a:hover { color: var(--ouro); }
+
+.entrada__fora {
+  margin: 0;
+  text-align: center;
+  font-size: 16px;
+  color: var(--letra-tenue);
+}
+.entrada__fora a { color: var(--ouro); }
+
+/* --------------------------------- a de quem compra */
+.porta { padding-block: 120px 100px; }
+
+.porta__par { display: grid; gap: 48px; }
+
+/* Sem a fotografia ao lado, o cartão fica ao meio e não encostado à esquerda —
+   e não cresce com a coluna: um formulário de dois campos com setecentos pixéis
+   de largura lê-se pior do que um com quatrocentos. */
+.porta__caixa { width: 100%; max-width: 480px; margin-inline: auto; }
+
+.porta__título {
+  font-family: var(--titulo);
+  font-size: clamp(36px, 6vw, 50px);
+  line-height: 1.08;
+  color: var(--letra-forte);
+  margin: 12px 0 14px;
+}
+.porta__dizer-topo {
+  margin: 0 0 28px;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--letra-fraca);
+  max-width: 44ch;
+}
+
+/* As abas. Dois endereços, e por isso duas ligações — ver conta-abas.php. */
+.porta__abas {
+  display: flex;
+  gap: 0;
+  margin-bottom: 30px;
+  border: 1px solid var(--traco-forte);
+}
+.porta__aba {
+  flex: 1;
+  /* 48 e não menos: é o alvo mínimo de um dedo, e estas duas ficam lado a lado. */
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+  text-decoration: none;
+  transition: background .3s, color .3s;
+}
+.porta__aba:hover { color: var(--letra); }
+.porta__aba--aqui { background: var(--ouro); color: #140f08; }
+.porta__aba--aqui:hover { color: #140f08; }
+
+.porta__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+.porta__rótulo-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.porta__esqueci {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ouro);
+  text-decoration: none;
+}
+.porta__esqueci:hover { text-decoration: underline; }
+
+.porta__pé {
+  margin: 26px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--traco);
+  font-size: 16px;
+  color: var(--letra-tenue);
+}
+.porta__pé a { color: var(--ouro); }
+
+/* O lado da fotografia. Escondido no telefone: ninguém que veio entrar quer
+   primeiro uma razão para entrar, e ali seria o que rolava antes do campo. */
+.porta__lado { display: none; }
+
+/* --------------------------------- o que os dois usam */
+.campo__ajuda {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--letra-tenue);
+  line-height: 1.4;
+}
+
+/* As mensagens do pacote — `partials/flash` — com o desenho dos avisos da casa.
+   Sem isto saíam como texto solto, que numa página de palavra-passe quer dizer
+   que ninguém vê o «e-mail ou palavra-passe incorretos». */
+.flash {
+  border: 1px solid var(--traco-forte);
+  border-left-width: 3px;
+  padding: 14px 18px;
+  margin: 0 0 24px;
+  font-size: 17px;
+  color: var(--letra);
+}
+.flash--success { border-left-color: var(--ouro); }
+.flash--info    { border-left-color: var(--roxo-claro); }
+.flash--warning { border-left-color: var(--brasa); }
+.flash--error   { border-left-color: #c0603f; }
+
+@media (min-width: 900px) {
+  /* O cartão e a fotografia, lado a lado. O cartão não cresce com a coluna: um
+     formulário de dois campos com seiscentos pixéis de largura lê-se pior do
+     que um com quatrocentos. */
+  .porta__par { grid-template-columns: minmax(0, 460px) minmax(0, 1fr); gap: 64px; }
+  .porta__caixa { max-width: none; margin-inline: 0; }
+
+  .porta__lado {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    border: 1px solid var(--traco);
+  }
+  .porta__foto {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-size: cover;
+  }
+  .porta__véu {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(9, 8, 10, .92) 10%, rgba(9, 8, 10, .25) 70%);
+  }
+  .porta__dizer {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 36px;
+  }
+  .porta__chamada {
+    font-family: var(--titulo);
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--letra-forte);
+    margin: 0 0 18px;
+  }
+  .porta__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .porta__lista li {
+    display: flex;
+    gap: 10px;
+    font-size: 17px;
+    color: var(--letra-fraca);
+  }
+  .porta__lista span { color: var(--ouro); }
 }

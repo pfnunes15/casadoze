@@ -37,6 +37,15 @@ $outras = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() : 
 <meta name="theme-color" content="#09080a">
 <meta name="color-scheme" content="dark">
 
+<?php /* Fora do índice, quando a vista o pede. Num formulário de palavra-passe
+         não há nada que valha a pena encontrar, e um resultado que leva alguém
+         a uma caixa de senha em vez do que procurava é uma resposta pior do que
+         nenhuma. Com ele caem também os hreflang: numa página sem endereço
+         próprio por idioma, cada linha destas diz que a porta de entrada de uma
+         língua é a tradução deste formulário, o que não é verdade. */ ?>
+<?php if (!empty($pageRobots)): ?>
+<meta name="robots" content="<?= e($pageRobots) ?>">
+<?php else: ?>
 <?php /* A mesma página nas outras línguas, para um motor de busca saber que são
          a mesma e não versões a competir. O x-default é para quem chega sem
          preferência: a língua principal. Com uma língua só, isto não desenha
@@ -46,6 +55,7 @@ $outras = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() : 
 <?php endforeach; ?>
 <?php if ($outras !== []): ?>
 <link rel="alternate" hreflang="x-default" href="<?= e(url(\Admedia\Core\Locales::url(\Admedia\Core\Locales::path(), \Admedia\Core\Locales::default()))) ?>">
+<?php endif; ?>
 <?php endif; ?>
 
 <link rel="stylesheet" href="<?= asset('css/main.css') ?>">
@@ -67,6 +77,12 @@ $outras = \Admedia\Core\Locales::many() ? \Admedia\Core\Locales::alternates() : 
    transparente, com a fotografia por trás para se ler contra ela. As outras
    páginas levam 'folha-só' ou nada, conforme o que têm para mostrar. */
 $classesDoCorpo = trim((string)($bodyClass ?? ''));
+
+/* Um ecrã que não é uma página do site: a porta da equipa. Sem menu, sem cesto,
+   sem o rodapé de cinco andares — nada daquilo serve a quem vem trabalhar, e o
+   cesto por cima de um formulário de palavra-passe é um convite a carregar no
+   sítio errado. Quem o pede é a vista, com `$semMoldura = true`. */
+$semMoldura = !empty($semMoldura);
 ?>
 <body<?= $classesDoCorpo !== '' ? ' class="' . e($classesDoCorpo) . '"' : '' ?>>
 
@@ -74,6 +90,7 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
          invisível até alguém lá chegar com o teclado: sem ele, quem navega
          assim atravessa o menu inteiro em cada página antes de chegar ao
          texto. */ ?>
+<?php if (!$semMoldura): ?>
 <a class="saltar" href="#conteudo"><?= e(__('site.skip')) ?></a>
 
 <?php /* A barra dourada do topo. Só onde a vista a pedir — `$anúncio = true` —,
@@ -82,6 +99,7 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
 <?php if (!empty($anúncio)) { require __DIR__ . '/../partials/anuncio.php'; } ?>
 
 <?php require __DIR__ . '/../partials/header.php'; ?>
+<?php endif; ?>
 
 <main id="conteudo">
     <?php
@@ -96,7 +114,11 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
        cima dela. */
     $deEcrã = array_intersect_key($flashes, array_flip(['success', 'error', 'warning', 'info']));
     ?>
-    <?php if ($deEcrã !== []): ?>
+    <?php /* `$avisosNaVista` é para quem os desenha melhor do que isto: as duas
+             portas põem o «palavra-passe incorreta» dentro do cartão, ao pé do
+             campo, e não no topo da página a dois ecrãs de distância. Sem a
+             pergunta, a mensagem saía nos dois sítios. */ ?>
+    <?php if ($deEcrã !== [] && !$semMoldura && empty($avisosNaVista)): ?>
         <?php /* Pela cadeia das vistas: este parcial vive no pacote e não aqui. O
                  $flashes vai explícito porque o `partial()` corre num âmbito
                  fechado — só vê o que lhe passam —, e sem isto nenhuma mensagem
@@ -106,9 +128,9 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
     <?= $content ?>
 </main>
 
-<?php require __DIR__ . '/../partials/footer.php'; ?>
+<?php if (!$semMoldura) { require __DIR__ . '/../partials/footer.php'; } ?>
 
-<?php if ($app->hasShop()): ?>
+<?php if ($app->hasShop() && !$semMoldura): ?>
 <?php /* A gaveta do cesto. Vazia no documento e enchida pelo js/site.js, que
          vai buscar o seu conteúdo a `/carrinho/gaveta` depois de juntar uma
          peça. Está aqui e não dentro de uma vista da loja porque se junta de
@@ -126,8 +148,10 @@ $classesDoCorpo = trim((string)($bodyClass ?? ''));
          cabeçalho dela. Carregada em todas as páginas e não só onde há montra
          porque este site é uma página só; o dia em que forem duas, isto passa a
          ser pedido pelo bloco. */ ?>
+<?php if (!$semMoldura): ?>
 <script src="<?= asset('js/arte-produtos.js') ?>" defer></script>
 <script src="<?= asset('js/site.js') ?>" defer></script>
+<?php endif; ?>
 <?php clear_old(); ?>
 </body>
 </html>
