@@ -169,6 +169,14 @@
 html {
   -webkit-text-size-adjust: 100%;
 
+  /* Em que tom o sistema operativo desenha o que é dele: a lista que um
+     `<select>` abre, a barra de deslocamento, o calendário de um campo de
+     data. Está no `<meta>` da moldura também, e aqui porque o meta é uma
+     omissão do documento e isto é a regra — e nem todos os browsers tratam os
+     dois do mesmo modo. Sem isto, escolher o país abria uma lista branca a
+     arder no meio de uma página preta. */
+  color-scheme: dark;
+
   /* O menu do topo é todo de âncoras — a loja, as consultas, a casa, os
      contactos — e sem isto cada uma delas corta a página de um sítio para o
      outro. Quem pediu menos movimento recebe o salto de volta, na regra lá em
@@ -3722,6 +3730,48 @@ a.vídeo__moldura { border-style: solid; }
   width: 100%;
 }
 .campo:focus { border-color: var(--ouro); outline: none; }
+
+/* A lista de escolher, desenhada por nós.
+   -------------------------------------------------------------------------
+   O `<select>` do browser traz a sua própria seta, encostada ao canto de
+   baixo quando lhe damos uma altura fixa — e era por isso que o «Portugal»
+   ficava em cima e a seta lá em baixo, cada um para seu lado.
+
+   `appearance: none` tira a seta nativa e o que fica é uma caixa como as
+   outras; a seta volta como fundo, ao meio da altura, com `padding-right`
+   para a letra nunca lhe passar por cima. O SVG vai embebido: é meia dúzia de
+   bytes e um pedido a menos. */
+select.campo {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 46px;
+  /* A seta é cor da letra e não do ouro: é uma affordance, não um acento. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23b9b0c2' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 12px 8px;
+
+  /* A letra ao meio da altura, como nos campos de escrever ao lado. Um
+     `<select>` com altura fixa encosta o texto ao cimo da caixa — o «Portugal»
+     ficava uma dúzia de pixéis acima do «Funchal» do campo do lado —, e o que
+     o centra é a entrelinha, porque o `padding` vertical num select não é
+     respeitado por todos os browsers. 54 e não 56: é a altura menos os dois
+     fios da borda. */
+  line-height: 54px;
+
+  /* **A lista que abre é do sistema e não desta folha.** Quem a faz sair
+     escura é o `color-scheme` do `html`. As duas linhas do `option` abaixo
+     são para os sistemas que deixam pintá-las — Windows e Linux; no macOS
+     mandam as do sistema. */
+  cursor: pointer;
+}
+select.campo:hover { border-color: rgba(228, 220, 203, .4); }
+select.campo option {
+  background: var(--fundo-caixa);
+  color: var(--letra);
+}
+/* O que ainda não foi escolhido lê-se como falta e não como escolha. */
+select.campo option[value=""] { color: var(--letra-tenue); }
 .campo--prosa { height: auto; padding: 14px 16px; line-height: 1.5; resize: vertical; }
 .campo__rótulo {
   font-family: var(--mono);
