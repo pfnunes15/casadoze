@@ -707,7 +707,7 @@ a { color: inherit; text-decoration: none; }
 .field input[type="number"], .field input[type="search"], .field input[type="tel"],
 .field input[type="url"], .field input[type="date"], .field input[type="time"],
 .field input[type="datetime-local"], .field input[type="month"], .field input[type="week"],
-.field input[type="file"], .field select, .field textarea,
+.field select, .field textarea,
 .admin-table input[type="text"], .admin-table input[type="email"],
 .admin-table input[type="number"], .admin-table input[type="search"],
 .admin-table input[type="tel"], .admin-table input[type="url"],
@@ -720,12 +720,18 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* A largura inteira é da coluna de um formulário, e não de uma célula de
-   tabela — numa tabela quem manda na largura é a coluna. */
+   tabela — numa tabela quem manda na largura é a coluna.
+
+   Sem `input[type="file"]`: essa caixa está escondida atrás de um botão — ver
+   .upload — e dar-lhe a largura inteira do formulário era dar mil e
+   quatrocentos pixéis a um elemento absoluto que ninguém vê. A página rolava
+   ao lado nas Definições e nas Actualizações, sem nada visível que o
+   explicasse. */
 .field input[type="text"], .field input[type="email"], .field input[type="password"],
 .field input[type="number"], .field input[type="search"], .field input[type="tel"],
 .field input[type="url"], .field input[type="date"], .field input[type="time"],
 .field input[type="datetime-local"], .field input[type="month"], .field input[type="week"],
-.field input[type="file"], .field select, .field textarea {
+.field select, .field textarea {
   width: 100%;
 }
 
@@ -1829,8 +1835,14 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    `visibility:hidden` would take it out of the tab order, and then the only
    way to reach it would be the mouse. */
 .upload { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-.upload__input {
+/* Dentro de `.upload` e não só pela classe: `.field input[type="file"]` pesa
+   mais do que `.upload__input`, e com ela a caixa escondida ficava com a
+   largura inteira do formulário — absoluta, 1440 pixéis, fora do ecrã. A
+   página passava a rolar ao lado nas Definições e nas Actualizações, sem nada
+   visível lá que o explicasse. */
+.upload .upload__input {
   position: absolute; width: 1px; height: 1px;
+  padding: 0; border: 0;
   opacity: 0; overflow: hidden; clip-path: inset(50%);
 }
 .upload__pick {
@@ -2046,40 +2058,114 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .langs__one--missing { background: none; color: var(--faint); border: 1px dashed var(--border); }
 .langs__one--live:hover, .langs__one--draft:hover { outline: 2px solid currentColor; outline-offset: 1px; }
 
-/* ---------------- A frota, e as regras de agravamento ---------------- */
-.frota__foto { width: 5.5rem; }
-.frota__foto img {
-  display: block; width: 4.5rem; height: 3rem; object-fit: cover;
-  border-radius: var(--radius-sm); border: 1px solid var(--border);
+/* ---------------- A frota ----------------
+   Um cartão por viatura: a fotografia à esquerda, e à direita o que ela é.
+   Ver views/admin/viagens/frota/index.php para a razão de não ser tabela. */
+.viaturas { display: grid; gap: 1rem; margin-bottom: 1.25rem; }
+.viatura {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
-.frota__sem  { color: var(--faint); font-size: .8rem; }
-.frota__file { margin-top: .4rem; font-size: .82rem; }
-.frota__drop { margin: .35rem 0 0; font-size: .82rem; }
+/* Uma viatura fora de serviço continua a ver-se e a poder ser mudada — só
+   não está a trabalhar. Apagada seria outra coisa. */
+.viatura--parada { background: var(--surface-2); }
+.viatura--parada .viatura__foto img { opacity: .5; filter: grayscale(.5); }
+.viatura--nova { border-style: dashed; box-shadow: none; }
 
-/* A matrícula. Em maiúsculas e com as letras todas à mesma distância: é um
-   código e lê-se como um código, não como uma palavra. */
-.frota__matricula {
-  width: 8.5rem;
+.viatura__foto { display: grid; gap: .5rem; align-content: start; }
+.viatura__foto img,
+.viatura__sem {
+  width: 100%; aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  object-fit: cover;
+}
+.viatura__sem {
+  display: grid; place-items: center;
+  background: var(--surface-2); color: var(--faint);
+  font-size: .8rem;
+}
+.viatura__foto .upload { gap: .4rem; }
+.viatura__tirar { font-size: .82rem; }
+
+.viatura__corpo { display: grid; gap: .9rem; align-content: start; }
+/* O nome e a matrícula dizem qual é o carro; os números dizem o tamanho
+   dele. Na mesma linha, e cada um com a largura do que lá cabe. */
+.viatura__identidade {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) 9rem 6rem 6rem;
+  gap: .75rem;
+  align-items: end;
+}
+.viatura__identidade .field { margin-bottom: 0; }
+.viatura__matricula {
   text-transform: uppercase;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   letter-spacing: .06em;
 }
+.viatura__conta { width: 100%; }
 
-/* O que a viatura tem: sete respostas de sim ou não, numa grelha que cabe na
-   célula. Caixas e não texto livre — o site mostra sempre a mesma coisa
-   escrita da mesma maneira. */
-.frota__tem { min-width: 20rem; }
-.frota__sinal {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  margin: 0 .9rem .25rem 0;
-  font-size: .84rem;
-  white-space: nowrap;
-  cursor: pointer;
+/* O rótulo de um grupo de caixas não é de nenhuma delas, por isso não é um
+   <label>: seria um rótulo a apontar para coisa nenhuma. */
+.viatura__rotulo {
+  display: block; margin-bottom: .4rem;
+  font-size: .85rem; font-weight: 600; color: var(--text);
 }
-.frota__sinal input { margin: 0; }
-.frota__nota { margin-top: .45rem; font-size: .85rem; }
+/* As características como sinais que se carregam, e não como sete caixas
+   numa lista: a pergunta é «o que tem a bordo», e a resposta lê-se melhor
+   como um punhado de coisas acesas. O mesmo desenho dos dias da semana nos
+   agravamentos. */
+.viatura__sinais { display: flex; flex-wrap: wrap; gap: .4rem; }
+.viatura__sinal { position: relative; }
+.viatura__sinal input {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  margin: 0; opacity: 0; cursor: pointer;
+}
+.viatura__sinal span {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .4rem .8rem; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: .84rem; color: var(--muted);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.viatura__sinal span::before {
+  content: ''; flex: none;
+  width: .5rem; height: .5rem; border-radius: 50%;
+  background: var(--border);
+}
+.viatura__sinal input:checked + span {
+  background: var(--accent-bg); color: #0f7a5a; border-color: #0f7a5a; font-weight: 600;
+}
+.viatura__sinal input:checked + span::before { background: #0f7a5a; }
+.viatura__sinal input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .viatura__sinal span { transition: none; }
+}
+
+.viatura__pe {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .75rem;
+  padding-top: .9rem; border-top: 1px solid var(--border);
+}
+.viatura__apagar { color: var(--danger); font-size: .85rem; }
+
+.viaturas__nova { margin: 1.75rem 0 .6rem; font-size: .95rem; color: var(--muted); }
+
+/* Quatro campos numa linha pedem uma coluna larga. Com a barra lateral ao
+   lado, abaixo disto já não há essa largura — e um cartão que não cabe põe a
+   página a rolar ao lado, que num formulário é pior do que uma linha a mais. */
+@media (max-width: 1180px) {
+  .viatura__identidade { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .viatura { grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
+  .viatura__foto img, .viatura__sem { max-width: 12rem; }
+}
 
 /* Uma regra é um cartão e não uma linha de tabela: tem nove campos, e nove
    colunas numa tabela é uma tabela que se lê de lado. */
