@@ -5688,3 +5688,106 @@ body.entrada > main { width: 100%; }
   }
   .porta__lista span { color: var(--ouro); }
 }
+
+/* ---------------------------------------------------------------------------
+   A transferência bancária.
+
+   A escolha no checkout, e os dados da conta na página que se vê a seguir — que
+   é onde a pessoa está quando precisa deles.
+   --------------------------------------------------------------------------- */
+
+/* A linha do pagamento passa a ser escolha quando há mais do que uma forma. O
+   rádio do browser fica escondido e quem se vê é o círculo desenhado, como nas
+   zonas de envio — mas o rádio continua lá, e é ele que o teclado encontra. */
+.pagamento--escolha { cursor: pointer; }
+.pagamento__rótulo { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.pagamento__rótulo input[type=radio] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.pagamento__marca {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border: 1px solid var(--traco-forte);
+  border-radius: 999px;
+  position: relative;
+  transition: border-color .3s;
+}
+.pagamento__marca::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  background: var(--ouro);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.pagamento__rótulo input:checked + .pagamento__marca { border-color: var(--ouro); }
+.pagamento__rótulo input:checked + .pagamento__marca::after { opacity: 1; }
+/* O foco do teclado tem de se ver: o rádio está escondido e sem isto quem
+   navega com o Tab não sabe em qual das formas de pagamento está. */
+.pagamento__rótulo input:focus-visible + .pagamento__marca {
+  outline: 2px solid var(--ouro);
+  outline-offset: 3px;
+}
+
+.transferência {
+  margin-top: 28px;
+  padding: 28px;
+  border: 1px solid rgba(217, 179, 108, .35);
+  background: rgba(217, 179, 108, .05);
+  text-align: left;
+}
+.transferência__título {
+  margin: 0 0 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ouro);
+}
+.transferência__dados {
+  display: grid;
+  /* Os rótulos numa coluna estreita e os valores noutra, para o IBAN e a
+     referência ficarem alinhados e se conferirem de uma passagem de olhos. */
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px 24px;
+  margin: 0;
+}
+.transferência__dados dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+  padding-top: 4px;
+}
+.transferência__dados dd {
+  margin: 0;
+  font-size: 18px;
+  color: var(--letra-forte);
+  overflow-wrap: anywhere;
+}
+/* Monoespaçado, porque se copia à mão para a aplicação do banco e um 0 tem de
+   se distinguir de um O. */
+.transferência__iban,
+.transferência__referência {
+  font-family: var(--mono);
+  font-size: 17px;
+  letter-spacing: .04em;
+}
+.transferência__referência { color: var(--ouro-claro); }
+.transferência__nota {
+  margin: 20px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--letra-fraca);
+}
+
+@media (min-width: 700px) {
+  .transferência__dados { gap: 12px 40px; }
+}

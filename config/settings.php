@@ -168,9 +168,12 @@ return [
     // -----------------------------------------------------------------------
     'shop' => [
         'label'  => 'Loja',
-        'help'   => 'As chaves do Stripe e o IVA. Enquanto as chaves estiverem vazias a loja '
-                  . 'mostra os produtos e não deixa finalizar a compra — que é o que se quer '
-                  . 'enquanto ela está a ser preparada.',
+        'help'   => 'Como se recebe o dinheiro, e o IVA. **São duas formas de pagamento e a '
+                  . 'casa escolhe as que quer:** cartão, pelo Stripe, e transferência '
+                  . 'bancária. Basta preencher uma — a que ficar sem dados não é oferecida a '
+                  . 'ninguém. Com as duas vazias a loja mostra os produtos e não deixa '
+                  . 'finalizar a compra, que é o que se quer enquanto ela está a ser '
+                  . 'preparada.',
         'fields' => [
             'shop.stripe_publishable' => [
                 'type'   => 'text',
@@ -200,6 +203,62 @@ return [
                           . 'antes de pagar.',
                 'placeholder' => 'whsec_...',
             ],
+
+            // ---------------------------------------------------------------
+            // A transferência bancária, para a conta Wise.
+            //
+            // O Wise não cobra cartões nem avisa o site de nada: o que tem é
+            // uma conta com IBAN. Por isso esta forma de pagamento **não se
+            // confirma sozinha** — a encomenda fica à espera e alguém da casa
+            // marca-a como paga quando vir o dinheiro no extracto.
+            //
+            // Chega preencher o titular e o IBAN para passar a ser oferecida.
+            // ---------------------------------------------------------------
+            'shop.wise_holder' => [
+                'type'   => 'text',
+                'global' => true,
+                'label'  => 'Transferência · titular da conta',
+                'help'   => 'O nome exacto que está na conta Wise. É o que o cliente escreve '
+                          . 'no destinatário da transferência, e um nome diferente do da conta '
+                          . 'faz o banco devolver o dinheiro. **Preenchido isto e o IBAN, a '
+                          . 'transferência passa a aparecer no checkout.**',
+                'placeholder' => 'Covil Ancestral, Unipessoal Lda.',
+            ],
+            'shop.wise_iban' => [
+                'type'   => 'text',
+                'global' => true,
+                'label'  => 'Transferência · IBAN',
+                'help'   => 'O IBAN da conta Wise, na moeda em que a loja vende. Com ou sem '
+                          . 'espaços, tanto faz — o site arruma-os. No Wise está em Gerir → '
+                          . 'dados da conta.',
+                'placeholder' => 'BE00 0000 0000 0000',
+            ],
+            'shop.wise_bic' => [
+                'type'   => 'text',
+                'global' => true,
+                'label'  => 'Transferência · BIC/SWIFT',
+                'help'   => 'Opcional. Dentro da zona euro ninguém precisa dele; serve a quem '
+                          . 'transfere de fora.',
+                'placeholder' => 'TRWIBEB1XXX',
+            ],
+            'shop.wise_label' => [
+                'type'   => 'text',
+                'global' => true,
+                'label'  => 'Transferência · como se chama no checkout',
+                'help'   => 'O que o cliente lê ao escolher como paga. Vazio fica '
+                          . '«Transferência bancária».',
+                'placeholder' => 'Transferência bancária',
+            ],
+            'shop.wise_days' => [
+                'type'   => 'text',
+                'global' => true,
+                'label'  => 'Transferência · dias de espera',
+                'help'   => 'Quantos dias a casa guarda a encomenda à espera do dinheiro. É só '
+                          . 'o que se diz ao cliente — o stock fica reservado durante esse '
+                          . 'tempo. Vazio são 5.',
+                'placeholder' => '5',
+            ],
+
             'shop.country' => [
                 'type'   => 'text',
                 'global' => true,

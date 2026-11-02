@@ -73,6 +73,14 @@ $morada = array_values(array_filter([
       &middot; <?= e(date('d/m/Y', $quando)) ?>
     </span>
 
+    <?php
+    /* Quem vai pagar esta encomenda, e se é dos que se liquidam à mão. A coluna
+       `gateway` só existe desde que há duas formas de pagamento; nas encomendas
+       anteriores está vazia, e vazio quer dizer cartão, que era a única. */
+    $porta   = \Admedia\Shop\Payment\Gateways::get((string)($order['gateway'] ?? ''));
+    $porMão  = $porta !== null && method_exists($porta, 'settlesByHand') && $porta->settlesByHand();
+    ?>
+
     <h1 class="feito__título"><?= e(__($pago ? 'loja.done.title' : 'shop.thanks.almost')) ?></h1>
 
     <p class="feito__dito">
@@ -82,13 +90,53 @@ $morada = array_values(array_filter([
           <?= e(__('shop.thanks.sent_to', ['email' => (string)$order['email']])) ?>
         <?php endif; ?>
       <?php else: ?>
-        <?= e(__('shop.thanks.pending')) ?>
+        <?php /* «Estamos a confirmar com o banco» é verdade quando foi um
+                 cartão e é mentira numa transferência: aí ninguém está a
+                 confirmar nada, falta a pessoa ir ao banco dela. */ ?>
+        <?= e(__($porMão ? 'loja.transfer.lead' : 'shop.thanks.pending')) ?>
       <?php endif; ?>
     </p>
 
-    <?php if (!$pago && $webhookMissing): ?>
+    <?php if (!$pago && $porMão): ?>
+      <?php /* As instruções da transferência. É isto que a pessoa veio ver, e
+               por isso está antes de tudo o resto: sem o IBAN à frente dos
+               olhos, a encomenda acabou de ficar à espera de nada.
+
+               O IBAN em grupos de quatro, que é como se confere, e a referência
+               em destaque — uma transferência sem ela chega à conta sem se
+               saber de quem é. */ ?>
+      <div class="transferência">
+        <p class="transferência__título"><?= e(__('loja.transfer.title')) ?></p>
+        <dl class="transferência__dados">
+          <dt><?= e(__('loja.transfer.holder')) ?></dt>
+          <dd><?= e(\Admedia\Shop\Payment\WiseGateway::titular()) ?></dd>
+
+          <dt><?= e(__('loja.transfer.iban')) ?></dt>
+          <dd class="transferência__iban"><?= e(\Admedia\Shop\Payment\WiseGateway::ibanLegivel()) ?></dd>
+
+          <?php if (\Admedia\Shop\Payment\WiseGateway::bic() !== ''): ?>
+            <dt><?= e(__('loja.transfer.bic')) ?></dt>
+            <dd><?= e(\Admedia\Shop\Payment\WiseGateway::bic()) ?></dd>
+          <?php endif; ?>
+
+          <dt><?= e(__('loja.transfer.amount')) ?></dt>
+          <dd><?= e(money((int)$order['total_cents'])) ?></dd>
+
+          <dt><?= e(__('loja.transfer.reference')) ?></dt>
+          <dd class="transferência__referência"><?= e((string)$order['reference']) ?></dd>
+        </dl>
+        <p class="transferência__nota">
+          <?= e(__('loja.transfer.note', [
+              'dias' => (string)\Admedia\Shop\Payment\WiseGateway::diasDeEspera(),
+          ])) ?>
+        </p>
+      </div>
+
+    <?php elseif (!$pago && $webhookMissing): ?>
       <?php /* Só o dono do site o pode resolver, e esconder a razão fazia a
-               encomenda parecer perdida. */ ?>
+               encomenda parecer perdida. Não se mostra a quem está à espera de
+               uma transferência: aí a encomenda não está avariada, está à
+               espera, e é outra frase. */ ?>
       <p class="feito__aviso" role="status"><?= e(__('shop.thanks.no_webhook')) ?></p>
     <?php endif; ?>
   </div>

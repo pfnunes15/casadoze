@@ -147,11 +147,32 @@ $passo = 0;
         <?php if ($gateways === []): ?>
           <p class="passo__falta"><?= e(__('loja.cart.cannot_sell')) ?></p>
         <?php else: ?>
+          <?php /* Escolhe-se, quando há mais do que um. Com um só, a lista
+                   continua a ser uma lista — e o botão fica escondido, porque
+                   não há nada a decidir e um botão sozinho e já marcado é uma
+                   pergunta sem resposta possível.
+
+                   Rádios e não JavaScript: é o `name="gateway"` que o
+                   CheckoutController lê, e quem o tiver desligado escolhe na
+                   mesma. */ ?>
+          <?php $há_escolha = count($gateways) > 1; ?>
           <ul class="pagamentos">
-            <?php foreach ($gateways as $g): ?>
-              <li class="pagamento">
-                <span class="pagamento__nome"><?= e($g->label()) ?></span>
-                <span class="pagamento__nota"><?= e(__('loja.step.payment.hosted')) ?></span>
+            <?php foreach ($gateways as $i => $g): ?>
+              <?php $porMão = method_exists($g, 'settlesByHand') && $g->settlesByHand(); ?>
+              <li class="pagamento<?= $há_escolha ? ' pagamento--escolha' : '' ?>">
+                <label class="pagamento__rótulo">
+                  <?php if ($há_escolha): ?>
+                    <input type="radio" name="gateway" value="<?= e($g->key()) ?>"
+                           <?= $i === array_key_first($gateways) ? 'checked' : '' ?>>
+                    <span class="pagamento__marca" aria-hidden="true"></span>
+                  <?php else: ?>
+                    <input type="hidden" name="gateway" value="<?= e($g->key()) ?>">
+                  <?php endif; ?>
+                  <span class="pagamento__nome"><?= e($g->label()) ?></span>
+                </label>
+                <span class="pagamento__nota">
+                  <?= e(__($porMão ? 'loja.step.payment.transfer' : 'loja.step.payment.hosted')) ?>
+                </span>
               </li>
             <?php endforeach; ?>
           </ul>
