@@ -51,6 +51,22 @@ if ($categoria !== '') {
     $produtos = Product::published();
 }
 
+/* Por que ordem, antes de cortar aos primeiros. A Loja devolve-os pela ordem da
+   casa — o `sort_order` —, que é a certa para a montra de uma colecção pensada;
+   não é a certa para uma porta de entrada que quer mostrar o que chegou agora.
+   Uma peça nova entra com o `sort_order` no fim e nunca aparecia aqui.
+
+   Ordenado em memória e não na consulta: a Loja já traz tudo e corta a seguir,
+   e são nove produtos. O dia em que forem quinhentos, isto passa a ser uma
+   cláusula no SQL — e aí é no pacote, não aqui. */
+if ((string)($opções['order'] ?? '') === 'recentes') {
+    usort($produtos, static function (array $a, array $b): int {
+        // Pelo id quando a data empata: duas peças criadas no mesmo segundo —
+        // um povoamento, uma importação — ficavam em ordem indefinida.
+        return [$b['created_at'] ?? '', (int)$b['id']] <=> [$a['created_at'] ?? '', (int)$a['id']];
+    });
+}
+
 $produtos = array_slice($produtos, 0, $quantos);
 
 /* As categorias de cada produto, para os filtros saberem o que esconder. Uma

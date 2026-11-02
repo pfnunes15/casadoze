@@ -212,6 +212,19 @@ return [
                 'help'  => 'O endereço da categoria, como está escrito em Loja > Categorias — '
                          . 'por exemplo «velas-e-oleos». Vazio mostra de todas.',
             ],
+            'order' => [
+                'type'    => 'select',
+                'store'   => 'options',
+                'label'   => 'Por que ordem',
+                'choices' => [
+                    'casa'     => 'A ordem da casa (Loja › Produtos)',
+                    'recentes' => 'Os mais recentes primeiro',
+                ],
+                'help'    => 'A ordem da casa é a que se arrasta em Loja › Produtos, e serve '
+                           . 'uma montra pensada peça a peça. «Os mais recentes» põe à frente '
+                           . 'o que entrou agora — é o que se quer numa porta de entrada, onde '
+                           . 'uma peça nova com a ordem no fim nunca chegava a aparecer.',
+            ],
             'limit' => [
                 'type'  => 'number',
                 'store' => 'options',
