@@ -13,5 +13,15 @@ declare(strict_types=1);
  * instaladas devolvem um array vazio e não aparecem.
  */
 
-return \Admedia\Viagens\Viagens::accountLists()
-     + \Admedia\Shop\Shop::accountLists();
+$listas = \Admedia\Viagens\Viagens::accountLists()
+        + \Admedia\Shop\Shop::accountLists();
+
+/* O título, na voz desta casa. O pacote escreve «As suas compras» e este site
+   trata toda a gente por tu — «a tua conta», «o teu email», «ainda não
+   compraste». Uma linha em você no meio disso lê-se como se fosse de outro
+   sítio. Só o rótulo muda; quem vai buscar as linhas continua a ser o pacote. */
+if (isset($listas['orders'])) {
+    $listas['orders']['label'] = 'As tuas compras';
+}
+
+return $listas;

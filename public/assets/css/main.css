@@ -5791,3 +5791,131 @@ body.entrada > main { width: 100%; }
 @media (min-width: 700px) {
   .transferência__dados { gap: 12px 40px; }
 }
+
+/* ---------------------------------------------------------------------------
+   A conta de quem compra.
+
+   O que esta pessoa comprou, e para onde lhe mandamos. Duas colunas num ecrã
+   largo e uma no telefone — a morada por baixo das compras, porque é das
+   compras que se vem à procura.
+   --------------------------------------------------------------------------- */
+.conta { padding-block: 120px 100px; }
+
+.conta__topo { margin-bottom: 48px; }
+.conta__título {
+  font-family: var(--titulo);
+  font-size: clamp(38px, 6vw, 56px);
+  line-height: 1.08;
+  color: var(--letra-forte);
+  margin: 12px 0 16px;
+  /* Um email por nome é o que acontece a quem se registou e não escreveu o
+     nome, e um email em corpo 56 rebenta a linha num telefone. */
+  overflow-wrap: anywhere;
+}
+.conta__linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 24px;
+}
+.conta__email { font-size: 18px; color: var(--letra-fraca); overflow-wrap: anywhere; }
+.conta__sair {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+  cursor: pointer;
+  transition: color .3s;
+}
+.conta__sair:hover { color: var(--ouro); }
+
+.conta__par { display: grid; gap: 28px; }
+
+.conta__caixa {
+  padding: 32px;
+  border: 1px solid var(--traco);
+  background: var(--fundo-caixa);
+}
+.conta__caixa-título {
+  margin: 0 0 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--letra-tenue);
+}
+
+.conta__vazio {
+  margin: 0 0 20px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--letra-fraca);
+}
+.conta__caixa .botão { margin-top: 4px; }
+
+.conta__lista { list-style: none; margin: 0; padding: 0; }
+.conta__item {
+  display: grid;
+  /* Referência e valor nas pontas; a data e o estado pelo meio. Numa coluna
+     estreita passa a duas filas em vez de encolher a referência até não se ler. */
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 16px;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--traco);
+}
+.conta__item:first-child { padding-top: 0; }
+.conta__item:last-child { padding-bottom: 0; border-bottom: 0; }
+.conta__ref {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: var(--letra-forte);
+}
+.conta__valor {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--ouro);
+  text-align: right;
+}
+.conta__quando { font-size: 16px; color: var(--letra-tenue); }
+.conta__selo {
+  justify-self: end;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+}
+.conta__selo--bom    { color: #8e9c78; }
+.conta__selo--espera { color: var(--brasa); }
+.conta__selo--morto  { color: var(--letra-tenue); }
+
+.conta__morada {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-style: normal;
+  font-size: 18px;
+  color: var(--letra);
+}
+.conta__tenue { color: var(--letra-tenue); }
+.conta__nota {
+  margin: 20px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--letra-tenue);
+}
+
+@media (min-width: 900px) {
+  /* As compras ficam com o espaço; a morada é quatro linhas e não precisa de
+     metade do ecrã para as dizer. */
+  .conta__par { grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 32px; }
+  .conta__item { grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 24px; }
+  .conta__selo { justify-self: auto; }
+}
