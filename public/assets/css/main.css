@@ -5915,28 +5915,25 @@ body.entrada > main { width: 100%; }
 }
 
 @media (min-width: 900px) {
-  /* As compras ficam com o espaço; a morada é quatro linhas e não precisa de
-     metade do ecrã para as dizer. */
-  .conta__par { grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 32px; }
   .conta__item { grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 24px; }
   .conta__selo { justify-self: auto; }
 }
 
-/* O formulário dos dados, na coluna da conta. Os campos são os da loja — ver
-   `.campo` — e o que muda aqui é só o ar entre eles e o par do código postal
-   com a cidade, que se escrevem a olhar um para o outro. */
-.conta__forma { margin-top: 4px; }
-.conta__forma .porta__campo { margin-bottom: 16px; }
-.conta__forma .botão { margin-top: 8px; }
-.conta__dupla { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 16px; }
+/* O formulário dos dados. Os campos são os da loja — ver `.campo` — e o que
+   muda aqui é a grelha: seis colunas, e cada campo diz quantas ocupa. Num
+   telefone é tudo uma coluna, e as regras de baixo é que o espalham.
 
-@media (min-width: 520px) {
-  .conta__dupla { grid-template-columns: minmax(0, 7rem) minmax(0, 1fr); }
-}
+   Seis e não doze: os campos deste formulário partem-se em meios e em terços
+   — nome e telefone ao lado um do outro, código postal, cidade e país na mesma
+   linha — e uma grelha de doze obrigava a escrever `span 6` para dizer metade. */
+.conta__forma { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0 20px; }
+.conta__forma > * { grid-column: 1 / -1; }
+.conta__forma .porta__campo { margin-bottom: 18px; }
 
-/* Numa coluna estreita — a da conta num ecrã largo — o par volta a empilhar:
-   sete caracteres de código postal ao lado de «Funchal» em 340px é apertar os
-   dois até nenhum se ler. */
-@media (min-width: 900px) {
-  .conta__dupla { grid-template-columns: minmax(0, 1fr); }
+.conta__guardar { display: flex; justify-content: flex-end; margin-top: 6px; }
+
+@media (min-width: 620px) {
+  .conta__meio  { grid-column: span 3; }
+  .conta__terço { grid-column: span 2; }
+  .conta__tudo  { grid-column: 1 / -1; }
 }
