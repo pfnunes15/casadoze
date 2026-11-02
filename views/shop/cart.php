@@ -133,8 +133,17 @@ foreach ($linhas as $linha) {
           <div class="cesto__linha">
             <a class="cesto__moldura" href="<?= e(Shop::to('product', ['slug' => (string)$p['slug']])) ?>"
                tabindex="-1" aria-hidden="true">
+              <?php /* Pelas variantes. O `image` guarda um `.jpg` que não existe
+                       em disco — o App\Services\Imagens tira-lhe a extensão e
+                       procura o WebP ao lado —, por isso pedi-lo directamente
+                       dava a moldura partida. Uma fotografia carregada pelo
+                       backoffice, que ainda não tem variantes, serve-se como
+                       está. */ ?>
               <?php if (trim((string)$p['image']) !== ''): ?>
-                <img src="<?= e(media_url((string)$p['image'])) ?>" alt="" loading="lazy">
+                <?php $fontes = \App\Services\Imagens::srcset((string)$p['image']); ?>
+                <img src="<?= e($fontes[1] ?? media_url((string)$p['image'])) ?>"
+                     <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="120px"' : '' ?>
+                     alt="" loading="lazy" decoding="async">
               <?php elseif (($desenhos[$pid] ?? '') !== ''): ?>
                 <canvas width="600" height="800" data-desenho="<?= e($desenhos[$pid]) ?>"
                         data-semente="<?= $pid ?>" aria-hidden="true"></canvas>

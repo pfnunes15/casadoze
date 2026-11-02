@@ -45,6 +45,7 @@ use Admedia\Core\Middleware\AuthMiddleware;
 use Admedia\Core\Middleware\CsrfMiddleware;
 use Admedia\Core\Middleware\EditorOrAbove;
 use Admedia\Shop\Shop;
+use App\Controllers\ContaController;
 use App\Controllers\IntentController;
 use App\Controllers\KitController;
 use App\Controllers\CheckoutPageController;
@@ -122,6 +123,15 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
     }
 
     \Admedia\Core\Accounts\Accounts::routes($r);
+
+    /* Mudar os próprios dados. **Devia ser do pacote** — ver
+       App\Controllers\ContaController, que explica porquê — e está aqui porque
+       era onde se podia escrever. Registado depois do `Accounts::routes` porque
+       é um endereço que ele não conhece. */
+    $r->post(
+        (\Admedia\Core\Auth::doors()['customer_login'] ?? '/login') . '/dados',
+        [ContaController::class, 'guardar']
+    );
 
     /* Entrar, a sério. O `Accounts::routes` só regista o GET do formulário — o
        POST que verifica a palavra-passe vive no `Shop::accountRoutes`, e esse

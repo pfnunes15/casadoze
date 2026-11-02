@@ -67,8 +67,12 @@ $faltam   = $gratisAPartirDe > 0 ? max(0, $gratisAPartirDe - $subtotal) : 0;
       ?>
       <div class="gaveta__linha">
         <a class="gaveta__moldura" href="<?= e($ficha) ?>" tabindex="-1" aria-hidden="true">
+          <?php /* Pelas variantes, como no cesto — ver views/shop/cart.php. */ ?>
           <?php if (trim((string)$p['image']) !== ''): ?>
-            <img src="<?= e(media_url((string)$p['image'])) ?>" alt="" loading="lazy">
+            <?php $fontes = \App\Services\Imagens::srcset((string)$p['image']); ?>
+            <img src="<?= e($fontes[1] ?? media_url((string)$p['image'])) ?>"
+                 <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="96px"' : '' ?>
+                 alt="" loading="lazy" decoding="async">
           <?php elseif (($desenhos[$pid] ?? '') !== ''): ?>
             <canvas width="600" height="800" data-desenho="<?= e($desenhos[$pid]) ?>"
                     data-semente="<?= $pid ?>" aria-hidden="true"></canvas>

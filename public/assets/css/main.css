@@ -5833,7 +5833,9 @@ body.entrada > main { width: 100%; }
 }
 .conta__sair:hover { color: var(--ouro); }
 
-.conta__par { display: grid; gap: 28px; }
+/* `start` e não o `stretch` de origem: a caixa das compras com uma linha lá
+   dentro não tem nada que crescer até à altura do formulário ao lado. */
+.conta__par { display: grid; gap: 28px; align-items: start; }
 
 .conta__caixa {
   padding: 32px;
@@ -5918,4 +5920,23 @@ body.entrada > main { width: 100%; }
   .conta__par { grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 32px; }
   .conta__item { grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 24px; }
   .conta__selo { justify-self: auto; }
+}
+
+/* O formulário dos dados, na coluna da conta. Os campos são os da loja — ver
+   `.campo` — e o que muda aqui é só o ar entre eles e o par do código postal
+   com a cidade, que se escrevem a olhar um para o outro. */
+.conta__forma { margin-top: 4px; }
+.conta__forma .porta__campo { margin-bottom: 16px; }
+.conta__forma .botão { margin-top: 8px; }
+.conta__dupla { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 16px; }
+
+@media (min-width: 520px) {
+  .conta__dupla { grid-template-columns: minmax(0, 7rem) minmax(0, 1fr); }
+}
+
+/* Numa coluna estreita — a da conta num ecrã largo — o par volta a empilhar:
+   sete caracteres de código postal ao lado de «Funchal» em 340px é apertar os
+   dois até nenhum se ler. */
+@media (min-width: 900px) {
+  .conta__dupla { grid-template-columns: minmax(0, 1fr); }
 }

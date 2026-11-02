@@ -104,28 +104,96 @@ $estados = [
         </section>
       <?php endforeach; ?>
 
+      <?php /* Os dados, para mudar aqui. Antes só se mostravam e a página
+               mandava a pessoa esperar pelo checkout da compra seguinte — o que
+               é verdade e é pouco: quem muda de casa não quer esperar por uma
+               encomenda para o dizer.
+
+               Um formulário aberto e não um «editar» que o abre: são seis
+               campos e escondê-los atrás de um botão é um clique a mais para
+               corrigir uma letra no código postal. */ ?>
       <section class="conta__caixa conta__caixa--lado">
-        <h2 class="conta__caixa-título">Onde entregamos</h2>
+        <h2 class="conta__caixa-título">Os teus dados</h2>
 
         <?php if ($morada === []): ?>
           <p class="conta__vazio">
-            Ainda não temos morada tua. Escreve-a na primeira compra e fica
-            guardada para as seguintes.
-          </p>
-        <?php else: ?>
-          <address class="conta__morada">
-            <?php foreach ($morada as $linha): ?>
-              <span><?= e($linha) ?></span>
-            <?php endforeach; ?>
-            <?php if ($dado('phone') !== ''): ?>
-              <span class="conta__tenue"><?= e($dado('phone')) ?></span>
-            <?php endif; ?>
-          </address>
-          <p class="conta__nota">
-            Muda-se no checkout da próxima compra — é lá que é precisa, e é lá
-            que se confere antes de a encomenda seguir.
+            Ainda não temos morada tua. Escreve-a aqui e fica guardada para as
+            próximas compras.
           </p>
         <?php endif; ?>
+
+        <form class="conta__forma" method="post"
+              action="<?= e(locale_url((Auth::doors()['customer_login'] ?? '/login') . '/dados')) ?>">
+          <?= csrf_field() ?>
+
+          <p class="porta__campo">
+            <label class="campo__rótulo" for="d-name">Nome</label>
+            <input class="campo" type="text" id="d-name" name="name" maxlength="190"
+                   value="<?= e((string)old('name', $dado('name'))) ?>" autocomplete="name">
+          </p>
+
+          <p class="porta__campo">
+            <label class="campo__rótulo" for="d-line1">Morada</label>
+            <input class="campo" type="text" id="d-line1" name="ship_line1" maxlength="190"
+                   value="<?= e((string)old('ship_line1', $dado('ship_line1'))) ?>"
+                   autocomplete="address-line1">
+          </p>
+
+          <p class="porta__campo">
+            <label class="campo__rótulo" for="d-line2">
+              Mais da morada <span class="campo__opcional">(opcional)</span>
+            </label>
+            <input class="campo" type="text" id="d-line2" name="ship_line2" maxlength="190"
+                   value="<?= e((string)old('ship_line2', $dado('ship_line2'))) ?>"
+                   autocomplete="address-line2">
+          </p>
+
+          <div class="conta__dupla">
+            <p class="porta__campo">
+              <label class="campo__rótulo" for="d-postcode">Código postal</label>
+              <input class="campo" type="text" id="d-postcode" name="ship_postcode" maxlength="30"
+                     value="<?= e((string)old('ship_postcode', $dado('ship_postcode'))) ?>"
+                     autocomplete="postal-code">
+            </p>
+
+            <p class="porta__campo">
+              <label class="campo__rótulo" for="d-city">Cidade</label>
+              <input class="campo" type="text" id="d-city" name="ship_city" maxlength="120"
+                     value="<?= e((string)old('ship_city', $dado('ship_city'))) ?>"
+                     autocomplete="address-level2">
+            </p>
+          </div>
+
+          <p class="porta__campo">
+            <label class="campo__rótulo" for="d-country">País</label>
+            <?php /* Uma lista e não uma caixa de escrever: a coluna guarda duas
+                     letras. A lista vem do controlador, que é quem a valida —
+                     duas listas destas são duas listas que têm de concordar. */ ?>
+            <select class="campo" id="d-country" name="ship_country" autocomplete="country">
+              <?php
+              $atual  = strtoupper((string)old('ship_country', $dado('ship_country')));
+              $países = ['' => '—'] + \App\Controllers\ContaController::PAISES;
+              ?>
+              <?php foreach ($países as $código => $nome): ?>
+                <option value="<?= e($código) ?>" <?= $atual === $código ? 'selected' : '' ?>>
+                  <?= e($nome) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </p>
+
+          <p class="porta__campo">
+            <label class="campo__rótulo" for="d-phone">
+              Telefone <span class="campo__opcional">(opcional)</span>
+            </label>
+            <input class="campo" type="tel" id="d-phone" name="phone" maxlength="60"
+                   value="<?= e((string)old('phone', $dado('phone'))) ?>" autocomplete="tel">
+          </p>
+
+          <button type="submit" class="botão botão--cheio botão--largo">
+            <span>Guardar</span>
+          </button>
+        </form>
       </section>
 
     </div>
