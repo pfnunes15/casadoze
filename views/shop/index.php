@@ -293,7 +293,17 @@ $depoisDaAbertura = $abertura === PHP_INT_MAX ? PHP_INT_MAX : $abertura + 86400;
                  alvo que engole o outro. */ ?>
         <a class="produto__moldura" href="<?= e($ficha) ?>" data-inclina
            aria-label="<?= e((string)$produto['name']) ?>" tabindex="-1" aria-hidden="true">
-          <?php if ($d['desenho'] !== ''): ?>
+          <?php /* A fotografia ganha ao desenho. O desenho é o que esta casa põe
+                   onde ainda não há fotografia nenhuma — e uma peça fotografada
+                   que na montra aparece como um rabisco abstracto é uma peça que
+                   ninguém reconhece quando chega à ficha. */ ?>
+          <?php $foto = trim((string)($produto['image'] ?? '')); ?>
+          <?php if ($foto !== ''): ?>
+            <?php $fontes = \App\Services\Imagens::srcset($foto); ?>
+            <img class="produto__foto" src="<?= e($fontes[1] ?? media_url($foto)) ?>"
+                 <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="(min-width: 900px) 340px, 50vw"' : '' ?>
+                 alt="" loading="lazy" decoding="async">
+          <?php elseif ($d['desenho'] !== ''): ?>
             <canvas class="produto__desenho" width="600" height="800"
                     data-desenho="<?= e($d['desenho']) ?>" data-semente="<?= $id ?>"
                     aria-hidden="true"></canvas>

@@ -130,7 +130,15 @@ $botãoUrl   = trim((string)($section['cta_url'] ?? '')) ?: Shop::to('index');
                    teclado é um alvo que engole o outro. */ ?>
           <a class="produto__moldura" href="<?= e(Shop::to('product', ['slug' => (string)$produto['slug']])) ?>"
              data-inclina tabindex="-1" aria-hidden="true">
-            <?php if ($desenho !== ''): ?>
+            <?php /* A fotografia ganha ao desenho — ver views/shop/index.php,
+                     que faz a mesma escolha pela mesma razão. */ ?>
+            <?php $foto = trim((string)($produto['image'] ?? '')); ?>
+            <?php if ($foto !== ''): ?>
+              <?php $fontes = \App\Services\Imagens::srcset($foto); ?>
+              <img class="produto__foto" src="<?= e($fontes[1] ?? media_url($foto)) ?>"
+                   <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="(min-width: 900px) 320px, 50vw"' : '' ?>
+                   alt="" loading="lazy" decoding="async">
+            <?php elseif ($desenho !== ''): ?>
               <?php /* O canvas é desenhado pelo browser e não traz nada escrito:
                        o que descreve o produto é o nome por baixo, que está em
                        texto. Daí o `aria-hidden`. */ ?>

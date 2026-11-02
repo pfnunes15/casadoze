@@ -110,8 +110,16 @@ $temVariantes = $variants !== [];
              assunto da página e tem espaço para o ser. */ ?>
     <div class="peça__moldura">
       <?php if ($imagem !== ''): ?>
-        <img class="peça__foto" src="<?= e(media_url($imagem)) ?>"
-             alt="<?= e((string)($product['image_alt'] ?: $nome)) ?>">
+        <?php /* Pelas variantes, como o resto do site. O `$fontes[1]` é a mais
+                 estreita e serve de `src` a quem não leia `srcset`; sem
+                 variantes — uma fotografia carregada pelo backoffice, que ainda
+                 não passou pelo bin/variantes-de-imagem.sh — fica o ficheiro
+                 tal como está, que é melhor do que uma moldura vazia. */ ?>
+        <?php $fontes = \App\Services\Imagens::srcset($imagem); ?>
+        <img class="peça__foto" src="<?= e($fontes[1] ?? media_url($imagem)) ?>"
+             <?= $fontes !== null ? 'srcset="' . e($fontes[0]) . '" sizes="(min-width: 900px) 560px, 100vw"' : '' ?>
+             alt="<?= e((string)($product['image_alt'] ?: $nome)) ?>"
+             loading="lazy" decoding="async">
       <?php elseif ($desenho !== ''): ?>
         <canvas class="peça__desenho" width="600" height="800"
                 data-desenho="<?= e($desenho) ?>" data-semente="<?= $id ?>"

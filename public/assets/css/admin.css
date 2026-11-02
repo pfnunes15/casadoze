@@ -467,17 +467,48 @@ a { color: inherit; text-decoration: none; }
 
 /* Two fields side by side. `.field-row` existed in the HTML of half a dozen
    screens and had no rule at all — the fields stacked anyway, and whoever wrote
-   the HTML thought they had put them in a row. */
+   the HTML thought they had put them in a row.
+
+   **It wraps `.field` children and nothing else.** Given a bare label, input and
+   help text, the `auto-fit` spreads the three across three columns, which is
+   what the products form looked like for a while: the question on the left, the
+   box in the middle and the explanation on the right, none of them lined up
+   with the row above. */
 .field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 0 1.25rem; }
+
+/* The boxes line up along the bottom of the row even when one explanation runs
+   to three lines and the other to one. Without this the two sit at different
+   heights and the pair stops reading as a pair. */
+.field-row > .field { display: flex; flex-direction: column; }
+.field-row > .field > :last-child { margin-top: auto; }
 
 /* The row of buttons at the end of a form. */
 .admin-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-top: 1.5rem; }
 
 /* A screen with nothing in it is an answer and not a failure: it says what is
-   missing and how to fix it, instead of leaving a blank. */
+   missing and how to fix it, instead of leaving a blank.
+
+   The sentence is held to a readable measure instead of running the width of a
+   wide monitor — a single centred line a thousand pixels long is read by
+   nobody. And the `<strong>` that opens it is the heading of the screen at that
+   moment, so it is sized like one. */
 .admin-empty {
-  padding: 2.5rem 1.5rem; text-align: center; color: var(--muted);
+  max-width: 46rem; margin-inline: auto;
+  padding: 3rem 2rem; text-align: center; color: var(--muted);
   border: 1px dashed var(--border); border-radius: var(--radius); background: var(--surface);
+  line-height: 1.55;
+}
+.admin-empty > strong {
+  display: block; margin-bottom: .5rem;
+  font-size: 1.05rem; font-weight: 600; color: var(--text);
+}
+.admin-empty > strong + br { display: none; }
+/* O que fazer a seguir. Vem no fim da frase, como as onze vistas o escreveram,
+   e por isso o que o distingue é o sublinhado: a negrito e sem ele, lia-se como
+   ênfase e não como sítio onde carregar. */
+.admin-empty a {
+  font-weight: 600; color: var(--text);
+  text-decoration: underline; text-underline-offset: .2em;
 }
 
 /* ---------------- Filters and lists ---------------- */
@@ -697,6 +728,13 @@ a { color: inherit; text-decoration: none; }
 .field input[type="file"], .field select, .field textarea {
   width: 100%;
 }
+
+/* Uma lista de escolha múltipla conta as linhas que o `size` pede e não sabe do
+   `padding` que a regra de cima lhe deu: o resultado é a última linha cortada
+   ao meio pela borda, que se lê como o fim da lista. Em cima e em baixo o
+   espaço sai; aos lados fica, que é onde o texto precisa dele. */
+.field select[multiple] { padding-block: .25rem; }
+.field select[multiple] option { padding: .2rem .65rem; }
 
 .field input:focus, .field select:focus, .field textarea:focus,
 .admin-table input:focus, .admin-table select:focus, .admin-table textarea:focus {
