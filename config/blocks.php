@@ -157,12 +157,20 @@ return [
                     'help'  => 'Uma ou duas palavras. É o que o cartão diz em grande.',
                 ],
                 'subtitle' => [
-                    'type'  => 'text',
+                    'type'  => 'select',
                     'label' => 'Etiqueta',
-                    'help'  => 'A etiqueta da loja que este cartão abre — o endereço dela, em '
-                             . 'minúsculas e sem acentos, como aparece em Loja > Etiquetas. É '
-                             . 'ela que decide que produtos aparecem e quantos o cartão conta. '
-                             . 'Uma etiqueta que não exista desenha o cartão sem contagem.',
+                    'help'  => 'A etiqueta da loja que este cartão abre. É ela que decide que '
+                             . 'produtos aparecem e quantos o cartão conta.',
+                    /* Como a categoria da montra: escolhida da loja. Escrita à
+                       mão, uma etiqueta que não existisse desenhava o cartão
+                       sem contagem e sem explicação. */
+                    'choices' => static function (): array {
+                        $lista = ['' => '— escolher —'];
+                        foreach (\Admedia\Shop\Models\Tag::all() as $t) {
+                            $lista[(string)$t['slug']] = (string)$t['name'];
+                        }
+                        return $lista;
+                    },
                 ],
                 'caption' => [
                     'type'    => 'select',
@@ -206,11 +214,24 @@ return [
                 'help'  => 'Uma linha debaixo do título. Vazio não deixa buraco.',
             ],
             'category' => [
-                'type'  => 'text',
+                'type'  => 'select',
                 'store' => 'options',
                 'label' => 'Só uma categoria',
-                'help'  => 'O endereço da categoria, como está escrito em Loja > Categorias — '
-                         . 'por exemplo «velas-e-oleos». Vazio mostra de todas.',
+                'help'  => 'Vazio mostra produtos de todas.',
+                /* A lista vem da loja e não de um nome escrito à mão. Antes
+                   pedia-se aqui o endereço da categoria — «velas-e-oleos», em
+                   minúsculas e sem acentos — e um erro de uma letra não dava
+                   erro nenhum: dava uma montra vazia, sem dizer porquê.
+
+                   Closure e não lista pronta: só se pergunta à base de dados
+                   quando o formulário é mesmo desenhado. */
+                'choices' => static function (): array {
+                    $lista = ['' => 'Todas as categorias'];
+                    foreach (\Admedia\Shop\Models\Category::tree(true) as $c) {
+                        $lista[(string)$c['slug']] = (string)$c['name'];
+                    }
+                    return $lista;
+                },
             ],
             'order' => [
                 'type'    => 'select',
