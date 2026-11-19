@@ -25,22 +25,10 @@ declare(strict_types=1);
  * escrita depois dele nunca seria alcançada — nem o `/admin`.
  */
 
-use Admedia\Cms\Controllers\Admin\CmsUpdateController;
-use Admedia\Cms\Controllers\Admin\FeatureController;
-use Admedia\Cms\Controllers\Admin\BlockPreviewController;
-use Admedia\Cms\Controllers\Admin\DashboardController;
-use Admedia\Cms\Controllers\Admin\EditorController;
-use Admedia\Cms\Controllers\Admin\EnquiryAdminController;
-use Admedia\Cms\Controllers\Admin\MenuAdminController;
-use Admedia\Cms\Controllers\Admin\PageAdminController;
-use Admedia\Cms\Controllers\Admin\SectionAdminController;
-use Admedia\Cms\Controllers\Admin\SettingsController;
 use Admedia\Cms\Controllers\ContactController;
 use Admedia\Cms\Controllers\PageController;
 use Admedia\Core\Controllers\AuthController;
 use Admedia\Core\Controllers\MigrationController;
-use Admedia\Core\Controllers\UserAdminController;
-use Admedia\Core\Middleware\AdminOnly;
 use Admedia\Core\Middleware\AuthMiddleware;
 use Admedia\Core\Middleware\CsrfMiddleware;
 use Admedia\Core\Middleware\EditorOrAbove;
@@ -230,55 +218,16 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
 
     // ---------- O backoffice ----------
     $r->group(['prefix' => '/admin', 'middleware' => [AuthMiddleware::class, EditorOrAbove::class]], function ($r) {
-        $r->get('', [DashboardController::class, 'index']);
+        /* The backoffice's own addresses, declared by the package — see
+           Admedia\Cms\Cms::adminRoutes. Forty-odd lines used to be copied in
+           here, identical in every site, which made a new screen in the CMS a
+           six-repository change that the package could not verify.
 
-        // Em que língua se está a editar. Uma escolha, não um endereço: o
-        // backoffice é o mesmo para todas — ver Admedia\Core\Locales::editing.
-        $r->post('/locale', [DashboardController::class, 'setLocale']);
-        // Voltar a perguntar já se há CMS novo, sem esperar pelo dia seguinte.
-        $r->post('/verificar-cms', [DashboardController::class, 'checkUpdates']);
+           Each layer answers for itself and registers nothing when it is not
+           installed, so mounting all three gives this site exactly the ones it
+           has. */
+        \Admedia\Cms\Cms::adminRoutes($r);
 
-        // Imagens metidas pelo editor de texto.
-        $r->post('/editor/upload', [EditorController::class, 'uploadImage']);
-
-        // Como é um bloco, para quem o está a escolher. Desenhado com a folha de
-        // estilo do site, e por isso vai num iframe e não para dentro da página
-        // do backoffice.
-        $r->get('/blocks/{type}/preview', [BlockPreviewController::class, 'show']);
-        
-        /* Um bloco desta página, com o conteúdo dela, para a tela do editor
-           desenhar a página em vez de a descrever. Sem esta rota os quadros
-           da tela caem no apanha-tudo e cada bloco aparece como a página
-           inteira. Ver views/admin/partials/composer.php. */
-        $r->get('/sections/{id}/preview', [BlockPreviewController::class, 'section']);
-
-        // Páginas. Uma página são os seus dados mais os blocos de que é feita, e
-        // ambos se editam em /pages/{id}/edit.
-        $r->get   ('/pages',              [PageAdminController::class, 'index']);
-        $r->get   ('/pages/new',          [PageAdminController::class, 'create']);
-        $r->post  ('/pages',              [PageAdminController::class, 'store']);
-        $r->get   ('/pages/{id}/edit',    [PageAdminController::class, 'edit']);
-        $r->post  ('/pages/{id}',         [PageAdminController::class, 'update']);
-        $r->post  ('/pages/{id}/publish', [PageAdminController::class, 'togglePublish']);
-        $r->post  ('/pages/{id}/menu',    [PageAdminController::class, 'addToMenu']);
-        // Start this page in a language it is not written in yet. POST, not
-        // GET: it creates a row. See Admedia\Cms\Translations.
-        $r->post  ('/pages/{id}/translate/{locale}', [PageAdminController::class, 'translate']);
-        $r->delete('/pages/{id}',         [PageAdminController::class, 'destroy']);
-
-        // Blocos. Um bloco grava num pedido só — os campos dele e todos os itens
-        // que tem —, por isso não há endereços por item a alcançar.
-        $r->get   ('/pages/{pageId}/sections',       [SectionAdminController::class, 'index']);
-        $r->post  ('/pages/{pageId}/sections',       [SectionAdminController::class, 'store']);
-        $r->post  ('/pages/{pageId}/sections/order', [SectionAdminController::class, 'reorder']);
-        $r->get   ('/sections/{id}/edit',            [SectionAdminController::class, 'edit']);
-        $r->post  ('/sections/{id}',                 [SectionAdminController::class, 'update']);
-        $r->post  ('/sections/{id}/move',            [SectionAdminController::class, 'move']);
-        $r->post  ('/sections/{id}/publish',         [SectionAdminController::class, 'togglePublish']);
-        /* Um campo, escrito directamente na folha do editor em vez de num
-           formulário. Responde JSON — nada navega. Ver Admedia\Cms\LiveEdit. */
-        $r->post  ('/sections/{id}/field',           [SectionAdminController::class, 'field']);
-        $r->delete('/sections/{id}',                 [SectionAdminController::class, 'destroy']);
 
         /* A loja no backoffice: produtos, encomendas, categorias, características
            e portes. Endereços do pacote, porque o backoffice é o mesmo em todo o
@@ -356,49 +305,7 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->post  ('/vagas/{id}/abrir', [SlotAdminController::class, 'toggle']);
         $r->delete('/vagas/{id}',       [SlotAdminController::class, 'destroy']);
 
-        // Pedidos. Ler e apagar, e mais nada — um registo que se pode editar não
-        // é um registo.
-        $r->get   ('/enquiries',      [EnquiryAdminController::class, 'index']);
-        $r->get   ('/enquiries/{id}', [EnquiryAdminController::class, 'show']);
-        $r->delete('/enquiries/{id}', [EnquiryAdminController::class, 'destroy']);
-
-        // Menus
-        $r->get   ('/menus',           [MenuAdminController::class, 'index']);
-        $r->get   ('/menus/novo',      [MenuAdminController::class, 'create']);
-        $r->post  ('/menus',           [MenuAdminController::class, 'store']);
-        $r->get   ('/menus/{id}/edit', [MenuAdminController::class, 'edit']);
-        $r->post  ('/menus/{id}',      [MenuAdminController::class, 'update']);
-        $r->post  ('/menus/{id}/mover',[MenuAdminController::class, 'move']);
-        $r->delete('/menus/{id}',      [MenuAdminController::class, 'destroy']);
-
         // ---------- Só o administrador ----------
-        $r->group(['middleware' => [AdminOnly::class]], function ($r) {
-            $r->get ('/settings', [SettingsController::class, 'edit']);
-            $r->post('/settings', [SettingsController::class, 'update']);
-
-            /* O que o site tem ligado, e o que pode ligar. Instalar escreve
-               na pasta config/ e mexe no esquema — por isso o controlador
-               exige administrador, e não se fia só em a barra lateral o
-               esconder. Ver Admedia\Cms\Features. */
-            /* Actualizar o CMS sem FTP: o pacote é enviado daqui, nunca
-               descarregado pelo site. Ver Admedia\Cms\Updater. */
-            $r->get ('/cms',          [CmsUpdateController::class, 'index']);
-            $r->post('/cms',          [CmsUpdateController::class, 'upload']);
-            $r->post('/cms/terminar', [CmsUpdateController::class, 'finish']);
-            
-            $r->get ('/features',                [FeatureController::class, 'index']);
-            $r->post('/features/{key}/install',  [FeatureController::class, 'install']);
-            $r->post('/features/{key}/disable',  [FeatureController::class, 'disable']);
-
-            $r->get   ('/users',               [UserAdminController::class, 'index']);
-            $r->get   ('/users/new',           [UserAdminController::class, 'create']);
-            $r->post  ('/users',               [UserAdminController::class, 'store']);
-            $r->get   ('/users/{id}/edit',     [UserAdminController::class, 'edit']);
-            $r->post  ('/users/{id}',          [UserAdminController::class, 'update']);
-            $r->post  ('/users/{id}/active',   [UserAdminController::class, 'toggleActive']);
-            $r->post  ('/users/{id}/reinvite', [UserAdminController::class, 'resendInvite']);
-            $r->delete('/users/{id}',          [UserAdminController::class, 'destroy']);
-        });
     });
 
     /* ---------- O apanha-tudo ----------
