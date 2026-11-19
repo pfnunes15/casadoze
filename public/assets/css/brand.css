@@ -1,0 +1,12 @@
+/* This site's own palette, read by the backoffice.
+   Belongs to the site and is never shipped by the package.
+
+   --admin-accent is the purple. The gold is a light-on-dark colour and cannot carry text
+   here.
+   One token repaints the whole backoffice — the ground's tint, the
+   counters, the save button, what is waiting for somebody. It never
+   says what state a thing is in; see the note in the package's
+   admin.css. */
+:root {
+  --admin-accent: #7b4fb8;
+}
