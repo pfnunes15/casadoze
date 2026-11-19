@@ -411,6 +411,30 @@ a { color: inherit; text-decoration: none; }
 .order-sheet > .admin-card { margin-bottom: 0; }
 .order-sheet h2:not(:first-child) { margin-top: 20px; }
 
+/* A product, in a list: the photograph, then the name.
+
+   The thumbnail is a fixed square whatever shape the photograph is — a column
+   of boxes of different widths is a column the eye cannot run down. A product
+   with no photograph keeps the square, empty and hatched: the gap is the point,
+   because a shop item with no picture is something to go and fix. */
+.prod-row { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.prod-row__shot {
+  flex: none;
+  width: 44px; height: 44px;
+  border-radius: var(--r-cell);
+  object-fit: cover;
+  background: var(--sub);
+}
+.prod-row__shot--none {
+  display: block;
+  border: 1px dashed var(--border);
+  background:
+    repeating-linear-gradient(45deg,
+      transparent 0 6px,
+      color-mix(in srgb, var(--ink) 7%, transparent) 6px 7px);
+}
+.prod-row strong { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
 
 /* ---------------- Cards ---------------- */
 /* Translucent and not solid white: the ground shows through just enough for a
