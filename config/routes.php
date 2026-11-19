@@ -368,6 +368,7 @@ $r->group(['middleware' => [CsrfMiddleware::class]], function ($r) {
         $r->post  ('/menus',           [MenuAdminController::class, 'store']);
         $r->get   ('/menus/{id}/edit', [MenuAdminController::class, 'edit']);
         $r->post  ('/menus/{id}',      [MenuAdminController::class, 'update']);
+        $r->post  ('/menus/{id}/mover',[MenuAdminController::class, 'move']);
         $r->delete('/menus/{id}',      [MenuAdminController::class, 'destroy']);
 
         // ---------- Só o administrador ----------

@@ -37,288 +37,299 @@
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
+/* Outfit, self-hosted. Two subsets cover everything the backoffice writes;
+   no request leaves the page, which is behind a login and under a CSP that
+   forbids third-party script and style anyway. */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/outfit-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/outfit-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
-  --bg:          var(--admin-canvas, #f4f1ea);
-  --surface:     var(--white, #ffffff);
-  --surface-2:   #f7f5ef;
-  --surface-2:   color-mix(in srgb, var(--admin-canvas, #f4f1ea) 55%, var(--white, #ffffff));
-  --border:      #eae8e2;
-  --border:      color-mix(in srgb, var(--admin-ink, #1b2426) 9%, var(--white, #ffffff));
-  --text:        var(--admin-ink, #1b2426);
-  --muted:       var(--admin-muted, #6b7a7c);
-  --faint:       #9aa5a6;
-  --faint:       color-mix(in srgb, var(--admin-muted, #6b7a7c) 62%, var(--white, #ffffff));
+  /* ---------------------------------------------------------------------
+     The accent, and the only colour a site chooses.
 
-  /* Solid buttons and the sidebar: the brand's own chrome. */
-  --primary:     var(--admin-chrome, #4a4a49);
-  --primary-d:   var(--admin-chrome-dark, #3f3f3e);
-  /* What marks the page you are on. Dark text on it, because a highlight this
-     light cannot carry white. */
-  --highlight:   var(--admin-highlight, #f5f2a6);
-  --highlight-ink: var(--admin-ink, #1b2426);
+     `--admin-accent` is the hook to set; without it we fall back to the
+     chrome the site already declared for the old sidebar. That fallback is
+     not always right — a site whose chrome was a neutral grey gets a
+     neutral backoffice — so any site that cares declares the accent.
 
-  --accent:      #2f7d5e;
-  --accent-bg:   #e8f2ed;
+     The ground below is deliberately NOT `--admin-canvas` any more. Six
+     sites each picking their own background is six products; one ground
+     with the brand breathed into one corner is one product that knows
+     whose it is. What tells two backoffices apart is the glow, the pills
+     and the chips, not the paper.
+     --------------------------------------------------------------------- */
+  --brand:       var(--admin-accent, var(--admin-chrome, #2f6f55));
+  --brand-ink:   #ffffff;
+  /* The accent as text or as a thin line. A pale brand is unreadable at
+     1px on white, so it is darkened here rather than at each use. */
+  --brand-text:  color-mix(in srgb, var(--brand) 82%, #000);
 
-  /* Danger stays outside the palette on purpose: red is not the brand here,
-     it is the meaning. A delete button that matched the brand would be a
-     delete button nobody hesitates over. */
-  --danger:      #b3243a;
-  --danger-bg:   #fbe9ec;
-  --danger-line: #eec6cd;
+  /* Surfaces */
+  --ink:         #1c1d1f;
+  --ink-2:       #626366;
+  --line:        rgba(28, 29, 31, .09);
+  --solid:       #ffffff;
+  --sub:         #f3f2ee;
+  --card:        rgba(255, 255, 255, .78);
+  --ground:      #ecebe7;
+  --ground-img:
+    radial-gradient(1200px 700px at 100% 0%, color-mix(in srgb, var(--brand) 13%, transparent), transparent 60%),
+    linear-gradient(140deg, #e6e5e1 0%, #ecebe7 55%, #edece8 100%);
 
-  --sidebar:     var(--admin-chrome, #4a4a49);
-  --sidebar-2:   var(--admin-chrome-dark, #3f3f3e);
-  --sidebar-tx:  rgba(255,255,255,.82);
-  --sidebar-w:   256px;
-  /* Cantos e profundidade.
-     Era tudo caixa branca com um risco de um pixel à volta: o desenho de uma
-     folha de cálculo, onde nada está à frente de nada. Os cantos abriram e o
-     risco passou a ser sombra — o que separa uma caixa do fundo é ela estar
-     um bocadinho acima, que é como se lê um cartão. */
-  --radius:      14px;
-  --radius-sm:   10px;
-  --shadow:      0 1px 2px rgba(27,36,38,.04), 0 2px 6px rgba(27,36,38,.06);
-  --shadow-md:   0 6px 20px rgba(27,36,38,.10);
+  /* The dark pill: what marks the page you are on, and the quiet primary
+     button. Not the brand — a site whose brand is red would mark the
+     current tab in the colour of an alarm. */
+  --pill:        #2b2b2d;
+  --pill-ink:    #ffffff;
+
+  /* Danger stays outside the palette on purpose: red is not the brand
+     here, it is the meaning. A delete button that matched the brand would
+     be a delete button nobody hesitates over. */
+  --danger:      #b3261e;
+  --danger-ink:  #ffffff;
+  --danger-bg:   #fbeceb;
+  --danger-line: color-mix(in srgb, var(--danger) 25%, transparent);
+
+  /* Radii, from the visual guide: pills, cards, inner cards, cells. */
+  --r-pill:      999px;
+  --r-card:      28px;
+  --r-inner:     20px;
+  --r-field:     14px;
+  --r-cell:      10px;
+
+  /* ---------------------------------------------------------------------
+     The names the rest of this file was written against.
+
+     Aliases, not copies: two thousand lines below here ask for --surface
+     and --border and --text, and they all repaint from the tokens above
+     without a single one of them being touched. Keep them.
+     --------------------------------------------------------------------- */
+  --bg:          var(--ground);
+  --surface:     var(--solid);
+  --surface-2:   var(--sub);
+  --border:      var(--line);
+  --text:        var(--ink);
+  --muted:       var(--ink-2);
+  --faint:       color-mix(in srgb, var(--ink-2) 62%, var(--solid));
+
+  --primary:     var(--pill);
+  --primary-d:   #1f1f21;
+  --highlight:   var(--pill);
+  --highlight-ink: var(--pill-ink);
+
+  --accent:      var(--brand-text);
+  --accent-bg:   color-mix(in srgb, var(--brand) 12%, var(--solid));
+
+  --radius:      var(--r-card);
+  --radius-sm:   var(--r-field);
+  --shadow:      0 1px 2px rgba(28,29,31,.03), 0 2px 8px rgba(28,29,31,.05);
+  --shadow-md:   0 18px 40px rgba(28,29,31,.10);
   --transition:  150ms ease;
+
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
 
 body.admin {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 14px;
-  line-height: 1.55;
+  min-height: 100dvh;
+  background: var(--ground-img) fixed, var(--ground);
+  color: var(--ink);
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
+/* One light weight for every heading. It is most of what makes this read
+   calm rather than loud, and it is why the titles are allowed to be big. */
+h1, h2, h3 { font-weight: 300; letter-spacing: -.02em; line-height: 1.1; }
+
 a { color: inherit; text-decoration: none; }
 
-.admin-layout { display: flex; min-height: 100vh; }
-
-/* ---------------- Sidebar ---------------- */
-.admin-sidebar {
-  width: var(--sidebar-w);
-  background: var(--sidebar);
-  color: var(--sidebar-tx);
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  flex-shrink: 0;
-}
-.admin-sidebar__brand {
-  padding: 1.5rem 1.2rem;
-  display: flex; align-items: center; justify-content: center;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
-}
-/* The site's mark, however tall or wide the client's file happens to be. */
-.admin-sidebar__brand img {
-  max-height: 44px; max-width: 100%; width: auto; height: auto; display: block;
-}
-.admin-sidebar__brand:hover { background: rgba(255,255,255,.04); }
-.admin-sidebar__brand span {
-  font-weight: 600; color: #fff; font-size: 1rem; letter-spacing: 0;
-}
-
-/* A barra rola, e **tem de se ver que rola**.
-   -------------------------------------------------------------------------
-   São vinte e uma entradas e a altura é a da janela. Num portátil cabem umas
-   dez: as outras ficavam debaixo do fundo da lista, com o bloco de quem entrou
-   logo a seguir a dizer «acabou aqui». Metade do backoffice — as categorias,
-   os portes, o IVA, as definições, os utilizadores — existia e não havia como
-   lá chegar sem adivinhar que aquilo rolava. No macOS a barra de deslocamento
-   só aparece enquanto se rola, por isso não havia pista nenhuma.
-
-   O esbatido no fundo é a pista. É o próprio fundo da barra a subir vinte e
-   quatro pixéis, e **esconde-se sozinho quando não faz falta**: só tem o que
-   esbater se a lista chegar lá abaixo. Com dez entradas, cai sobre o vazio e
-   não se vê. */
-.admin-sidebar__nav {
-  padding: 0.85rem 0.7rem;
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
-  /* A barra de deslocamento ocupa lugar sempre, mesmo quando não há nada para
-     rolar. Sem isto, a lista salta um punhado de pixéis para o lado no momento
-     em que passa a caber — e a barra do macOS, que só aparece enquanto se
-     rola, não deixava pista nenhuma. */
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.28) transparent;
-}
-.admin-sidebar__nav::-webkit-scrollbar { width: 8px; }
-.admin-sidebar__nav::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,.28);
+:focus-visible {
+  outline: 3px solid var(--brand-text);
+  outline-offset: 2px;
   border-radius: 4px;
 }
-.admin-sidebar__nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.42); }
 
-.admin-sidebar__rolo { position: relative; flex: 1; min-height: 0; display: flex; }
-.admin-sidebar__rolo::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  /* Quarenta e não vinte e quatro: a vinte e quatro apanhava meia linha de
-     texto e lia-se como sombra. A quarenta apanha a linha inteira a desaparecer,
-     que é o que diz «há mais por baixo». */
-  height: 40px;
-  background: linear-gradient(to top, var(--sidebar) 35%, transparent);
-  pointer-events: none;
-}
+/* The shell is a column now: a bar across the top, the work under it.
+   See views/layouts/admin.php for why the sidebar went. */
+.admin-layout { display: flex; flex-direction: column; min-height: 100dvh; }
 
-.admin-sidebar__nav h6 {
-  padding: 1.1rem 0.85rem 0.4rem;
-  margin: 0;
-  font-size: 0.78rem;
-  letter-spacing: 0;
-  color: rgba(255,255,255,.5);
-  font-weight: 600;
-}
-.admin-sidebar__nav a {
-  display: flex;
+/* ---------------- The bar across the top ----------------
+   The sidebar is gone. It was a 256px column carrying up to twenty-one links
+   on a shop site, most of them places nobody goes in a given week, and it cost
+   that column on every screen for the privilege. By the end it did not fit a
+   laptop: the list ran off the bottom and four shop screens existed with no
+   way to reach them, which is what the nested drawers were papering over.
+
+   What replaced it is one row of pills: the half-dozen AREAS of the
+   backoffice. The sections inside an area are the tab rail the screens
+   already draw — see views/admin/partials/tabs.php — so getting anywhere is
+   an area and then a section, which is what it was before, minus the column
+   and minus the drawers.
+
+   The row scrolls sideways when it does not fit. Deliberately not a drawer: a
+   drawer is one extra click on every single navigation, every day, paid by
+   the person who uses this most. */
+
+.admin-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.7rem;
-  color: var(--sidebar-tx);
-  padding: 0.62rem 0.85rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 2px;
-  transition: background var(--transition), color var(--transition);
-}
-.admin-sidebar__nav a svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.85; }
-.admin-sidebar__nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
-/* Onde se está.
-   Era o rectângulo inteiro pintado da cor da marca, com texto escuro por
-   cima: lê-se à primeira, mas é o que mais faz a barra parecer de outra
-   década, e com dezasseis entradas é um berro no meio de uma lista calma.
-   A marca fica — numa barra à esquerda, que é a altura do item — e o fundo
-   passa a ser o mesmo branco translúcido do rato por cima, um pouco mais
-   firme. */
-.admin-sidebar__nav a.active {
-  background: rgba(255,255,255,.12);
-  color: #fff;
-  font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--highlight);
-}
-.admin-sidebar__nav a.active svg { opacity: 1; }
-.admin-sidebar__nav a.sub {
-  padding-left: 2.4rem;
-  font-size: 0.82rem;
-  color: rgba(255,255,255,.55);
+  gap: 12px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px;
 }
 
-/* The dashboard's quick guide */
-.admin-guide__summary {
-  cursor: pointer; user-select: none; list-style: none;
-  display: flex; align-items: center; gap: 0.5rem;
-  font-size: 1.1rem; font-weight: 700; color: var(--text);
+.admin-head__left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-head__tools { display: flex; align-items: center; gap: 8px; grid-column: 2; grid-row: 1; }
+
+/* The site's own mark, so somebody who runs several can tell at a glance
+   which one they are in. The name is the fallback and the alt text, never a
+   second thing to read beside the logo. */
+.admin-brand {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  font-size: 18px; font-weight: 500; letter-spacing: -.01em;
+  color: var(--ink); white-space: nowrap;
 }
-.admin-guide__summary::-webkit-details-marker { display: none; }
-.admin-guide__summary::after {
-  content: ''; margin-left: auto;
-  width: 8px; height: 8px;
-  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
-  transform: rotate(-45deg); opacity: 0.5;
-  transition: transform var(--transition);
-}
-.admin-guide[open] .admin-guide__summary::after { transform: rotate(45deg); }
-.admin-guide__intro { color: var(--muted); margin: 0.7rem 0 0.4rem; line-height: 1.55; }
-.admin-guide__group {
-  font-size: 0.82rem; letter-spacing: 0;
-  color: var(--muted); font-weight: 700; margin: 1.4rem 0 0.7rem;
-}
-.admin-guide__group span { text-transform: none; letter-spacing: 0; font-weight: 400; opacity: 0.8; }
-.admin-guide__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
-.admin-guide__list > li { display: flex; gap: 0.85rem; align-items: flex-start; }
-.admin-guide__ico { font-size: 1.25rem; line-height: 1.35; flex-shrink: 0; width: 1.8rem; text-align: center; }
-.admin-guide__list strong { display: block; color: var(--text); font-size: 0.95rem; }
-.admin-guide__list p { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
-.admin-guide__tip {
-  margin: 1.4rem 0 0; padding: 0.85rem 1rem;
-  background: var(--surface-2); border-radius: var(--radius-sm);
-  color: var(--text); font-size: 0.9rem; line-height: 1.55;
+.admin-brand img { display: block; height: 22px; width: auto; }
+
+.admin-head__where {
+  font-size: 14px; color: var(--ink-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* As definições, num item que abre */
-.admin-nav-adv { width: 100%; margin-top: 0.5rem; }
-.admin-nav-adv > summary {
-  display: flex; align-items: center; gap: 0.7rem;
-  color: var(--sidebar-tx);
-  padding: 0.62rem 0.85rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem; font-weight: 500;
-  cursor: pointer; user-select: none; list-style: none;
-  transition: background var(--transition), color var(--transition);
+.admin-nav {
+  display: flex; gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--card);
+  overflow-x: auto; scrollbar-width: none;
+  grid-column: 1 / -1;
 }
-.admin-nav-adv > summary::-webkit-details-marker { display: none; }
-.admin-nav-adv > summary svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.85; }
-.admin-nav-adv > summary:hover { background: rgba(255,255,255,0.06); color: #fff; }
-.admin-nav-adv > summary .nav-hint { font-weight: 400; opacity: 0.6; font-size: 0.85em; }
-/* arrow that rotates when open */
-.admin-nav-adv > summary::after {
-  content: ''; margin-left: auto;
-  width: 7px; height: 7px;
-  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
-  transform: rotate(-45deg); opacity: 0.55;
-  transition: transform var(--transition);
-}
-.admin-nav-adv[open] > summary::after { transform: rotate(45deg); }
-/* As linhas de dentro ficam um degrau à direita e um ponto mais calmas: é o
-   que diz que pertencem ao item que abriu, e não à barra toda. */
-.admin-nav-adv__items { margin-top: 2px; }
-.admin-nav-adv__items a {
-  padding-left: 2.1rem;
-  font-size: .845rem;
-}
+.admin-nav::-webkit-scrollbar { display: none; }
 
-/* The way out of the backoffice, in the foot rather than in the list.
-   Quieter than a nav item, because leaving is not one of the things the
-   sidebar is for — but it sits above the signed-in name, because people look
-   for it in the corner. */
-.admin-sidebar__site {
-  display: block; padding: .55rem .9rem; margin: 0 .7rem .35rem;
-  font-size: .82rem; color: rgba(255,255,255,.55); text-decoration: none;
-  border-radius: var(--radius-sm); transition: all var(--transition);
+.admin-nav a {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 44px; padding: 9px 16px;
+  border-radius: var(--r-pill);
+  font-size: 14px; color: var(--ink); white-space: nowrap;
 }
-.admin-sidebar__site:hover { background: rgba(255,255,255,.06); color: #fff; }
+.admin-nav a:hover { background: rgba(255, 255, 255, .6); }
+.admin-nav a.active, .admin-nav a.active:hover { background: var(--pill); color: var(--pill-ink); }
 
-.admin-sidebar__user {
-  padding: 0.9rem 1.1rem;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
+/* A count is the only reason anybody opens an inbox. It wears the brand
+   because it is the one thing on this bar that is waiting for a person. */
+.nav-count {
+  padding: 1px 7px;
+  border-radius: var(--r-pill);
+  background: var(--brand); color: var(--brand-ink);
+  font-size: 11px; font-weight: 600;
 }
-.admin-sidebar__user-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--highlight);
-  color: var(--highlight-ink); font-weight: 700;
+.admin-nav a.active .nav-count { background: rgba(255, 255, 255, .22); color: #fff; }
+
+.admin-head__btn {
+  position: relative; flex: none;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 0.9rem;
+  width: 44px; height: 44px;
+  border: 1px solid var(--line); border-radius: 50%;
+  background: var(--card); color: var(--ink); cursor: pointer;
+  font-size: 15px;
 }
-.admin-sidebar__user strong { display: block; color: #fff; font-size: 0.85rem; }
-.admin-sidebar__user small { color: rgba(255,255,255,.6); font-size: 0.82rem; }
-.admin-sidebar__user form { margin: 0.15rem 0 0; }
-.admin-sidebar__user button {
-  background: none; border: none; color: rgba(255,255,255,.7);
-  padding: 0; cursor: pointer; font-size: 0.78rem; font-family: inherit;
+.admin-head__btn:hover { background: var(--solid); }
+
+/* Who you are, and the way out. A menu and not a permanent block: signing out
+   is not one of the things somebody came here to do, and it used to sit in
+   the sidebar at the same weight as the work. */
+.admin-who { position: relative; flex: none; }
+.admin-who__btn {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 44px; padding: 4px 14px 4px 4px;
+  border: 1px solid var(--line); border-radius: var(--r-pill);
+  background: var(--card); color: var(--ink); cursor: pointer; text-align: left;
+  font: inherit;
 }
-.admin-sidebar__user button:hover { text-decoration: underline; }
+.admin-who__face {
+  display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--brand); color: var(--brand-ink);
+  font-size: 13px; font-weight: 600;
+}
+.admin-who__id { display: none; }
+.admin-who__name { display: block; font-size: 14px; font-weight: 500; line-height: 1.2; }
+.admin-who__role { display: block; font-size: 12px; color: var(--ink-2); }
+
+.admin-who__menu {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60;
+  min-width: 240px; padding: 14px;
+  border: 1px solid var(--line); border-radius: var(--r-inner);
+  background: var(--solid);
+  box-shadow: var(--shadow-md);
+}
+.admin-who__menu strong { display: block; font-size: 15px; font-weight: 500; }
+.admin-who__menu small { display: block; margin-bottom: 12px; font-size: 13px; color: var(--ink-2); word-break: break-all; }
+.admin-who__menu form { margin-top: 10px; }
+
+@media (min-width: 768px) {
+  .admin-head { gap: 16px; padding: 20px 32px; }
+  .admin-who__id { display: block; }
+}
+@media (min-width: 1180px) {
+  .admin-head { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .admin-nav { grid-column: 2; grid-row: 1; justify-self: center; }
+  .admin-head__tools { grid-column: 3; }
+}
+
+/* The area's own sections, on the lists. Same rail as a screen's own tabs,
+   one notch quieter, because it is navigation between screens rather than
+   inside one. */
+.admin-tabs--area { margin-bottom: 24px; }
 
 /* ---------------- Main ---------------- */
-.admin-main { flex: 1; padding: 2rem 2.4rem; min-width: 0; }
-.admin-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.75rem; gap: 1rem; flex-wrap: wrap;
+.admin-main {
+  flex: 1; min-width: 0;
+  width: 100%; max-width: 1440px; margin: 0 auto;
+  padding: 8px 16px 64px;
 }
-.admin-header h1 { margin: 0; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+@media (min-width: 768px) { .admin-main { padding: 16px 32px 64px; } }
+
+.admin-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin: 8px 0 20px; gap: 16px; flex-wrap: wrap;
+}
+/* Big and light. The size is what makes a screen announce itself without a
+   rule under it or a colour behind it; the weight is what stops the size from
+   shouting. */
+.admin-header h1 { margin: 0; font-size: 2.6rem; font-weight: 300; letter-spacing: -.02em; }
+@media (max-width: 600px) { .admin-header h1 { font-size: 2rem; } }
+
 /* The title and its one-line subtitle sit on a line together, which is how
    every screen here reads: «Páginas  13 páginas.» The row has to wrap, and
    the title must not be the thing that wraps — squeezing «Definições do
@@ -326,19 +337,68 @@ a { color: inherit; text-decoration: none; }
    hierarchy exactly backwards. */
 .admin-header > div { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: baseline; }
 .admin-header > div > h1 { flex: 0 0 auto; }
+.admin-header__sub { font-size: 13px; color: var(--ink-2); }
 /* A second sentence is not a subtitle any more — it is a paragraph, and it
    takes its own line. */
 .admin-header__sub + .admin-header__sub { flex: 1 0 100%; margin-top: .15rem; }
 
+/* The way back, on its own line above the title. In the flex row it sat
+   beside the h1 reading as part of it — "Páginas Nova página". */
+.admin-header__crumb { flex: 1 0 100%; margin: 0 0 2px; font-size: 13px; }
+.admin-header__crumb a { color: var(--ink-2); }
+.admin-header__crumb a:hover { color: var(--brand-text); text-decoration: underline; }
+
+/* A form of two questions does not want the width of a table. Beyond about
+   this, the eye has to travel from a label on the left to a box that ends far
+   away on the right, for no gain. */
+.page-new { max-width: 640px; }
+
+/* The refinements of a form, behind one word.
+
+   The same shape as the delete drawer at the foot of an editor, and for the
+   same reason: what is rarely needed should be reachable without being in the
+   way of what is always needed. It opens by itself whenever the thing inside
+   it is already set to something other than its default, so nothing is ever
+   hidden from the person who put it there. */
+.admin-more { margin: 4px 0 8px; }
+.admin-more > summary {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 10px 18px;
+  border: 1px solid var(--border); border-radius: var(--r-pill);
+  font-size: 14px; color: var(--ink); cursor: pointer; list-style: none;
+}
+.admin-more > summary::-webkit-details-marker { display: none; }
+.admin-more > summary::before { content: '\203A'; display: inline-block; transition: transform .15s; }
+.admin-more[open] > summary::before { transform: rotate(90deg); }
+.admin-more > summary:hover { background: var(--sub); }
+.admin-more__body { padding: 20px 0 0; }
+
+/* A button that is one character wide. Square-ish rather than pill-long, so
+   two of them beside an "Editar" read as a pair of nudges and not as two more
+   words to read. */
+.btn-admin--icon { min-width: 36px; padding: 8px 10px; font-size: 15px; line-height: 1; }
+
+/* An order reads as one sheet: the lines across the top, then who it is for
+   beside what you can do about it. */
+.order-sheet { display: grid; gap: 16px; align-items: start; }
+@media (min-width: 900px) { .order-sheet { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.order-sheet > .admin-card { margin-bottom: 0; }
+.order-sheet h2:not(:first-child) { margin-top: 20px; }
+
+
 /* ---------------- Cards ---------------- */
+/* Translucent and not solid white: the ground shows through just enough for a
+   card to read as something laid ON the page rather than a hole cut in it. A
+   form people type into gets --solid, where white is one less thing between
+   them and what they wrote. */
 .admin-card {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.6rem 1.75rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  margin-bottom: 16px;
 }
+.admin-card--solid { background: var(--solid); }
 /* Cards with a wide table scroll horizontally (instead of cutting the page off) */
 /* `clip` and not `hidden`, and not `auto`.
    Both of those make the card a scroll container, and a scroll container is
@@ -350,11 +410,11 @@ a { color: inherit; text-decoration: none; }
    nowhere useful to pin anyway. */
 .admin-card:has(> .admin-table) { overflow: clip; }
 .admin-card h2 {
-  margin: 0 0 1.1rem; font-size: 1.05rem; font-weight: 600;
+  margin: 0 0 14px; font-size: 20px; font-weight: 500; letter-spacing: -.01em;
   display: flex; align-items: center; gap: 0.5rem;
 }
 .admin-card--flush { padding: 0; overflow: clip; }
-.admin-card--flush h2 { padding: 1.2rem 1.5rem 0; }
+.admin-card--flush h2 { padding: 20px 22px 0; }
 
 /* ---------------- Stat tiles ---------------- */
 .stat-grid {
@@ -364,33 +424,37 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 1.6rem;
 }
 .stat-tile {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.3rem 1.4rem;
-  box-shadow: var(--shadow);
+  border-radius: var(--r-card);
+  padding: 20px 22px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  transition: transform var(--transition), box-shadow var(--transition);
+  gap: 16px;
 }
-.stat-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .stat-tile__icon {
-  width: 46px; height: 46px; border-radius: 12px;
+  width: 46px; height: 46px; border-radius: var(--r-field);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
 .stat-tile__icon svg { width: 22px; height: 22px; }
+/* Five names, two meanings. A tile either counts something waiting for a
+   person or it counts something that simply is, and five hand-picked hues —
+   blue, amber, violet and two more — said neither: they were a palette on a
+   dashboard, competing with each other and with the site's own colour.
+
+   The names stay because views ask for them by name, and a site that invents
+   a sixth gets the neutral one rather than nothing. */
 .stat-tile__icon--red    { background: var(--danger-bg); color: var(--danger); }
-.stat-tile__icon--green  { background: var(--accent-bg); color: var(--accent); }
-.stat-tile__icon--blue   { background: #e6effd; color: #2f6fed; }
-.stat-tile__icon--amber  { background: #fdf1dd; color: #d99412; }
-.stat-tile__icon--violet { background: #efe9fd; color: #7c4ddb; }
+.stat-tile__icon--amber,
+.stat-tile__icon--green  { background: var(--brand); color: var(--brand-ink); }
+.stat-tile__icon--blue,
+.stat-tile__icon--violet { background: var(--sub); color: var(--ink-2); }
 .stat-tile__label {
-  font-size: 0.82rem; letter-spacing: 0;
-  color: var(--muted); margin: 0 0 0.15rem; font-weight: 600;
+  font-size: 13px; letter-spacing: 0;
+  color: var(--muted); margin: 0 0 2px; font-weight: 400;
 }
-.stat-tile__value { font-size: 1.7rem; font-weight: 700; margin: 0; line-height: 1; }
+.stat-tile__value { font-size: 2.1rem; font-weight: 300; margin: 0; line-height: 1; letter-spacing: -.02em; }
 
 /* ---------------- Table ---------------- */
 /* `separate` and not `collapse`: a collapsed table draws its borders on the
@@ -400,12 +464,16 @@ a { color: inherit; text-decoration: none; }
    travels with it. */
 .admin-table {
   width: 100%; border-collapse: separate; border-spacing: 0;
-  font-size: 0.875rem;
+  font-size: 14px;
 }
+/* Room to breathe. A list is read down, and rows packed to the pixel make the
+   eye lose its line between the name and the date at the far right. */
 .admin-table th, .admin-table td {
-  padding: 0.8rem 1.1rem; text-align: left;
+  padding: 14px 20px; text-align: left;
   border-bottom: 1px solid var(--border); vertical-align: middle;
 }
+.admin-table tbody tr:last-child td { border-bottom: 0; }
+.admin-table tbody tr:hover td { background: rgba(255, 255, 255, .55); }
 
 /* The header follows the reader down a long list. Eighty wines is four
    screens of scrolling, and by the second one a column of dates and a column
@@ -418,7 +486,8 @@ a { color: inherit; text-decoration: none; }
      Branco e não cinzento: a faixa cinzenta por cima de linhas brancas é o
      desenho de uma folha de cálculo. O que diz que aquela linha é o título
      das colunas é o tamanho, a cor e o risco por baixo. */
-  background: var(--surface);
+  background: var(--sub);
+  font-weight: 500;
   border-bottom: 0;
   box-shadow: inset 0 -1px 0 var(--border);
 }
@@ -476,21 +545,29 @@ a { color: inherit; text-decoration: none; }
    therefore the house colour. Of the buttons this package draws, 44 already
    asked for `--outline` — which was the same as saying "not the black one" — and
    no longer have to ask. */
+/* 44px tall, always. It is the size a finger needs, and a backoffice gets
+   used on a phone at the counter more often than anyone plans for. */
 .btn-admin {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  padding: 0.6rem 1.05rem; font-size: 0.85rem; font-weight: 600;
-  border-radius: var(--radius-sm); border: 1px solid var(--border);
-  background: var(--surface); color: var(--text); cursor: pointer;
-  font-family: inherit; transition: all var(--transition); white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 12px 20px;
+  font-size: 14px; font-weight: 500;
+  border-radius: var(--r-pill); border: 1px solid var(--border);
+  background: transparent; color: var(--ink); cursor: pointer;
+  font-family: inherit; transition: background var(--transition); white-space: nowrap;
 }
-.btn-admin:hover {
-  background: var(--surface-2); border-color: var(--muted);
-  color: var(--text); transform: translateY(-1px);
-}
+.btn-admin:hover { background: rgba(255, 255, 255, .65); color: var(--ink); }
 .btn-admin svg { width: 16px; height: 16px; }
+.btn-admin:disabled { cursor: not-allowed; opacity: .55; }
 
-.btn-admin--primary { background: var(--primary); border-color: var(--primary); color: #fff; }
-.btn-admin--primary:hover { background: var(--primary-d); border-color: var(--primary-d); color: #fff; }
+/* The dark pill, not the brand: this is the action of the screen, and it has
+   to read the same on six sites whose brands range from a near-black grey to
+   a bright red. --action below is for the one act that IS the point of the
+   screen — saving what somebody just wrote. */
+.btn-admin--primary { background: var(--pill); border-color: var(--pill); color: var(--pill-ink); }
+.btn-admin--primary:hover { background: var(--primary-d); border-color: var(--primary-d); color: var(--pill-ink); }
+
+.btn-admin--action { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); font-weight: 600; }
+.btn-admin--action:hover { background: color-mix(in srgb, var(--brand) 88%, #000); border-color: transparent; color: var(--brand-ink); }
 
 /* This is already what a button is by default. It stays because it is written
    in 44 places, and a class that harms nobody is cheaper than 44 edits. */
@@ -501,11 +578,15 @@ a { color: inherit; text-decoration: none; }
 .btn-admin--ghost {
   background: transparent; border-color: transparent; color: var(--muted);
 }
-.btn-admin--ghost:hover { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+.btn-admin--ghost:hover { background: var(--sub); color: var(--text); border-color: transparent; }
 
-.btn-admin--danger { background: var(--surface); color: var(--danger); border-color: var(--danger-line); }
-.btn-admin--danger:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
-.btn-admin--sm { padding: 0.38rem 0.7rem; font-size: 0.78rem; }
+.btn-admin--danger { background: transparent; color: var(--danger); border-color: var(--danger-line); }
+.btn-admin--danger:hover { background: var(--danger); color: var(--danger-ink); border-color: var(--danger); }
+
+/* Still a touch target. Smaller type and less padding, never under 36px —
+   below that it is a thing you aim at rather than press. */
+.btn-admin--sm { min-height: 36px; padding: 8px 14px; font-size: 13px; }
+.btn-admin--full { width: 100%; min-height: 52px; font-size: 15px; }
 
 /* Two fields side by side. `.field-row` existed in the HTML of half a dozen
    screens and had no rule at all — the fields stacked anyway, and whoever wrote
@@ -536,8 +617,8 @@ a { color: inherit; text-decoration: none; }
    moment, so it is sized like one. */
 .admin-empty {
   max-width: 46rem; margin-inline: auto;
-  padding: 3rem 2rem; text-align: center; color: var(--muted);
-  border: 1px dashed var(--border); border-radius: var(--radius); background: var(--surface);
+  padding: 48px 32px; text-align: center; color: var(--muted);
+  border: 1px dashed var(--border); border-radius: var(--r-card); background: transparent;
   line-height: 1.55;
 }
 .admin-empty > strong {
@@ -648,21 +729,32 @@ a { color: inherit; text-decoration: none; }
 
 /* One menu at a time, and the tabs say how many items each one has: an empty
    menu announces itself before anyone clicks it. */
-.menu-tabs { display: flex; flex-wrap: wrap; gap: .25rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+/* The same rail as everywhere else. This row was the last underlined-tab
+   survivor in the backoffice: picking one of three menus is the same gesture
+   as picking one of three sections of a form, and drawing it differently made
+   it a second thing to learn. */
+.menu-tabs {
+  display: inline-flex; gap: 4px;
+  max-width: 100%; margin: 0 0 20px; padding: 4px;
+  border: 1px solid var(--border); border-radius: var(--r-pill);
+  background: var(--card);
+  overflow-x: auto; scrollbar-width: none;
+}
+.menu-tabs::-webkit-scrollbar { display: none; }
 .menu-tabs a {
-  display: inline-flex; align-items: center; gap: .45rem;
-  padding: .55rem .9rem; margin-bottom: -1px;
-  border-bottom: 2px solid transparent; color: var(--muted);
-  text-decoration: none; font-weight: 500; font-size: .9rem;
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 44px; padding: 9px 18px;
+  border-radius: var(--r-pill); color: var(--ink);
+  text-decoration: none; font-weight: 500; font-size: 14px; white-space: nowrap;
 }
-.menu-tabs a:hover { color: var(--text); }
-.menu-tabs a.is-on { color: var(--text); border-bottom-color: var(--primary); }
+.menu-tabs a:hover { background: rgba(255, 255, 255, .6); }
+.menu-tabs a.is-on, .menu-tabs a.is-on:hover { background: var(--pill); color: var(--pill-ink); }
 .menu-tabs a span {
-  min-width: 1.4rem; padding: .05rem .35rem; border-radius: 999px;
-  background: var(--surface-2); color: var(--muted);
-  font-size: .82rem; font-weight: 600; text-align: center;
+  min-width: 20px; padding: 1px 7px; border-radius: var(--r-pill);
+  background: var(--sub); color: var(--muted);
+  font-size: 11px; font-weight: 600; text-align: center;
 }
-.menu-tabs a.is-on span { background: var(--primary); color: #fff; }
+.menu-tabs a.is-on span { background: rgba(255, 255, 255, .22); color: #fff; }
 
 /* The structure is what matters in a menu — the order, and what sits inside
    what — so the indent is a column and not an indentation made of spaces. */
@@ -671,11 +763,13 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr) max-content;
   align-items: center; gap: 1rem;
-  padding: .6rem .8rem;
+  padding: 10px 16px;
   margin-left: calc(var(--level, 0) * 1.75rem);
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r-inner);
+  background: var(--solid);
 }
+/* The nudges and the edit link, together and tight. */
+.menu-item__actions { display: flex; align-items: center; gap: 6px; }
 .menu-item.is-off { opacity: .55; }
 .menu-item__name { display: flex; align-items: center; gap: .45rem; min-width: 0; }
 .menu-item__name a { font-weight: 600; color: var(--text); text-decoration: none; }
@@ -693,35 +787,52 @@ a { color: inherit; text-decoration: none; }
 /* A quiet badge, for a qualification and not for a state. */
 .badge--soft {
   display: inline-flex; align-items: center;
-  padding: .1rem .45rem; border-radius: 999px;
-  background: var(--surface-2); color: var(--muted);
-  font-size: .8rem; font-weight: 600; letter-spacing: 0;
+  padding: 6px 12px; border-radius: var(--r-pill);
+  background: var(--sub); color: var(--muted);
+  font-size: 12px; font-weight: 500; letter-spacing: 0;
 }
 
 /* A badge with no modifier still has to be visible. Without a background of
    its own it was coloured text floating in a row of other text, which is not
    a badge; and the modifiers below are a shared vocabulary, so a site that
    invents a state nobody styled gets something legible rather than nothing. */
+/* A state is a settled fact, and it is drawn quietly: one neutral pill with a
+   coloured dot doing the distinguishing.
+
+   NOT the brand. A state painted in the house colour says different things on
+   different sites — on a site whose brand is red, "Publicada" announces itself
+   in the colour of an alarm, and on a green one a draft looks approved. The
+   brand belongs to what is WAITING for somebody; see .badge--todo.
+
+   And every one of these carries its word as well as its colour: about one man
+   in twelve cannot tell the green dot from the amber one. */
 .badge {
-  display: inline-flex; align-items: center; gap: 0.3rem;
-  padding: 0.2rem 0.6rem; border-radius: 999px;
-  background: var(--surface-2); color: var(--muted);
-  font-size: 0.8rem; font-weight: 600; letter-spacing: 0;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 12px; border-radius: var(--r-pill);
+  background: var(--sub); color: var(--ink);
+  font-size: 12px; font-weight: 500; letter-spacing: 0;
 }
-.badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.7; }
-.badge--published { background: var(--accent-bg); color: #0f7a5a; }
-.badge--draft     { background: #fdf1dd; color: #9a6b10; }
-.badge--admin     { background: var(--danger-bg); color: var(--danger); }
-.badge--editor    { background: #e6effd; color: #2456c4; }
-.badge--socio     { background: #efe9fd; color: #5b3bbd; }
-.badge--system    { background: #eef1f6; color: #475569; }
+.badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.55; }
+
+/* The one badge that wears the house colour, because it is the one asking for
+   a person: an order paid and not sent, a booking with no driver. */
+.badge--todo { background: var(--brand); color: var(--brand-ink); font-weight: 600; }
+.badge--todo::before { background: var(--brand-ink); opacity: .8; }
+
+.badge--published::before { background: #1f7a4d; opacity: 1; }
+.badge--draft { color: var(--muted); background: transparent; border: 1px solid var(--border); }
+.badge--draft::before { background: var(--muted); opacity: .6; }
+.badge--admin::before    { background: var(--danger); opacity: 1; }
+.badge--editor::before   { background: color-mix(in srgb, var(--ink) 55%, transparent); opacity: 1; }
+.badge--socio::before    { background: #5b3bbd; opacity: 1; }
+.badge--system::before   { background: #475569; opacity: 1; }
 
 /* ---------------- Forms ---------------- */
 .admin-form {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow);
+  background: var(--solid); border: 1px solid var(--border);
+  border-radius: var(--r-card); padding: 24px;
 }
-.field { margin-bottom: 1.25rem; }
+.field { margin-bottom: 18px; }
 /* A field's label is a question being asked of somebody, so it is written
    the way a question is written. It used to be 0.78rem, UPPERCASE and
    letter-spaced — the typography of a column header in a report, applied to
@@ -730,8 +841,8 @@ a { color: inherit; text-decoration: none; }
    backoffice is actually for; and at 0.78rem it was smaller than the help
    text underneath it, so the explanation shouted louder than the question. */
 .field label {
-  display: block; font-weight: 600; font-size: 0.95rem;
-  letter-spacing: 0; margin-bottom: 0.4rem; color: var(--text);
+  display: block; font-weight: 500; font-size: 13px;
+  letter-spacing: 0; margin-bottom: 6px; color: var(--muted);
 }
 /* Uma caixa de escrever é uma caixa de escrever, esteja onde estiver.
    
@@ -755,10 +866,16 @@ a { color: inherit; text-decoration: none; }
 .admin-table input[type="tel"], .admin-table input[type="url"],
 .admin-table input[type="date"], .admin-table input[type="time"],
 .admin-table input[type="datetime-local"], .admin-table select, .admin-table textarea {
-  padding: 0.7rem 0.9rem;
-  border: 1px solid #d8dde6; border-radius: var(--radius-sm);
-  background: #fff; font-family: inherit; font-size: 0.9rem; color: var(--text);
+  min-height: 52px;
+  padding: 12px 16px;
+  border: 1px solid var(--line); border-radius: var(--r-field);
+  background: var(--solid); font-family: inherit; font-size: 15px; color: var(--ink);
   transition: border var(--transition), box-shadow var(--transition);
+}
+/* Inside a table a 52px box would push every row to twice its height for no
+   gain: the cell already says what the box is. */
+.admin-table input, .admin-table select, .admin-table textarea {
+  min-height: 40px; padding: 8px 12px; font-size: 14px;
 }
 
 /* A largura inteira é da coluna de um formulário, e não de uma célula de
@@ -786,11 +903,13 @@ a { color: inherit; text-decoration: none; }
 
 .field input:focus, .field select:focus, .field textarea:focus,
 .admin-table input:focus, .admin-table select:focus, .admin-table textarea:focus {
-  outline: none; border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(74,74,73,.14);
+  outline: none; border-color: var(--brand-text);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent);
 }
 .field textarea { min-height: 220px; resize: vertical; }
-.field-error { color: var(--danger); font-size: 0.85rem; font-weight: 600; margin-top: 0.3rem; }
+/* The ✕ carries the meaning as much as the colour does. */
+.field-error { color: var(--danger); font-size: 13px; font-weight: 500; margin-top: 6px; }
+.field-error::before { content: '\2715'; margin-right: 5px; }
 /* The explanation under a field is the sentence that makes the field
    answerable. At 0.78rem it was set like a footnote, which is the one way to
    make sure it is not read. */
@@ -804,31 +923,31 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------------- Flash ---------------- */
 .flash {
-  padding: 0.85rem 1.1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;
-  font-size: 0.88rem; font-weight: 500; display: flex; align-items: center; gap: 0.55rem;
+  padding: 14px 20px; border-radius: var(--r-pill); margin-bottom: 18px;
+  font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px;
   border: 1px solid transparent;
 }
-.flash::before { font-size: 1rem; }
-.flash--success { background: var(--accent-bg); color: #0f7a5a; border-color: #b6ebd8; }
+.flash::before { font-size: 15px; }
+/* Three tones, not four palettes. Something went wrong, or it did not — and
+   the mark in front says which before the colour does, which is the whole
+   reason the marks are there. The greens, ambers and blues that used to be
+   here were three invented hues on a page that already has the site's own. */
+.flash--success { background: color-mix(in srgb, var(--brand) 14%, var(--solid)); color: var(--brand-text); border-color: color-mix(in srgb, var(--brand) 28%, transparent); }
 .flash--success::before { content: '✓'; }
 .flash--error   { background: var(--danger-bg); color: var(--danger); border-color: var(--danger-line); }
 .flash--error::before { content: '✕'; }
-.flash--warning { background: #fdf1dd; color: #9a6b10; border-color: #f3ddb0; }
+.flash--warning { background: var(--sub); color: var(--ink); border-color: var(--border); }
 .flash--warning::before { content: '!'; }
-.flash--info    { background: #e6effd; color: #2456c4; border-color: #c3d6f7; }
+.flash--info    { background: var(--sub); color: var(--ink); border-color: var(--border); }
 .flash--info::before { content: 'i'; }
 
 .inline-form { display: inline; }
 
 /* ---------------- Responsive ---------------- */
+/* Nothing here reshapes a sidebar any more: the bar is across the top and it
+   scrolls sideways by itself at any width. What is left is the one thing a
+   narrow screen really does change — a wide table. */
 @media (max-width: 880px) {
-  .admin-layout { flex-direction: column; }
-  .admin-sidebar { width: 100%; height: auto; position: static; }
-  .admin-sidebar__nav { display: flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.5rem; }
-  .admin-sidebar__nav h6 { display: none; }
-  .admin-sidebar__nav a { margin: 0; }
-  .admin-sidebar__nav a.sub { padding-left: 0.85rem; }
-  .admin-main { padding: 1.25rem; }
   /* Below this width the columns stop fitting, so the card scrolls sideways
      after all. The header stops being sticky with it: it would pin to the
      card, which does not scroll down, and a header that stays put while
@@ -839,42 +958,32 @@ a { color: inherit; text-decoration: none; }
   .admin-table thead th { position: static; }
   .admin-table .truncate { max-width: 14rem; }
 }
-.badge--blocked   { background: var(--danger-bg); color: var(--danger); }
+.badge--blocked::before { background: var(--danger); opacity: 1; }
 
 /* The states a request passes through, in the one vocabulary every site's
    own screens can reach for: a booking, an order, a job. Amber is the only
    one that asks for anything — it is the colour of "nobody has touched
    this", and the only badge in a list that should catch an eye. */
-.badge--new       { background: #fdf1dd; color: #9a6b10; }
-.badge--confirmed { background: var(--accent-bg); color: #0f7a5a; }
-.badge--done      { background: #eef1f6; color: #475569; }
-.badge--cancelled { background: var(--danger-bg); color: var(--danger); }
-
-/* The "(avançado)" hint on the menu's sections */
-.admin-sidebar__nav h6 .nav-hint { font-weight: 400; opacity: 0.6; font-size: 0.85em; }
-
-/* The "Opções avançadas" block in the page editor */
-.adv-options { margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2, #f7f8fa); }
-.adv-options > summary {
-  cursor: pointer; padding: 0.85rem 1rem; font-weight: 600; color: var(--text);
-  list-style: none; user-select: none;
-}
-.adv-options > summary::-webkit-details-marker { display: none; }
-.adv-options > summary::before { content: "▸ "; color: var(--muted, #94a3b8); }
-.adv-options[open] > summary::before { content: "▾ "; }
-.adv-options > .field { padding: 0 1rem; }
-.adv-options > .field:last-child { padding-bottom: 1rem; }
+/* "New" is the only one that asks for anything — it is "nobody has touched
+   this" — so it is the one that wears the house colour. The rest are facts,
+   drawn like every other state: a neutral pill and a dot. */
+.badge--new       { background: var(--brand); color: var(--brand-ink); font-weight: 600; }
+.badge--new::before { background: var(--brand-ink); opacity: .8; }
+.badge--confirmed::before { background: #1f7a4d; opacity: 1; }
+.badge--done      { color: var(--muted); }
+.badge--cancelled { color: var(--muted); background: transparent; border: 1px solid var(--border); }
+.badge--cancelled::before { background: var(--danger); opacity: 1; }
 
 /* Barra de pesquisa/filtro (lista de documentos) */
 .admin-toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1rem; }
 .admin-search { flex: 1 1 320px; min-width: 0; padding: 0.6rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font: inherit; }
 .admin-filter { padding: 0.6rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font: inherit; background: #fff; max-width: 100%; }
 .admin-search:focus, .admin-filter:focus { outline: none; border-color: var(--primary); }
-.admin-toolbar__count { color: var(--muted, #94a3b8); font-size: 0.9rem; }
-.doc-meta { font-size: 0.82rem; color: var(--muted, #94a3b8); margin-top: 0.2rem; }
+.admin-toolbar__count { color: var(--muted); font-size: 0.9rem; }
+.doc-meta { font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
 /* The filename smaller and breakable, so it does not stretch the table */
 .doc-meta code { font-size: 0.8rem; word-break: break-word; overflow-wrap: anywhere; }
-.doc-empty { padding: 1.5rem; text-align: center; color: var(--muted, #94a3b8); }
+.doc-empty { padding: 1.5rem; text-align: center; color: var(--muted); }
 @media (max-width: 700px) {
   .admin-toolbar { flex-direction: column; align-items: stretch; }
   .doc-meta code { word-break: break-all; }
@@ -909,17 +1018,17 @@ body.modal-open { overflow: hidden; }
 .struct-card__desc { font-size: .8rem; color: var(--muted); line-height: 1.3; }
 /* Miniatura da estrutura */
 .struct-viz { display: flex; gap: 4px; width: 100%; height: 46px; margin-bottom: .35rem; }
-.struct-viz i { display: block; flex: 1; background: #cbd5e1; border-radius: 4px; }
+.struct-viz i { display: block; flex: 1; background: color-mix(in srgb, var(--ink) 25%, transparent); border-radius: 4px; }
 .struct-viz--blank { flex-direction: column; gap: 6px; }
 .struct-viz--blank i { height: 8px; flex: none; }
 .struct-viz--blank i:nth-child(2) { width: 80%; }
 .struct-viz--blank i:nth-child(3) { width: 60%; }
-.struct-viz--imgtext i.is-img { background: #94a3b8; flex: 0 0 38%; }
-.struct-card:hover .struct-viz i { background: #f7a3aa; }
+.struct-viz--imgtext i.is-img { background: color-mix(in srgb, var(--ink) 40%, transparent); flex: 0 0 38%; }
+.struct-card:hover .struct-viz i { background: color-mix(in srgb, var(--brand) 55%, transparent); }
 .struct-card:hover .struct-viz--imgtext i.is-img { background: var(--primary); }
 
 /* Aviso breve (toast) */
-.admin-toast { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(20px); background: #111827; color: #fff; padding: .7rem 1.2rem; border-radius: 8px; opacity: 0; transition: all .3s ease; z-index: 1100; font-size: .95rem; box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+.admin-toast { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--pill); color: var(--pill-ink); padding: .7rem 1.2rem; border-radius: 8px; opacity: 0; transition: all .3s ease; z-index: 1100; font-size: .95rem; box-shadow: 0 8px 24px rgba(0,0,0,.3); }
 .admin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* Code blocks on the e-mail settings page */
@@ -973,10 +1082,10 @@ body.modal-open { overflow: hidden; }
    an unfilled field. */
 .field-duration { display: flex; align-items: center; gap: .4rem; }
 .field-duration select { width: auto; min-width: 4.75rem; }
-.field-duration__sep { font-weight: 600; font-size: 1.05rem; color: #374151; }
+.field-duration__sep { font-weight: 600; font-size: 1.05rem; color: var(--ink); }
 .field-duration__unit,
 .field-money__unit {
-  font-size: .82rem; letter-spacing: 0; color: #6b7280;
+  font-size: .82rem; letter-spacing: 0; color: var(--ink-2);
 }
 .field-duration__unit { margin-left: .35rem; }
 
@@ -985,7 +1094,7 @@ body.modal-open { overflow: hidden; }
    what gets typed here is only the number. */
 .field-money { display: flex; align-items: center; gap: .45rem; }
 .field-money input { max-width: 180px; text-align: right; }
-.field-money__unit { font-size: 1rem; text-transform: none; letter-spacing: 0; color: #374151; }
+.field-money__unit { font-size: 1rem; text-transform: none; letter-spacing: 0; color: var(--ink); }
 .field code { background: var(--surface-2); padding: .08rem .35rem; border-radius: 4px; font-size: .85em; }
 
 /* Heading plus its level, side by side — the words and how they rank are one
@@ -1017,8 +1126,8 @@ textarea.heading-row__text { min-height: 0; height: auto; resize: vertical; }
      keeps a pale mark readable. */
   background-color: #fff;
   background-image:
-    linear-gradient(45deg, #e6e9ef 25%, transparent 25%, transparent 75%, #e6e9ef 75%),
-    linear-gradient(45deg, #e6e9ef 25%, transparent 25%, transparent 75%, #e6e9ef 75%);
+    linear-gradient(45deg, var(--sub) 25%, transparent 25%, transparent 75%, var(--sub) 75%),
+    linear-gradient(45deg, var(--sub) 25%, transparent 25%, transparent 75%, var(--sub) 75%);
   background-size: 16px 16px;
   background-position: 0 0, 8px 8px;
 }
@@ -1100,7 +1209,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 }
 .needs__item:hover { border-color: var(--primary); transform: translateX(2px); }
 .needs__item--urgent  { border-left-color: var(--danger); }
-.needs__item--waiting { border-left-color: #b7791f; }
+.needs__item--waiting { border-left-color: var(--brand); }
 .needs__item--quiet   { border-left-color: var(--faint); }
 
 /* O número primeiro, porque é o que se lê antes de ler. */
@@ -1111,7 +1220,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   font-size: 1.05rem; font-weight: 600; font-variant-numeric: tabular-nums;
 }
 .needs__item--urgent .needs__count  { background: var(--danger-bg); color: var(--danger); }
-.needs__item--waiting .needs__count { background: #fdf1dd; color: #9a6b10; }
+.needs__item--waiting .needs__count { background: color-mix(in srgb, var(--brand) 14%, var(--solid)); color: var(--brand-text); }
 
 .needs__text { flex: 1; min-width: 0; }
 .needs__text strong { display: block; font-size: 1rem; font-weight: 600; }
@@ -1160,41 +1269,54 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    One screen in sections you switch between. The same row of tabs on every
    long form in the backoffice, because two screens that behave alike are one
    thing to learn instead of two. See views/admin/partials/tabs.php. */
+/* The same pill as the navigation above it, one size down: the row of areas
+   and the row of sections are the same gesture at two depths, and drawing them
+   alike is what makes the second one need no explaining.
+
+   A rail and not folder tabs. Folder tabs had to butt against a border to read
+   as attached to anything, which tied this row to the card below it and made
+   every screen that used tabs without a card look broken. */
 .admin-tabs {
-  display: flex; flex-wrap: wrap; gap: .15rem;
-  margin: 0 0 1.25rem; border-bottom: 1px solid var(--border);
+  display: inline-flex; gap: 4px;
+  max-width: 100%; margin: 0 0 20px; padding: 4px;
+  border: 1px solid var(--border); border-radius: var(--r-pill);
+  background: var(--card);
+  overflow-x: auto; scrollbar-width: none;
 }
+.admin-tabs::-webkit-scrollbar { display: none; }
 .admin-tab__pick {
-  display: inline-flex; align-items: center; gap: .4rem;
-  padding: .55rem 1rem .6rem; margin-bottom: -1px;
-  background: none;
-  border: 1px solid transparent; border-bottom-color: var(--border);
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  color: var(--muted); font: inherit; font-size: .9rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 44px; padding: 9px 18px;
+  background: none; border: 0; border-radius: var(--r-pill);
+  color: var(--ink); font: inherit; font-size: 14px; font-weight: 500;
   cursor: pointer; white-space: nowrap;
 }
-.admin-tab__pick:hover { color: var(--text); background: var(--surface-2); }
-.admin-tab__pick.is-on {
-  background: var(--surface); color: var(--text);
-  border-color: var(--border); border-bottom-color: var(--surface);
+.admin-tab__pick:hover { background: rgba(255, 255, 255, .6); }
+.admin-tab__pick.is-on, .admin-tab__pick.is-on:hover {
+  background: var(--pill); color: var(--pill-ink);
 }
 .admin-tab__count {
-  padding: .05rem .4rem; border-radius: 999px;
-  background: var(--surface-2); color: var(--muted);
-  font-size: .8rem; font-weight: 600;
+  padding: 1px 7px; border-radius: var(--r-pill);
+  background: var(--sub); color: var(--muted);
+  font-size: 11px; font-weight: 600;
 }
-.admin-tab__pick.is-on .admin-tab__count { background: var(--accent-bg); color: var(--accent); }
+.admin-tab__pick.is-on .admin-tab__count { background: rgba(255, 255, 255, .22); color: #fff; }
+
+/* A tab that submits — the language tabs of a page use one — is a form, and a
+   form is a block. `display: contents` puts its button in the rail beside its
+   siblings instead of in a box of its own. */
+.admin-tab__form { display: contents; }
 
 /* The same row, when the tabs are two screens rather than two sections of
    one. They behave differently because they are different — one reveals, one
    navigates — but nothing about that is the editor's problem, so nothing
    about it shows. */
-.admin-tabs--links .admin-tab__pick { text-decoration: none; align-items: baseline; }
+.admin-tabs--links .admin-tab__pick { text-decoration: none; }
 .admin-tab__pick small {
   display: block; margin-top: .05rem;
-  font-size: .82rem; font-weight: 400; color: var(--faint);
+  font-size: 12px; font-weight: 400; color: var(--faint);
 }
-.admin-tab__pick.is-on small { color: var(--muted); }
+.admin-tab__pick.is-on small { color: rgba(255, 255, 255, .75); }
 
 /* Without the script the panels are plain sections of the page, one after the
    other, each behind its own heading — the long form this replaced, which is
@@ -1276,7 +1398,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   font-size: .82rem; font-weight: 600; letter-spacing: 0; white-space: nowrap;
 }
 .rule-state--on   { background: var(--accent-bg); color: var(--accent); }
-.rule-state--soon { background: #fdf1dd; color: #9a6b10; }
+.rule-state--soon { background: color-mix(in srgb, var(--brand) 14%, var(--solid)); color: var(--brand-text); }
 .rule-state--done,
 .rule-state--off  { background: var(--surface-2); color: var(--muted); }
 
@@ -1347,19 +1469,25 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 
 /* ---------------- Cards, save bar ---------------- */
 
+/* The save button follows you. It used to be a line under the last field,
+   which on a long form is four scrolls below the thing somebody just changed —
+   and the commonest way to lose work here was to leave without pressing it.
+
+   Sticky for every form and not only the block editor, which is where this
+   started: there is no form in this backoffice where burying the save is the
+   right answer. */
 .save-bar {
+  position: sticky; bottom: 16px; z-index: 5;
   display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem; flex-wrap: wrap;
-  margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border);
+  gap: 12px; flex-wrap: wrap;
+  margin-top: 24px; padding: 12px 12px 12px 22px;
+  border: 1px solid var(--border); border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, .86);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(28, 29, 31, .08);
 }
 .save-bar .field-check { margin: 0; }
-.save-bar__actions { display: flex; gap: .6rem; margin-left: auto; }
-.block-form > .save-bar {
-  position: sticky; bottom: 0; z-index: 5;
-  margin-top: 0; padding: 1rem 1.5rem;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  box-shadow: 0 -4px 16px rgba(16,24,40,.06);
-}
+.save-bar__actions { display: flex; gap: 8px; margin-left: auto; }
 
 /* ---------------- The block list ---------------- */
 /* ---------------- The page editor ----------------
@@ -1527,7 +1655,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   font-size: .8rem; font-weight: 500; letter-spacing: 0; white-space: nowrap;
 }
 .canvas__said.is-good { background: rgba(47, 133, 90, .85); }
-.canvas__said.is-bad  { background: var(--danger, #c0392b); }
+.canvas__said.is-bad  { background: var(--danger); }
 .canvas__state {
   margin-left: .4rem; padding: .05rem .35rem; border-radius: 3px;
   background: rgba(255,255,255,.18); font-weight: 500; letter-spacing: 0;
@@ -1545,7 +1673,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .canvas__tool:hover:not(:disabled) { background: rgba(255,255,255,.16); color: #fff; }
 .canvas__tool:disabled { opacity: .3; cursor: default; }
 .canvas__tool--text { font-size: .82rem; }
-.canvas__tool--danger:hover { background: var(--danger, #c0392b); color: #fff; }
+.canvas__tool--danger:hover { background: var(--danger); color: #fff; }
 
 /* Where a block out of the palette is going to land. A real gap opening in the
    page, not a line drawn over it: the page moves aside for the thing being
@@ -1568,7 +1696,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   position: sticky; bottom: 1rem; z-index: 3;
   display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
   margin-top: .75rem; padding: .8rem 1rem; border-radius: var(--radius-sm);
-  background: #fdf1dd; color: #9a6b10; font-size: .88rem; font-weight: 500;
+  background: color-mix(in srgb, var(--brand) 14%, var(--solid)); color: var(--brand-text); font-size: .88rem; font-weight: 500;
   box-shadow: var(--shadow-md);
 }
 .item-list__empty, .outline__empty {
@@ -1644,7 +1772,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   /* The picture belongs to the button around it. */
   pointer-events: none;
 }
-.block-picker__card:hover .block-picker__shot { border-color: #cbd2dd; }
+.block-picker__card:hover .block-picker__shot { border-color: color-mix(in srgb, var(--ink) 22%, transparent); }
 @media (prefers-reduced-motion: reduce) {
   .block-picker__card, .block-picker__card:hover { transition: none; transform: none; }
 }
@@ -1738,15 +1866,15 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .outline__item--l4 { padding-left: 4.2rem; }
 .outline__item--l5 { padding-left: 5.6rem; }
 .outline__item--l6 { padding-left: 7rem; }
-.outline__item--l1 .outline__level { background: #e6effd; color: #2456c4; }
+.outline__item--l1 .outline__level { background: var(--pill); color: var(--pill-ink); }
 .outline__text { font-size: .92rem; }
 .outline__text--empty { color: var(--faint); font-style: italic; }
 
 .outline__warning {
   margin: .5rem 0 0; padding: .75rem 1rem; border-radius: var(--radius-sm);
-  background: #fdf1dd; color: #9a6b10; font-size: .88rem; line-height: 1.5;
+  background: color-mix(in srgb, var(--brand) 14%, var(--solid)); color: var(--brand-text); font-size: .88rem; line-height: 1.5;
 }
-.outline__ok { margin: .5rem 0 0; color: #0f7a5a; font-size: .88rem; }
+.outline__ok { margin: .5rem 0 0; color: var(--brand-text); font-size: .88rem; }
 
 .page-extra { margin-top: 1.5rem; }
 
@@ -1764,13 +1892,6 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
    without the information. */
 .admin-table tr.is-unread td { font-weight: 600; }
 .admin-table tr.is-unread td:first-child { box-shadow: inset 3px 0 0 var(--admin-highlight); }
-
-/* A contagem por ler, na barra lateral. */
-.admin-sidebar__nav .nav-count {
-    display: inline-block; min-width: 20px; padding: 1px 6px; margin-left: 6px;
-    border-radius: 10px; font-size: 11px; font-weight: 700; text-align: center;
-    background: var(--admin-highlight); color: var(--admin-chrome);
-}
 
 /* Label/value pairs, for an enquiry's sheet. */
 .meta-list { display: grid; grid-template-columns: max-content 1fr; gap: 8px 22px; margin: 22px 0; }
@@ -1795,7 +1916,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 .field-set { border: 0; padding: 0; margin: 0; min-width: 0; }
 .field-set > legend {
   padding: 0; margin: 0 0 .45rem;
-  font-weight: 600; font-size: .82rem; color: #374151;
+  font-weight: 600; font-size: .82rem; color: var(--ink);
 }
 .field-set .field-check { margin-bottom: .5rem; }
 .field-set .field-check:last-child { margin-bottom: 0; }
@@ -1811,7 +1932,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
 }
 .admin-locale__row { display: flex; gap: .35rem; flex-wrap: wrap; }
 .admin-locale__pick {
-  border: 1px solid var(--border, #d8dce3); background: transparent;
+  border: 1px solid var(--border); background: transparent;
   color: inherit; border-radius: 6px; cursor: pointer;
   padding: .28rem .55rem; font-size: .82rem; font-weight: 600; letter-spacing: 0;
 }
@@ -2079,26 +2200,31 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   .week__cell { min-width: 7.5rem; }
 }
 
-/* ---------------- Em que línguas a página está escrita ----------------
+/* ---------------- Which languages a page is written in ----------------
 
-   Uma marca por língua, numa coluna da linha da página. Não um separador
-   por cima da lista: a página é uma, e partir a lista por língua mostrava
-   as mesmas sete páginas duas vezes como se fossem catorze.
+   One mark per language, in a column of the page's row. Not a tab bar above
+   the list: the page is one thing, and splitting the list by language showed
+   the same seven pages twice as if they were fourteen.
 
-   Cheia = publicada. Contornada = escrita mas por publicar. Apagada e
-   tracejada = ainda não existe — e essa é a única que não é uma ligação,
-   porque não há para onde ir; escreve-se de dentro da página. */
-.langs { display: inline-flex; gap: .3rem; }
+   Solid = published. Outlined = written but not published. Faint and dashed =
+   does not exist yet — and that is the only one that is not a link, because
+   there is nowhere to go; you write it from inside the page.
+
+   Three shapes and not three colours. These were a pale green, an amber and a
+   grey, which is a distinction about a tenth of readers cannot make and which
+   went to pieces anyway the moment the accent became the site's own: amber
+   text on a pale blue ground is not a state, it is a smudge. */
+.langs { display: inline-flex; gap: 5px; }
 .langs__one {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 2.1rem; padding: .12rem .3rem; border-radius: 999px;
-  font-size: .76rem; font-weight: 700; text-decoration: none;
+  min-width: 34px; min-height: 26px; padding: 2px 8px; border-radius: var(--r-pill);
+  font-size: 12px; font-weight: 600; letter-spacing: .02em; text-decoration: none;
   border: 1px solid transparent;
 }
-.langs__one--live    { background: var(--accent-bg); color: #0f7a5a; }
-.langs__one--draft   { background: var(--surface); color: #9a6b10; border-color: #e2c98f; }
-.langs__one--missing { background: none; color: var(--faint); border: 1px dashed var(--border); }
-.langs__one--live:hover, .langs__one--draft:hover { outline: 2px solid currentColor; outline-offset: 1px; }
+.langs__one--live    { background: var(--sub); color: var(--ink); }
+.langs__one--draft   { background: transparent; color: var(--ink); border-color: var(--border); }
+.langs__one--missing { background: none; color: var(--faint); border: 1px dashed var(--border); font-weight: 400; }
+.langs__one--live:hover, .langs__one--draft:hover { outline: 2px solid var(--brand-text); outline-offset: 1px; }
 
 /* ---------------- A frota ----------------
    Um cartão por viatura: a fotografia à esquerda, e à direita o que ela é.
@@ -2181,9 +2307,9 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   background: var(--border);
 }
 .viatura__sinal input:checked + span {
-  background: var(--accent-bg); color: #0f7a5a; border-color: #0f7a5a; font-weight: 600;
+  background: var(--accent-bg); color: var(--brand-text); border-color: var(--brand-text); font-weight: 600;
 }
-.viatura__sinal input:checked + span::before { background: #0f7a5a; }
+.viatura__sinal input:checked + span::before { background: var(--brand-text); }
 .viatura__sinal input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .viatura__sinal span { transition: none; }
@@ -2249,7 +2375,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator { opacity:
   border: 1px solid var(--border); background: var(--surface);
   font-size: .82rem; font-weight: 600; color: var(--muted);
 }
-.regra__dia input:checked + span { background: var(--accent-bg); color: #0f7a5a; border-color: #0f7a5a; }
+.regra__dia input:checked + span { background: var(--accent-bg); color: var(--brand-text); border-color: var(--brand-text); }
 .regra__dia input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
 .regra__estado { display: flex; flex-direction: column; justify-content: flex-end; }
 /* A regra dita por extenso, por baixo dela: nove campos não se lêem de

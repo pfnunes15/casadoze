@@ -1201,3 +1201,36 @@
 
 
 })();
+
+
+/* Who you are, and the way out.
+   Its own IIFE, like everything else here: a menu that fails to find its
+   button must not take the rest of the file's behaviour down with it. That
+   has happened before — see the note on the drawers above. */
+(function () {
+  var box = document.querySelector('[data-who]');
+  if (!box) { return; }
+
+  var open = box.querySelector('[data-who-open]');
+  var menu = box.querySelector('[data-who-menu]');
+  if (!open || !menu) { return; }
+
+  function show(on) {
+    menu.hidden = !on;
+    open.setAttribute('aria-expanded', on ? 'true' : 'false');
+  }
+
+  open.addEventListener('click', function (e) {
+    e.stopPropagation();
+    show(menu.hidden);
+  });
+
+  /* Anywhere else closes it, and so does Escape: a menu you can only close by
+     finding the button again is a menu in the way. */
+  document.addEventListener('click', function (e) {
+    if (!menu.hidden && !box.contains(e.target)) { show(false); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !menu.hidden) { show(false); open.focus(); }
+  });
+})();
