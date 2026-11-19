@@ -172,82 +172,90 @@ a { color: inherit; text-decoration: none; }
   border-radius: 4px;
 }
 
-/* The shell is a column now: a bar across the top, the work under it.
-   See views/layouts/admin.php for why the sidebar went. */
-.admin-layout { display: flex; flex-direction: column; min-height: 100dvh; }
+/* The column on the left, the work beside it. Below 900px the column lies
+   down and the whole thing stacks — see .admin-side. */
+.admin-layout { display: flex; min-height: 100dvh; }
+@media (max-width: 900px) { .admin-layout { flex-direction: column; } }
 
-/* ---------------- The bar across the top ----------------
-   The sidebar is gone. It was a 256px column carrying up to twenty-one links
-   on a shop site, most of them places nobody goes in a given week, and it cost
-   that column on every screen for the privilege. By the end it did not fit a
-   laptop: the list ran off the bottom and four shop screens existed with no
-   way to reach them, which is what the nested drawers were papering over.
+/* ---------------- The column on the left ----------------
+   Six areas, down the side.
 
-   What replaced it is one row of pills: the half-dozen AREAS of the
-   backoffice. The sections inside an area are the tab rail the screens
-   already draw — see views/admin/partials/tabs.php — so getting anywhere is
-   an area and then a section, which is what it was before, minus the column
-   and minus the drawers.
+   Not the sidebar this replaced, which listed every SCREEN — twenty-one links
+   on a shop site, most of them places nobody goes in a given week — and by the
+   end did not fit a laptop: the list ran off the bottom and four shop screens
+   existed with no way to reach them, which is what the nested drawers were
+   papering over.
 
-   The row scrolls sideways when it does not fit. Deliberately not a drawer: a
-   drawer is one extra click on every single navigation, every day, paid by
-   the person who uses this most. */
+   What is here is the half-dozen AREAS. The screens inside an area are its
+   sections, drawn on the tab rail every long form already uses, so getting
+   anywhere is an area and then a section. Six items fit any screen, which is
+   the whole reason the column can come back.
 
-.admin-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 16px;
+   Below 900px it lies down and becomes a row that scrolls sideways. A drawer
+   would be one extra click on every single navigation, every day, paid by the
+   person who uses this most. */
+
+.admin-side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 248px;
+  padding: 20px 14px;
+  /* A surface of its own, like every other panel here. With only a hairline
+     to the right it read as nothing at all — a list of words floating on the
+     ground, which is not where you look for navigation. */
+  background: var(--card);
+  border-right: 1px solid var(--line);
+  /* The full height of the window, and its own scroll, so the work beside it
+     scrolls on its own. `height` and not `min-height`: with the latter the
+     panel ended where its six items ended and the surface stopped a third of
+     the way down the screen. */
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
 }
 
-.admin-head__left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.admin-head__tools { display: flex; align-items: center; gap: 8px; grid-column: 2; grid-row: 1; }
-
-/* The site's own mark, so somebody who runs several can tell at a glance
-   which one they are in. The name is the fallback and the alt text, never a
-   second thing to read beside the logo. */
+/* The site's own mark, so somebody who runs several can tell at a glance which
+   one they are in. No frame around it: a logo is already a shape, and a pill
+   drawn round it reads as a button you cannot press. */
 .admin-brand {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 18px;
-  border: 1.5px solid var(--ink);
-  border-radius: var(--r-pill);
-  font-size: 18px; font-weight: 500; letter-spacing: -.01em;
-  color: var(--ink); white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 4px;
+  font-size: 19px; font-weight: 500; letter-spacing: -.01em;
+  color: var(--ink);
 }
-.admin-brand img { display: block; height: 22px; width: auto; }
+.admin-brand img { display: block; max-height: 34px; max-width: 100%; width: auto; }
 
 .admin-head__where {
-  font-size: 14px; color: var(--ink-2);
+  padding: 0 4px;
+  font-size: 13px; color: var(--ink-2);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .admin-nav {
-  display: flex; gap: 2px;
-  padding: 4px;
-  border: 1px solid var(--line);
-  border-radius: var(--r-pill);
-  background: var(--card);
-  overflow-x: auto; scrollbar-width: none;
-  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.admin-nav::-webkit-scrollbar { display: none; }
 
 .admin-nav a {
-  display: inline-flex; align-items: center; gap: 7px;
-  min-height: 44px; padding: 9px 16px;
-  border-radius: var(--r-pill);
+  display: flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 10px 14px;
+  border-radius: var(--r-field);
   font-size: 14px; color: var(--ink); white-space: nowrap;
 }
-.admin-nav a:hover { background: rgba(255, 255, 255, .6); }
+.admin-nav a:hover { background: rgba(255, 255, 255, .65); }
 .admin-nav a.active, .admin-nav a.active:hover { background: var(--pill); color: var(--pill-ink); }
 
 /* A count is the only reason anybody opens an inbox. It wears the brand
-   because it is the one thing on this bar that is waiting for a person. */
+   because it is the one thing here waiting for a person. */
 .nav-count {
+  margin-left: auto;
   padding: 1px 7px;
   border-radius: var(--r-pill);
   background: var(--brand); color: var(--brand-ink);
@@ -255,40 +263,42 @@ a { color: inherit; text-decoration: none; }
 }
 .admin-nav a.active .nav-count { background: rgba(255, 255, 255, .22); color: #fff; }
 
-.admin-head__btn {
-  position: relative; flex: none;
-  display: flex; align-items: center; justify-content: center;
-  width: 44px; height: 44px;
-  border: 1px solid var(--line); border-radius: 50%;
-  background: var(--card); color: var(--ink); cursor: pointer;
-  font-size: 15px;
-}
-.admin-head__btn:hover { background: var(--solid); }
+/* The way out of the backoffice, and who you are. At the foot, because
+   neither is something somebody came here to do. */
+.admin-side__foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
 
-/* Who you are, and the way out. A menu and not a permanent block: signing out
-   is not one of the things somebody came here to do, and it used to sit in
-   the sidebar at the same weight as the work. */
-.admin-who { position: relative; flex: none; }
+.admin-head__btn {
+  display: flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 10px 14px;
+  border: 0; border-radius: var(--r-field);
+  background: transparent; color: var(--ink-2); cursor: pointer;
+  font-size: 13px; text-align: left;
+}
+.admin-head__btn:hover { background: var(--sub); color: var(--ink); }
+
+.admin-who { position: relative; }
 .admin-who__btn {
-  display: flex; align-items: center; gap: 10px;
-  min-height: 44px; padding: 4px 14px 4px 4px;
-  border: 1px solid var(--line); border-radius: var(--r-pill);
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  min-height: 52px; padding: 6px 10px;
+  border: 1px solid var(--line); border-radius: var(--r-field);
   background: var(--card); color: var(--ink); cursor: pointer; text-align: left;
   font: inherit;
 }
 .admin-who__face {
+  flex: none;
   display: grid; place-items: center;
   width: 36px; height: 36px; border-radius: 50%;
   background: var(--brand); color: var(--brand-ink);
   font-size: 13px; font-weight: 600;
 }
-.admin-who__id { display: none; }
-.admin-who__name { display: block; font-size: 14px; font-weight: 500; line-height: 1.2; }
+.admin-who__id { min-width: 0; }
+.admin-who__name { display: block; font-size: 14px; font-weight: 500; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .admin-who__role { display: block; font-size: 12px; color: var(--ink-2); }
 
 .admin-who__menu {
-  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60;
-  min-width: 240px; padding: 14px;
+  position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); z-index: 60;
+  padding: 14px;
   border: 1px solid var(--line); border-radius: var(--r-inner);
   background: var(--solid);
   box-shadow: var(--shadow-md);
@@ -297,28 +307,44 @@ a { color: inherit; text-decoration: none; }
 .admin-who__menu small { display: block; margin-bottom: 12px; font-size: 13px; color: var(--ink-2); word-break: break-all; }
 .admin-who__menu form { margin-top: 10px; }
 
-@media (min-width: 768px) {
-  .admin-head { gap: 16px; padding: 20px 32px; }
-  .admin-who__id { display: block; }
-}
-@media (min-width: 1180px) {
-  .admin-head { grid-template-columns: auto minmax(0, 1fr) auto; }
-  .admin-nav { grid-column: 2; grid-row: 1; justify-self: center; }
-  .admin-head__tools { grid-column: 3; }
+/* Lying down. The column becomes a strip across the top that scrolls
+   sideways — the same six items, the same order, no drawer. */
+@media (max-width: 900px) {
+  .admin-side {
+    position: static; width: 100%; height: auto; overflow: visible;
+    flex-direction: row; align-items: center; flex-wrap: wrap;
+    gap: 10px; padding: 12px 16px;
+    border-right: 0; border-bottom: 1px solid var(--line);
+    background: var(--card);
+  }
+  .admin-head__where { display: none; }
+  .admin-nav {
+    order: 3; flex-direction: row; width: 100%;
+    gap: 2px; padding: 4px;
+    border: 1px solid var(--line); border-radius: var(--r-pill);
+    background: var(--card);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .admin-nav::-webkit-scrollbar { display: none; }
+  .admin-nav a { border-radius: var(--r-pill); }
+  .nav-count { margin-left: 0; }
+  .admin-side__foot { margin-top: 0; margin-left: auto; flex-direction: row; align-items: center; }
+  .admin-who__btn { width: auto; }
+  .admin-who__id { display: none; }
+  .admin-who__menu { left: auto; right: 0; width: 240px; }
+  .admin-head__btn span:last-child { display: none; }
 }
 
-/* The area's own sections, on the lists. Same rail as a screen's own tabs,
-   one notch quieter, because it is navigation between screens rather than
-   inside one. */
 .admin-tabs--area { margin-bottom: 24px; }
+
 
 /* ---------------- Main ---------------- */
 .admin-main {
   flex: 1; min-width: 0;
-  width: 100%; max-width: 1440px; margin: 0 auto;
-  padding: 8px 16px 64px;
+  width: 100%; max-width: 1280px;
+  padding: 16px 20px 64px;
 }
-@media (min-width: 768px) { .admin-main { padding: 16px 32px 64px; } }
+@media (min-width: 768px) { .admin-main { padding: 24px 32px 64px; } }
 
 .admin-header {
   display: flex; align-items: flex-end; justify-content: space-between;
