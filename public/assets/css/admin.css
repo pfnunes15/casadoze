@@ -435,6 +435,25 @@ a { color: inherit; text-decoration: none; }
 }
 .prod-row strong { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
+/* The shop's settings, as cards rather than a list of five words.
+
+   The count is what makes it a picture of the shop instead of a menu: a
+   section at zero reads as something not yet needed, and one with a number
+   reads as somewhere to go back to. */
+.shop-more { display: grid; gap: 14px; }
+@media (min-width: 700px)  { .shop-more { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1150px) { .shop-more { grid-template-columns: repeat(3, 1fr); } }
+.shop-more__card {
+  display: block;
+  padding: 20px 22px;
+  border: 1px solid var(--border); border-radius: var(--r-card);
+  background: var(--card); color: var(--ink);
+}
+.shop-more__card:hover { background: var(--solid); border-color: color-mix(in srgb, var(--ink) 18%, transparent); }
+.shop-more__card strong { display: block; font-size: 17px; font-weight: 500; }
+.shop-more__count { display: block; margin: 2px 0 8px; font-size: 13px; color: var(--brand-text); font-weight: 500; }
+.shop-more__detail { display: block; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
 
 /* ---------------- Cards ---------------- */
 /* Translucent and not solid white: the ground shows through just enough for a
