@@ -137,7 +137,7 @@ return [
     ],
 
     'social' => [
-        'label'  => 'Redes',
+        'label'  => 'Social',
         'help'   => 'Os endereços dos perfis da Casa. Uma rede sem endereço não aparece no '
                   . 'rodapé — é assim que se tira uma de lá, sem precisar de ninguém.',
         'fields' => [
@@ -168,13 +168,18 @@ return [
     // -----------------------------------------------------------------------
     'shop' => [
         'label'  => 'Loja',
-        'help'   => 'Como se recebe o dinheiro, e o IVA. **São duas formas de pagamento e a '
-                  . 'casa escolhe as que quer:** cartão, pelo Stripe, e transferência '
+        'help'   => 'Como se recebe o dinheiro, e o IVA. São duas formas de pagamento e a '
+                  . 'casa escolhe as que quer: cartão, pelo Stripe, e transferência '
                   . 'bancária. Basta preencher uma — a que ficar sem dados não é oferecida a '
                   . 'ninguém. Com as duas vazias a loja mostra os produtos e não deixa '
                   . 'finalizar a compra, que é o que se quer enquanto ela está a ser '
                   . 'preparada.',
         'fields' => [
+            'shop.pagamentos' => [
+                'type'  => 'subheading',
+                'label' => 'Pagamento com cartão',
+                'help'  => 'As chaves do Stripe. Vazias, o cartão não é oferecido a ninguém.',
+            ],
             'shop.stripe_publishable' => [
                 'type'   => 'text',
                 'global' => true,
@@ -197,8 +202,8 @@ return [
                 'label'  => 'Segredo do webhook',
                 'help'   => 'Começa por whsec_. No Stripe, em Programadores → Webhooks, crie um '
                           . 'destino para o endereço do site seguido de /pagamento/stripe/aviso '
-                          . 'e escolha o evento checkout.session.completed. **Sem isto as '
-                          . 'encomendas nunca passam a pagas**, porque é o que prova que o '
+                          . 'e escolha o evento checkout.session.completed. Sem isto as '
+                          . 'encomendas nunca passam a pagas, porque é o que prova que o '
                           . 'pagamento é real — quem volta ao site pode ter fechado a janela '
                           . 'antes de pagar.',
                 'placeholder' => 'whsec_...',
@@ -214,20 +219,26 @@ return [
             //
             // Chega preencher o titular e o IBAN para passar a ser oferecida.
             // ---------------------------------------------------------------
+            'shop.transferencia' => [
+                'type'  => 'subheading',
+                'label' => 'Pagamento por transferência',
+                'help'  => 'A conta onde o dinheiro cai. Não se confirma sozinha: a encomenda fica '
+                         . 'à espera e alguém da casa marca-a como paga quando vir o extracto.',
+            ],
             'shop.wise_holder' => [
                 'type'   => 'text',
                 'global' => true,
-                'label'  => 'Transferência · titular da conta',
+                'label'  => 'Titular da conta',
                 'help'   => 'O nome exacto que está na conta Wise. É o que o cliente escreve '
                           . 'no destinatário da transferência, e um nome diferente do da conta '
-                          . 'faz o banco devolver o dinheiro. **Preenchido isto e o IBAN, a '
-                          . 'transferência passa a aparecer no checkout.**',
+                          . 'faz o banco devolver o dinheiro. Preenchido isto e o IBAN, a '
+                          . 'transferência passa a aparecer no checkout.',
                 'placeholder' => 'Covil Ancestral, Unipessoal Lda.',
             ],
             'shop.wise_iban' => [
                 'type'   => 'text',
                 'global' => true,
-                'label'  => 'Transferência · IBAN',
+                'label'  => 'IBAN',
                 'help'   => 'O IBAN da conta Wise, na moeda em que a loja vende. Com ou sem '
                           . 'espaços, tanto faz — o site arruma-os. No Wise está em Gerir → '
                           . 'dados da conta.',
@@ -236,7 +247,7 @@ return [
             'shop.wise_bic' => [
                 'type'   => 'text',
                 'global' => true,
-                'label'  => 'Transferência · BIC/SWIFT',
+                'label'  => 'BIC/SWIFT',
                 'help'   => 'Opcional. Dentro da zona euro ninguém precisa dele; serve a quem '
                           . 'transfere de fora.',
                 'placeholder' => 'TRWIBEB1XXX',
@@ -244,7 +255,7 @@ return [
             'shop.wise_label' => [
                 'type'   => 'text',
                 'global' => true,
-                'label'  => 'Transferência · como se chama no checkout',
+                'label'  => 'Como se chama no checkout',
                 'help'   => 'O que o cliente lê ao escolher como paga. Vazio fica '
                           . '«Transferência bancária».',
                 'placeholder' => 'Transferência bancária',
@@ -252,13 +263,18 @@ return [
             'shop.wise_days' => [
                 'type'   => 'text',
                 'global' => true,
-                'label'  => 'Transferência · dias de espera',
+                'label'  => 'Dias de espera',
                 'help'   => 'Quantos dias a casa guarda a encomenda à espera do dinheiro. É só '
                           . 'o que se diz ao cliente — o stock fica reservado durante esse '
                           . 'tempo. Vazio são 5.',
                 'placeholder' => '5',
             ],
 
+            'shop.impostos' => [
+                'type'  => 'subheading',
+                'label' => 'Impostos',
+                'help'  => 'Onde a casa está e que IVA cobra. Decide-se uma vez.',
+            ],
             'shop.country' => [
                 'type'   => 'text',
                 'global' => true,
@@ -303,8 +319,8 @@ return [
                 'label'  => 'IVA por omissão',
                 'help'   => 'A taxa que se aplica a quase tudo o que vende, em percentagem: 23 '
                           . 'no continente, 22 na Madeira, 16 nos Açores. Um produto com taxa '
-                          . 'diferente escreve a sua na ficha dele. **Os preços que escreve nos '
-                          . 'produtos já incluem IVA** — é o que o comprador paga —, e esta taxa '
+                          . 'diferente escreve a sua na ficha dele. Os preços que escreve nos '
+                          . 'produtos já incluem IVA — é o que o comprador paga —, e esta taxa '
                           . 'serve para o decompor na encomenda e na factura. Vazio não cobra '
                           . 'IVA nenhum.',
                 'placeholder' => '23',
@@ -313,6 +329,11 @@ return [
                chave de tradução porque é texto da Casa e não da interface: quem
                o escreve é quem vende, e muda-o quando a loja muda. Vazio
                esconde o parágrafo, que é melhor do que um lugar-comum. */
+            'shop.textos' => [
+                'type'  => 'subheading',
+                'label' => 'O que o cliente lê',
+                'help'  => 'As frases da loja e o endereço para onde vão as encomendas.',
+            ],
             'shop.intro' => [
                 'type'  => 'textarea',
                 'label' => 'Frase de entrada da loja',

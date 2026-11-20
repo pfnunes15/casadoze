@@ -480,7 +480,7 @@ return [
             'cta_label' => [
                 'type'  => 'text',
                 'label' => 'Texto do botão do canal',
-                'help'  => 'O endereço não se escreve aqui: vem de Definições > Redes > '
+                'help'  => 'O endereço não se escreve aqui: vem de Definições > Social > '
                          . 'YouTube, que é o mesmo que o rodapé usa. Sem ele o botão não '
                          . 'aparece.',
             ],

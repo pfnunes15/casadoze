@@ -18,7 +18,7 @@
  * O cartão leva à página da sessão **neste site** e não ao YouTube: é lá que
  * estão os capítulos e a peça que foi usada, e é de lá que se vai à loja.
  *
- * O endereço do canal vem das Definições — Redes > YouTube — e não se escreve
+ * O endereço do canal vem das Definições — Social > YouTube — e não se escreve
  * aqui: é o mesmo que o rodapé usa.
  *
  * @var array  $section
