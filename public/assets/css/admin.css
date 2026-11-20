@@ -299,6 +299,123 @@ a { color: inherit; text-decoration: none; }
 .field-group:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 .field-group__title { margin: 0 0 4px; font-size: 17px; font-weight: 500; letter-spacing: -.01em; }
 
+/* Settings, grouped by subject.
+
+   The head sits on the ground and names the group; each subject below it is
+   a card of its own. The difference between fifteen boxes in a column and
+   four cards of three or four is the difference between reading everything
+   to find the IBAN and going straight to "Pagamento por transferência". */
+.settings-group__head { margin: 0 0 16px; }
+.settings-group__head h2 { margin: 0 0 4px; font-size: 1.6rem; font-weight: 300; letter-spacing: -.02em; }
+.settings-group__head .field-help { max-width: 70ch; }
+.settings-group__subject { margin: 0 0 4px; font-size: 18px; font-weight: 500; letter-spacing: -.01em; }
+.settings-group .admin-card { margin-bottom: 16px; }
+.settings-group .admin-card:last-of-type { margin-bottom: 0; }
+
+/* A rail inside a rail. One measure down, so the eye reads it as the second
+   level and not as a competing first. */
+.admin-tabs--sub { margin-bottom: 16px; }
+.admin-tabs--sub .admin-tab__pick { min-height: 38px; padding: 7px 14px; font-size: 13px; }
+.admin-tabs--sub .admin-tab__count { font-size: 10px; }
+
+/* One payment provider: a switch, what it is, and what it needs.
+
+   The switch is the whole head of the card and not a box in a corner — the
+   question is "do we take this", and the answer is the card. */
+.pay__head { display: flex; align-items: flex-start; gap: 14px; cursor: pointer; }
+.pay__head input { width: 20px; height: 20px; margin-top: 2px; flex: none; accent-color: var(--brand); }
+.pay__name { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pay__name strong { font-size: 17px; font-weight: 500; }
+.pay__name small { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+.pay__name .badge { align-self: flex-start; }
+.pay__fields { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+.pay__fields > :last-child { margin-bottom: 0; }
+
+/* Asking for a CSV: the usual periods as buttons, two dates for everything
+   else. The quick ones first because they are what gets pressed. */
+/* The whole card is one row: the heading, the ready-made periods, the two
+   dates and the button. It wraps on a narrow screen — never scrolls sideways —
+   and the heading drops to a label's size because next to a button that says
+   "Descarregar" it is only saying which file. */
+.csv { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.csv h2 { margin: 0; font-size: 14px; color: var(--muted); white-space: nowrap; }
+.csv__rapido { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.csv__datas { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+.csv__datas .field { display: flex; align-items: center; gap: 6px; margin-bottom: 0; }
+.csv__datas .field label { margin: 0; white-space: nowrap; }
+.csv__datas input[type="date"] { min-width: 148px; }
+
+/* One response, read as a sheet.
+
+   The facts first, on a line of their own, then the questions with their
+   answers in two columns that both start where the one above started. A hair
+   between rows and nothing else: ten questions want a reading order, not a
+   table's furniture. On a narrow screen the two columns become one, the
+   answer under its question, which is the same reading order with less room. */
+.quest__na { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+
+.resposta__factos {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+  margin: 0 0 18px; font-size: 13px; color: var(--muted);
+}
+.resposta__factos > * + *::before {
+  content: '·'; margin-right: 10px; color: var(--border-strong, var(--border));
+}
+.resposta__respostas { display: grid; grid-template-columns: 1fr; gap: 0; margin: 0; }
+.resposta__respostas dt,
+.resposta__respostas dd { margin: 0; padding: 10px 0; line-height: 1.5; }
+.resposta__respostas dt { color: var(--muted); padding-bottom: 2px; }
+.resposta__respostas dd { white-space: pre-wrap; padding-top: 0; }
+.resposta__respostas dt:not(:first-child) { border-top: 1px solid var(--border); }
+
+@media (min-width: 720px) {
+  /* No column gap, padding on the question instead: a gap between the two
+     columns is a gap in the hairline too, and a rule that stops and starts
+     again reads as two tables side by side.
+
+     The question is set at the answer's size and told apart by colour, not by
+     being smaller. Smaller, the two boxes of a row were different heights, and
+     the hairline on each of them came out at a different place — one rule per
+     row, drawn twice, a dozen pixels apart. */
+  .resposta__respostas { grid-template-columns: minmax(180px, 22rem) 1fr; column-gap: 0; }
+  .resposta__respostas dt,
+  .resposta__respostas dd { padding: 11px 0; border-top: 1px solid var(--border); }
+  .resposta__respostas dt { padding-right: 28px; }
+  .resposta__respostas dt:first-child,
+  .resposta__respostas dd:nth-child(2) { border-top: 0; }
+}
+
+/* A questionnaire, question by question.
+
+   One card each, and the same bar in all of them: a rating and a choice are
+   different questions and the same picture answers both — how many said each
+   thing, and which one won. */
+.quest { display: grid; gap: 14px; }
+@media (min-width: 820px)  { .quest { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1300px) { .quest { grid-template-columns: repeat(3, 1fr); } }
+.quest__card { margin-bottom: 0; }
+.quest__pergunta { margin: 0 0 12px; font-size: 15px; font-weight: 500; line-height: 1.4; }
+.quest__media { display: flex; align-items: baseline; gap: 8px; margin: 0 0 12px; }
+.quest__media strong { font-size: 2rem; font-weight: 300; letter-spacing: -.02em; }
+.quest__media span { font-size: 13px; color: var(--ink-2); }
+
+.quest__barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.quest__barras li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.quest__nota { width: 14px; font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.quest__opcao { width: 42%; font-size: 13px; color: var(--ink-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.quest__barra { height: 10px; border-radius: var(--r-pill); background: var(--sub); overflow: hidden; }
+/* Zero gets no bar at all, and must not get a sliver that reads as "a few". */
+.quest__barra span { display: block; height: 100%; border-radius: var(--r-pill); background: var(--brand); }
+.quest__conta { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right; }
+
+/* A choice reads above its bar: the answers are sentences, and a sentence
+   beside a bar in a 380px card becomes three letters and an ellipsis. */
+.quest__barras--opcoes li { display: block; }
+.quest__barras--opcoes .quest__opcao { display: block; width: auto; white-space: normal; margin-bottom: 3px; color: var(--ink); }
+.quest__linha { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.quest__barras--opcoes li + li { margin-top: 10px; }
+
 /* The way out of the backoffice, and who you are. At the foot, because
    neither is something somebody came here to do. */
 .admin-side__foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }

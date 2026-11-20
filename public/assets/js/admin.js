@@ -789,9 +789,20 @@
 (function () {
   'use strict';
 
-  var bar = document.querySelector('[data-tabs]');
-  if (!bar) return;
+  /* One rail was the assumption, and it stopped being true the day a group of
+     settings grew subjects of its own: the shop's nineteen fields are four
+     subjects inside one of eight groups, which is a rail inside a rail.
 
+     So every rail on the page is wired, each with its own panels, its own
+     memory and its own keyboard. They do not know about each other — a rail
+     only ever touches the panels its own picks name. */
+  var bars = Array.prototype.slice.call(document.querySelectorAll('[data-tabs]'));
+  if (!bars.length) return;
+
+  bars.forEach(wire);
+  document.documentElement.classList.add('has-tabs');
+
+function wire(bar, nth) {
   var picks  = Array.prototype.slice.call(bar.querySelectorAll('[data-tab]'));
   var panels = {};
   var order  = [];
@@ -812,9 +823,9 @@
 
   if (order.length < 2) return;
 
-  // Per screen, so two screens with a tab called the same thing do not
-  // inherit each other's.
-  var MEMORY = 'admin.tabs:' + window.location.pathname;
+  // Per screen AND per rail, so two screens with a tab called the same thing
+  // do not inherit each other's, and neither do two rails on one screen.
+  var MEMORY = 'admin.tabs:' + window.location.pathname + ':' + nth;
 
   function remembered() {
     try { return sessionStorage.getItem(MEMORY) || ''; } catch (e) { return ''; }
@@ -852,10 +863,10 @@
        itself answer `querySelectorAll('[data-tab]')`. Nothing here was
        fooled by that — the picks are looked up inside the bar — but the next
        thing to go looking for tabs would have been. */
-    document.documentElement.setAttribute('data-tab-open', key);
+    if (nth === 0) { document.documentElement.setAttribute('data-tab-open', key); }
 
     if (remember) {
-      if (window.history && window.history.replaceState) {
+      if (nth === 0 && window.history && window.history.replaceState) {
         window.history.replaceState(null, '', '#' + key);
       }
       try { sessionStorage.setItem(MEMORY, key); } catch (e) { /* private window */ }
@@ -897,15 +908,11 @@
     if (panel && panel.hidden) show(panel.getAttribute('data-tab-panel'), false);
   }, true);
 
-  /* Says the switching is live, which is what lets the stylesheet drop the
-     per-section headings: with tabs on, the tab says the same thing and a
-     second copy of it is noise. Set here and not in the markup, so a browser
-     that never ran this keeps them. */
-  document.documentElement.classList.add('has-tabs');
 
-  var asked = (window.location.hash || '').replace('#', '');
+  var asked = nth === 0 ? (window.location.hash || '').replace('#', '') : '';
   var back  = remembered();
   show(panels[asked] ? asked : (panels[back] ? back : order[0]), false);
+}
 })();
 
 /* ---------------------------------------------------------------------------
@@ -1232,5 +1239,29 @@
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && !menu.hidden) { show(false); open.focus(); }
+  });
+})();
+
+
+/* The payments screen: a provider's fields follow its switch.
+
+   Hidden and not removed — unticking a provider must never be a way to lose
+   keys that took somebody twenty minutes to find in a dashboard. The server
+   stores what is sent whether the box is ticked or not; see
+   PaymentAdminController::update. */
+(function () {
+  'use strict';
+
+  var cards = document.querySelectorAll('.pay');
+  if (!cards.length) { return; }
+
+  Array.prototype.forEach.call(cards, function (card) {
+    var toggle = card.querySelector('[data-pay-toggle]');
+    var fields = card.querySelector('[data-pay-fields]');
+    if (!toggle || !fields) { return; }
+
+    toggle.addEventListener('change', function () {
+      fields.hidden = !toggle.checked;
+    });
   });
 })();
